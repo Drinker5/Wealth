@@ -1,0 +1,153 @@
+@startuml Domain
+allowmixing
+
+package Summary {
+    object IncomeSummary{
+
+    }
+}
+
+package PortfolioManagement {
+    object Operation {
+        Id
+        InstrumentId
+        Type
+        DateTime
+    }
+
+    object Buy {
+        Amount
+        Money
+    }
+
+    object Sell {
+        Amount
+        Money
+    }
+
+    object Portfolio {
+        Assets
+    }
+
+    object PortfolioAsset {
+        InstrumentId
+        Count
+    }
+
+    object Coupon {
+        Money
+    }
+
+    object Dividend {
+        Money
+    }
+
+    Buy --> Operation
+    Sell --> Operation
+    Dividend --> Operation
+    Coupon --> Operation
+    Portfolio --> PortfolioAsset
+}
+
+object Money_VO {
+    CurrencyId
+    Amount
+}
+
+package CurrencyManagement {
+    object Currency {
+        Id
+        Name
+        Symbol
+    }
+
+    object ExchangeRate {
+        BaseCurrencyId
+        TargetCurrencyId
+        Rate
+        ValidOnDate
+    }
+}
+
+package Budget {
+    object Expense {
+        Id
+        Money
+        Date
+    }
+
+    object Income {
+        Id
+        Money
+        Date
+    }
+}
+
+package StrategyTracking {
+    object Strategy {
+        Id
+        Name
+        Components
+    }
+
+    object StrategyComponent {
+        InstrumentId
+        Weight
+    }
+
+    Strategy --> StrategyComponent
+}
+
+package InstrumentManagement {
+    object Instrument {
+        Id
+        CurrencyId
+        Name
+    }
+
+    object Stock {
+        Dividend
+    }
+    object Bond {
+        Coupon
+    }
+
+
+    object Dividend_VO {
+        CurrencyId
+        ValuePerYear
+    }
+
+    object Coupon_VO {
+        CurrencyId
+        ValuePerYear
+    }
+
+    Instrument --> Bond
+    Instrument --> Stock
+    Stock --> Dividend_VO
+    Bond --> Coupon_VO
+}
+
+package DepositManagement {
+    object Deposit {
+        Id
+        Name
+        Yield
+    }
+    object Yield_VO {
+        PercentPerYear
+    }
+
+    Deposit --> Yield_VO
+}
+
+Summary --> Budget
+Summary --> PortfolioManagement
+InstrumentManagement --> CurrencyManagement
+Operation --> Instrument
+ExchangeRate --> Currency
+StrategyComponent --> Instrument
+
+@enduml
+
