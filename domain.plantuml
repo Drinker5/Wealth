@@ -3,115 +3,195 @@ allowmixing
 
 package Summary {
     object IncomeSummary{
+        Currencies
+        Wallets
+        Deposits
+    }
+
+    interface API {
 
     }
 }
 
 package PortfolioManagement {
-    object Operation {
+    abstract Portfolio {
         Id
-        InstrumentId
-        Type
-        DateTime
-    }
-
-    object Buy {
-        Amount
-        Money
-    }
-
-    object Sell {
-        Amount
-        Money
-    }
-
-    object Portfolio {
         Assets
+        Name
+        Currencies
+        --
+        Add(Name)
+        Rename(NewName)
+        AddCurrency(Money)
     }
+    note right of Portfolio : "ИИС, Бр. счёт"
 
     object PortfolioAsset {
         InstrumentId
-        Count
+        Quantity
     }
 
-    object Coupon {
-        Money
-    }
-
-    object Dividend {
-        Money
-    }
-
-    Buy --> Operation
-    Sell --> Operation
-    Dividend --> Operation
-    Coupon --> Operation
     Portfolio --> PortfolioAsset
+
+    interface API {
+        Porfolios
+        PorfolioAssets
+        CreatePorfolio()
+        AddCurrency(Money)
+    }
 }
 
-object Money_VO {
-    CurrencyId
-    Amount
+package PortfolioOperations {
+    abstract PortfolioOperation {
+        Id
+        PortfolioId
+        InstrumentId
+        DateTime
+        Money
+        Type : Trade, Cash, Currency
+    }
+    object Trade {
+        Type : Buy, Sell
+        Amount
+        --
+        Add()
+    }
+
+    object Cash {
+        Type : Coupon, Dividend, Amortization
+        --
+        Add()
+    }
+
+    object Currency {
+        Type : Add, Withdraw
+        --
+        Add()
+    }
+
+    abstract SplitOperation {
+        Id
+        InstrumentId
+        Rate
+        DateTime
+        --
+        Add()
+    }
+
+    PortfolioOperation --> Cash
+    PortfolioOperation --> Trade
+    PortfolioOperation --> Currency
+
+    interface API {
+        OperationsByPortfolio
+        OperationsByInstrument
+        Buy(Quantity, Money)
+        Sell(Quantity, Money)
+        AddCoupon(Money)
+        AddDividend(Money)
+        Split1To(Rate)
+        ReverseSplitTo1(Rate)
+        AddToAccount(Money)
+        Withdraw(Money)
+    }
 }
 
 package CurrencyManagement {
-    object Currency {
+    abstract Currency {
         Id
         Name
         Symbol
+        ExchangeRates
     }
 
-    object ExchangeRate {
+    entity ExchangeRate {
         BaseCurrencyId
         TargetCurrencyId
         Rate
         ValidOnDate
     }
+
+    object Money_VO {
+        CurrencyId
+        Amount
+    }
+
+    Currency --> ExchangeRate
+
+    interface API {
+        Currencies
+        Echange(BaseCurrencyId, TargetCurrencyId)
+    }
 }
 
-package Budget {
-    object Expense {
+package WalletManagement {
+    abstract Wallet {
         Id
+        Name
         Money
+        Operations
+        --
+        Add
+        Change(NewMoney)
+    }
+
+    entity WalletOperation {
+        Id
+        WalletId
+        Money
+        Type : Income, Expense
         Date
     }
 
-    object Income {
-        Id
-        Money
-        Date
+    interface API {
+        Wallets
+        AddWallet(CurrencyId)
+        ChangeMoney(WalletId, Money)
+        AddExpense(WalletId, Money)
+        AddIncome(WalletId, Money)
     }
+
+    Wallet --> WalletOperation
 }
 
 package StrategyTracking {
-    object Strategy {
+    abstract Strategy {
         Id
         Name
         Components
     }
 
-    object StrategyComponent {
+    entity StrategyComponent {
+        StrategyId
         InstrumentId
         Weight
     }
 
     Strategy --> StrategyComponent
+
+    interface API {
+        Strategy
+        AddComponent(StrategyId)
+        ChangeWeights(StrategyId)
+    }
 }
 
 package InstrumentManagement {
-    object Instrument {
-        Id
-        CurrencyId
-        Name
-    }
 
+    abstract Instrument {
+        Id
+        Price : Money
+        ISIN
+        Name
+        Type
+    }
     object Stock {
         Dividend
     }
+
     object Bond {
         Coupon
     }
-
 
     object Dividend_VO {
         CurrencyId
@@ -123,31 +203,66 @@ package InstrumentManagement {
         ValuePerYear
     }
 
-    Instrument --> Bond
     Instrument --> Stock
-    Stock --> Dividend_VO
-    Bond --> Coupon_VO
+    Instrument --> Bond
+
+    interface API {
+        Instruments
+        Instrument
+        Stocks
+        Bonds
+        AddStock()
+        AddBond()
+        ChangeDividend()
+        ChangeCoupon()
+        ChangePrice()
+    }
 }
 
 package DepositManagement {
-    object Deposit {
+    abstract Deposit {
         Id
         Name
         Yield
+        Operations
+        Invest(Money)
+        Withdraw(Money)
+        Interest(Money)
     }
-    object Yield_VO {
+
+    entity DepositOperation {
+        Id
+        Type
+        Money
+        DateTime
+    }
+    note right of DepositOperation : "Add, Withdraw"
+
+    object Yield {
         PercentPerYear
     }
 
-    Deposit --> Yield_VO
+
+    Deposit --> Yield
+    Deposit --> DepositOperation
+
+    interface API {
+        Deposits
+        Deposit
+        Invest(Money)
+        Withdraw(Money)
+        AddInterest(Money)
+    }
 }
 
-Summary --> Budget
-Summary --> PortfolioManagement
 InstrumentManagement --> CurrencyManagement
-Operation --> Instrument
-ExchangeRate --> Currency
-StrategyComponent --> Instrument
-
+PortfolioManagement --> InstrumentManagement
+PortfolioOperations --> PortfolioManagement
+StrategyTracking --> InstrumentManagement
+WalletManagement --> CurrencyManagement
+DepositManagement --> CurrencyManagement
+Summary --> WalletManagement
+Summary --> PortfolioManagement
+Summary --> DepositManagement
 @enduml
 
