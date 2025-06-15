@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/SolutionFiles/">
+    <File Path=".gitignore" />
+  </Folder>
+  <Folder Name="/src/">
+    <File Path="src\Directory.Build.Props" />
+  </Folder>
+  <Folder Name="/src/Domain/">
+    <Project Path="src/Domain/Wealth.CurrencyManagement.Domain/Wealth.CurrencyManagement.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Infrastructure/">
+    <Project Path="src/Infrastructure/Wealth.CurrencyManagement.Infrastructure/Wealth.CurrencyManagement.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests\Wealth.CurrencyManagement.Domain.Tests\Wealth.CurrencyManagement.Domain.Tests.csproj" />
+    <File Path="tests\.editorconfig" />
+  </Folder>
+</Solution>

@@ -98,17 +98,18 @@ package PortfolioOperations {
 
 package CurrencyManagement {
     abstract Currency {
-        Id
+        Id : ISO 4217
         Name
         Symbol
-        ExchangeRates
+        Rename(NewName)
     }
 
-    entity ExchangeRate {
+    abstract ExchangeRate {
         BaseCurrencyId
         TargetCurrencyId
         Rate
         ValidOnDate
+        Convert(Money)
     }
 
     object Money_VO {
@@ -116,7 +117,10 @@ package CurrencyManagement {
         Amount
     }
 
-    Currency --> ExchangeRate
+    protocol Events {
+        CurrencyRenamed
+        EchangeAdded
+    }
 
     interface API {
         Currencies
