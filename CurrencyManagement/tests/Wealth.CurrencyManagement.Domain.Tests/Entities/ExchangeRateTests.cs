@@ -1,8 +1,9 @@
-using Wealth.CurrencyManagement.Domain.Entities;
+using Wealth.CurrencyManagement.Domain.Currency;
+using Wealth.CurrencyManagement.Domain.ExchangeRate;
 
 namespace Wealth.CurrencyManagement.Domain.Tests.Entities;
 
-[TestSubject(typeof(ExchangeRate))]
+[TestSubject(typeof(ExchangeRate.ExchangeRate))]
 public class ExchangeRateTests
 {
     private readonly CurrencyId c1 = new CurrencyId("FOO");
@@ -14,7 +15,7 @@ public class ExchangeRateTests
     [Fact]
     public void WhenExchangeRateCreated()
     {
-        var exchangeRate = new ExchangeRate(c1, c2, r, d);
+        var exchangeRate = CreateExchangeRate(c1, c2, r, d);
 
         Assert.Equal(c1, exchangeRate.BaseCurrencyId);
         Assert.Equal(c2, exchangeRate.TargetCurrencyId);
@@ -28,31 +29,31 @@ public class ExchangeRateTests
     [InlineData(-3)]
     public void CreateExchangeRate_InvalidRate(decimal invalidRate)
     {
-        Assert.ThrowsAny<Exception>(() => new ExchangeRate(c1, c2, invalidRate, d));
+        Assert.ThrowsAny<Exception>(() => CreateExchangeRate(c1, c2, invalidRate, d));
     }
 
     [Fact]
     public void CreateExchangeRate_InvalidDate()
     {
-        Assert.ThrowsAny<Exception>(() => new ExchangeRate(c1, c2, 1m, default));
+        Assert.ThrowsAny<Exception>(() => CreateExchangeRate(c1, c2, 1m, default));
     }
 
     [Fact]
     public void Convert_InvalidCurrency()
     {
-        var exchangeRate = new ExchangeRate(c1, c2, r, d);
+        var exchangeRate = CreateExchangeRate(c1, c2, r, d);
         var m = new Money(c3, 100);
 
         Assert.ThrowsAny<Exception>(() => exchangeRate.Convert(m));
     }
-    
+
     [Theory]
     [InlineData(10, 100, 1000)]
     [InlineData(0.1, 100, 10)]
     [InlineData(1, 0, 0)]
     public void WhenConvert(decimal rate, decimal amount, decimal expected)
     {
-        var exchangeRate = new ExchangeRate(c1, c2, rate, d);
+        var exchangeRate = CreateExchangeRate(c1, c2, rate, d);
         var m = new Money(c1, amount);
 
         var result = exchangeRate.Convert(m);
@@ -61,5 +62,10 @@ public class ExchangeRateTests
         Assert.Equal(expected, result.Amount);
         Assert.Equal(c2, result.CurrencyId);
         Assert.Equal(backResult, m);
+    }
+
+    private ExchangeRate.ExchangeRate CreateExchangeRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, decimal rate, DateTime date)
+    {
+        return ExchangeRate.ExchangeRate.Create(baseCurrencyId, targetCurrencyId, rate, date);
     }
 }

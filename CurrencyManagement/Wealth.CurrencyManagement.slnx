@@ -1,9 +1,16 @@
 <Solution>
   <Folder Name="/SolutionFiles/">
     <File Path=".gitignore" />
+    <File Path=".editorconfig" />
   </Folder>
   <Folder Name="/src/">
     <File Path="src\Directory.Build.Props" />
+  </Folder>
+  <Folder Name="/src/API/">
+    <Project Path="src\API\Wealth.CurrencyManagement.API\Wealth.CurrencyManagement.API.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/src/Application/">
+    <Project Path="src\Application\Wealth.CurrencyManagement.Application\Wealth.CurrencyManagement.Application.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/src/Domain/">
     <Project Path="src/Domain/Wealth.CurrencyManagement.Domain/Wealth.CurrencyManagement.Domain.csproj" />
@@ -12,7 +19,8 @@
     <Project Path="src/Infrastructure/Wealth.CurrencyManagement.Infrastructure/Wealth.CurrencyManagement.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests\Wealth.CurrencyManagement.Application.Tests\Wealth.CurrencyManagement.Application.Tests.csproj" Type="Classic C#" />
     <Project Path="tests\Wealth.CurrencyManagement.Domain.Tests\Wealth.CurrencyManagement.Domain.Tests.csproj" />
-    <File Path="tests\.editorconfig" />
+    <File Path="tests\Directory.Build.Props" />
   </Folder>
 </Solution>

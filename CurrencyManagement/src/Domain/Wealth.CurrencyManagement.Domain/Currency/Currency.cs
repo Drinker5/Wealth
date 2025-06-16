@@ -1,7 +1,6 @@
-using System.Runtime.CompilerServices;
 using Wealth.CurrencyManagement.Domain.Interfaces;
 
-namespace Wealth.CurrencyManagement.Domain.Entities;
+namespace Wealth.CurrencyManagement.Domain.Currency;
 
 public class Currency : AggregateRoot
 {
@@ -9,11 +8,8 @@ public class Currency : AggregateRoot
     public string Name { get; private set; }
     public string Symbol { get; private set; }
 
-    private Currency(CurrencyCreated e)
+    private Currency()
     {
-        Id = e.CurrencyId;
-        Name = e.Name;
-        Symbol = e.Symbol;
     }
 
     public static Currency Create(CurrencyId id, string name, string symbol)
@@ -24,9 +20,8 @@ public class Currency : AggregateRoot
         if (string.IsNullOrEmpty(name))
             throw new ArgumentNullException(nameof(name));
 
-        var currencyCreated = new CurrencyCreated(id, name, symbol);
-        var currency = new Currency(currencyCreated);
-        currency.Events.Add(currencyCreated);
+        var currency = new Currency();
+        currency.Apply(new CurrencyCreated(id, name, symbol));
         return currency;
     }
 
@@ -39,9 +34,14 @@ public class Currency : AggregateRoot
             return;
 
 
-        var currencyRenamed = new CurrencyRenamed(Id, newName);
-        When(currencyRenamed);
-        Events.Add(currencyRenamed);
+        Apply(new CurrencyRenamed(Id, newName));
+    }
+
+    private void When(CurrencyCreated e)
+    {
+        Id = e.CurrencyId;
+        Name = e.Name;
+        Symbol = e.Symbol;
     }
 
     private void When(CurrencyRenamed e)

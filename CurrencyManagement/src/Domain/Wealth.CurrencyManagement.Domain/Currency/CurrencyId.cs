@@ -1,4 +1,4 @@
-namespace Wealth.CurrencyManagement.Domain.Entities;
+namespace Wealth.CurrencyManagement.Domain.Currency;
 
 public record CurrencyId
 {
