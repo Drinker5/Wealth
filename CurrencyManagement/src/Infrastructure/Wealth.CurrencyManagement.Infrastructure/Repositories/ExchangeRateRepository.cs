@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Wealth.CurrencyManagement.Domain.Currency;
-using Wealth.CurrencyManagement.Domain.ExchangeRate;
+using Wealth.CurrencyManagement.Domain.Currencies;
+using Wealth.CurrencyManagement.Domain.ExchangeRates;
 using Wealth.CurrencyManagement.Domain.Repositories;
-using Wealth.CurrencyManagement.Infrastructure.UnitOfWork;
+using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Repositories;
 

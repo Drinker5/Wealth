@@ -5,7 +5,7 @@ using Wealth.CurrencyManagement.Domain.Interfaces;
 namespace Wealth.CurrencyManagement.Infrastructure.RequestProcessing.CommandPipelines;
 
 public class CommandUnitOfWorkPipeline<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : ICommand<TResponse>
+    where TRequest : ICommand
 {
     private readonly IUnitOfWork unitOfWork;
 

@@ -1,0 +1,6 @@
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Wealth.CurrencyManagement.Domain.Currencies;
+
+namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks.EntityConfigurations;
+
+public class CurrencyIdConverter() : ValueConverter<CurrencyId, string>(v => v.Code, v => new CurrencyId(v));

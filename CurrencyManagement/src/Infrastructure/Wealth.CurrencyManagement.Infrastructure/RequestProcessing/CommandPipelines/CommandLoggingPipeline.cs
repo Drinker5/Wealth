@@ -6,13 +6,13 @@ using Wealth.CurrencyManagement.Domain.Interfaces;
 namespace Wealth.CurrencyManagement.Infrastructure.RequestProcessing.CommandPipelines;
 
 internal class CommandLoggingPipeline<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : ICommand<TResponse>
+    where TRequest : ICommand
 {
-    private readonly ILogger logger;
+    private readonly ILogger<CommandLoggingPipeline<TRequest, TResponse>> logger;
     private readonly IJsonSerializer jsonSerializer;
 
     public CommandLoggingPipeline(
-        ILogger logger,
+        ILogger<CommandLoggingPipeline<TRequest, TResponse>> logger,
         IJsonSerializer jsonSerializer)
     {
         this.logger = logger;

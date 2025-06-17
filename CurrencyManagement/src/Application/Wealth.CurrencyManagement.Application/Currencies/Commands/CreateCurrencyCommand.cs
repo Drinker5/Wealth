@@ -1,0 +1,7 @@
+using Wealth.CurrencyManagement.Application.Currencies.Queries;
+using Wealth.CurrencyManagement.Application.Interfaces;
+using Wealth.CurrencyManagement.Domain.Currencies;
+
+namespace Wealth.CurrencyManagement.Application.Currencies.Commands;
+
+public record CreateCurrencyCommand(CurrencyId CurrencyId, string Name, string Symbol) : ICommand<CurrencyDTO>;

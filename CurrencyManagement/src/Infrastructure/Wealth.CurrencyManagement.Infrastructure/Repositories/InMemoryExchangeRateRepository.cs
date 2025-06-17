@@ -1,5 +1,5 @@
-using Wealth.CurrencyManagement.Domain.Currency;
-using Wealth.CurrencyManagement.Domain.ExchangeRate;
+using Wealth.CurrencyManagement.Domain.Currencies;
+using Wealth.CurrencyManagement.Domain.ExchangeRates;
 using Wealth.CurrencyManagement.Domain.Repositories;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Repositories;

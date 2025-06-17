@@ -1,9 +1,35 @@
-@API_HostAddress = http://localhost:5280
+@API_HostAddress = http://localhost:5280/api
 
-GET {{API_HostAddress}}/
+GET {{API_HostAddress}}/Currency/
 Accept: application/json
 
 ###
 
-POST {{API_HostAddress}}/
+POST {{API_HostAddress}}/Currency
 Accept: application/json
+Content-Type: application/json
+
+{
+  "id": "BAR",
+  "name": "Bar",
+  "symbol": "B"
+}
+
+###
+
+POST {{API_HostAddress}}/ExchangeRate
+Accept: application/json
+Content-Type: application/json
+
+{
+  "fromId": "FOO",
+  "toId": "BAR",
+  "rate": 10,
+  "date": "2010-10-10"
+}
+
+###
+
+GET {{API_HostAddress}}/ExchangeRate?fromId=FOO&toId=BAR&value=15.32&date=2010-10-10
+Accept: application/json
+

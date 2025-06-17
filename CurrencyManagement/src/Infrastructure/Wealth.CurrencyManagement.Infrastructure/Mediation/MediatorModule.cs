@@ -1,12 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Wealth.CurrencyManagement.Application.Currency.Commands;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Wealth.CurrencyManagement.Infrastructure.Interfaces;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Mediation;
 
-public static class MediatorModule
+public class MediatorModule : IServiceModule
 {
-    public static void RegisterMediatorModule(this IServiceCollection services)
+    public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateCurrencyCommandHandler).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
     }
 }

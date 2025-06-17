@@ -1,10 +1,11 @@
-using Wealth.CurrencyManagement.Domain.Currency;
+using Wealth.CurrencyManagement.Domain.Currencies;
 
 namespace Wealth.CurrencyManagement.Domain.Repositories;
 
 public interface ICurrencyRepository
 {
-    Task<Currency.Currency?> GetCurrency(CurrencyId id);
-    Task<Currency.Currency> CreateCurrency(CurrencyId id, string name, string symbol);
+    Task<Currency?> GetCurrency(CurrencyId id);
+    Task<Currency> CreateCurrency(CurrencyId id, string name, string symbol);
     Task ChangeCurrencyName(CurrencyId id, string newName);
+    Task<IEnumerable<Currency>> GetCurrencies();
 }

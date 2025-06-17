@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Wealth.CurrencyManagement.Domain.Currency;
+using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Domain.Repositories;
-using Wealth.CurrencyManagement.Infrastructure.UnitOfWork;
+using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Repositories;
 
@@ -37,5 +37,10 @@ public class CurrencyRepository : ICurrencyRepository
             return;
         
         exists.Rename(newName);
+    }
+
+    public async Task<IEnumerable<Currency>> GetCurrencies()
+    {
+        return await context.Currencies.AsNoTracking().ToListAsync();
     }
 }

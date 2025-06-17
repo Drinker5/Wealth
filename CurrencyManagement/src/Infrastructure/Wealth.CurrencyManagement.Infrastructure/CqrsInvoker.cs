@@ -13,15 +13,15 @@ public class CqrsInvoker
         _serviceProvider = serviceProvider;
     }
     
-    public async Task<TResult> CommandAsync<TResult>(ICommand<TResult> command)
+    public async Task<TResult> Command<TResult>(ICommand<TResult> command)
     {
         using var scope = _serviceProvider.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-        return await mediator.Send(command);
+        return await mediator.Send<TResult>(command);
     }
 
-    public async Task CommandAsync(ICommand command)
+    public async Task Command(ICommand command)
     {
         using var scope = _serviceProvider.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
@@ -29,7 +29,7 @@ public class CqrsInvoker
         await mediator.Send(command);
     }
 
-    public async Task<TResult> QueryAsync<TResult>(IQuery<TResult> query)
+    public async Task<TResult> Query<TResult>(IQuery<TResult> query)
     {
         using var scope = _serviceProvider.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();

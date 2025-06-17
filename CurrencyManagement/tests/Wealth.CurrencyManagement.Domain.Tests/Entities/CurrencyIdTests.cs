@@ -1,4 +1,4 @@
-using Wealth.CurrencyManagement.Domain.Currency;
+using Wealth.CurrencyManagement.Domain.Currencies;
 
 namespace Wealth.CurrencyManagement.Domain.Tests.Entities;
 

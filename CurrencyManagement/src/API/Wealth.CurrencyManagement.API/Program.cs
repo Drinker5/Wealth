@@ -1,23 +1,26 @@
-using Wealth.CurrencyManagement.Application.Currency.Commands;
-using Wealth.CurrencyManagement.Domain.Currency;
+using Serilog;
+using Serilog.Events;
+using Wealth.CurrencyManagement.Application.Currencies.Commands;
+using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Infrastructure;
-using Wealth.CurrencyManagement.Infrastructure.Json;
-using Wealth.CurrencyManagement.Infrastructure.Mediation;
-using Wealth.CurrencyManagement.Infrastructure.RequestProcessing;
-using Wealth.CurrencyManagement.Infrastructure.UnitOfWork;
+using Wealth.CurrencyManagement.Infrastructure.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 builder.Services.AddOpenApi();
 
-builder.Services.AddLogging(o => o.AddConsole());
+var logConfig = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .Enrich.FromLogContext();
 
-builder.Services.RegisterRequestProcessingModule();
-builder.Services.RegisterUnitOfWorkModule();
-builder.Services.RegisterNewtonsoftJsonModule();
-builder.Services.RegisterMediatorModule();
+const string outputTemplate = "[{Level:u3}] {Message:lj}{NewLine}{Exception}";
+logConfig = logConfig.WriteTo.Console(outputTemplate: outputTemplate);
+
+builder.Services.AddLogging(o => o.ClearProviders().AddSerilog(logConfig.CreateLogger(), dispose: true));
+builder.Services.AddServiceModules(builder.Configuration);
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -27,15 +30,6 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-
+app.MapControllers();
 app.UseHttpsRedirection();
-
-app.MapGet("/", () => "hello");
-
-app.MapPost("/", async (CqrsInvoker invoker) =>
-{
-    var currencyId = new CurrencyId("FOO");
-    await invoker.CommandAsync(new CreateCurrencyCommand(currencyId, "Foo", "F"));
-});
-
 app.Run();

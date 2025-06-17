@@ -1,4 +1,4 @@
-using Wealth.CurrencyManagement.Domain.Currency;
+using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Domain.Repositories;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Repositories;
@@ -30,5 +30,10 @@ public class InMemoryCurrencyRepository : ICurrencyRepository
             return;
         
         exists.Rename(newName);
+    }
+
+    public Task<IEnumerable<Currency>> GetCurrencies()
+    {
+        return Task.FromResult(currencies.AsEnumerable());
     }
 }

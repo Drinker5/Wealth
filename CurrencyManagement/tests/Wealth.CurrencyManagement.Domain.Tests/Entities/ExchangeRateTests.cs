@@ -1,9 +1,9 @@
-using Wealth.CurrencyManagement.Domain.Currency;
-using Wealth.CurrencyManagement.Domain.ExchangeRate;
+using Wealth.CurrencyManagement.Domain.Currencies;
+using Wealth.CurrencyManagement.Domain.ExchangeRates;
 
 namespace Wealth.CurrencyManagement.Domain.Tests.Entities;
 
-[TestSubject(typeof(ExchangeRate.ExchangeRate))]
+[TestSubject(typeof(ExchangeRate))]
 public class ExchangeRateTests
 {
     private readonly CurrencyId c1 = new CurrencyId("FOO");
@@ -39,6 +39,12 @@ public class ExchangeRateTests
     }
 
     [Fact]
+    public void CreateExchangeRate_InvalidCurrency()
+    {
+        Assert.ThrowsAny<Exception>(() => CreateExchangeRate(c1, c1, 1m, d));
+    }
+
+    [Fact]
     public void Convert_InvalidCurrency()
     {
         var exchangeRate = CreateExchangeRate(c1, c2, r, d);
@@ -64,8 +70,8 @@ public class ExchangeRateTests
         Assert.Equal(backResult, m);
     }
 
-    private ExchangeRate.ExchangeRate CreateExchangeRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, decimal rate, DateTime date)
+    private ExchangeRate CreateExchangeRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, decimal rate, DateTime date)
     {
-        return ExchangeRate.ExchangeRate.Create(baseCurrencyId, targetCurrencyId, rate, date);
+        return ExchangeRate.Create(baseCurrencyId, targetCurrencyId, rate, date);
     }
 }

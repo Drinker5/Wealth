@@ -1,18 +1,18 @@
-using Wealth.CurrencyManagement.Domain.Currency;
+using Wealth.CurrencyManagement.Domain.Currencies;
 
 namespace Wealth.CurrencyManagement.Domain.Tests.Entities;
 
-[TestSubject(typeof(Currency.Currency))]
+[TestSubject(typeof(Currency))]
 public class WhenCurrencyCreated
 {
     private readonly CurrencyId currencyId = new CurrencyId("FOO");
-    private readonly Currency.Currency currency;
+    private readonly Currency currency;
     private readonly string name = "name";
     private readonly string symbol = "symbol";
 
     public WhenCurrencyCreated()
     {
-        currency = Currency.Currency.Create(currencyId, name, symbol);
+        currency = Currency.Create(currencyId, name, symbol);
     }
 
     [Fact]
