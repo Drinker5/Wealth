@@ -1,17 +1,17 @@
 ﻿using Microsoft.Extensions.Logging;
-using Wealth.CurrencyManagement.Domain.Interfaces;
+using Wealth.CurrencyManagement.Domain.Abstractions;
 
 namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks.Decorators;
 
-internal class LoggingUnitOfWorkDecorator : IUnitOfWork
+internal class UnitOfWorkLoggingDecorator : IUnitOfWork
 {
     private readonly IUnitOfWork decorated;
-    private readonly ILogger<LoggingUnitOfWorkDecorator> logger;
+    private readonly ILogger<UnitOfWorkLoggingDecorator> logger;
     private bool commited;
 
-    public LoggingUnitOfWorkDecorator(
+    public UnitOfWorkLoggingDecorator(
         IUnitOfWork decorated,
-        ILogger<LoggingUnitOfWorkDecorator> logger)
+        ILogger<UnitOfWorkLoggingDecorator> logger)
     {
         this.decorated = decorated;
         this.logger = logger;

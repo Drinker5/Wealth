@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Wealth.CurrencyManagement.Domain.Interfaces;
-using Wealth.CurrencyManagement.Infrastructure.Interfaces;
+using Wealth.CurrencyManagement.Domain.Abstractions;
+using Wealth.CurrencyManagement.Infrastructure.Abstractions;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Json;
 

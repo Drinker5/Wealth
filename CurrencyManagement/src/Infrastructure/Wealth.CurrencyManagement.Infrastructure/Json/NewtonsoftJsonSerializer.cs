@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Wealth.CurrencyManagement.Domain.Interfaces;
+using Wealth.CurrencyManagement.Domain.Abstractions;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Json;
 

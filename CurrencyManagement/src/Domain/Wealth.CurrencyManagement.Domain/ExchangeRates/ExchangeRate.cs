@@ -1,5 +1,5 @@
+using Wealth.CurrencyManagement.Domain.Abstractions;
 using Wealth.CurrencyManagement.Domain.Currencies;
-using Wealth.CurrencyManagement.Domain.Interfaces;
 
 #pragma warning disable CS8618
 
@@ -12,13 +12,13 @@ public class ExchangeRate : AggregateRoot
     public CurrencyId BaseCurrencyId { get; private set; }
     public CurrencyId TargetCurrencyId { get; private set; }
     public decimal Rate { get; private set; }
-    public DateTime ValidOnDate { get; private set; }
+    public DateOnly ValidOnDate { get; private set; }
 
     private ExchangeRate()
     {
     }
 
-    public static ExchangeRate Create(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, decimal rate, DateTime date)
+    public static ExchangeRate Create(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, decimal rate, DateOnly date)
     {
         if (rate < minimalRate)
             throw new ArgumentException("Rate must be greater than 0");

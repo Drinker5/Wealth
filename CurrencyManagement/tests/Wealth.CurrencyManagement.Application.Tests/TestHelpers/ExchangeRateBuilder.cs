@@ -8,7 +8,7 @@ public class ExchangeRateBuilder
     private CurrencyId baseCurrencyId = "FOO";
     private CurrencyId targetCurrencyId = "BAR";
     private decimal rate = 1.42m;
-    private DateTime date = new DateTime(2010, 10, 10);
+    private DateOnly date = new DateOnly(2010, 10, 10);
 
     public ExchangeRate Build()
     {
@@ -34,7 +34,7 @@ public class ExchangeRateBuilder
         return this;
     }
     
-    public ExchangeRateBuilder SetDate(DateTime newDate)
+    public ExchangeRateBuilder SetDate(DateOnly newDate)
     {
         date = newDate;
         return this;

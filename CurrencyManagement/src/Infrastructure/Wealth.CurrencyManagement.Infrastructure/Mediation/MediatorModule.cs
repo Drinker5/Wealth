@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Wealth.CurrencyManagement.Infrastructure.Interfaces;
+using Wealth.CurrencyManagement.Infrastructure.Abstractions;
+using Wealth.CurrencyManagement.Infrastructure.Mediation.RequestProcessing.CommandBehaviors;
+using Wealth.CurrencyManagement.Infrastructure.Mediation.RequestProcessing.QueryPipelines;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Mediation;
 
@@ -8,6 +10,15 @@ public class MediatorModule : IServiceModule
 {
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
+        services.AddSingleton<CqrsInvoker>();
+        
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+            cfg.AddOpenBehavior(typeof(CommandLoggingBehavior<,>));
+            cfg.AddOpenBehavior(typeof(CommandUnitOfWorkBehavior<,>));
+
+            cfg.AddOpenBehavior(typeof(QueryLoggingPipeline<,>));
+        });
     }
 }

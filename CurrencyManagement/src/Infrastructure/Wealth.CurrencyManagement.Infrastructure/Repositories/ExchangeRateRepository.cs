@@ -14,7 +14,7 @@ public class ExchangeRateRepository : IExchangeRateRepository
     {
         this.context = context;
     }
-    public Task<ExchangeRate?> GetExchangeRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, DateTime validOnDate)
+    public Task<ExchangeRate?> GetExchangeRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, DateOnly validOnDate)
     {
         return context.ExchangeRates.AsNoTracking().SingleOrDefaultAsync(e =>
             e.BaseCurrencyId == baseCurrencyId
@@ -22,7 +22,7 @@ public class ExchangeRateRepository : IExchangeRateRepository
             && e.ValidOnDate == validOnDate);
     }
 
-    public async Task<ExchangeRate> CreateExchangeRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, decimal rate, DateTime validOnDate)
+    public async Task<ExchangeRate> CreateExchangeRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, decimal rate, DateOnly validOnDate)
     {
         var exist = await GetExchangeRate(baseCurrencyId, targetCurrencyId, validOnDate);
         if (exist != null)

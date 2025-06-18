@@ -1,5 +1,5 @@
+using Wealth.CurrencyManagement.Domain.Abstractions;
 using Wealth.CurrencyManagement.Domain.Currencies;
-using Wealth.CurrencyManagement.Domain.Interfaces;
 
 namespace Wealth.CurrencyManagement.Domain.ExchangeRates;
 

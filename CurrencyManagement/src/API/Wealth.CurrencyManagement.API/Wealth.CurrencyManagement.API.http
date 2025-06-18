@@ -1,9 +1,27 @@
 @API_HostAddress = http://localhost:5280/api
 
+# @name Get currencies
+
 GET {{API_HostAddress}}/Currency/
 Accept: application/json
 
 ###
+
+# @name Add FOO currency
+
+POST {{API_HostAddress}}/Currency
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": "FOO",
+  "name": "Foo",
+  "symbol": "F"
+}
+
+###
+
+# @name Add BAR currency
 
 POST {{API_HostAddress}}/Currency
 Accept: application/json
@@ -15,7 +33,10 @@ Content-Type: application/json
   "symbol": "B"
 }
 
+
 ###
+
+# @name Add exchange rate
 
 POST {{API_HostAddress}}/ExchangeRate
 Accept: application/json
@@ -28,8 +49,9 @@ Content-Type: application/json
   "date": "2010-10-10"
 }
 
-###
+### 
 
+# @name Convert FOO->BAR
 GET {{API_HostAddress}}/ExchangeRate?fromId=FOO&toId=BAR&value=15.32&date=2010-10-10
 Accept: application/json
 

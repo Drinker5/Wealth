@@ -9,7 +9,7 @@ public class ExchangeRateTests
     private readonly CurrencyId c1 = new CurrencyId("FOO");
     private readonly CurrencyId c2 = new CurrencyId("BAR");
     private readonly CurrencyId c3 = new CurrencyId("BAZ");
-    private readonly DateTime d = new DateTime(2020, 01, 01);
+    private readonly DateOnly d = new DateOnly(2020, 01, 01);
     private readonly decimal r = 4.72m;
 
     [Fact]
@@ -70,7 +70,7 @@ public class ExchangeRateTests
         Assert.Equal(backResult, m);
     }
 
-    private ExchangeRate CreateExchangeRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, decimal rate, DateTime date)
+    private ExchangeRate CreateExchangeRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, decimal rate, DateOnly date)
     {
         return ExchangeRate.Create(baseCurrencyId, targetCurrencyId, rate, date);
     }

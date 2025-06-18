@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Wealth.CurrencyManagement.Application.Interfaces;
+using Wealth.CurrencyManagement.Application.Abstractions;
 
-namespace Wealth.CurrencyManagement.Infrastructure;
+namespace Wealth.CurrencyManagement.Infrastructure.Mediation;
 
 public class CqrsInvoker
 {

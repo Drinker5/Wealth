@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Wealth.CurrencyManagement.Application.Interfaces;
+namespace Wealth.CurrencyManagement.Application.Abstractions;
 
 public interface ICommand<out TResult> : IRequest<TResult>, ICommand
 {

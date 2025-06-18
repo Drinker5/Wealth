@@ -1,4 +1,4 @@
-﻿namespace Wealth.CurrencyManagement.Domain.Interfaces;
+﻿namespace Wealth.CurrencyManagement.Domain.Abstractions;
 
 public interface IJsonSerializer
 {

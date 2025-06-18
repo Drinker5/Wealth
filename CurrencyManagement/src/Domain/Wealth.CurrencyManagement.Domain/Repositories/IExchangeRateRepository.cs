@@ -7,11 +7,11 @@ public interface IExchangeRateRepository
 {
     Task<ExchangeRate?> GetExchangeRate(CurrencyId baseCurrencyId,
         CurrencyId targetCurrencyId,
-        DateTime validOnDate);
+        DateOnly validOnDate);
 
     Task<ExchangeRate> CreateExchangeRate(
         CurrencyId baseCurrencyId,
         CurrencyId targetCurrencyId,
         decimal rate,
-        DateTime validOnDate);
+        DateOnly validOnDate);
 }

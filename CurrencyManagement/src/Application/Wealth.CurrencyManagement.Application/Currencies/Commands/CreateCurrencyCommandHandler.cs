@@ -1,5 +1,5 @@
+using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Application.Currencies.Queries;
-using Wealth.CurrencyManagement.Application.Interfaces;
 using Wealth.CurrencyManagement.Domain.Repositories;
 
 namespace Wealth.CurrencyManagement.Application.Currencies.Commands;

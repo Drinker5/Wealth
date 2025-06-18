@@ -1,7 +1,7 @@
 using MediatR;
-using Wealth.CurrencyManagement.Domain.Interfaces;
+using Wealth.CurrencyManagement.Domain.Abstractions;
 
-namespace Wealth.CurrencyManagement.Application.Interfaces;
+namespace Wealth.CurrencyManagement.Application.Abstractions;
 
 public interface IDomainEventHandler<in TEvent> : INotificationHandler<TEvent>
     where TEvent : IDomainEvent

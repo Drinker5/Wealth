@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Wealth.CurrencyManagement.Domain.Interfaces;
+using Wealth.CurrencyManagement.Application.Abstractions;
+using Wealth.CurrencyManagement.Domain.Abstractions;
 using Wealth.CurrencyManagement.Domain.Repositories;
-using Wealth.CurrencyManagement.Infrastructure.Interfaces;
+using Wealth.CurrencyManagement.Infrastructure.Abstractions;
 using Wealth.CurrencyManagement.Infrastructure.Repositories;
 using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks.Decorators;
 
@@ -28,9 +29,11 @@ public class UnitOfWorkModule : IServiceModule
 
         services.AddScoped<ICurrencyRepository, CurrencyRepository>();
         services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
+        services.AddScoped<IOutboxRepository, OutboxRepository>();
 
         // UnitOfWork
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.Decorate<IUnitOfWork, LoggingUnitOfWorkDecorator>();
+        services.Decorate<IUnitOfWork, UnitOfWorkLoggingDecorator>();
+        services.Decorate<IUnitOfWork, UnitOfWorkCreateOutboxMessagesDecorator>();
     }
 }

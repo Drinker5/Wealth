@@ -14,13 +14,18 @@ public class ExhcangeRateTests
     {
         var baseId = new CurrencyId("FOO");
         var toId = new CurrencyId("BAR");
-        var date = new DateTime(2000, 1, 1);
+        var date = new DateOnly(2000, 1, 1);
         var command = new CreateExchangeRateCommand(baseId, toId, 1.1m, date);
+        var currencyRepo = Substitute.For<ICurrencyRepository>();
+        currencyRepo.GetCurrency(baseId).Returns(new CurrencyBuilder().Build());
+        currencyRepo.GetCurrency(toId).Returns(new CurrencyBuilder().Build());
         var repo = Substitute.For<IExchangeRateRepository>();
-        var handler = new CreateExchangeRateCommandHandler(repo);
+        var handler = new CreateExchangeRateCommandHandler(currencyRepo, repo);
 
         await handler.Handle(command, CancellationToken.None);
 
+        await currencyRepo.Received(1).GetCurrency(baseId);
+        await currencyRepo.Received(1).GetCurrency(toId);
         await repo.Received(1)
             .CreateExchangeRate(
                 command.BaseCurrencyId,
@@ -33,7 +38,7 @@ public class ExhcangeRateTests
     public async Task WhenExchange()
     {
         var money = new Money(new CurrencyId("FOO"), 100);
-        var query = new ExchangeQuery(money, new CurrencyId("BAR"), new DateTime(2000, 1, 1));
+        var query = new ExchangeQuery(money, new CurrencyId("BAR"), new DateOnly(2000, 1, 1));
         var repo = Substitute.For<IExchangeRateRepository>();
         var rate = new ExchangeRateBuilder().Build();
         repo.GetExchangeRate(money.CurrencyId, query.TargetCurrencyId, query.Date).Returns(rate);
@@ -49,7 +54,7 @@ public class ExhcangeRateTests
     public async Task WhenExchangeIsNotFound()
     {
         var money = new Money(new CurrencyId("FOO"), 100);
-        var query = new ExchangeQuery(money, new CurrencyId("BAR"), new DateTime(2000, 1, 1));
+        var query = new ExchangeQuery(money, new CurrencyId("BAR"), new DateOnly(2000, 1, 1));
         var repo = Substitute.For<IExchangeRateRepository>();
         
         var handler = new ExchangeQueryHandler(repo);

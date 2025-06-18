@@ -1,6 +1,6 @@
 using Wealth.CurrencyManagement.Domain.Utilities;
 
-namespace Wealth.CurrencyManagement.Domain.Interfaces;
+namespace Wealth.CurrencyManagement.Domain.Abstractions;
 
 public abstract class AggregateRoot
 {

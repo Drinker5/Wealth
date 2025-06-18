@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using Wealth.CurrencyManagement.Application.Interfaces;
-using Wealth.CurrencyManagement.Domain.Interfaces;
+using Wealth.CurrencyManagement.Application.Abstractions;
+using Wealth.CurrencyManagement.Domain.Abstractions;
 
-namespace Wealth.CurrencyManagement.Infrastructure.RequestProcessing.QueryPipelines;
+namespace Wealth.CurrencyManagement.Infrastructure.Mediation.RequestProcessing.QueryPipelines;
 
 internal class QueryLoggingPipeline<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IQuery
@@ -21,16 +21,13 @@ internal class QueryLoggingPipeline<TRequest, TResponse> : IPipelineBehavior<TRe
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        logger.LogInformation("{Name} is processing: {NewLine}{SerializeIndented}",
-            request.GetType().Name,
-            Environment.NewLine,
-            jsonSerializer.SerializeIndented(request));
+        logger.LogInformation("{Name} is processing: {@Request}", request.GetType().Name, request);
         try
         {
             TResponse result = await next(cancellationToken);
             if (typeof(TResponse) != typeof(Unit))
             {
-                logger.LogInformation("Result: {NewLine}{SerializeIndented}", Environment.NewLine, jsonSerializer.SerializeIndented(result));
+                logger.LogInformation("Result: {@Request}", result);
             }
 
             return result;

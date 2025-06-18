@@ -3,7 +3,7 @@ using Serilog.Events;
 using Wealth.CurrencyManagement.Application.Currencies.Commands;
 using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Infrastructure;
-using Wealth.CurrencyManagement.Infrastructure.Interfaces;
+using Wealth.CurrencyManagement.Infrastructure.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 

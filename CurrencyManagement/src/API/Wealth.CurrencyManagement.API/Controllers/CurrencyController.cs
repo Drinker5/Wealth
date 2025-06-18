@@ -3,6 +3,7 @@ using Wealth.CurrencyManagement.Application.Currencies.Commands;
 using Wealth.CurrencyManagement.Application.Currencies.Queries;
 using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Infrastructure;
+using Wealth.CurrencyManagement.Infrastructure.Mediation;
 
 namespace Wealth.CurrencyManagement.API.Controllers;
 

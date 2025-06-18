@@ -1,4 +1,4 @@
-using Wealth.CurrencyManagement.Application.Interfaces;
+using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Domain.ExchangeRates;
 using Wealth.CurrencyManagement.Domain.Repositories;

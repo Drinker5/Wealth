@@ -8,7 +8,7 @@ public class InMemoryExchangeRateRepository : IExchangeRateRepository
 {
     private readonly List<ExchangeRate> exchangeRates = [];
 
-    public Task<ExchangeRate?> GetExchangeRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, DateTime validOnDate)
+    public Task<ExchangeRate?> GetExchangeRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, DateOnly validOnDate)
     {
         var exchangeRate = exchangeRates.SingleOrDefault(e =>
             e.BaseCurrencyId == baseCurrencyId
@@ -17,7 +17,7 @@ public class InMemoryExchangeRateRepository : IExchangeRateRepository
         return Task.FromResult(exchangeRate);
     }
 
-    public async Task<ExchangeRate> CreateExchangeRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, decimal rate, DateTime validOnDate)
+    public async Task<ExchangeRate> CreateExchangeRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, decimal rate, DateOnly validOnDate)
     {
         var exist = await GetExchangeRate(baseCurrencyId, targetCurrencyId, validOnDate);
         if (exist != null)
