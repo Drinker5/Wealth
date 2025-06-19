@@ -1,10 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using RabbitMQ.Client;
 using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Domain.Abstractions;
 using Wealth.CurrencyManagement.Domain.Repositories;
 using Wealth.CurrencyManagement.Infrastructure.Abstractions;
+using Wealth.CurrencyManagement.Infrastructure.EventBus;
 using Wealth.CurrencyManagement.Infrastructure.Repositories;
 using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks.Decorators;
 
@@ -35,5 +39,9 @@ public class UnitOfWorkModule : IServiceModule
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.Decorate<IUnitOfWork, UnitOfWorkLoggingDecorator>();
         services.Decorate<IUnitOfWork, UnitOfWorkCreateOutboxMessagesDecorator>();
+        
+        // Outbox Polling
+        services.Configure<OutboxOptions>(configuration.GetSection(OutboxOptions.Section));
+        services.AddSingleton<IHostedService, OutboxPollingHostedService>();
     }
 }

@@ -55,3 +55,15 @@ Content-Type: application/json
 GET {{API_HostAddress}}/ExchangeRate?fromId=FOO&toId=BAR&value=15.32&date=2010-10-10
 Accept: application/json
 
+###
+
+# @name Rename currency
+
+PUT {{API_HostAddress}}/Currency
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": "FOO",
+  "newName": "Foo2"
+}

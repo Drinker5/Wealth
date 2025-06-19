@@ -1,4 +1,4 @@
-namespace Wealth.CurrencyManagement.API.Controllers;
+namespace Wealth.CurrencyManagement.API.Controllers.Requests;
 
 public class CreateCurrencyRequest
 {

@@ -16,7 +16,7 @@ public class CurrencyRepository : ICurrencyRepository
 
     public Task<Currency?> GetCurrency(CurrencyId id)
     {
-        return context.Currencies.AsNoTracking().SingleOrDefaultAsync(i => i.Id == id);
+        return context.Currencies.SingleOrDefaultAsync(i => i.Id == id);
     }
 
     public async Task<Currency> CreateCurrency(CurrencyId id, string name, string symbol)

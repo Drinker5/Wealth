@@ -1,4 +1,4 @@
-﻿namespace Wealth.CurrencyManagement.Domain.Abstractions;
+﻿namespace Wealth.CurrencyManagement.Application.Abstractions;
 
 public interface IJsonSerializer
 {
@@ -6,4 +6,5 @@ public interface IJsonSerializer
     string SerializeIndented(object? value);
     object? Deserialize(string data, Type type);
     T? Deserialize<T>(string data);
+    byte[] SerializeToUtf8Bytes(IntegrationEvent @event);
 }

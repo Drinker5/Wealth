@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wealth.CurrencyManagement.Application.Abstractions;
+using Wealth.CurrencyManagement.Domain.Utilities;
 using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Repositories;
@@ -24,6 +25,16 @@ internal class OutboxRepository : IOutboxRepository
             .OutboxMessages
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+    }
+
+    public async Task<IEnumerable<Guid>> LoadUnprocessed(int take, CancellationToken cancellationToken = default)
+    {
+        return await context.OutboxMessages.AsNoTracking()
+            .OrderBy(i => i.OccurredOn) // old first
+            .Where(i => i.ProcessedDate == null && (i.ProcessingDate < Clock.Now || i.ProcessedDate == null))
+            .Select(x => x.Id)
+            .Take(take)
+            .ToListAsync(cancellationToken);
     }
 
     public void Remove(OutboxMessage outboxMessage)

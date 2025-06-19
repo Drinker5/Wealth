@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Wealth.CurrencyManagement.API.Controllers.Requests;
 using Wealth.CurrencyManagement.Application.Currencies.Commands;
 using Wealth.CurrencyManagement.Application.Currencies.Queries;
 using Wealth.CurrencyManagement.Domain.Currencies;
@@ -29,5 +30,12 @@ public class CurrencyController : Controller
     {
         var result = await invoker.Command(new CreateCurrencyCommand(request.Id, request.Name, request.Symbol));
         return Ok(result);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Put([FromBody] RenameCurrencyRequest request)
+    {
+        await invoker.Command(new RenameCurrencyCommand(request.Id, request.NewName));
+        return Ok();
     }
 }
