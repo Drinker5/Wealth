@@ -39,9 +39,13 @@ public class UnitOfWorkModule : IServiceModule
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.Decorate<IUnitOfWork, UnitOfWorkLoggingDecorator>();
         services.Decorate<IUnitOfWork, UnitOfWorkCreateOutboxMessagesDecorator>();
-        
+
         // Outbox Polling
-        services.Configure<OutboxOptions>(configuration.GetSection(OutboxOptions.Section));
-        services.AddSingleton<IHostedService, OutboxPollingHostedService>();
+        var outboxPollingOptions = configuration.GetSection(OutboxPollingOptions.Section).Get<OutboxPollingOptions>();
+        if (outboxPollingOptions?.Enabled ?? false)
+        {
+            services.Configure<OutboxPollingOptions>(configuration.GetSection(OutboxPollingOptions.Section));
+            services.AddSingleton<IHostedService, OutboxPollingHostedService>();
+        }
     }
 }

@@ -1,7 +1,9 @@
 namespace Wealth.CurrencyManagement.Application.Abstractions;
 
-public class OutboxOptions
+public class OutboxPollingOptions
 {
-    public const string Section = "Outbox";
+    public const string Section = "OutboxPolling";
+
+    public bool Enabled { get; set; } = false;
     public int RetryCount { get; set; } = 10;
 }

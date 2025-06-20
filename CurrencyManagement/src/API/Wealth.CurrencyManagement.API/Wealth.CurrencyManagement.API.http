@@ -67,3 +67,22 @@ Content-Type: application/json
   "id": "FOO",
   "newName": "Foo2"
 }
+
+###
+
+# @name Outbox Trigger
+
+POST {{API_HostAddress}}/OutboxTrigger
+Accept: application/json
+Content-Type: application/json
+
+{
+  
+}
+
+###
+
+# @name Outbox Trigger Next
+
+POST {{API_HostAddress}}/OutboxTrigger/Next
+Accept: application/json

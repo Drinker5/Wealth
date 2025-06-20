@@ -16,6 +16,5 @@ public record SomeIntegrationEventHandler : IIntegrationEventHandler<SomeIntegra
     {
         logger.LogInformation("Handling integration event: {Name}", @event.GetType().Name);
         throw new Exception("Something went wrong");
-        return Task.CompletedTask;
     }
 }

@@ -25,7 +25,8 @@ public class OutboxPollingHostedService : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        logger.LogInformation("Starting Outbox Polling on a background thread.");
+        logger.LogInformation(
+            "Starting Outbox Polling on a background thread. '{Section}.Enabled = true'", OutboxPollingOptions.Section);
         _ = Task.Run(() => DoStuffPeriodically(cancellationToken), cancellationToken);
         return Task.CompletedTask;
     }

@@ -1,0 +1,9 @@
+services:
+  app:
+    build:
+      context: .
+      target: app
+      dockerfile: Dockerfile
+    command:
+      - "-url=http://host.docker.internal:5280/api/OutboxTrigger/Next"
+      - "-period=2000"

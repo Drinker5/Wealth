@@ -15,7 +15,7 @@ namespace Wealth.CurrencyManagement.Application.Outbox.Commands;
 internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxCommand>
 {
     private readonly IOutboxRepository outboxRepository;
-    private readonly IOptions<OutboxOptions> options;
+    private readonly IOptions<OutboxPollingOptions> options;
     private readonly IJsonSerializer jsonSerializer;
     private readonly ILogger<ProcessOutboxCommandHandler> logger;
     private readonly IServiceProvider serviceProvider;
@@ -25,7 +25,7 @@ internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxComman
 
     public ProcessOutboxCommandHandler(
         IOutboxRepository outboxRepository,
-        IOptions<OutboxOptions> options,
+        IOptions<OutboxPollingOptions> options,
         IJsonSerializer jsonSerializer,
         ILogger<ProcessOutboxCommandHandler> logger,
         IServiceProvider serviceProvider)
