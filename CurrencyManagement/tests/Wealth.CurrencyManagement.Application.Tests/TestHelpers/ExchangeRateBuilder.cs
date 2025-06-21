@@ -33,7 +33,7 @@ public class ExchangeRateBuilder
         rate = newRate;
         return this;
     }
-    
+
     public ExchangeRateBuilder SetDate(DateOnly newDate)
     {
         date = newDate;

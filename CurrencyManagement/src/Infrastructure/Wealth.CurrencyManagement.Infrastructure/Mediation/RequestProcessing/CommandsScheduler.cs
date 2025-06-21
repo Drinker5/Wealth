@@ -20,37 +20,37 @@ internal class CommandsScheduler : ICommandsScheduler
         this.repository = repository;
     }
 
-    public async Task EnqueueAsync(ICommand command)
+    public async Task EnqueueAsync(ICommand command, CancellationToken cancellationToken = default)
     {
         var outboxMessage = OutboxMessage.Create(
             jsonSerializer,
             Clock.Now,
             command);
 
-        await AddOutboxMessageAsync(outboxMessage);
+        await AddOutboxMessageAsync(outboxMessage, cancellationToken);
     }
 
-    public async Task EnqueueAsync<TResult>(ICommand<TResult> command)
+    public async Task EnqueueAsync<TResult>(ICommand<TResult> command, CancellationToken cancellationToken = default)
     {
         var outboxMessage = OutboxMessage.Create(
             jsonSerializer,
             Clock.Now,
             command);
 
-        await AddOutboxMessageAsync(outboxMessage);
+        await AddOutboxMessageAsync(outboxMessage, cancellationToken);
     }
 
-    public async Task EnqueuePublishingEventAsync(IntegrationEvent integrationEvent)
+    public async Task EnqueuePublishingEventAsync(IntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
     {
         var outboxMessage = OutboxMessage.Create(
             jsonSerializer,
             Clock.Now,
             integrationEvent);
 
-        await AddOutboxMessageAsync(outboxMessage);
+        await AddOutboxMessageAsync(outboxMessage, cancellationToken);
     }
 
-    public async Task ScheduleAsync(ICommand command, DateTimeOffset date)
+    public async Task ScheduleAsync(ICommand command, DateTimeOffset date, CancellationToken cancellationToken = default)
     {
         var outboxMessage = OutboxMessage.CreateDelayed(
             jsonSerializer,
@@ -58,12 +58,12 @@ internal class CommandsScheduler : ICommandsScheduler
             command,
             date);
 
-        await AddOutboxMessageAsync(outboxMessage);
+        await AddOutboxMessageAsync(outboxMessage, cancellationToken);
     }
 
-    private async Task AddOutboxMessageAsync(OutboxMessage outboxMessage)
+    private async Task AddOutboxMessageAsync(OutboxMessage outboxMessage, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("OutboxMessage added: {@Message}", outboxMessage);
-        await repository.Add(outboxMessage);
+        await repository.Add(outboxMessage, cancellationToken);
     }
 }

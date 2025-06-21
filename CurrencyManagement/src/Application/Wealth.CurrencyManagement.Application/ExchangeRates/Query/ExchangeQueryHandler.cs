@@ -13,6 +13,7 @@ public class ExchangeQueryHandler : IQueryHandler<ExchangeQuery, Money?>
     {
         this.exchangeRateRepository = exchangeRateRepository;
     }
+
     public async Task<Money?> Handle(ExchangeQuery request, CancellationToken cancellationToken)
     {
         var exchangeRate = await exchangeRateRepository.GetExchangeRate(request.Money.CurrencyId, request.TargetCurrencyId, request.Date);

@@ -31,7 +31,7 @@ internal class OutboxRepository : IOutboxRepository
     {
         return await context.OutboxMessages.AsNoTracking()
             .OrderBy(i => i.OccurredOn) // old first
-            .Where(i => i.ProcessedDate == null && (i.ProcessingDate < Clock.Now || i.ProcessedDate == null))
+            .Where(i => i.ProcessedDate == null && (i.ProcessingDate < Clock.Now || i.ProcessingDate == null))
             .Select(x => x.Id)
             .Take(take)
             .ToListAsync(cancellationToken);

@@ -21,6 +21,7 @@
   <Folder Name="/tests/">
     <Project Path="tests\Wealth.CurrencyManagement.Application.Tests\Wealth.CurrencyManagement.Application.Tests.csproj" Type="Classic C#" />
     <Project Path="tests\Wealth.CurrencyManagement.Domain.Tests\Wealth.CurrencyManagement.Domain.Tests.csproj" />
+    <Project Path="tests\Wealth.CurrencyManagement.Infrastructure.Tests\Wealth.CurrencyManagement.Infrastructure.Tests.csproj" Type="Classic C#" />
     <File Path="tests\Directory.Build.Props" />
   </Folder>
 </Solution>

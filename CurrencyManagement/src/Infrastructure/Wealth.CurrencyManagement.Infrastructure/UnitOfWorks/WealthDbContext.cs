@@ -12,9 +12,10 @@ namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 /// </summary>
 public class WealthDbContext : DbContext
 {
-    public DbSet<Currency> Currencies { get; internal init; }
-    public DbSet<ExchangeRate> ExchangeRates { get; internal init; }
-    public DbSet<OutboxMessage> OutboxMessages { get; internal init; }
+    public virtual DbSet<Currency> Currencies { get; internal init; }
+    public virtual DbSet<ExchangeRate> ExchangeRates { get; internal init; }
+    public virtual DbSet<OutboxMessage> OutboxMessages { get; internal init; }
+
 
     private bool commited;
 

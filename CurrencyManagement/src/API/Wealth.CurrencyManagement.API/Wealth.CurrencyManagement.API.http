@@ -86,3 +86,9 @@ Content-Type: application/json
 
 POST {{API_HostAddress}}/OutboxTrigger/Next
 Accept: application/json
+
+###
+
+# @name CheckNewExchangeRates
+
+POST {{API_HostAddress}}/ExchangeRate/CheckNewExchangeRates/USD/RUB

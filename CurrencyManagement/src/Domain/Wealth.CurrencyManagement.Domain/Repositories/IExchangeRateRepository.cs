@@ -14,4 +14,6 @@ public interface IExchangeRateRepository
         CurrencyId targetCurrencyId,
         decimal rate,
         DateOnly validOnDate);
+
+    Task<DateOnly> GetLastExchangeRateDate(CurrencyId requestFromCurrency, CurrencyId requestToCurrency);
 }

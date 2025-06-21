@@ -33,4 +33,12 @@ public class ExchangeRateController : Controller
         var result = await invoker.Query(new ExchangeQuery(new Money(fromId, value), new CurrencyId(toId), date));
         return Ok(result);
     }
+
+    
+    [HttpPost("[action]/{fromId}/{toId}")]
+    public async Task<IActionResult> CheckNewExchangeRates(string fromId, string toId)
+    {
+        await invoker.Command(new CheckNewExchangeRatesCommand(new CurrencyId(fromId), new CurrencyId(toId)));
+        return Ok();
+    }
 }

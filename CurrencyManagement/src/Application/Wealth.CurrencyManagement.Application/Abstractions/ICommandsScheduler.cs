@@ -2,8 +2,8 @@
 
 public interface ICommandsScheduler
 {
-    Task EnqueueAsync(ICommand command);
-    Task EnqueueAsync<TResult>(ICommand<TResult> command);
-    Task EnqueuePublishingEventAsync(IntegrationEvent integrationEvent);
-    Task ScheduleAsync(ICommand command, DateTimeOffset date);
+    Task EnqueueAsync(ICommand command, CancellationToken cancellationToken = default);
+    Task EnqueueAsync<TResult>(ICommand<TResult> command, CancellationToken cancellationToken = default);
+    Task EnqueuePublishingEventAsync(IntegrationEvent integrationEvent, CancellationToken cancellationToken = default);
+    Task ScheduleAsync(ICommand command, DateTimeOffset date, CancellationToken cancellationToken = default);
 }

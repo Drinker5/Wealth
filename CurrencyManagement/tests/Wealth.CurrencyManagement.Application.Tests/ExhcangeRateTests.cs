@@ -1,3 +1,4 @@
+using Wealth.CurrencyManagement.Application.DataProviders;
 using Wealth.CurrencyManagement.Application.ExchangeRates.Commands;
 using Wealth.CurrencyManagement.Application.ExchangeRates.Query;
 using Wealth.CurrencyManagement.Application.Tests.TestHelpers;
@@ -9,6 +10,15 @@ namespace Wealth.CurrencyManagement.Application.Tests;
 
 public class ExhcangeRateTests
 {
+    private readonly ICurrencyRepository currencyRepo;
+    private readonly IExchangeRateRepository exchangeRateRepo;
+
+    public ExhcangeRateTests()
+    {
+        currencyRepo = Substitute.For<ICurrencyRepository>();
+        exchangeRateRepo = Substitute.For<IExchangeRateRepository>();
+    }
+
     [Fact]
     public async Task WhenCreateCurrency()
     {
@@ -16,17 +26,15 @@ public class ExhcangeRateTests
         var toId = new CurrencyId("BAR");
         var date = new DateOnly(2000, 1, 1);
         var command = new CreateExchangeRateCommand(baseId, toId, 1.1m, date);
-        var currencyRepo = Substitute.For<ICurrencyRepository>();
         currencyRepo.GetCurrency(baseId).Returns(new CurrencyBuilder().Build());
         currencyRepo.GetCurrency(toId).Returns(new CurrencyBuilder().Build());
-        var repo = Substitute.For<IExchangeRateRepository>();
-        var handler = new CreateExchangeRateCommandHandler(currencyRepo, repo);
+        var handler = new CreateExchangeRateCommandHandler(currencyRepo, exchangeRateRepo);
 
         await handler.Handle(command, CancellationToken.None);
 
         await currencyRepo.Received(1).GetCurrency(baseId);
         await currencyRepo.Received(1).GetCurrency(toId);
-        await repo.Received(1)
+        await exchangeRateRepo.Received(1)
             .CreateExchangeRate(
                 command.BaseCurrencyId,
                 command.TargetCurrencyId,
@@ -39,28 +47,26 @@ public class ExhcangeRateTests
     {
         var money = new Money(new CurrencyId("FOO"), 100);
         var query = new ExchangeQuery(money, new CurrencyId("BAR"), new DateOnly(2000, 1, 1));
-        var repo = Substitute.For<IExchangeRateRepository>();
         var rate = new ExchangeRateBuilder().Build();
-        repo.GetExchangeRate(money.CurrencyId, query.TargetCurrencyId, query.Date).Returns(rate);
-        
-        var handler = new ExchangeQueryHandler(repo);
+        exchangeRateRepo.GetExchangeRate(money.CurrencyId, query.TargetCurrencyId, query.Date).Returns(rate);
+
+        var handler = new ExchangeQueryHandler(exchangeRateRepo);
         var result = await handler.Handle(query, CancellationToken.None);
 
-        await repo.Received(1).GetExchangeRate(money.CurrencyId, query.TargetCurrencyId, query.Date);
+        await exchangeRateRepo.Received(1).GetExchangeRate(money.CurrencyId, query.TargetCurrencyId, query.Date);
         Assert.NotNull(result);
     }
-    
+
     [Fact]
     public async Task WhenExchangeIsNotFound()
     {
         var money = new Money(new CurrencyId("FOO"), 100);
         var query = new ExchangeQuery(money, new CurrencyId("BAR"), new DateOnly(2000, 1, 1));
-        var repo = Substitute.For<IExchangeRateRepository>();
-        
-        var handler = new ExchangeQueryHandler(repo);
+
+        var handler = new ExchangeQueryHandler(exchangeRateRepo);
         var result = await handler.Handle(query, CancellationToken.None);
 
-        await repo.Received(1).GetExchangeRate(money.CurrencyId, query.TargetCurrencyId, query.Date);
+        await exchangeRateRepo.Received(1).GetExchangeRate(money.CurrencyId, query.TargetCurrencyId, query.Date);
         Assert.Null(result);
     }
 }

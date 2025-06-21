@@ -1,0 +1,1 @@
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Wealth.CurrencyManagement.Infrastructure.Tests")]
