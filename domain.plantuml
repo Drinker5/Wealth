@@ -117,14 +117,19 @@ package CurrencyManagement {
         Amount
     }
 
-    protocol Events {
+    protocol DomainEvents {
         CurrencyRenamed
         EchangeAdded
     }
 
     interface API {
-        Currencies
-        Echange(BaseCurrencyId, TargetCurrencyId)
+        GET Currency: Currency[]
+        GET EchangeRate (fromId, toId, rate, date): Money 
+        --
+        POST Currency (CreateCurrencyRequest)
+        PUT Currency (RenameCurrencyRequest)
+        POST ExchangeRate (CreateEchangeRateRequest)
+        POST EchangeRate/CheckNewExchangeRates/{fromId}/{toId}
     }
 }
 
