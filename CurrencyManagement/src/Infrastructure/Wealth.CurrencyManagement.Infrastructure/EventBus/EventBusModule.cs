@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
 using RabbitMQ.Client;
@@ -35,7 +35,7 @@ public class EventBusModule : IServiceModule
 
         services.AddSingleton<IConnectionFactory>(sp => CreateConnectionFactory(configSection));
         services.AddSingleton<IConnection>(sp =>
-            CreateConnection(sp.GetRequiredService<IConnectionFactory>(), settings.RetryCount).AsTask().GetAwaiter().GetResult());
+            CreateConnection(sp, settings.RetryCount).AsTask().GetAwaiter().GetResult());
     }
 
     private IConnectionFactory CreateConnectionFactory(IConfigurationSection configSection)
@@ -46,9 +46,10 @@ public class EventBusModule : IServiceModule
         return factory;
     }
 
-    private static ValueTask<IConnection> CreateConnection(IConnectionFactory factory, int retryCount, CancellationToken cancellationToken = default)
+    private static ValueTask<IConnection> CreateConnection(IServiceProvider sp, int retryCount, CancellationToken cancellationToken = default)
     {
         var resiliencePipelineBuilder = new ResiliencePipelineBuilder();
+        var logger = sp.GetRequiredService<ILogger<EventBusModule>>();
         if (retryCount > 0)
         {
             resiliencePipelineBuilder.AddRetry(new RetryStrategyOptions
@@ -59,11 +60,17 @@ public class EventBusModule : IServiceModule
                 BackoffType = DelayBackoffType.Exponential,
                 MaxRetryAttempts = retryCount,
                 Delay = TimeSpan.FromSeconds(1),
+                OnRetry = args =>
+                {
+                    logger.LogWarning("Retrying RabbitMQ connection, attempt: {Attempt}, next in: {Delay}", args.AttemptNumber, args.RetryDelay);
+                    return ValueTask.CompletedTask;
+                },
             });
         }
 
         var resiliencePipeline = resiliencePipelineBuilder.Build();
 
+        var factory = sp.GetRequiredService<IConnectionFactory>();
         return resiliencePipeline.ExecuteAsync(static async (factory, cancellationToken) =>
             await factory.CreateConnectionAsync(cancellationToken), factory, cancellationToken);
     }
