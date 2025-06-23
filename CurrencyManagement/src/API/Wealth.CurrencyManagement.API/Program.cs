@@ -7,13 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 
-var logConfig = new LoggerConfiguration()
-    .MinimumLevel.Information()
-    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-    .Enrich.FromLogContext();
-
-const string outputTemplate = "[{Level:u3}] {Message:lj}{NewLine}{Exception}";
-logConfig = logConfig.WriteTo.Console(outputTemplate: outputTemplate);
+var logConfig = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration);
 
 builder.Services.AddHttpClient();
 builder.Services.AddLogging(o => o.ClearProviders().AddSerilog(logConfig.CreateLogger(), dispose: true));
