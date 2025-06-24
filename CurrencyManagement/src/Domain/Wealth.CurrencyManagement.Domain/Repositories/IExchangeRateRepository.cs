@@ -16,4 +16,8 @@ public interface IExchangeRateRepository
         DateOnly validOnDate);
 
     Task<DateOnly> GetLastExchangeRateDate(CurrencyId requestFromCurrency, CurrencyId requestToCurrency);
+    Task<PaginatedResult<ExchangeRate>> GetExchangeRates(
+        CurrencyId requestFromId,
+        CurrencyId requestToId,
+        PageRequest pageRequest);
 }

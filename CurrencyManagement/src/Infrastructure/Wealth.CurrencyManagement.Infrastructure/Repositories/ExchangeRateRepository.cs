@@ -47,4 +47,21 @@ public class ExchangeRateRepository : IExchangeRateRepository
 
         return date;
     }
+
+    public async Task<PaginatedResult<ExchangeRate>> GetExchangeRates(CurrencyId requestFromId, CurrencyId requestToId, PageRequest pageRequest)
+    {
+        var skip = pageRequest.PageSize * (pageRequest.Page - 1);
+        var take = pageRequest.PageSize;
+        var queryable = context.ExchangeRates.AsNoTracking()
+            .Where(e => e.BaseCurrencyId == requestFromId)
+            .Where(e => e.TargetCurrencyId == requestToId);
+        var total = await queryable.CountAsync();
+        var exchangeRates = await queryable
+            .OrderByDescending(e => e.ValidOnDate)
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync();
+
+        return new PaginatedResult<ExchangeRate>(exchangeRates.AsReadOnly(), total);
+    }
 }

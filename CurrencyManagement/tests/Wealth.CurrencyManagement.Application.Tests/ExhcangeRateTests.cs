@@ -1,6 +1,6 @@
 using Wealth.CurrencyManagement.Application.DataProviders;
 using Wealth.CurrencyManagement.Application.ExchangeRates.Commands;
-using Wealth.CurrencyManagement.Application.ExchangeRates.Query;
+using Wealth.CurrencyManagement.Application.ExchangeRates.Queries;
 using Wealth.CurrencyManagement.Application.Tests.TestHelpers;
 using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Domain.ExchangeRates;

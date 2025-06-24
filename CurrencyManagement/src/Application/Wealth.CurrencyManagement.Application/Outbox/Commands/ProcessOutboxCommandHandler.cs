@@ -93,7 +93,7 @@ internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxComman
             throw new InvalidOperationException($"Could not deserialize message '{outboxMessage.Data}'");
 
         await using var scope = serviceProvider.CreateAsyncScope();
-        
+
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
         if (type.IsAssignableTo(typeof(INotification)))
@@ -126,6 +126,9 @@ internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxComman
         var retryOptions = new RetryStrategyOptions
         {
             MaxRetryAttempts = retryCount,
+            ShouldHandle = new PredicateBuilder()
+                .Handle<ArgumentException>(_ => false)
+                .Handle<Exception>(e => e is not ArgumentException),
             DelayGenerator = (context) => ValueTask.FromResult(GenerateDelay(context.AttemptNumber))
         };
 

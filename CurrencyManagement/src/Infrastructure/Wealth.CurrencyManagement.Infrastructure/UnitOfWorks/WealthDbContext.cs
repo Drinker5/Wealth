@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Logging;
 using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Domain.Currencies;
@@ -10,7 +11,7 @@ namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 /// dotnet ef migrations add --project src\Infrastructure\Wealth.CurrencyManagement.Infrastructure --startup-project .\src\API\Wealth.CurrencyManagement.API Name
 /// dotnet ef database update --project src\Infrastructure\Wealth.CurrencyManagement.Infrastructure --startup-project .\src\API\Wealth.CurrencyManagement.API
 /// </summary>
-public class WealthDbContext : DbContext
+public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbContext>
 {
     public virtual DbSet<Currency> Currencies { get; internal init; }
     public virtual DbSet<ExchangeRate> ExchangeRates { get; internal init; }
@@ -18,8 +19,11 @@ public class WealthDbContext : DbContext
 
 
     private bool commited;
+    public WealthDbContext()
+    {
+    }
 
-    public WealthDbContext(DbContextOptions options)
+    public WealthDbContext(DbContextOptions<WealthDbContext> options)
         : base(options)
     {
     }
@@ -38,5 +42,12 @@ public class WealthDbContext : DbContext
 
         commited = true;
         return base.SaveChangesAsync(cancellationToken);
+    }
+
+    public WealthDbContext CreateDbContext(string[] args)
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<WealthDbContext>();
+        optionsBuilder.UseInMemoryDatabase("Design");
+        return new WealthDbContext(optionsBuilder.Options);
     }
 }

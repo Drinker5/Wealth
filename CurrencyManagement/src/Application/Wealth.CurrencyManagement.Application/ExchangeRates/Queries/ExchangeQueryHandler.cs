@@ -1,9 +1,8 @@
 using Wealth.CurrencyManagement.Application.Abstractions;
-using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Domain.ExchangeRates;
 using Wealth.CurrencyManagement.Domain.Repositories;
 
-namespace Wealth.CurrencyManagement.Application.ExchangeRates.Query;
+namespace Wealth.CurrencyManagement.Application.ExchangeRates.Queries;
 
 public class ExchangeQueryHandler : IQueryHandler<ExchangeQuery, Money?>
 {

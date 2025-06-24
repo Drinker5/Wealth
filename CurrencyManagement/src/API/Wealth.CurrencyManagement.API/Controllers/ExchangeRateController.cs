@@ -1,11 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Wealth.CurrencyManagement.API.Controllers.Requests;
-using Wealth.CurrencyManagement.Application.Currencies.Queries;
 using Wealth.CurrencyManagement.Application.ExchangeRates.Commands;
-using Wealth.CurrencyManagement.Application.ExchangeRates.Query;
+using Wealth.CurrencyManagement.Application.ExchangeRates.Queries;
 using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Domain.ExchangeRates;
-using Wealth.CurrencyManagement.Infrastructure;
 using Wealth.CurrencyManagement.Infrastructure.Mediation;
 
 namespace Wealth.CurrencyManagement.API.Controllers;

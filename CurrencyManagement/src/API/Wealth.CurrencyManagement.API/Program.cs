@@ -1,11 +1,12 @@
 using Serilog;
-using Serilog.Events;
+using Wealth.CurrencyManagement.API.Components;
 using Wealth.CurrencyManagement.Infrastructure.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddOpenApi();
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
 
 var logConfig = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration);
 
@@ -20,8 +21,15 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    app.UseHsts();
 }
 
-app.MapControllers();
 app.UseHttpsRedirection();
+app.UseAntiforgery();
+app.MapStaticAssets();
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
+app.MapControllers();
+
 app.Run();

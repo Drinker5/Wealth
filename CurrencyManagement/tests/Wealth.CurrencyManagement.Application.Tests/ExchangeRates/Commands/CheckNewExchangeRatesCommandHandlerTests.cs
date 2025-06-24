@@ -16,6 +16,7 @@ public class CheckNewExchangeRatesCommandHandlerTests
     private readonly ICommandsScheduler scheduler;
     private readonly CurrencyId c1 = "FOO";
     private readonly CurrencyId c2 = "BAR";
+    private readonly CurrencyId notExisted = "QWE";
     private readonly DateOnly d1 = new(2020, 1, 1);
 
     public CheckNewExchangeRatesCommandHandlerTests()
@@ -70,5 +71,25 @@ public class CheckNewExchangeRatesCommandHandlerTests
         await curencyRepo.Received(1).GetCurrency(c2);
         await exchangeRateRepository.Received(1).GetLastExchangeRateDate(c1, c2);
         Assert.Empty(scheduler.ReceivedCalls());
+    }
+
+    [Fact]
+    public async Task WhenCommandExecuted_SameCurrencies()
+    {
+        var command = new CheckNewExchangeRatesCommand(c1, c1);
+        
+        await Assert.ThrowsAnyAsync<InvalidOperationException>(async () =>  await handler.Handle(command, CancellationToken.None));
+    }
+    
+    [Fact]
+    public async Task WhenCommandExecuted_NotExistedCurrencies()
+    {
+        var command = new CheckNewExchangeRatesCommand(c1, notExisted);
+        
+        await Assert.ThrowsAnyAsync<InvalidOperationException>(async () =>  await handler.Handle(command, CancellationToken.None));
+        
+        var command2 = new CheckNewExchangeRatesCommand(notExisted, c2);
+        
+        await Assert.ThrowsAnyAsync<InvalidOperationException>(async () =>  await handler.Handle(command2, CancellationToken.None));
     }
 }

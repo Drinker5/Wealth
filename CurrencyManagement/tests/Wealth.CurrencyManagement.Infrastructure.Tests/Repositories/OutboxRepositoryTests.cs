@@ -20,7 +20,7 @@ public class OutboxRepositoryTests
             .UseInMemoryDatabase("fakeDb")
             .Options;
         context = new WealthDbContext(options);
-
+        context.Database.EnsureDeleted();
         repo = new OutboxRepository(context);
         Clock.SetCustomDate(now);
     }

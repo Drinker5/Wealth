@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.CurrencyManagement.Application.Abstractions;
+using Wealth.CurrencyManagement.Application.Validators;
 using Wealth.CurrencyManagement.Infrastructure.Abstractions;
 using Wealth.CurrencyManagement.Infrastructure.Mediation.RequestProcessing;
 using Wealth.CurrencyManagement.Infrastructure.Mediation.RequestProcessing.CommandBehaviors;
@@ -18,9 +20,12 @@ public class MediatorModule : IServiceModule
         {
             cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
             cfg.AddOpenBehavior(typeof(CommandLoggingBehavior<,>));
+            cfg.AddOpenBehavior(typeof(CommandValidationBehavior<,>));
             cfg.AddOpenBehavior(typeof(CommandUnitOfWorkBehavior<,>));
 
             cfg.AddOpenBehavior(typeof(QueryLoggingPipeline<,>));
         });
+        
+        services.AddValidatorsFromAssemblyContaining<CommandValidator<ICommand>>();
     }
 }

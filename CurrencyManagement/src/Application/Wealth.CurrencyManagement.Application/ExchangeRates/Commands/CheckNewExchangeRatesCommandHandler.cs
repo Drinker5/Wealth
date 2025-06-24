@@ -30,6 +30,9 @@ public class CheckNewExchangeRatesCommandHandler : ICommandHandler<CheckNewExcha
         if (c2 == null)
             throw new InvalidOperationException($"Currency {request.ToCurrency} not found");
 
+        if (c1 == c2)
+            throw new InvalidOperationException($"Currency {request.ToCurrency} is same");
+        
         var date = await exchangeRateRepository.GetLastExchangeRateDate(request.FromCurrency, request.ToCurrency);
 
         var scheduled = 0;
@@ -40,6 +43,8 @@ public class CheckNewExchangeRatesCommandHandler : ICommandHandler<CheckNewExcha
             var provideNewExchangeRateCommand = new ProvideNewExchangeRateCommand(request.FromCurrency, request.ToCurrency, d);
             await scheduler.ScheduleAsync(provideNewExchangeRateCommand, whenToExecute, cancellationToken);
             scheduled++;
+            if (scheduled > 30) // schedule only 30 per command
+                break;
         }
     }
 }

@@ -1,0 +1,47 @@
+﻿@page "/currencies"
+@rendermode InteractiveServer
+@using Wealth.CurrencyManagement.Application.Currencies.Queries
+@inject CqrsInvoker cqrsInvoker
+<PageTitle>Currencies</PageTitle>
+
+<h1>Currencies</h1>
+
+@if (currencies == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>CurrencyId</th>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var currency in currencies)
+        {
+            <tr>
+                <td>@currency.CurrencyId</td>
+                <td>@currency.Symbol - @currency.Name</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<CurrencyDTO>? currencies;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            currencies = await cqrsInvoker.Query(new GetCurrenciesQuery());
+            StateHasChanged();
+        }
+    }
+}

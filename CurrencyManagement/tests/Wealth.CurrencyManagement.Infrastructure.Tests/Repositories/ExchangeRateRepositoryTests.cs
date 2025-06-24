@@ -23,6 +23,7 @@ public class ExchangeRateRepositoryTests
             .UseInMemoryDatabase("fakeDb")
             .Options;
         context = new WealthDbContext(options);
+        context.Database.EnsureDeleted();
         repo = new ExchangeRateRepository(context);
     }
 
