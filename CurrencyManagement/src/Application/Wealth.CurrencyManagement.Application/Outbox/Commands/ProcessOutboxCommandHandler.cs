@@ -126,9 +126,6 @@ internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxComman
         var retryOptions = new RetryStrategyOptions
         {
             MaxRetryAttempts = retryCount,
-            ShouldHandle = new PredicateBuilder()
-                .Handle<ArgumentException>(_ => false)
-                .Handle<Exception>(e => e is not ArgumentException),
             DelayGenerator = (context) => ValueTask.FromResult(GenerateDelay(context.AttemptNumber))
         };
 

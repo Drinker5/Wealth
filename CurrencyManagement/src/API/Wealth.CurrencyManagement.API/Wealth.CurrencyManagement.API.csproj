@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.6" />
@@ -15,42 +14,4 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\Wealth.CurrencyManagement.Infrastructure\Wealth.CurrencyManagement.Infrastructure.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\ExchangeRates\Create.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\ExchangeRates\Delete.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\ExchangeRates\Details.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\ExchangeRates\Edit.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\ExchangeRates\Index.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Currencies\Create.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Currencies\Delete.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Currencies\Details.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Currencies\Edit.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Currencies\Index.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Shared\_Layout.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Shared\_ViewImports.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Shared\_ViewStart.cshtml" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\_js\bootstrap.bundle.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\_js\bootstrap.bundle.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\_js\bootstrap.bundle.min.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\_js\bootstrap.bundle.min.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\_js\bootstrap.esm.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\_js\bootstrap.esm.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\_js\bootstrap.esm.min.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\_js\bootstrap.esm.min.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\_js\bootstrap.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\_js\bootstrap.js.map" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\_js\bootstrap.min.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\_js\bootstrap.min.js.map" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="Components\Layout\MainLayout.razor" />
-    <AdditionalFiles Include="Components\Layout\NavMenu.razor" />
-    <AdditionalFiles Include="Components\Pages\Counter.razor" />
-    <AdditionalFiles Include="Components\Pages\Error.razor" />
-    <AdditionalFiles Include="Components\Pages\Home.razor" />
-    <AdditionalFiles Include="Components\Pages\Weather.razor" />
-  </ItemGroup>
-
 </Project>
