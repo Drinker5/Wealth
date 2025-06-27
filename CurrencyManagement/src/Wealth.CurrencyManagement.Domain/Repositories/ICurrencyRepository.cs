@@ -8,4 +8,5 @@ public interface ICurrencyRepository
     Task<Currency> CreateCurrency(CurrencyId id, string name, string symbol);
     Task ChangeCurrencyName(CurrencyId id, string newName);
     Task<IEnumerable<Currency>> GetCurrencies();
+    Task DeleteCurrency(CurrencyId requestCurrencyId);
 }

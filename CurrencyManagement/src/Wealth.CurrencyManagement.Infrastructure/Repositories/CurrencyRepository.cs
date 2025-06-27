@@ -24,7 +24,7 @@ public class CurrencyRepository : ICurrencyRepository
         var exists = await GetCurrency(id);
         if (exists != null)
             return exists;
-        
+
         var newCurrency = Currency.Create(id, name, symbol);
         await context.Currencies.AddAsync(newCurrency);
         return newCurrency;
@@ -35,12 +35,21 @@ public class CurrencyRepository : ICurrencyRepository
         var exists = await GetCurrency(id);
         if (exists == null)
             return;
-        
+
         exists.Rename(newName);
     }
 
     public async Task<IEnumerable<Currency>> GetCurrencies()
     {
         return await context.Currencies.AsNoTracking().ToListAsync();
+    }
+
+    public async Task DeleteCurrency(CurrencyId requestCurrencyId)
+    {
+        var currency = await GetCurrency(requestCurrencyId);
+        if (currency == null)
+            return;
+
+        context.Currencies.Remove(currency);
     }
 }
