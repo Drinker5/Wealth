@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Wealth.CurrencyManagement.Application.Abstractions;
+namespace Wealth.CurrencyManagement.Infrastructure.Abstractions;
 
 public interface IServiceModule
 {

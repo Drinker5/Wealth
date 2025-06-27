@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Wealth.CurrencyManagement.Application.Abstractions;
-using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
+using Wealth.CurrencyManagement.Infrastructure.Abstractions;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Outbox;
 

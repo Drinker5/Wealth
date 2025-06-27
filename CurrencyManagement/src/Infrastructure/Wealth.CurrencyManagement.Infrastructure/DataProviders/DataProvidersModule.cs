@@ -1,8 +1,8 @@
 ﻿using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Application.DataProviders;
+using Wealth.CurrencyManagement.Infrastructure.Abstractions;
 
 namespace Wealth.CurrencyManagement.Infrastructure.DataProviders;
 

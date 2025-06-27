@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,6 +9,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Application.DomainEvents;
+using Wealth.CurrencyManagement.Infrastructure.Abstractions;
 
 namespace Wealth.CurrencyManagement.Infrastructure.EventBus;
 

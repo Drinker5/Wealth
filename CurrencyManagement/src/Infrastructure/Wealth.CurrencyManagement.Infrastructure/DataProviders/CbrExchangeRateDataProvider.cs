@@ -8,7 +8,6 @@ using Polly.Bulkhead;
 using Polly.CircuitBreaker;
 using Polly.RateLimit;
 using Polly.Retry;
-using Polly.Timeout;
 using Wealth.CurrencyManagement.Application.DataProviders;
 using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Domain.Utilities;

@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using Wealth.CurrencyManagement.Application.Abstractions;
-using Wealth.CurrencyManagement.Domain.Abstractions;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Mediation.RequestProcessing.QueryPipelines;
 

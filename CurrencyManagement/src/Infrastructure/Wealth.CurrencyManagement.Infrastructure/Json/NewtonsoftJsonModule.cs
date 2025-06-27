@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Wealth.CurrencyManagement.Application.Abstractions;
-using Wealth.CurrencyManagement.Domain.Abstractions;
 using Wealth.CurrencyManagement.Infrastructure.Abstractions;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Json;
