@@ -10,8 +10,7 @@
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="4.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
   </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructure\Wealth.CurrencyManagement.Infrastructure\Wealth.CurrencyManagement.Infrastructure.csproj" />
+    <ProjectReference Include="..\Wealth.CurrencyManagement.Infrastructure\Wealth.CurrencyManagement.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

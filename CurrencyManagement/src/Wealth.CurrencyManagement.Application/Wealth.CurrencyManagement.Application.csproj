@@ -8,6 +8,6 @@
     <PackageReference Include="Polly" Version="8.6.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Domain\Wealth.CurrencyManagement.Domain\Wealth.CurrencyManagement.Domain.csproj" />
+    <ProjectReference Include="..\Wealth.CurrencyManagement.Domain\Wealth.CurrencyManagement.Domain.csproj" />
   </ItemGroup>
 </Project>

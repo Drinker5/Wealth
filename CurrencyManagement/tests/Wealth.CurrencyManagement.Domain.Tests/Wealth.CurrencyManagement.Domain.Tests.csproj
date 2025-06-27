@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Domain\Wealth.CurrencyManagement.Domain\Wealth.CurrencyManagement.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Wealth.CurrencyManagement.Domain\Wealth.CurrencyManagement.Domain.csproj" />
   </ItemGroup>
 
 </Project>

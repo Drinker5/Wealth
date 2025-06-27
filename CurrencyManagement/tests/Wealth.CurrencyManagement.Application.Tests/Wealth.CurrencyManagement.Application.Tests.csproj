@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Application\Wealth.CurrencyManagement.Application\Wealth.CurrencyManagement.Application.csproj" />
-    <ProjectReference Include="..\..\src\Infrastructure\Wealth.CurrencyManagement.Infrastructure\Wealth.CurrencyManagement.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Wealth.CurrencyManagement.Application\Wealth.CurrencyManagement.Application.csproj" />
+    <ProjectReference Include="..\..\src\Wealth.CurrencyManagement.Infrastructure\Wealth.CurrencyManagement.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="DataProviders\response.xml">
