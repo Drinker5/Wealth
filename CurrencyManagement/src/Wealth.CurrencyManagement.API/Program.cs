@@ -1,5 +1,5 @@
 using Serilog;
-using Wealth.CurrencyManagement.API.Components;
+using Wealth.CurrencyManagement.API.Blazor;
 using Wealth.CurrencyManagement.Infrastructure.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);

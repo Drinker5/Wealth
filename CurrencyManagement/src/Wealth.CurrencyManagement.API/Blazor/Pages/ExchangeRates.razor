@@ -3,13 +3,12 @@
 @using Wealth.CurrencyManagement.Application.Currencies.Queries
 @using Wealth.CurrencyManagement.Application.ExchangeRates.Queries
 @using Wealth.CurrencyManagement.Domain.Repositories
-@using Wealth.CurrencyManagement.API.Components.Components
 @using Wealth.CurrencyManagement.Application.ExchangeRates.Commands
 @inject CqrsInvoker cqrsInvoker
 <PageTitle>Currencies</PageTitle>
 
 <h1>Exchange Rates</h1>
-<ErrorModal @bind-Show="showErrorModal" @bind-Message="errorMessage" OnClose="() => showErrorModal = false" />
+<ErrorModal @bind-Show="showErrorModal" @bind-Message="errorMessage" OnClose="() => showErrorModal = false"/>
 
 @if (exchangeRates == null)
 {
@@ -72,8 +71,9 @@ else
 
                 @for (int i = Math.Max(1, pagination.Page - 2); i <= Math.Min(pagination.TotalPages, pagination.Page + 2); i++)
                 {
+                    var page = i;
                     <li class="page-item @(i == pagination.Page ? "active" : "")">
-                        <button class="page-link" @onclick="() => ChangePage(i)">@i</button>
+                        <button class="page-link" @onclick="() => ChangePage(page)">@i</button>
                     </li>
                 }
 
@@ -180,4 +180,5 @@ else
             StateHasChanged();
         }
     }
+
 }
