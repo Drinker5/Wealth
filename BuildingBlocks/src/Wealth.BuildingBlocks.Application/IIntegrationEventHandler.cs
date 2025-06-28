@@ -1,4 +1,4 @@
-﻿namespace Wealth.CurrencyManagement.Application.Abstractions;
+﻿namespace Wealth.BuildingBlocks.Application;
 
 public interface IIntegrationEventHandler<in TIntegrationEvent> : IIntegrationEventHandler
     where TIntegrationEvent : IntegrationEvent

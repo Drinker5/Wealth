@@ -1,4 +1,4 @@
-using Wealth.CurrencyManagement.Application.Abstractions;
+using Wealth.BuildingBlocks.Application;
 
 namespace Wealth.CurrencyManagement.Application.Currencies.Queries;
 

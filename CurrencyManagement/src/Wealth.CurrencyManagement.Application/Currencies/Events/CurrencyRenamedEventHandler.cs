@@ -1,3 +1,4 @@
+using Wealth.BuildingBlocks.Application;
 using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Application.DomainEvents;
 using Wealth.CurrencyManagement.Domain.Currencies;

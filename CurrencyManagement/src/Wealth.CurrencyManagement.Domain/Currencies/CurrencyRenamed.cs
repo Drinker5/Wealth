@@ -1,5 +1,5 @@
-using Wealth.CurrencyManagement.Domain.Abstractions;
+using Wealth.BuildingBlocks.Domain;
 
 namespace Wealth.CurrencyManagement.Domain.Currencies;
 
-public record CurrencyRenamed(CurrencyId CurrencyId, string NewName) : DomainEvent;
+public record CurrencyRenamed(CurrencyId CurrencyId, string NewName) : IDomainEvent;

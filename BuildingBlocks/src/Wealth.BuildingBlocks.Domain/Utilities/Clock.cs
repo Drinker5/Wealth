@@ -1,4 +1,4 @@
-﻿namespace Wealth.CurrencyManagement.Domain.Utilities;
+﻿namespace Wealth.BuildingBlocks.Domain.Utilities;
 
 public static class Clock
 {

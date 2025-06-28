@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using FluentValidation;
 using MediatR;
+using Wealth.BuildingBlocks.Application;
 using Wealth.CurrencyManagement.Application.Abstractions;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Mediation.RequestProcessing.CommandBehaviors;

@@ -1,4 +1,4 @@
-namespace Wealth.CurrencyManagement.Application.Abstractions;
+namespace Wealth.BuildingBlocks.Application;
 
 public abstract record IntegrationEvent
 {

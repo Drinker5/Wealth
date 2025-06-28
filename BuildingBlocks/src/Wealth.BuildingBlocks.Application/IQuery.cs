@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Wealth.CurrencyManagement.Application.Abstractions;
+namespace Wealth.BuildingBlocks.Application;
 
 public interface IQuery<out TResult> : IRequest<TResult>, IQuery
 {

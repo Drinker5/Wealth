@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Wealth.BuildingBlocks.Application;
 using Wealth.CurrencyManagement.Application.Abstractions;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Mediation;

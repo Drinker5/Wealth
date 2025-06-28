@@ -1,7 +1,9 @@
 <Solution>
   <Folder Name="/BuildingBlocks/" />
   <Folder Name="/BuildingBlocks/src/">
+    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Application\Wealth.BuildingBlocks.Application.csproj" Type="Classic C#" />
     <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Domain\Wealth.BuildingBlocks.Domain.csproj" Type="Classic C#" />
+    <File Path="BuildingBlocks\Directory.Build.props" />
   </Folder>
   <Folder Name="/CurrencyManagement/">
     <File Path="CurrencyManagement/Dockerfile" />
@@ -22,6 +24,7 @@
   </Folder>
   <Folder Name="/InstrumentManagement/" />
   <Folder Name="/InstrumentManagement/src/">
+    <Project Path="InstrumentManagement\src\Wealth.InstrumentManagement.Application\Wealth.InstrumentManagement.Application.csproj" Type="Classic C#" />
     <Project Path="InstrumentManagement\src\Wealth.InstrumentManagement.Domain\Wealth.InstrumentManagement.Domain.csproj" Type="Classic C#" />
     <File Path="InstrumentManagement\src\Directory.Build.props" />
   </Folder>

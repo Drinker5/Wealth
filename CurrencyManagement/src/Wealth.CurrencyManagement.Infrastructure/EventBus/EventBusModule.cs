@@ -7,7 +7,7 @@ using Polly;
 using Polly.Retry;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
-using Wealth.CurrencyManagement.Application.Abstractions;
+using Wealth.BuildingBlocks.Application;
 using Wealth.CurrencyManagement.Application.DomainEvents;
 using Wealth.CurrencyManagement.Infrastructure.Abstractions;
 

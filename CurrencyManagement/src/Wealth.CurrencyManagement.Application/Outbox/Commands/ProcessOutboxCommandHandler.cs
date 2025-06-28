@@ -1,14 +1,14 @@
 ﻿using System.Collections.Concurrent;
-using System.Net.Sockets;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.CurrencyManagement.Application.Abstractions;
-using Wealth.CurrencyManagement.Domain.Utilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Retry;
+using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain;
+using Wealth.BuildingBlocks.Domain.Utilities;
 
 namespace Wealth.CurrencyManagement.Application.Outbox.Commands;
 

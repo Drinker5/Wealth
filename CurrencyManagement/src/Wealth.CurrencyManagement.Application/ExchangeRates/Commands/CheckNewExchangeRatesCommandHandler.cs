@@ -1,6 +1,7 @@
+using Wealth.BuildingBlocks.Application;
+using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Domain.Repositories;
-using Wealth.CurrencyManagement.Domain.Utilities;
 
 namespace Wealth.CurrencyManagement.Application.ExchangeRates.Commands;
 

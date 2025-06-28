@@ -10,7 +10,7 @@ public class BondInstrument : Instrument
 
     public Coupon Coupon { get; private set; }
 
-    public static BondInstrument Create(string name, ISIN isin, Coupon coupon)
+    public static BondInstrument Create(string name, ISIN isin)
     {
         var bond = new BondInstrument();
         bond.Apply(new BondCreated
@@ -18,7 +18,6 @@ public class BondInstrument : Instrument
             Id = InstrumentId.New(),
             Name = name,
             ISIN = isin,
-            Coupon = coupon,
         });
         return bond;
     }
@@ -28,6 +27,23 @@ public class BondInstrument : Instrument
         Id = @event.Id;
         Name = @event.Name;
         ISIN = @event.ISIN;
-        Coupon = @event.Coupon;
+    }
+
+    public void ChangeCoupon(Coupon coupon)
+    {
+        if (Coupon == coupon)
+            return;
+        
+        Apply(new BondCouponChanged
+        {
+            Id = Id,
+            ISIN = ISIN,
+            NewCoupon = coupon
+        });
+    }
+
+    private void When(BondCouponChanged @event)
+    {
+        Coupon = @event.NewCoupon;
     }
 }

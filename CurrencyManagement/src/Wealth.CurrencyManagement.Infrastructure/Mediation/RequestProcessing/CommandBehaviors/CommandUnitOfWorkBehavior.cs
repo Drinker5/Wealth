@@ -1,4 +1,5 @@
 using MediatR;
+using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain;
 using Wealth.CurrencyManagement.Application.Abstractions;
 

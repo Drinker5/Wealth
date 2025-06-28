@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.CurrencyManagement.Application.Abstractions;
-using Wealth.CurrencyManagement.Domain.Utilities;
 using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Repositories;

@@ -7,8 +7,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Retry;
+using Wealth.BuildingBlocks.Application;
+using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.CurrencyManagement.Application.Abstractions;
-using Wealth.CurrencyManagement.Domain.Utilities;
 
 namespace Wealth.CurrencyManagement.Infrastructure.EventBus;
 

@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Application\Wealth.BuildingBlocks.Application.csproj" />
+    <ProjectReference Include="..\Wealth.InstrumentManagement.Domain\Wealth.InstrumentManagement.Domain.csproj" />
+  </ItemGroup>
+</Project>

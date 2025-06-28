@@ -11,7 +11,7 @@ public class StockInstrument : Instrument
 
     public Dividend Dividend { get; private set; }
 
-    public static StockInstrument Create(string name, ISIN isin, Dividend dividend)
+    public static StockInstrument Create(string name, ISIN isin)
     {
         var stock = new StockInstrument();
         stock.Apply(new StockCreated
@@ -19,7 +19,6 @@ public class StockInstrument : Instrument
             Id = InstrumentId.New(),
             Name = name,
             ISIN = isin,
-            Dividend = dividend,
         });
         return stock;
     }
@@ -28,8 +27,13 @@ public class StockInstrument : Instrument
     {
         if (this.Dividend == dividend)
             return;
-        
-        Apply(new DividendChanged(Id, ISIN, dividend));
+
+        Apply(new StockDividendChanged
+        {
+            Id = Id,
+            ISIN = ISIN,
+            NewDividend = dividend
+        });
     }
 
     private void When(StockCreated @event)
@@ -37,13 +41,10 @@ public class StockInstrument : Instrument
         Id = @event.Id;
         Name = @event.Name;
         ISIN = @event.ISIN;
-        Dividend = @event.Dividend;
     }
 
-    private void When(DividendChanged @event)
+    private void When(StockDividendChanged @event)
     {
-        Dividend = @event.Dividend;
+        Dividend = @event.NewDividend;
     }
 }
-
-public record DividendChanged(InstrumentId Id, string ISIN, Dividend Dividend) : IDomainEvent;
