@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Wealth.CurrencyManagement.Domain.Utilities;
+namespace Wealth.BuildingBlocks.Domain.Utilities;
 
 internal static class DynamicInvoker
 {

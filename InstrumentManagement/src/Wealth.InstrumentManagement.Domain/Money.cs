@@ -1,6 +1,5 @@
 using Wealth.BuildingBlocks.Domain;
-using Wealth.CurrencyManagement.Domain.Currencies;
 
-namespace Wealth.CurrencyManagement.Domain.ExchangeRates;
+namespace Wealth.InstrumentManagement.Domain;
 
 public record Money(CurrencyId CurrencyId, decimal Amount) : IValueObject;

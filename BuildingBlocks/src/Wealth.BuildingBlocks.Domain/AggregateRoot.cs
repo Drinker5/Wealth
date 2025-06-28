@@ -1,6 +1,6 @@
-using Wealth.CurrencyManagement.Domain.Utilities;
+using Wealth.BuildingBlocks.Domain.Utilities;
 
-namespace Wealth.CurrencyManagement.Domain.Abstractions;
+namespace Wealth.BuildingBlocks.Domain;
 
 public abstract class AggregateRoot
 {

@@ -1,5 +1,5 @@
-﻿using Wealth.CurrencyManagement.Application.Abstractions;
-using Wealth.CurrencyManagement.Domain.Abstractions;
+﻿using Wealth.BuildingBlocks.Domain;
+using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Domain.Utilities;
 
 namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks.Decorators;

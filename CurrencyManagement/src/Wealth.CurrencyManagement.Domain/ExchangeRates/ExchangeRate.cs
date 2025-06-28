@@ -1,4 +1,4 @@
-using Wealth.CurrencyManagement.Domain.Abstractions;
+using Wealth.BuildingBlocks.Domain;
 using Wealth.CurrencyManagement.Domain.Currencies;
 
 #pragma warning disable CS8618

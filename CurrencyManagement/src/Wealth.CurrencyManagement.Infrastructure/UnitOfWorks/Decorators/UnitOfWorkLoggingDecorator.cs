@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using Wealth.CurrencyManagement.Domain.Abstractions;
+using Wealth.BuildingBlocks.Domain;
 
 namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks.Decorators;
 

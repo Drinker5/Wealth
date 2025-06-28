@@ -3,12 +3,12 @@ using System.Net.Sockets;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.CurrencyManagement.Application.Abstractions;
-using Wealth.CurrencyManagement.Domain.Abstractions;
 using Wealth.CurrencyManagement.Domain.Utilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Retry;
+using Wealth.BuildingBlocks.Domain;
 
 namespace Wealth.CurrencyManagement.Application.Outbox.Commands;
 

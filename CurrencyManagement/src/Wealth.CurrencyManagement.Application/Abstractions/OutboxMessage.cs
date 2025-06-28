@@ -1,6 +1,4 @@
-﻿using Wealth.CurrencyManagement.Domain.Abstractions;
-
-namespace Wealth.CurrencyManagement.Application.Abstractions;
+﻿namespace Wealth.CurrencyManagement.Application.Abstractions;
 
 public class OutboxMessage
 {

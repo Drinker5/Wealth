@@ -1,4 +1,4 @@
-using Wealth.CurrencyManagement.Domain.Abstractions;
+using Wealth.BuildingBlocks.Domain;
 
 namespace Wealth.CurrencyManagement.Domain.Currencies;
 

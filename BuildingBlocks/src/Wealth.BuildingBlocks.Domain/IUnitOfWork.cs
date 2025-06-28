@@ -1,4 +1,4 @@
-namespace Wealth.CurrencyManagement.Domain.Abstractions;
+namespace Wealth.BuildingBlocks.Domain;
 
 public interface IUnitOfWork
 {
