@@ -4,3 +4,15 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+  - package-ecosystem: "nuget"
+    directory: "/BuildingBlocks"
+    schedule:
+      interval: "daily"  
+  - package-ecosystem: "nuget"
+    directory: "/CurrencyManagement"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "nuget"
+    directory: "/InstrumentManagement"
+    schedule:
+      interval: "daily"
