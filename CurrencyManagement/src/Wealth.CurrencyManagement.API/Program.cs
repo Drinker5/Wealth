@@ -14,6 +14,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddLogging(o => o.ClearProviders().AddSerilog(logConfig.CreateLogger(), dispose: true));
 builder.Services.AddServiceModules(builder.Configuration);
 builder.Services.AddControllers();
+builder.Services.AddServiceDiscovery();
 
 var app = builder.Build();
 

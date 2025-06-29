@@ -23,6 +23,24 @@ public class CurrencyController : Controller
         return Ok(result);
     }
 
+    [HttpGet]
+    [Route("{id}")]
+    public async Task<IActionResult> Get(string id)
+    {
+        try
+        {
+            var result = await invoker.Query(new GetCurrencyQuery(id));
+            if (result is null)
+                return NotFound("Currency not found");
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] CreateCurrencyRequest request)
     {

@@ -8,6 +8,8 @@ namespace Wealth.InstrumentManagement.Domain.Instruments;
 /// </summary>
 public record ISIN : IValueObject
 {
+    public static ISIN Empty = new ISIN("000000000000"); 
+
     public string Value { get; }
 
     /// <param name="value">12-character alphanumeric code</param>

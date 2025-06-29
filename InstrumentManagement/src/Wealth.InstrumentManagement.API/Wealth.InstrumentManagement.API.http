@@ -1,0 +1,9 @@
+@API_HostAddress = localhost:5229
+
+###
+GRPC localhost:5229/greet.Greeter/SayHello
+Content-Type: application/grpc
+
+{
+    name: "RUB"
+}
