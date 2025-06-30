@@ -16,6 +16,18 @@ services:
       postgres:
         condition: service_healthy
 
+  instrument-management:
+    build:
+      context: ./InstrumentManagement
+      dockerfile: ./Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Services__currency__http=currency-management
+    ports:
+      - 5001:80
+    restart: on-failure
+
   rabbit:
     image: rabbitmq:management
   postgres:

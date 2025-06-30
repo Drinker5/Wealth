@@ -23,8 +23,8 @@
     <File Path="CurrencyManagement/tests/Directory.Build.props" />
   </Folder>
   <Folder Name="/InstrumentManagement/">
-    <File Path="Dockerfile" />
-    <File Path=".dockerignore" />
+    <File Path="InstrumentManagement/Dockerfile" />
+    <File Path="InstrumentManagement/.dockerignore" />
   </Folder>
   <Folder Name="/InstrumentManagement/src/">
     <Project Path="InstrumentManagement\src\Wealth.InstrumentManagement.API\Wealth.InstrumentManagement.API.csproj" Type="Classic C#" />
