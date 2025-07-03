@@ -29,7 +29,7 @@ public class CurrencyService(ILogger<CurrencyService> logger, HttpClient httpCli
 
         if (response.IsSuccessStatusCode)
         {
-            var sontent = await response.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadAsStringAsync();
             return await response.Content.ReadFromJsonAsync<CurrencyItem>();
         }
 

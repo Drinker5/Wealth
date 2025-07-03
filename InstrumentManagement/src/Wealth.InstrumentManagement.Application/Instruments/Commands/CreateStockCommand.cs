@@ -3,7 +3,7 @@ using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Commands;
 
-public class CreateStockCommand : ICommand
+public class CreateStockCommand : ICommand<InstrumentId>
 {
     public string Name { get; set; }
     public ISIN ISIN { get; set; }

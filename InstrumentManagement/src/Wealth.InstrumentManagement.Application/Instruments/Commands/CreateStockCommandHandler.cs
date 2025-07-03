@@ -1,9 +1,10 @@
 using Wealth.BuildingBlocks.Application;
+using Wealth.InstrumentManagement.Domain.Instruments;
 using Wealth.InstrumentManagement.Domain.Repositories;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Commands;
 
-public class CreateStockCommandHandler : ICommandHandler<CreateStockCommand>
+public class CreateStockCommandHandler : ICommandHandler<CreateStockCommand, InstrumentId>
 {
     private readonly IStocksRepository repository;
 
@@ -12,7 +13,7 @@ public class CreateStockCommandHandler : ICommandHandler<CreateStockCommand>
         this.repository = repository;
     }
 
-    public Task Handle(CreateStockCommand request, CancellationToken cancellationToken)
+    public Task<InstrumentId> Handle(CreateStockCommand request, CancellationToken cancellationToken)
     {
         return repository.CreateStock(request.Name, request.ISIN);
     }

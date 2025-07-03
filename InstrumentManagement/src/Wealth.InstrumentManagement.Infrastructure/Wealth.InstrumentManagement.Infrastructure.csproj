@@ -3,6 +3,7 @@
     <ProjectReference Include="..\Wealth.InstrumentManagement.Application\Wealth.InstrumentManagement.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.6" />
   </ItemGroup>
 </Project>

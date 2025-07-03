@@ -20,8 +20,9 @@ public class CreateBondCommandHandlerTests
         };
         var handler = new CreateBondCommandHandler(bondsRepository);
         
-        await handler.Handle(command, CancellationToken.None);
+        var id = await handler.Handle(command, CancellationToken.None);
         
         A.CallTo(() => bondsRepository.CreateBond(command.Name, command.ISIN)).MustHaveHappened();
+        Assert.That(id, Is.Not.Default);
     }
 }

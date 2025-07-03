@@ -19,8 +19,9 @@ public class CreateStockCommandHandlerTests
         };
         var handler = new CreateStockCommandHandler(stocksRepository);
         
-        await handler.Handle(command, CancellationToken.None);
+        var id = await handler.Handle(command, CancellationToken.None);
         
         A.CallTo(() => stocksRepository.CreateStock(command.Name, command.ISIN)).MustHaveHappened();
+        Assert.That(id, Is.Not.Default);
     }
 }

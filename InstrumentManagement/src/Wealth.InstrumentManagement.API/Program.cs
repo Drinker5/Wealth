@@ -1,3 +1,4 @@
+using Wealth.InstrumentManagement.API.Extensions;
 using Wealth.InstrumentManagement.API.Services;
 using Wealth.InstrumentManagement.Application.Services;
 using Wealth.InstrumentManagement.Infrastructure.Services;
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddGrpc();
+builder.AddApplicationServices();
 
 builder.Services.ConfigureHttpClientDefaults(http =>
 {

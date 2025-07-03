@@ -13,6 +13,8 @@ public abstract class Instrument : AggregateRoot
 
     public Money Price { get; protected set; }
 
+    public InstrumentType Type { get; protected init; }
+
     public void ChangePrice(Money newPrice)
     {
         if (Price == newPrice)

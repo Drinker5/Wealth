@@ -31,6 +31,7 @@ public class BondInstrumentTests
             Assert.That(instrument.Name, Is.EqualTo(name));
             Assert.That(instrument.ISIN, Is.EqualTo(isin));
             Assert.That(instrument.Coupon, Is.Null);
+            Assert.That(instrument.Type, Is.EqualTo(InstrumentType.Bond));
         }
     }
 

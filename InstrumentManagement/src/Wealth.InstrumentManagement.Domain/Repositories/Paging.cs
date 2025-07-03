@@ -1,4 +1,4 @@
-namespace Wealth.CurrencyManagement.Domain.Repositories;
+namespace Wealth.InstrumentManagement.Domain.Repositories;
 
 public record struct PageRequest(int Page, int PageSize);
 

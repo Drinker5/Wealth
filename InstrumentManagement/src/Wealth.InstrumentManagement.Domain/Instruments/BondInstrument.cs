@@ -6,6 +6,7 @@ public class BondInstrument : Instrument
 {
     private BondInstrument()
     {
+        Type = InstrumentType.Bond;
     }
 
     public Coupon Coupon { get; private set; }

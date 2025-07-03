@@ -4,6 +4,6 @@ namespace Wealth.InstrumentManagement.Domain.Repositories;
 
 public interface IBondsRepository
 {
-    Task CreateBond(string name, ISIN isin);
+    Task<InstrumentId> CreateBond(string name, ISIN isin);
     Task ChangeCoupon(InstrumentId id, Coupon coupon);
 }

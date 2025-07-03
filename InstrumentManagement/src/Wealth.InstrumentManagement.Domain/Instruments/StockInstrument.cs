@@ -7,6 +7,7 @@ public class StockInstrument : Instrument
 {
     private StockInstrument()
     {
+        Type = InstrumentType.Stock;
     }
 
     public Dividend Dividend { get; private set; }
