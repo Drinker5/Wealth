@@ -8,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddGrpc();
 builder.AddApplicationServices();
-
 builder.Services.ConfigureHttpClientDefaults(http =>
 {
     // Turn on resilience by default

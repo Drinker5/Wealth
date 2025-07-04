@@ -20,9 +20,9 @@ public class InMemoryInstrumentRepository :
         return Task.FromResult<IEnumerable<Instrument>>(instruments);
     }
 
-    public Task<Instrument?> GetInstrument(InstrumentId id)
+    public Task<Instrument?> GetInstrument(InstrumentId instrumentId)
     {
-        return Task.FromResult(instruments.FirstOrDefault(i => i.Id == id));
+        return Task.FromResult(instruments.FirstOrDefault(i => i.Id == instrumentId));
     }
 
     public Task DeleteInstrument(InstrumentId instrumentId)
