@@ -1,4 +1,5 @@
 using System.Data;
+using System.Reflection.Metadata.Ecma335;
 using Dapper;
 using Dommel;
 using Wealth.InstrumentManagement.Domain;
@@ -11,32 +12,31 @@ namespace Wealth.InstrumentManagement.Infrastructure.Repositories;
 public class InstrumentRepository :
     IInstrumentsRepository,
     IBondsRepository,
-    IStocksRepository, IDisposable
+    IStocksRepository
 {
-    private readonly WealthDbContext dbContext;
     private readonly IDbConnection connection;
 
     public InstrumentRepository(WealthDbContext dbContext)
     {
-        this.dbContext = dbContext;
         connection = dbContext.CreateConnection();
     }
 
     public async Task<IEnumerable<Instrument>> GetInstruments()
     {
-        return await connection.QueryAsync<Instrument>("SELECT * FROM Instruments");
+        var sql = """SELECT * FROM "Instruments" LIMIT 10 """;
+        return await GetInstruments(sql);
     }
 
     public async Task<Instrument?> GetInstrument(InstrumentId instrumentId)
     {
-        return await connection.QueryFirstOrDefaultAsync<Instrument>(
-            "SELECT * FROM Instruments WHERE Id = @Id",
-            new { Id = instrumentId.Id });
+        var sql = """SELECT * FROM "Instruments" WHERE "Id" = @Id""";
+        var instruments = await GetInstruments(sql, new { Id = instrumentId.Id });
+        return instruments.FirstOrDefault();
     }
 
     public async Task DeleteInstrument(InstrumentId instrumentId)
     {
-        await connection.ExecuteAsync("DELETE FROM Instruments WHERE Id = @Id", new { Id = instrumentId.Id });
+        await connection.ExecuteAsync("""DELETE FROM "Instruments" WHERE "Id" = @Id""", new { Id = instrumentId.Id });
     }
 
     public async Task ChangePrice(InstrumentId id, Money price)
@@ -46,45 +46,152 @@ public class InstrumentRepository :
             return;
 
         instrument.ChangePrice(price);
-        await connection.UpdateAsync(instrument);
+        var sql = """
+                  UPDATE "Instruments" 
+                  SET "Price_CurrencyId" = @CurrencyId, "Price_Amount" = @Amount
+                  WHERE "Id" = @Id
+                  """;
+        await connection.ExecuteAsync(sql, new
+        {
+            Id = id.Id,
+            CurrencyId = instrument.Price.CurrencyId.Code,
+            Amount = instrument.Price.Amount,
+        });
     }
 
     public async Task<InstrumentId> CreateBond(string name, ISIN isin)
     {
         var bondInstrument = BondInstrument.Create(name, isin);
-        var id = await connection.InsertAsync(bondInstrument);
-        return (InstrumentId)id;
-    }
+        var sql = """
+                  INSERT INTO "Instruments" ("Id", "Name", "ISIN", "Type") 
+                  VALUES (@Id, @Name, @ISIN, @Type)
+                  """;
+        await connection.ExecuteAsync(sql, new
+        {
+            Id = bondInstrument.Id.Id,
+            Name = bondInstrument.Name,
+            ISIN = bondInstrument.ISIN.Value,
+            Type = bondInstrument.Type
+        });
 
-    public async Task ChangeCoupon(InstrumentId id, Coupon coupon)
-    {
-        var bondInstrument = await GetInstrument(id) as BondInstrument;
-        if (bondInstrument == null)
-            return;
-
-        bondInstrument.ChangeCoupon(coupon);
-        await connection.UpdateAsync(bondInstrument);
-    }
-
-    public async Task ChangeDividend(InstrumentId id, Dividend dividend)
-    {
-        var stockInstrument = await GetInstrument(id) as StockInstrument;
-        if (stockInstrument == null)
-            return;
-
-        stockInstrument.ChangeDividend(dividend);
-        await connection.UpdateAsync(stockInstrument);
+        return bondInstrument.Id;
     }
 
     public async Task<InstrumentId> CreateStock(string name, ISIN isin)
     {
         var stockInstrument = StockInstrument.Create(name, isin);
-        var id = await connection.InsertAsync(stockInstrument);
-        return (InstrumentId)id;
+        var sql = """
+                  INSERT INTO "Instruments" ("Id", "Name", "ISIN", "Type") 
+                  VALUES (@Id, @Name, @ISIN, @Type)
+                  """;
+        var rowsAffected = await connection.ExecuteAsync(sql, new
+        {
+            Id = stockInstrument.Id.Id,
+            Name = stockInstrument.Name,
+            ISIN = stockInstrument.ISIN.Value,
+            Type = stockInstrument.Type
+        });
+
+        return stockInstrument.Id;
     }
 
-    public void Dispose()
+    public async Task ChangeCoupon(InstrumentId id, Coupon coupon)
     {
-        connection.Dispose();
+        var instrument = await GetInstrument(id) as BondInstrument;
+        if (instrument == null)
+            return;
+
+        instrument.ChangeCoupon(coupon);
+        var sql = """
+                  UPDATE "Instruments" 
+                  SET "Coupon_CurrencyId" = @CurrencyId, "Coupon_Amount" = @Amount
+                  WHERE "Id" = @Id
+                  """;
+        await connection.ExecuteAsync(sql, new
+        {
+            Id = id.Id,
+            CurrencyId = coupon.ValuePerYear.CurrencyId.Code,
+            Amount = coupon.ValuePerYear.Amount,
+        });
+    }
+
+    public async Task ChangeDividend(InstrumentId id, Dividend dividend)
+    {
+        var instrument = await GetInstrument(id) as StockInstrument;
+        if (instrument == null)
+            return;
+
+        instrument.ChangeDividend(dividend);
+        var sql = """
+                  UPDATE "Instruments" 
+                  SET "Dividend_CurrencyId" = @CurrencyId, "Dividend_Amount" = @Amount
+                  WHERE "Id" = @Id
+                  """;
+        await connection.ExecuteAsync(sql, new
+        {
+            Id = id.Id,
+            CurrencyId = dividend.ValuePerYear.CurrencyId.Code,
+            Amount = dividend.ValuePerYear.Amount,
+        });
+    }
+
+    private async Task<IEnumerable<Instrument>> GetInstruments(string sql, object? param = null)
+    {
+        using var reader = await connection.ExecuteReaderAsync(sql, param);
+
+        var instruments = new List<Instrument>();
+        while (reader.Read())
+        {
+            var discriminator = (InstrumentType)reader.GetInt32(reader.GetOrdinal(nameof(Instrument.Type)));
+
+            Instrument? instrument = discriminator switch
+            {
+                InstrumentType.Bond => BondParse(reader),
+                InstrumentType.Stock => StockParse(reader),
+                _ => null,
+            };
+
+            if (instrument == null)
+                continue;
+
+            instrument.Name = reader.GetString(reader.GetOrdinal(nameof(instrument.Name)));
+            instrument.ISIN = reader.GetString(reader.GetOrdinal(nameof(instrument.ISIN)));
+            if (!reader.IsDBNull(reader.GetOrdinal("Price_CurrencyId")))
+            {
+                instrument.Price = new Money(
+                    reader.GetString(reader.GetOrdinal("Price_CurrencyId")),
+                    reader.GetDecimal(reader.GetOrdinal("Price_Amount")));
+            }
+
+            instruments.Add(instrument);
+        }
+
+        return instruments;
+
+        BondInstrument BondParse(IDataReader reader)
+        {
+            var bondInstrument = new BondInstrument(reader.GetGuid(reader.GetOrdinal(nameof(BondInstrument.Id))));
+            if (!reader.IsDBNull(reader.GetOrdinal("Coupon_CurrencyId")))
+            {
+                bondInstrument.Coupon = new Coupon(
+                    reader.GetString(reader.GetOrdinal("Coupon_CurrencyId")),
+                    reader.GetDecimal(reader.GetOrdinal("Coupon_Amount")));
+            }
+
+            return bondInstrument;
+        }
+
+        Instrument? StockParse(IDataReader reader)
+        {
+            var stockInstrument = new StockInstrument(reader.GetGuid(reader.GetOrdinal(nameof(StockInstrument.Id))));
+            if (!reader.IsDBNull(reader.GetOrdinal("Dividend_CurrencyId")))
+            {
+                stockInstrument.Dividend = new Dividend(
+                    reader.GetString(reader.GetOrdinal("Dividend_CurrencyId")),
+                    reader.GetDecimal(reader.GetOrdinal("Dividend_Amount")));
+            }
+
+            return stockInstrument;
+        }
     }
 }

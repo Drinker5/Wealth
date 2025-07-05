@@ -11,10 +11,6 @@ public class InMemoryInstrumentRepository :
 {
     private List<Instrument> instruments = [];
 
-    public InMemoryInstrumentRepository()
-    {
-    }
-
     public Task<IEnumerable<Instrument>> GetInstruments()
     {
         return Task.FromResult<IEnumerable<Instrument>>(instruments);

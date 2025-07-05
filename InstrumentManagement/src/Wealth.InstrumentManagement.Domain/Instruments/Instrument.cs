@@ -7,11 +7,11 @@ public abstract class Instrument : AggregateRoot
 {
     public InstrumentId Id { get; protected set; }
 
-    public string Name { get; protected set; }
+    public string Name { get; set; }
 
-    public ISIN ISIN { get; protected set; }
+    public ISIN ISIN { get; set; }
 
-    public Money Price { get; protected set; }
+    public Money Price { get; set; }
 
     public InstrumentType Type { get; protected init; }
 

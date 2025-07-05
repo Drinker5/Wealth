@@ -7,15 +7,23 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 {
     private readonly WealthDbContext context;
     private readonly IDbConnection connection;
-    private readonly IDbTransaction? transaction;
+    private IDbTransaction? transaction;
 
     public UnitOfWork(WealthDbContext context)
     {
         this.context = context;
         connection = context.CreateConnection();
-        transaction = connection.BeginTransaction();
     }
 
+    public ValueTask BeginTransaction()
+    {
+        if (connection.State != ConnectionState.Open)
+            connection.Open();
+        
+        transaction = connection.BeginTransaction();
+        return ValueTask.CompletedTask;
+    }
+    
     public Task<int> Commit(CancellationToken cancellationToken)
     {
         transaction?.Commit();

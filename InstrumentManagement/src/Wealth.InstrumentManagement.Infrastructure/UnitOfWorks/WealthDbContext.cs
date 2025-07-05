@@ -4,9 +4,10 @@ using Npgsql;
 
 namespace Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
-public class WealthDbContext
+public class WealthDbContext : IDisposable
 {
     private readonly IConfiguration configuration;
+    private IDbConnection? connection;
 
     public WealthDbContext(IConfiguration configuration)
     {
@@ -14,8 +15,15 @@ public class WealthDbContext
     }
 
     public IDbConnection CreateConnection()
-        => new NpgsqlConnection(configuration.GetConnectionString("InstrumentManagement"));
+    {
+        return connection ??= new NpgsqlConnection(configuration.GetConnectionString("InstrumentManagement"));
+    }
 
     public IDbConnection CreateMasterConnection()
         => new NpgsqlConnection(configuration.GetConnectionString("Master"));
+
+    public void Dispose()
+    {
+        connection?.Dispose();
+    }
 }

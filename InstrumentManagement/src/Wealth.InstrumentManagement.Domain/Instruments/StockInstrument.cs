@@ -5,19 +5,21 @@ namespace Wealth.InstrumentManagement.Domain.Instruments;
 
 public class StockInstrument : Instrument
 {
-    private StockInstrument()
+    public StockInstrument(Guid id)
     {
+        Id = id;
         Type = InstrumentType.Stock;
     }
 
-    public Dividend Dividend { get; private set; }
+    public Dividend Dividend { get; set; }
 
     public static StockInstrument Create(string name, ISIN isin)
     {
-        var stock = new StockInstrument();
+        var instrumentId = InstrumentId.New();
+        var stock = new StockInstrument(instrumentId);
         stock.Apply(new StockCreated
         {
-            Id = InstrumentId.New(),
+            Id = instrumentId,
             Name = name,
             ISIN = isin,
         });

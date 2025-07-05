@@ -12,13 +12,12 @@ public class MigrationService(IServiceProvider serviceProvider) : IHostedService
         using var scope = serviceProvider.CreateScope();
         var databaseService = scope.ServiceProvider.GetRequiredService<Database>();
         var migrationService = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
-        await databaseService.CreateDatabase("instrumentmanagement");
+        await databaseService.CreateDatabase("InstrumentManagement");
         migrationService.MigrateUp();
         
-        var dbContext = serviceProvider.GetRequiredService<WealthDbContext>();
-        var seeders = serviceProvider.GetRequiredService<IEnumerable<IDbSeeder>>();
+        var seeders = scope.ServiceProvider.GetRequiredService<IEnumerable<IDbSeeder>>();
         foreach (var seeder in seeders)
-            await seeder.SeedAsync(dbContext);
+            await seeder.SeedAsync();
     }
 
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;

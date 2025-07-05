@@ -4,19 +4,21 @@ namespace Wealth.InstrumentManagement.Domain.Instruments;
 
 public class BondInstrument : Instrument
 {
-    private BondInstrument()
+    public BondInstrument(Guid id)
     {
+        this.Id = id;
         Type = InstrumentType.Bond;
     }
 
-    public Coupon Coupon { get; private set; }
+    public Coupon Coupon { get; set; }
 
     public static BondInstrument Create(string name, ISIN isin)
     {
-        var bond = new BondInstrument();
+        var instrumentId = InstrumentId.New();
+        var bond = new BondInstrument(instrumentId);
         bond.Apply(new BondCreated
         {
-            Id = InstrumentId.New(),
+            Id = instrumentId,
             Name = name,
             ISIN = isin,
         });

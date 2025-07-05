@@ -1,6 +1,9 @@
 using System.Reflection;
+using Dommel;
 using FluentMigrator.Runner;
+using Wealth.BuildingBlocks.Domain;
 using Wealth.InstrumentManagement.Domain.Repositories;
+using Wealth.InstrumentManagement.Infrastructure.Dapper;
 using Wealth.InstrumentManagement.Infrastructure.DbSeeding;
 using Wealth.InstrumentManagement.Infrastructure.DbSeeding.Seeds;
 using Wealth.InstrumentManagement.Infrastructure.Migrations;
@@ -13,10 +16,20 @@ public static class Extensions
 {
     public static void AddApplicationServices(this IHostApplicationBuilder builder)
     {
-        builder.Services.AddSingleton<IInstrumentsRepository, InMemoryInstrumentRepository>();
-        builder.Services.AddSingleton<IBondsRepository, InMemoryInstrumentRepository>();
-        builder.Services.AddSingleton<IStocksRepository, InMemoryInstrumentRepository>();
-
+        if (builder.Configuration.GetValue<bool>("InMemoryRepository"))
+        {
+            builder.Services.AddSingleton<IInstrumentsRepository, InMemoryInstrumentRepository>();
+            builder.Services.AddSingleton<IBondsRepository, InMemoryInstrumentRepository>();
+            builder.Services.AddSingleton<IStocksRepository, InMemoryInstrumentRepository>();
+        }
+        else
+        {
+            builder.Services.AddScoped<IInstrumentsRepository, InstrumentRepository>();
+            builder.Services.AddScoped<IBondsRepository, InstrumentRepository>();
+            builder.Services.AddScoped<IStocksRepository, InstrumentRepository>();
+        }
+        builder.Services.AddScoped<UnitOfWork>();
+        
         builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()); });
 
         builder.Services.AddSingleton<WealthDbContext>();
@@ -27,7 +40,9 @@ public static class Extensions
             .ConfigureRunner(c => c.AddPostgres()
                 .WithGlobalConnectionString(builder.Configuration.GetConnectionString("InstrumentManagement"))
                 .ScanIn(AppDomain.CurrentDomain.GetAssemblies()).For.Migrations());
-        
-        builder.Services.AddSingleton<IDbSeeder, FirstSeed>();
+
+        builder.Services.AddScoped<IDbSeeder, FirstSeed>();
+
+        DapperMapping.Map();
     }
 }

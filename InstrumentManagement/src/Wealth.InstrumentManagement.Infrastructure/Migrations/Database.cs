@@ -19,6 +19,6 @@ public class Database
         using var connection = context.CreateMasterConnection();
         var records = connection.Query(query, parameters);
         if (!records.Any())
-            await connection.ExecuteAsync($"CREATE DATABASE {dbName}");
+            await connection.ExecuteAsync($"CREATE DATABASE \"{dbName}\"");
     }
 }
