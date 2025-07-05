@@ -3,11 +3,11 @@ using Wealth.InstrumentManagement.Domain.Repositories;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Queries;
 
-public class GetCurrenciesQueryHandler : IQueryHandler<GetInstrumentsQuery, IEnumerable<InstrumentDTO>>
+public class GetInstrumentsQueryHandler : IQueryHandler<GetInstrumentsQuery, IEnumerable<InstrumentDTO>>
 {
     private readonly IInstrumentsRepository repository;
 
-    public GetCurrenciesQueryHandler(IInstrumentsRepository repository)
+    public GetInstrumentsQueryHandler(IInstrumentsRepository repository)
     {
         this.repository = repository;
     }

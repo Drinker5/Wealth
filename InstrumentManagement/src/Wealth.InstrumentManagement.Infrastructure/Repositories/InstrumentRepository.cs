@@ -1,7 +1,5 @@
 using System.Data;
-using System.Reflection.Metadata.Ecma335;
 using Dapper;
-using Dommel;
 using Wealth.InstrumentManagement.Domain;
 using Wealth.InstrumentManagement.Domain.Instruments;
 using Wealth.InstrumentManagement.Domain.Repositories;
@@ -14,10 +12,12 @@ public class InstrumentRepository :
     IBondsRepository,
     IStocksRepository
 {
+    private readonly WealthDbContext dbContext;
     private readonly IDbConnection connection;
 
     public InstrumentRepository(WealthDbContext dbContext)
     {
+        this.dbContext = dbContext;
         connection = dbContext.CreateConnection();
     }
 
@@ -57,6 +57,7 @@ public class InstrumentRepository :
             CurrencyId = instrument.Price.CurrencyId.Code,
             Amount = instrument.Price.Amount,
         });
+        dbContext.AddEvents(instrument);
     }
 
     public async Task<InstrumentId> CreateBond(string name, ISIN isin)
@@ -73,6 +74,7 @@ public class InstrumentRepository :
             ISIN = bondInstrument.ISIN.Value,
             Type = bondInstrument.Type
         });
+        dbContext.AddEvents(bondInstrument);
 
         return bondInstrument.Id;
     }
@@ -91,6 +93,7 @@ public class InstrumentRepository :
             ISIN = stockInstrument.ISIN.Value,
             Type = stockInstrument.Type
         });
+        dbContext.AddEvents(stockInstrument);
 
         return stockInstrument.Id;
     }
@@ -113,6 +116,7 @@ public class InstrumentRepository :
             CurrencyId = coupon.ValuePerYear.CurrencyId.Code,
             Amount = coupon.ValuePerYear.Amount,
         });
+        dbContext.AddEvents(instrument);
     }
 
     public async Task ChangeDividend(InstrumentId id, Dividend dividend)
@@ -133,6 +137,7 @@ public class InstrumentRepository :
             CurrencyId = dividend.ValuePerYear.CurrencyId.Code,
             Amount = dividend.ValuePerYear.Amount,
         });
+        dbContext.AddEvents(instrument);
     }
 
     private async Task<IEnumerable<Instrument>> GetInstruments(string sql, object? param = null)

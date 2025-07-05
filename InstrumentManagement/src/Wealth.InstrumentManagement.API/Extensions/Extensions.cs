@@ -2,10 +2,12 @@ using System.Reflection;
 using Dommel;
 using FluentMigrator.Runner;
 using Wealth.BuildingBlocks.Domain;
+using Wealth.InstrumentManagement.Application.Outbox;
 using Wealth.InstrumentManagement.Domain.Repositories;
 using Wealth.InstrumentManagement.Infrastructure.Dapper;
 using Wealth.InstrumentManagement.Infrastructure.DbSeeding;
 using Wealth.InstrumentManagement.Infrastructure.DbSeeding.Seeds;
+using Wealth.InstrumentManagement.Infrastructure.Mediation.CommandBehaviors;
 using Wealth.InstrumentManagement.Infrastructure.Migrations;
 using Wealth.InstrumentManagement.Infrastructure.Repositories;
 using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
@@ -30,10 +32,15 @@ public static class Extensions
         }
         builder.Services.AddScoped<UnitOfWork>();
         
-        builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()); });
+        builder.Services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+            cfg.AddOpenBehavior(typeof(CommandUnitOfWorkBehavior<,>));
+            cfg.AddOpenBehavior(typeof(CommandEventDispatchBehavior<,>));
+        });
 
-        builder.Services.AddSingleton<WealthDbContext>();
-        builder.Services.AddSingleton<Database>();
+        builder.Services.AddScoped<WealthDbContext>();
+        builder.Services.AddScoped<Database>();
         builder.Services.AddHostedService<MigrationService>();
         builder.Services.AddLogging(l => l.AddFluentMigratorConsole())
             .AddFluentMigratorCore()
@@ -44,5 +51,7 @@ public static class Extensions
         builder.Services.AddScoped<IDbSeeder, FirstSeed>();
 
         DapperMapping.Map();
+        
+        builder.Services.AddScoped<IOutboxRepository, OutboxRepository>();
     }
 }

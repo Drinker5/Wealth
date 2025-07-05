@@ -8,7 +8,7 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ASPNETCORE_ENVIRONMENT=Development
       - EventBus__ConnectionFactory__HostName=rabbit
-      - ConnectionStrings__CurrencyManagement=Host=postgres;Username=postgres;Password=postgres;Persist Security Info=True;Database=postgres;
+      - ConnectionStrings__CurrencyManagement=Host=postgres;Username=postgres;Password=postgres;Persist Security Info=True;Database=CurrencyManagement;
     ports:
       - 5000:80
     restart: on-failure
@@ -24,6 +24,8 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ASPNETCORE_ENVIRONMENT=Development
       - Services__currency__http=currency-management
+      - ConnectionStrings__InstrumentManagement=Host=postgres;Username=postgres;Password=postgres;Persist Security Info=True;Database=InstrumentManagement;
+      - ConnectionStrings__Master=Host=postgres;Username=postgres;Password=postgres;Persist Security Info=True;Database=postgres;
     ports:
       - 5001:80
     restart: on-failure

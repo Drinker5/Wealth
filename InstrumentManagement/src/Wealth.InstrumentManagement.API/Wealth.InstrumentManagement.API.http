@@ -1,9 +1,10 @@
 @API_HostAddress = localhost:5229
 
 ###
-GRPC {{API_HostAddress}}/greet.Greeter/SayHello
+GRPC {{API_HostAddress}}/InstrumentManagement.InstrumentsService/ChangePrice
 Content-Type: application/grpc
 
 {
-    name: "RUB"
+    id: "2f1ef715-827b-49a3-9d93-324b4719b2f5",
+    price: 43.42
 }
