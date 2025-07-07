@@ -6,11 +6,10 @@ import (
 )
 
 type LoggingEventBus struct {
-	logger *log.Logger
 }
 
 func (b *LoggingEventBus) Publish(message OutboxProviders.OutboxMessage) error {
-	b.logger.Printf(
+	log.Printf(
 		"Publishing event: ID=%s, Type=%s, Data=%s, OccurredOn=%v\n",
 		message.Id,
 		message.Type,
@@ -20,9 +19,6 @@ func (b *LoggingEventBus) Publish(message OutboxProviders.OutboxMessage) error {
 	return nil
 }
 
-func NewLoggingEventBus(logger *log.Logger) *LoggingEventBus {
-	if logger == nil {
-		logger = log.Default()
-	}
-	return &LoggingEventBus{logger: logger}
+func NewLoggingEventBus() *LoggingEventBus {
+	return &LoggingEventBus{}
 }

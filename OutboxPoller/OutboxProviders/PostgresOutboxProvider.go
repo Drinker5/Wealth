@@ -3,6 +3,7 @@ package OutboxProviders
 import (
 	"database/sql"
 	"errors"
+	"log"
 	"time"
 )
 
@@ -11,6 +12,7 @@ type PostgresOutboxProvider struct {
 }
 
 func NewPostgresOutboxProvider(db *sql.DB) *PostgresOutboxProvider {
+	log.Printf("Creating postgres outbox provider\n")
 	return &PostgresOutboxProvider{
 		db: db,
 	}
@@ -20,7 +22,7 @@ func (p *PostgresOutboxProvider) PullMessages(batchSize int) []OutboxMessage {
 	query := `
 		SELECT "Id", "Type", "Data", "OccurredOn" 
 		FROM "OutboxMessages" 
-		WHERE "ProcessedOn" = null
+		WHERE "ProcessedOn" IS null
 		ORDER BY "OccurredOn" 
 		LIMIT $1
 	`

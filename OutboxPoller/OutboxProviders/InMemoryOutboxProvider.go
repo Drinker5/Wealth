@@ -1,29 +1,37 @@
 package OutboxProviders
 
-import "slices"
+import (
+	"log"
+	"slices"
+)
 
 type InMemoryOutboxProvider struct {
-	messages []OutboxMessage
+	Messages []OutboxMessage
 }
 
 func (p *InMemoryOutboxProvider) PullMessages(batchSize int) []OutboxMessage {
-	return p.messages[:batchSize]
+	if batchSize > len(p.Messages) {
+		batchSize = len(p.Messages)
+	}
+
+	return p.Messages[:batchSize]
 }
 
-func (p *InMemoryOutboxProvider) MarkPublished(id string) {
+func (p *InMemoryOutboxProvider) MarkPublished(id string) error {
+	log.Printf("Mark Published %s", id)
 	predicate := func(item OutboxMessage) bool {
 		return item.Id == id
 	}
-
-	p.messages = slices.DeleteFunc(p.messages, predicate)
+	p.Messages = slices.DeleteFunc(p.Messages, predicate)
+	return nil
 }
 
 func NewInMemoryOutboxProvider() *InMemoryOutboxProvider {
 	return &InMemoryOutboxProvider{
-		messages: make([]OutboxMessage, 0),
+		Messages: make([]OutboxMessage, 0),
 	}
 }
 
 func (p *InMemoryOutboxProvider) AddMessage(message OutboxMessage) {
-	p.messages = append(p.messages, message)
+	p.Messages = append(p.Messages, message)
 }

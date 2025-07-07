@@ -3,17 +3,17 @@ package EventBuses
 import (
 	"OutboxPoller/OutboxProviders"
 	"context"
-	"fmt"
 	"github.com/segmentio/kafka-go"
+	"log"
 	"time"
 )
 
 type KafkaEventBus struct {
-	writer *kafka.Writer
+	Writer *kafka.Writer
 }
 
 func (b *KafkaEventBus) Publish(message OutboxProviders.OutboxMessage) error {
-	err := b.writer.WriteMessages(
+	err := b.Writer.WriteMessages(
 		context.Background(),
 		kafka.Message{
 			Key:   []byte(message.Id),
@@ -26,21 +26,24 @@ func (b *KafkaEventBus) Publish(message OutboxProviders.OutboxMessage) error {
 	)
 
 	if err != nil {
-		return fmt.Errorf("failed to publish message to Kafka: %w", err)
+		log.Printf("failed to publish message '%s' to Kafka: %s", message.Type, err)
+		return err
 	}
 	return err
 }
 
 func NewKafkaEventBus(brokers []string, topic string) *KafkaEventBus {
+	log.Printf("Creating kafka event bus for: %v, topic: %s\n", brokers, topic)
 	return &KafkaEventBus{
-		writer: &kafka.Writer{
+		Writer: &kafka.Writer{
 			Addr:     kafka.TCP(brokers...),
 			Topic:    topic,
 			Balancer: &kafka.RoundRobin{},
+			Logger:   kafka.LoggerFunc(log.Printf),
 		},
 	}
 }
 
 func (b *KafkaEventBus) Close() error {
-	return b.writer.Close()
+	return b.Writer.Close()
 }

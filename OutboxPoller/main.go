@@ -1,51 +1,88 @@
 package main
 
 import (
+	"OutboxPoller/EventBuses"
+	"OutboxPoller/OutboxProviders"
+	"OutboxPoller/Pollers"
+	"database/sql"
 	"flag"
 	"fmt"
+	_ "github.com/lib/pq"
 	"log"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 )
 
 func main() {
-	url := flag.String("url", "http://localhost:5280/api/OutboxTrigger/Next", "trigger url")
-	period := flag.Int64("period", 1000, "period in millisecond")
-	method := flag.String("method", "POST", "GET | POST")
-	flag.Parse()
-
-	go func() {
-		log.Println("Polling running in background...")
-		log.Printf("Url: %s\n", *url)
-		log.Printf("Period: %d ms\n", *period)
-		for {
-			trigger(*url, *method)
-			time.Sleep(time.Duration(*period) * time.Millisecond)
+	cmd := os.Args[1]
+	switch cmd {
+	case "outbox":
+		fs := flag.NewFlagSet("outbox", flag.ExitOnError)
+		if OutboxCommand(fs) != nil {
+			os.Exit(1)
 		}
-	}()
+	case "url":
+		fs := flag.NewFlagSet("url", flag.ExitOnError)
+		if UrlCommand(fs) != nil {
+			os.Exit(1)
+		}
+	default:
+		fmt.Println("Expected a subcommand: outbox|url")
+		os.Exit(1)
+	}
 
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, syscall.SIGINT, syscall.SIGTERM)
 	log.Println("Press ctrl+c to exit...")
 	<-done
 }
+func OutboxCommand(cmd *flag.FlagSet) error {
+	connectionString := cmd.String("connectionString", "postgres://postgres:postgres@localhost/InstrumentManagement?sslmode=disable", "PostgreSQL connection string")
+	kafkaBrokers := cmd.String("kafka-brokers", "localhost:9092", "Kafka brokers addresses")
+	kafkaTopic := cmd.String("kafka-topic", "wealth", "Kafka topic name")
+	if err := cmd.Parse(os.Args[2:]); err != nil {
+		fmt.Printf("error: %s", err)
+		return err
+	}
 
-func trigger(url string, method string) {
-	req, err := http.NewRequest(method, url, nil)
+	provider := initPostgresProvider(*connectionString)
+	bus := EventBuses.NewKafkaEventBus([]string{*kafkaBrokers}, *kafkaTopic)
+	poller := Pollers.OutboxPoller{
+		Provider: provider,
+		Bus:      bus,
+		PeriodMs: 1000,
+	}
+	poller.RunInBackground()
+	return nil
+}
+
+func initPostgresProvider(connectionString string) OutboxProviders.IOutboxProvider {
+	db, err := sql.Open("postgres", connectionString)
 	if err != nil {
-		fmt.Printf("could not create request: %s\n", err)
-		os.Exit(1)
+		log.Fatalf("Error connecting to postgres: %s", err)
 	}
 
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		log.Println(err.Error())
+	if err := db.Ping(); err != nil {
+		log.Fatalf("Error pinging postgres: %s", err)
 	}
 
-	if (resp.StatusCode != 200) && (resp.StatusCode != 201) {
-		log.Println(resp)
+	return OutboxProviders.NewPostgresOutboxProvider(db)
+}
+
+func UrlCommand(cmd *flag.FlagSet) error {
+	url := cmd.String("url", "http://localhost:5280/api/OutboxTrigger/Next", "trigger url")
+	period := cmd.Int("period", 1000, "period in millisecond")
+	method := cmd.String("method", "POST", "GET | POST")
+	if err := cmd.Parse(os.Args[2:]); err != nil {
+		fmt.Printf("error: %s", err)
+		return err
 	}
+	var poller = Pollers.UrlPoller{
+		Url:      *url,
+		Method:   *method,
+		PeriodMs: *period,
+	}
+	poller.RunInBackground()
+	return nil
 }
