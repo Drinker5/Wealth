@@ -1,8 +1,5 @@
-using System.Reflection;
-using Dommel;
 using FluentMigrator.Runner;
-using Wealth.BuildingBlocks.Domain;
-using Wealth.InstrumentManagement.Application.Outbox;
+using Wealth.BuildingBlocks.Application;
 using Wealth.InstrumentManagement.Domain.Repositories;
 using Wealth.InstrumentManagement.Infrastructure.Dapper;
 using Wealth.InstrumentManagement.Infrastructure.DbSeeding;

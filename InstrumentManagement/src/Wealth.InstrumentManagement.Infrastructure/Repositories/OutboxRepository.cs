@@ -1,9 +1,9 @@
 using System.Data;
 using System.Text.Json;
 using Dapper;
+using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Domain.Utilities;
-using Wealth.InstrumentManagement.Application.Outbox;
 using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Repositories;
@@ -17,7 +17,7 @@ public class OutboxRepository : IOutboxRepository
         connection = dbContext.CreateConnection();
     }
 
-    public async Task Add(IDomainEvent domainEvent)
+    public async Task Add(IDomainEvent domainEvent, CancellationToken cancellationToken)
     {
         var sql = """
                   INSERT INTO "OutboxMessages" 

@@ -9,12 +9,12 @@ internal class CommandsScheduler : ICommandsScheduler
 {
     private readonly ILogger<CommandsScheduler> logger;
     private readonly IJsonSerializer jsonSerializer;
-    private readonly IOutboxRepository repository;
+    private readonly IDeferredOperationRepository repository;
 
     public CommandsScheduler(
         ILogger<CommandsScheduler> logger,
         IJsonSerializer jsonSerializer,
-        IOutboxRepository repository)
+        IDeferredOperationRepository repository)
     {
         this.logger = logger;
         this.jsonSerializer = jsonSerializer;

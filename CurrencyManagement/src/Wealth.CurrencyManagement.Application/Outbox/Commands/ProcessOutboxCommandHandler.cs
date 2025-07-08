@@ -14,7 +14,7 @@ namespace Wealth.CurrencyManagement.Application.Outbox.Commands;
 
 internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxCommand>
 {
-    private readonly IOutboxRepository outboxRepository;
+    private readonly IDeferredOperationRepository deferredOperationRepository;
     private readonly IOptions<OutboxPollingOptions> options;
     private readonly IJsonSerializer jsonSerializer;
     private readonly ILogger<ProcessOutboxCommandHandler> logger;
@@ -24,13 +24,13 @@ internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxComman
     private readonly ResiliencePipeline _pipeline;
 
     public ProcessOutboxCommandHandler(
-        IOutboxRepository outboxRepository,
+        IDeferredOperationRepository deferredOperationRepository,
         IOptions<OutboxPollingOptions> options,
         IJsonSerializer jsonSerializer,
         ILogger<ProcessOutboxCommandHandler> logger,
         IServiceProvider serviceProvider)
     {
-        this.outboxRepository = outboxRepository;
+        this.deferredOperationRepository = deferredOperationRepository;
         this.options = options;
         _pipeline = CreateResiliencePipeline(options.Value.RetryCount);
         this.jsonSerializer = jsonSerializer;
@@ -42,7 +42,7 @@ internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxComman
 
     public async Task Handle(ProcessOutboxCommand request, CancellationToken cancellationToken)
     {
-        var outboxMessage = await outboxRepository.LoadAsync(request.MessageId, cancellationToken);
+        var outboxMessage = await deferredOperationRepository.LoadAsync(request.MessageId, cancellationToken);
 
         if (outboxMessage is null)
         {
@@ -117,7 +117,7 @@ internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxComman
             throw new InvalidOperationException($"Cound not handle type '{type}'");
         }
 
-        outboxRepository.Remove(outboxMessage);
+        deferredOperationRepository.Remove(outboxMessage);
     }
 
     private static ResiliencePipeline CreateResiliencePipeline(int retryCount)

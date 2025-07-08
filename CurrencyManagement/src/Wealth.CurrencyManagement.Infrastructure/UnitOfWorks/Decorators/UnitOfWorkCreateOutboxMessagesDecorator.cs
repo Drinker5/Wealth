@@ -7,13 +7,13 @@ namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks.Decorators;
 internal class UnitOfWorkCreateOutboxMessagesDecorator : IUnitOfWork
 {
     private readonly IUnitOfWork decorated;
-    private readonly IOutboxRepository repository;
+    private readonly IDeferredOperationRepository repository;
     private readonly IJsonSerializer jsonSerializer;
     private readonly WealthDbContext context;
 
     public UnitOfWorkCreateOutboxMessagesDecorator(
         IUnitOfWork decorated,
-        IOutboxRepository repository,
+        IDeferredOperationRepository repository,
         IJsonSerializer jsonSerializer,
         WealthDbContext context)
     {

@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.BuildingBlocks.Domain;
+using Wealth.BuildingBlocks.Infrastructure;
 using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Domain.Repositories;
-using Wealth.CurrencyManagement.Infrastructure.Abstractions;
 using Wealth.CurrencyManagement.Infrastructure.DbSeeding.Seeds;
 using Wealth.CurrencyManagement.Infrastructure.Extensions;
 using Wealth.CurrencyManagement.Infrastructure.Repositories;
@@ -18,8 +18,8 @@ public class UnitOfWorkModule : IServiceModule
     {
         services.AddDbContext<WealthDbContext>(options =>
         {
-            var usePostgress = configuration.GetSection("UsePostgres").Get<bool>();
-            if (usePostgress)
+            var usePostgres = configuration.GetSection("UsePostgres").Get<bool>();
+            if (usePostgres)
             {
                 options.UseNpgsql(configuration.GetConnectionString("CurrencyManagement"));
             }
@@ -32,7 +32,7 @@ public class UnitOfWorkModule : IServiceModule
 
         services.AddScoped<ICurrencyRepository, CurrencyRepository>();
         services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
-        services.AddScoped<IOutboxRepository, OutboxRepository>();
+        services.AddScoped<IDeferredOperationRepository, DeferredOperationRepository>();
 
         // UnitOfWork
         services.AddScoped<IUnitOfWork, UnitOfWork>();

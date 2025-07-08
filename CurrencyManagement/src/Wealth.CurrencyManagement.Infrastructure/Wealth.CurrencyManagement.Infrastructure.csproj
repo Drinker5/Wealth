@@ -15,6 +15,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" />
     <ProjectReference Include="..\Wealth.CurrencyManagement.Application\Wealth.CurrencyManagement.Application.csproj" />
   </ItemGroup>
 </Project>

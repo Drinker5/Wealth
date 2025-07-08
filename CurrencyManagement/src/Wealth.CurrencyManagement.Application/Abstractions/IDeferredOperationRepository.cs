@@ -1,6 +1,6 @@
 ﻿namespace Wealth.CurrencyManagement.Application.Abstractions;
 
-public interface IOutboxRepository
+public interface IDeferredOperationRepository
 {
     Task Add(OutboxMessage message, CancellationToken cancellationToken = default);
     Task<OutboxMessage?> LoadAsync(Guid id, CancellationToken cancellationToken = default);

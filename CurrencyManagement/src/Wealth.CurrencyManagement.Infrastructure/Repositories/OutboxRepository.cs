@@ -5,11 +5,11 @@ using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Repositories;
 
-internal class OutboxRepository : IOutboxRepository
+internal class DeferredOperationRepository : IDeferredOperationRepository
 {
     private readonly WealthDbContext context;
 
-    public OutboxRepository(WealthDbContext context)
+    public DeferredOperationRepository(WealthDbContext context)
     {
         this.context = context;
     }

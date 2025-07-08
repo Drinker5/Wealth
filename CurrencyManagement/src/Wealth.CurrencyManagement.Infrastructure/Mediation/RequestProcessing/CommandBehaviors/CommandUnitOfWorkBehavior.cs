@@ -1,7 +1,6 @@
 using MediatR;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain;
-using Wealth.CurrencyManagement.Application.Abstractions;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Mediation.RequestProcessing.CommandBehaviors;
 

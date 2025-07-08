@@ -3,6 +3,7 @@
   <Folder Name="/BuildingBlocks/src/">
     <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Application\Wealth.BuildingBlocks.Application.csproj" Type="Classic C#" />
     <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Domain\Wealth.BuildingBlocks.Domain.csproj" Type="Classic C#" />
+    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" Type="Classic C#" />
     <File Path="BuildingBlocks\Directory.Build.props" />
   </Folder>
   <Folder Name="/CurrencyManagement/">
@@ -37,6 +38,18 @@
     <Project Path="InstrumentManagement\tests\Wealth.InstrumentManagement.Application.Tests\Wealth.InstrumentManagement.Application.Tests.csproj" Type="Classic C#" />
     <Project Path="InstrumentManagement\tests\Wealth.InstrumentManagement.Domain.Tests\Wealth.InstrumentManagement.Domain.Tests.csproj" Type="Classic C#" />
     <File Path="InstrumentManagement\tests\Directory.Build.props" />
+  </Folder>
+  <Folder Name="/PortfolioManagement/" />
+  <Folder Name="/PortfolioManagement/src/">
+    <Project Path="PortfolioManagement\src\Wealth.PortfolioManagement.API\Wealth.PortfolioManagement.API.csproj" Type="Classic C#" />
+    <Project Path="PortfolioManagement\src\Wealth.PortfolioManagement.Application\Wealth.PortfolioManagement.Application.csproj" Type="Classic C#" />
+    <Project Path="PortfolioManagement\src\Wealth.PortfolioManagement.Domain\Wealth.PortfolioManagement.Domain.csproj" Type="Classic C#" />
+    <Project Path="PortfolioManagement\src\Wealth.PortfolioManagement.Infrastructure\Wealth.PortfolioManagement.Infrastructure.csproj" Type="Classic C#" />
+    <File Path="PortfolioManagement\src\Directory.Build.props" />
+  </Folder>
+  <Folder Name="/PortfolioManagement/tests/">
+    <Project Path="PortfolioManagement\tests\Wealth.PortfolioManagement.Domain.Tests\Wealth.PortfolioManagement.Domain.Tests.csproj" Type="Classic C#" />
+    <File Path="PortfolioManagement\tests\Directory.Build.props" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".gitignore" />

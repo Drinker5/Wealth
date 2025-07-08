@@ -3,10 +3,10 @@ using Wealth.InstrumentManagement.Domain.Instruments.Events;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Events;
 
-internal class BondCouponChangedEventHandler : IDomainEventHandler<BondCouponChanged>
+internal class BondCouponChangedEventHandler(IOutboxRepository outboxRepository) : IDomainEventHandler<BondCouponChanged>
 {
-    public Task Handle(BondCouponChanged notification, CancellationToken cancellationToken)
+    public async Task Handle(BondCouponChanged notification, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await outboxRepository.Add(notification, cancellationToken);
     }
 }

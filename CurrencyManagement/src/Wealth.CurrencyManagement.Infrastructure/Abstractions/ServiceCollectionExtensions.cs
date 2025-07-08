@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Wealth.BuildingBlocks.Infrastructure;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Abstractions;
 

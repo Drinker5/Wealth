@@ -10,16 +10,16 @@ public class OutboxTriggerController : Controller
 {
     private readonly ILogger logger;
     private readonly CqrsInvoker cqrsInvoker;
-    private readonly IOutboxRepository outboxRepository;
+    private readonly IDeferredOperationRepository deferredOperationRepository;
 
     public OutboxTriggerController(
         ILogger<OutboxTriggerController> logger,
         CqrsInvoker cqrsInvoker,
-        IOutboxRepository outboxRepository)
+        IDeferredOperationRepository deferredOperationRepository)
     {
         this.logger = logger;
         this.cqrsInvoker = cqrsInvoker;
-        this.outboxRepository = outboxRepository;
+        this.deferredOperationRepository = deferredOperationRepository;
     }
 
     [HttpPost]
@@ -45,7 +45,7 @@ public class OutboxTriggerController : Controller
     [HttpPost("[action]")]
     public async Task<IActionResult> Next(CancellationToken cancellationToken)
     {
-        var unprocessed = await outboxRepository.LoadUnprocessed(1, cancellationToken);
+        var unprocessed = await deferredOperationRepository.LoadUnprocessed(1, cancellationToken);
         try
         {
             foreach (var outboxMessageId in unprocessed)

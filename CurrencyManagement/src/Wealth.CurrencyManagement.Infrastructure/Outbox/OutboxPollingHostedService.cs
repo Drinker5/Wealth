@@ -34,7 +34,7 @@ public class OutboxPollingHostedService : IHostedService
     private async Task DoStuffPeriodically(CancellationToken cancellationToken = default)
     {
         await using var scope = serviceProvider.CreateAsyncScope();
-        var repository = scope.ServiceProvider.GetRequiredService<IOutboxRepository>();
+        var repository = scope.ServiceProvider.GetRequiredService<IDeferredOperationRepository>();
         var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
         while (await timer.WaitForNextTickAsync(cancellationToken))
         {

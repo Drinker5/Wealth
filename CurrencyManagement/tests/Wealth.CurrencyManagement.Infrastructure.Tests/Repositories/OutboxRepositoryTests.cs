@@ -7,21 +7,21 @@ using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Tests.Repositories;
 
-[TestSubject(typeof(OutboxRepository))]
-public class OutboxRepositoryTests
+[TestSubject(typeof(DeferredOperationRepository))]
+public class DeferredOperationRepositoryTests
 {
-    private readonly OutboxRepository repo;
+    private readonly DeferredOperationRepository repo;
     private readonly WealthDbContext context;
     private readonly DateTimeOffset now = new DateTimeOffset(2010, 10, 10, 0, 0, 0, TimeSpan.Zero);
 
-    public OutboxRepositoryTests()
+    public DeferredOperationRepositoryTests()
     {
         var options = new DbContextOptionsBuilder<WealthDbContext>()
             .UseInMemoryDatabase("fakeDb")
             .Options;
         context = new WealthDbContext(options);
         context.Database.EnsureDeleted();
-        repo = new OutboxRepository(context);
+        repo = new DeferredOperationRepository(context);
         Clock.SetCustomDate(now);
     }
 
