@@ -1,8 +1,10 @@
 <Solution>
   <Folder Name="/BuildingBlocks/" />
   <Folder Name="/BuildingBlocks/src/">
+    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.API\Wealth.BuildingBlocks.API.csproj" Type="Classic C#" />
     <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Application\Wealth.BuildingBlocks.Application.csproj" Type="Classic C#" />
     <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Domain\Wealth.BuildingBlocks.Domain.csproj" Type="Classic C#" />
+    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.EFCore\Wealth.BuildingBlocks.Infrastructure.EFCore.csproj" Type="Classic C#" />
     <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" Type="Classic C#" />
     <File Path="BuildingBlocks\Directory.Build.props" />
   </Folder>

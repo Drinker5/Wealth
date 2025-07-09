@@ -7,8 +7,8 @@ using Wealth.CurrencyManagement.Domain.ExchangeRates;
 namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 
 /// <summary>
-/// dotnet ef migrations add --project src\Infrastructure\Wealth.CurrencyManagement.Infrastructure --startup-project .\src\API\Wealth.CurrencyManagement.API Name
-/// dotnet ef database update --project src\Infrastructure\Wealth.CurrencyManagement.Infrastructure --startup-project .\src\API\Wealth.CurrencyManagement.API
+/// dotnet ef migrations add --project src\Wealth.CurrencyManagement.Infrastructure --startup-project .\src\Wealth.CurrencyManagement.API Name
+/// dotnet ef database update --project src\Wealth.CurrencyManagement.Infrastructure --startup-project .\src\Wealth.CurrencyManagement.API
 /// </summary>
 public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbContext>
 {

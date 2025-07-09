@@ -14,11 +14,13 @@ public class Portfolio : AggregateRoot
     {
     }
 
-    public static Portfolio Create(string name)
+    public static Portfolio Create(string name) => Create(PortfolioId.New(), name);
+
+    public static Portfolio Create(PortfolioId id, string name)
     {
         var portfolio = new Portfolio
         {
-            Id = PortfolioId.New(),
+            Id = id,
             Name = name
         };
 
@@ -28,11 +30,17 @@ public class Portfolio : AggregateRoot
 
     public void AddCurrency(CurrencyId currencyId, decimal amount)
     {
+        if (amount == 0)
+            return;
+
         Apply(new CurrencyAdded(Id, currencyId, amount));
     }
 
     public void AddAsset(InstrumentId instrumentId, ISIN isin, int quantity)
     {
+        if (quantity == 0)
+            return;
+
         Apply(new AssetAdded(Id, instrumentId, isin, quantity));
     }
 
@@ -75,5 +83,13 @@ public class Portfolio : AggregateRoot
                 ISIN = @event.ISIN,
             });
         }
+    }
+
+    public void Rename(string newName)
+    {
+        if (Name == newName)
+            return;
+
+        Apply(new PortfolioRenamed(Id, newName));
     }
 }

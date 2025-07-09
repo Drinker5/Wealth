@@ -1,17 +1,13 @@
-﻿using System.Diagnostics;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Wealth.CurrencyManagement.Infrastructure.DbSeeding;
+using Wealth.BuildingBlocks.Infrastructure.EFCore.DbSeeding;
 
-namespace Wealth.CurrencyManagement.Infrastructure.Extensions;
+namespace Wealth.BuildingBlocks.Infrastructure.EFCore.Extensions;
 
-internal static class MigrateDbContextExtensions
+public static class MigrateDbContextExtensions
 {
-    private static readonly string ActivitySourceName = "DbMigrations";
-    private static readonly ActivitySource ActivitySource = new(ActivitySourceName);
-
     public static IServiceCollection AddMigration<TContext>(this IServiceCollection services)
         where TContext : DbContext
         => services.AddMigration<TContext>((_, _) => Task.CompletedTask);
@@ -36,8 +32,6 @@ internal static class MigrateDbContextExtensions
         var scopeServices = scope.ServiceProvider;
         var logger = scopeServices.GetRequiredService<ILogger<TContext>>();
 
-        using var activity = ActivitySource.StartActivity($"Migration operation {typeof(TContext).Name}");
-
         try
         {
             logger.LogInformation("Migrating database associated with context {DbContextName}", typeof(TContext).Name);
@@ -57,7 +51,6 @@ internal static class MigrateDbContextExtensions
     private static async Task InvokeSeeder<TContext>(Func<TContext, IServiceProvider, Task> seeder, TContext context, IServiceProvider services)
         where TContext : DbContext
     {
-        using var activity = ActivitySource.StartActivity($"Migrating {typeof(TContext).Name}");
         await context.Database.MigrateAsync();
         await seeder(context, services);
     }

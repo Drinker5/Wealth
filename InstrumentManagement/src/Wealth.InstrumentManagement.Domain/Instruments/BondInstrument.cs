@@ -14,7 +14,11 @@ public class BondInstrument : Instrument
 
     public static BondInstrument Create(string name, ISIN isin)
     {
-        var instrumentId = InstrumentId.New();
+        return Create(InstrumentId.New(), name, isin);
+    }
+    
+    public static BondInstrument Create(InstrumentId instrumentId, string name, ISIN isin)
+    {
         var bond = new BondInstrument(instrumentId);
         bond.Apply(new BondCreated
         {

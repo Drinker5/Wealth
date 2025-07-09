@@ -14,7 +14,17 @@ internal class PortfolioConfiguration : IEntityTypeConfiguration<Portfolio>
             .HasConversion(new PortfolioIdConverter())
             .IsRequired();
 
-        builder.Property(x => x.Name);
+        builder.Property(x => x.Name).HasMaxLength(255).IsRequired();
+
+        builder.HasMany(i => i.Currencies)
+            .WithOne()
+            .HasForeignKey("PortfolioId")
+            .IsRequired();
+
+        builder.HasMany(x => x.Assets)
+            .WithOne()
+            .HasForeignKey("PortfolioId")
+            .IsRequired();
 
         builder.HasNoDiscriminator();
     }

@@ -3,10 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Infrastructure;
+using Wealth.BuildingBlocks.Infrastructure.EFCore.Extensions;
 using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Domain.Repositories;
-using Wealth.CurrencyManagement.Infrastructure.DbSeeding.Seeds;
-using Wealth.CurrencyManagement.Infrastructure.Extensions;
+using Wealth.CurrencyManagement.Infrastructure.DbSeeding;
 using Wealth.CurrencyManagement.Infrastructure.Repositories;
 using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks.Decorators;
 
@@ -28,6 +28,7 @@ public class UnitOfWorkModule : IServiceModule
                 options.UseInMemoryDatabase(Guid.NewGuid().ToString());
             }
         });
+
         services.AddMigration<WealthDbContext, FirstSeed>(); 
 
         services.AddScoped<ICurrencyRepository, CurrencyRepository>();

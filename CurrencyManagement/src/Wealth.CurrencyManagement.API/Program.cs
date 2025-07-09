@@ -1,6 +1,6 @@
 using Serilog;
+using Wealth.BuildingBlocks.API;
 using Wealth.CurrencyManagement.API.Blazor;
-using Wealth.CurrencyManagement.Infrastructure.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +12,7 @@ var logConfig = new LoggerConfiguration().ReadFrom.Configuration(builder.Configu
 
 builder.Services.AddHttpClient();
 builder.Services.AddLogging(o => o.ClearProviders().AddSerilog(logConfig.CreateLogger(), dispose: true));
-builder.Services.AddServiceModules(builder.Configuration);
+builder.AddServiceModules();
 builder.Services.AddControllers();
 builder.Services.AddServiceDiscovery();
 

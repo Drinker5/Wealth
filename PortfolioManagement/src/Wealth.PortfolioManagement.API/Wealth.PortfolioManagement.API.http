@@ -1,6 +1,12 @@
-@Wealth.PortfolioManagement.API_HostAddress = http://localhost:5018
+@API = http://localhost:5018
+@portfolioId = 00000000-0000-0000-0000-000000000001
 
-GET {{Wealth.PortfolioManagement.API_HostAddress}}/weatherforecast/
+GET {{API}}/api/portfolio/
+Accept: application/json
+
+###
+
+GET {{API}}/api/portfolio/{{portfolioId}}
 Accept: application/json
 
 ###

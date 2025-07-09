@@ -15,7 +15,11 @@ public class StockInstrument : Instrument
 
     public static StockInstrument Create(string name, ISIN isin)
     {
-        var instrumentId = InstrumentId.New();
+        return Create(InstrumentId.New(), name, isin);
+    }
+
+    public static StockInstrument Create(InstrumentId instrumentId, string name, ISIN isin)
+    {
         var stock = new StockInstrument(instrumentId);
         stock.Apply(new StockCreated
         {

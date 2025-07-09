@@ -1,8 +1,9 @@
-﻿using Wealth.CurrencyManagement.Domain.Currencies;
+﻿using Wealth.BuildingBlocks.Infrastructure.EFCore.DbSeeding;
+using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Domain.ExchangeRates;
 using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 
-namespace Wealth.CurrencyManagement.Infrastructure.DbSeeding.Seeds;
+namespace Wealth.CurrencyManagement.Infrastructure.DbSeeding;
 
 public class FirstSeed : IDbSeeder<WealthDbContext>
 {

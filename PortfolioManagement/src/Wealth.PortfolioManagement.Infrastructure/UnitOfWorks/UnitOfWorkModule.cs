@@ -4,7 +4,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Infrastructure;
+using Wealth.BuildingBlocks.Infrastructure.EFCore.Extensions;
 using Wealth.PortfolioManagement.Domain.Repositories;
+using Wealth.PortfolioManagement.Infrastructure.DbSeeding;
+using Wealth.PortfolioManagement.Infrastructure.Repositories;
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 
@@ -14,20 +17,21 @@ public class UnitOfWorkModule : IServiceModule
     {
         services.AddDbContext<WealthDbContext>(options =>
         {
-            var usePostgres = configuration.GetSection("UsePostgres").Get<bool>();
-            if (usePostgres)
-            {
-                options.UseNpgsql(configuration.GetConnectionString("CurrencyManagement"));
-            }
-            else
+            var inMemory = configuration.GetSection("InMemoryRepository").Get<bool>();
+            if (inMemory)
             {
                 options.UseInMemoryDatabase(Guid.NewGuid().ToString());
             }
+            else
+            {
+                options.UseNpgsql(configuration.GetConnectionString("PortfolioManagement"));
+                options.EnableSensitiveDataLogging();
+            }
         });
-        // services.AddMigration<WealthDbContext, FirstSeed>();
+        services.AddMigration<WealthDbContext, FirstSeed>();
 
-        // services.AddScoped<IPortfolioRepository, PortfolioRepository>();
-        // services.AddScoped<IOutboxRepository, OutboxRepository>();
+        services.AddScoped<IPortfolioRepository, PortfolioRepository>();
+        services.AddScoped<IOutboxRepository, OutboxRepository>();
 
         // UnitOfWork
         services.AddScoped<IUnitOfWork, UnitOfWork>();

@@ -8,6 +8,7 @@ public interface IPortfolioRepository
     Task<Portfolio?> GetPortfolio(PortfolioId id);
     Task RenamePortfolio(PortfolioId id, string newName);
     Task AddAsset(PortfolioId id, InstrumentId instrumentId, ISIN isin, int quantity);
-    Task AddCurrency(CurrencyId currencyId, decimal amount);
+    Task AddCurrency(PortfolioId id, CurrencyId currencyId, decimal amount);
+    Task<PortfolioId> CreatePortfolio(PortfolioId id, string requestName);
     Task<PortfolioId> CreatePortfolio(string requestName);
 }

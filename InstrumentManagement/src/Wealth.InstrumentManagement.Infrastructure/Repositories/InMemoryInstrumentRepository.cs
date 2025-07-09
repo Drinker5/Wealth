@@ -43,6 +43,13 @@ public class InMemoryInstrumentRepository :
         return Task.FromResult(bondInstrument.Id);
     }
 
+    public Task<InstrumentId> CreateBond(InstrumentId id, string name, ISIN isin)
+    {
+        var bondInstrument = BondInstrument.Create(id, name, isin);
+        instruments.Add(bondInstrument);
+        return Task.FromResult(bondInstrument.Id);
+    }
+
     public async Task ChangeCoupon(InstrumentId id, Coupon coupon)
     {
         var bondInstrument = await GetInstrument(id) as BondInstrument;
@@ -64,6 +71,13 @@ public class InMemoryInstrumentRepository :
     public Task<InstrumentId> CreateStock(string name, ISIN isin)
     {
         var stockInstrument = StockInstrument.Create(name, isin);
+        instruments.Add(stockInstrument);
+        return Task.FromResult(stockInstrument.Id);
+    }
+
+    public Task<InstrumentId> CreateStock(InstrumentId id, string name, ISIN isin)
+    {
+        var stockInstrument = StockInstrument.Create(id, name, isin);
         instruments.Add(stockInstrument);
         return Task.FromResult(stockInstrument.Id);
     }

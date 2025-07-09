@@ -60,9 +60,20 @@ public class InstrumentRepository :
         dbContext.AddEvents(instrument);
     }
 
-    public async Task<InstrumentId> CreateBond(string name, ISIN isin)
+    public Task<InstrumentId> CreateBond(InstrumentId id, string name, ISIN isin)
+    {
+        var bondInstrument = BondInstrument.Create(id, name, isin);
+        return CreateBond(bondInstrument);
+    }
+
+    public Task<InstrumentId> CreateBond(string name, ISIN isin)
     {
         var bondInstrument = BondInstrument.Create(name, isin);
+        return CreateBond(bondInstrument);
+    }
+
+    private async Task<InstrumentId> CreateBond(BondInstrument bondInstrument)
+    {
         var sql = """
                   INSERT INTO "Instruments" ("Id", "Name", "ISIN", "Type") 
                   VALUES (@Id, @Name, @ISIN, @Type)
@@ -79,14 +90,25 @@ public class InstrumentRepository :
         return bondInstrument.Id;
     }
 
-    public async Task<InstrumentId> CreateStock(string name, ISIN isin)
+    public Task<InstrumentId> CreateStock(InstrumentId id, string name, ISIN isin)
+    {
+        var stockInstrument = StockInstrument.Create(id, name, isin);
+        return CreateStock(stockInstrument);
+    }
+
+    public Task<InstrumentId> CreateStock(string name, ISIN isin)
     {
         var stockInstrument = StockInstrument.Create(name, isin);
+        return CreateStock(stockInstrument);
+    }
+
+    private async Task<InstrumentId> CreateStock(StockInstrument stockInstrument)
+    {
         var sql = """
                   INSERT INTO "Instruments" ("Id", "Name", "ISIN", "Type") 
                   VALUES (@Id, @Name, @ISIN, @Type)
                   """;
-        var rowsAffected = await connection.ExecuteAsync(sql, new
+        await connection.ExecuteAsync(sql, new
         {
             Id = stockInstrument.Id.Id,
             Name = stockInstrument.Name,

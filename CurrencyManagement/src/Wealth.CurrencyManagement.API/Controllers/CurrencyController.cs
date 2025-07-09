@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Wealth.BuildingBlocks.Infrastructure.Mediation;
 using Wealth.CurrencyManagement.API.Controllers.Requests;
 using Wealth.CurrencyManagement.Application.Currencies.Commands;
 using Wealth.CurrencyManagement.Application.Currencies.Queries;
