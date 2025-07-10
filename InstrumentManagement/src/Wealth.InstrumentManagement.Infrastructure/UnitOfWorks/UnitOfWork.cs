@@ -15,13 +15,13 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         connection = context.CreateConnection();
     }
 
-    public ValueTask BeginTransaction()
+    public Task<IDisposable> BeginTransaction()
     {
         if (connection.State != ConnectionState.Open)
             connection.Open();
         
         transaction = connection.BeginTransaction();
-        return ValueTask.CompletedTask;
+        return Task.FromResult<IDisposable>(transaction);
     }
     
     public Task<int> Commit(CancellationToken cancellationToken)

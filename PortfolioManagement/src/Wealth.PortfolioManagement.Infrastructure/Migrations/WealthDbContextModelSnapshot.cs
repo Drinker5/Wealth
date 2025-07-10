@@ -22,10 +22,16 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.HasSequence("PortfolioIdHiLo")
+                .IncrementsBy(10);
+
             modelBuilder.Entity("Wealth.PortfolioManagement.Domain.Portfolios.Portfolio", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "PortfolioIdHiLo");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -39,8 +45,8 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("Wealth.PortfolioManagement.Domain.Portfolios.PortfolioAsset", b =>
                 {
-                    b.Property<Guid>("PortfolioId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("PortfolioId")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("InstrumentId")
                         .HasColumnType("uuid");
@@ -60,8 +66,8 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("Wealth.PortfolioManagement.Domain.Portfolios.PortfolioCurrency", b =>
                 {
-                    b.Property<Guid>("PortfolioId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("PortfolioId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("CurrencyId")
                         .HasMaxLength(3)

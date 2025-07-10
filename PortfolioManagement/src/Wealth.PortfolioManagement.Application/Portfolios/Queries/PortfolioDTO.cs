@@ -4,7 +4,7 @@ namespace Wealth.PortfolioManagement.Application.Portfolios.Queries;
 
 public class PortfolioDTO
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public string Name { get; set; }
     public IEnumerable<AssetDTO> Assets { get; set; }
     public IEnumerable<CurrencyDTO> Currencies { get; set; }

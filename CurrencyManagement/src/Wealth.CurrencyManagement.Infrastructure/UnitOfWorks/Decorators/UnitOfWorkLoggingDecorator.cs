@@ -17,6 +17,8 @@ internal class UnitOfWorkLoggingDecorator : IUnitOfWork
         this.logger = logger;
     }
 
+    public Task<IDisposable> BeginTransaction() => decorated.BeginTransaction();
+    
     public async Task<int> Commit(CancellationToken cancellationToken = default)
     {
         logger.LogInformation("Commiting changes...");

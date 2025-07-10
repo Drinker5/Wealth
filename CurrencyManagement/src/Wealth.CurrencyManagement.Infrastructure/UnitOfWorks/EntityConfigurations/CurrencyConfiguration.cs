@@ -18,6 +18,8 @@ internal class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
 
         builder.Property(x => x.Symbol);
 
+        builder.Ignore(x => x.DomainEvents);
+        
         builder.HasNoDiscriminator();
     }
 }

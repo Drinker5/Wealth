@@ -24,7 +24,7 @@ public class Portfolio : AggregateRoot
             Name = name
         };
 
-        portfolio.Apply(new PortfolioCreated(portfolio.Id, portfolio.Name));
+        portfolio.Apply(new PortfolioCreated(portfolio));
         return portfolio;
     }
 
@@ -46,8 +46,8 @@ public class Portfolio : AggregateRoot
 
     private void When(PortfolioCreated @event)
     {
-        Id = @event.PortfolioId;
-        Name = @event.Name;
+        Id = @event.Portfolio.Id;
+        Name = @event.Portfolio.Name;
     }
 
     private void When(CurrencyAdded @event)

@@ -19,6 +19,7 @@ public class MediatorModule : IServiceModule
             cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
             cfg.AddOpenBehavior(typeof(CommandLoggingBehavior<,>));
             cfg.AddOpenBehavior(typeof(CommandUnitOfWorkBehavior<,>));
+            cfg.AddOpenBehavior(typeof(CommandDispatchEventsBehavior<,>));
 
             cfg.AddOpenBehavior(typeof(QueryLoggingPipeline<,>));
         });

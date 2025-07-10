@@ -11,6 +11,10 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateSequence(
+                name: "PortfolioIdHiLo",
+                incrementBy: 10);
+
             migrationBuilder.CreateTable(
                 name: "OutboxMessages",
                 columns: table => new
@@ -30,7 +34,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                 name: "Portfolios",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
                 },
                 constraints: table =>
@@ -43,7 +47,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                 columns: table => new
                 {
                     InstrumentId = table.Column<Guid>(type: "uuid", nullable: false),
-                    PortfolioId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PortfolioId = table.Column<int>(type: "integer", nullable: false),
                     ISIN = table.Column<string>(type: "character varying(12)", maxLength: 12, nullable: false),
                     Quantity = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -63,7 +67,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                 columns: table => new
                 {
                     CurrencyId = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: false),
-                    PortfolioId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PortfolioId = table.Column<int>(type: "integer", nullable: false),
                     Amount = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
@@ -92,6 +96,9 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Portfolios");
+
+            migrationBuilder.DropSequence(
+                name: "PortfolioIdHiLo");
         }
     }
 }

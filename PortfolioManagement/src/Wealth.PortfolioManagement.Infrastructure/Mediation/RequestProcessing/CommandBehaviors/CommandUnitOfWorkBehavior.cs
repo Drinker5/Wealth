@@ -16,6 +16,7 @@ internal class CommandUnitOfWorkBehavior<TRequest, TResponse> : IPipelineBehavio
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
+        using var transaction = await unitOfWork.BeginTransaction();
         var result = await next(cancellationToken);
         await unitOfWork.Commit(cancellationToken);
         return result;

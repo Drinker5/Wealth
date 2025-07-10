@@ -23,6 +23,8 @@ internal class UnitOfWorkCreateOutboxMessagesDecorator : IUnitOfWork
         this.context = context;
     }
 
+    public Task<IDisposable> BeginTransaction() => decorated.BeginTransaction();
+
     public async Task<int> Commit(CancellationToken cancellationToken = default)
     {
         await CreateOutboxMessages(cancellationToken);
@@ -35,8 +37,7 @@ internal class UnitOfWorkCreateOutboxMessagesDecorator : IUnitOfWork
         if (aggregate is null)
             return;
 
-        var domainEvents = aggregate.DomainEvents;
-        foreach (var domainEvent in domainEvents)
+        foreach (var domainEvent in aggregate.DomainEvents)
         {
             var outboxMessage = OutboxMessage.Create(
                 jsonSerializer,
@@ -44,13 +45,15 @@ internal class UnitOfWorkCreateOutboxMessagesDecorator : IUnitOfWork
                 domainEvent);
             await repository.Add(outboxMessage, cancellationToken);
         }
+        
+        aggregate.ClearDomainEvents();
     }
 
     private AggregateRoot? GetModifiedAggregate()
     {
         var modifiedAggregates = context.ChangeTracker
             .Entries<AggregateRoot>()
-            .Where(aggregate => aggregate.Entity.DomainEvents.Any())
+            .Where(aggregate => aggregate.Entity.DomainEvents != null && aggregate.Entity.DomainEvents.Any())
             .Select(aggregate => aggregate.Entity);
 
         if (modifiedAggregates.Count() > 1)

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore.Storage;
 using Wealth.BuildingBlocks.Domain;
 
 namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
@@ -5,15 +6,25 @@ namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 internal class UnitOfWork : IUnitOfWork
 {
     private readonly WealthDbContext context;
+    private IDbContextTransaction? transaction;
 
     public UnitOfWork(WealthDbContext context)
     {
         this.context = context;
     }
 
-    public Task<int> Commit(CancellationToken cancellationToken)
+    public async Task<IDisposable> BeginTransaction()
     {
-        return context.SaveChangesAsync(cancellationToken);
+        transaction = await context.Database.BeginTransactionAsync();
+        return transaction;
+    }
+
+    public async Task<int> Commit(CancellationToken cancellationToken)
+    {
+        var result = await context.SaveChangesAsync(cancellationToken);
+        if (transaction != null)
+            await transaction.CommitAsync(cancellationToken);
+
+        return result;
     }
 }
-

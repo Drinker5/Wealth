@@ -22,7 +22,7 @@ internal class ExchangeRateConfiguration : IEntityTypeConfiguration<ExchangeRate
         builder.Property(x => x.BaseCurrencyId)
             .HasConversion(new CurrencyIdConverter())
             .IsRequired();
-        
+
         builder.Property(x => x.TargetCurrencyId)
             .HasConversion(new CurrencyIdConverter())
             .IsRequired();
@@ -30,6 +30,8 @@ internal class ExchangeRateConfiguration : IEntityTypeConfiguration<ExchangeRate
         builder.Property(x => x.ValidOnDate).HasColumnType("date").IsRequired();
 
         builder.Property(x => x.Rate).IsRequired();
+        
+        builder.Ignore(x => x.DomainEvents);
 
         builder.HasNoDiscriminator();
     }

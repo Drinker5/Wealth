@@ -1,5 +1,6 @@
 @API = http://localhost:5018
-@portfolioId = 00000000-0000-0000-0000-000000000001
+@portfolioId = 2
+@name = Test3
 
 GET {{API}}/api/portfolio/
 Accept: application/json
@@ -8,5 +9,15 @@ Accept: application/json
 
 GET {{API}}/api/portfolio/{{portfolioId}}
 Accept: application/json
+
+###
+
+POST {{API}}/api/portfolio
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "{{name}}"
+}
 
 ###

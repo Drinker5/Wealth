@@ -4,11 +4,12 @@ namespace Wealth.BuildingBlocks.Domain;
 
 public abstract class AggregateRoot
 {
-    private readonly List<IDomainEvent> events = [];
-    public IReadOnlyCollection<IDomainEvent> DomainEvents => events.AsReadOnly();
+    private List<IDomainEvent>? events;
+    public IReadOnlyCollection<IDomainEvent>? DomainEvents => events?.AsReadOnly();
 
     private void AddDomainEvent(IDomainEvent domainEvent)
     {
+        events ??= [];
         events.Add(domainEvent);
     }
 
@@ -20,5 +21,10 @@ public abstract class AggregateRoot
     {
         this.Invoke("When", @event);
         AddDomainEvent(@event);
+    }
+
+    public void ClearDomainEvents()
+    {
+        events?.Clear();
     }
 }
