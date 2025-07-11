@@ -33,16 +33,29 @@ package PortfolioManagement {
 
     Portfolio --> PortfolioAsset
 
-    interface API {
-        Porfolios
-        PorfolioAssets
-        CreatePorfolio()
-        AddCurrency(Money)
+    object PortfolioCurrency {
+        CurrencyId
+        Amount
     }
-}
 
-package PortfolioOperations {
-    abstract PortfolioOperation {
+    Portfolio --> PortfolioCurrency
+    
+    interface API {
+        Portfolios()
+        PortfolioAssets(PortfId)
+        --
+        CreatePortfolio(Name)
+        Buy(PortfId, InstrId, Num)
+        Sell(PortfId, InstrId, Num)
+        Income(PortfId, InstrId, Money, IncomeType)
+        Expense(PortfId, InstrId, Money, ExpenseType)
+        Deposit(PortfId, Money)
+        Withdraw(PortfId, Money)
+        Split(InstrumentId, Rate)
+        Delist(InstrumentId)
+    }
+
+    object VIEW_PortfolioOperation {
         Id
         PortfolioId
         InstrumentId
@@ -50,49 +63,22 @@ package PortfolioOperations {
         Money
         Type : Trade, Cash, Currency
     }
-    object Trade {
-        Type : Buy, Sell
-        Amount
-        --
-        Add()
-    }
 
-    object Cash {
-        Type : Coupon, Dividend, Amortization
-        --
-        Add()
-    }
-
-    object Currency {
-        Type : Add, Withdraw
-        --
-        Add()
-    }
-
-    abstract SplitOperation {
+    object VIEW_GlobalOperation {
         Id
         InstrumentId
-        Rate
         DateTime
-        --
-        Add()
+        Type: Split, Delist
     }
 
-    PortfolioOperation --> Cash
-    PortfolioOperation --> Trade
-    PortfolioOperation --> Currency
-
-    interface API {
-        OperationsByPortfolio
-        OperationsByInstrument
-        Buy(Quantity, Money)
-        Sell(Quantity, Money)
-        AddCoupon(Money)
-        AddDividend(Money)
-        Split1To(Rate)
-        ReverseSplitTo1(Rate)
-        AddToAccount(Money)
-        Withdraw(Money)
+    enum IncomeType {
+        Coupon
+        Dividend
+        Amortization
+    }
+    
+    enum ExpenseType {
+        Tax
     }
 }
 
@@ -266,7 +252,6 @@ package DepositManagement {
 
 InstrumentManagement --> CurrencyManagement
 PortfolioManagement --> InstrumentManagement
-PortfolioOperations --> PortfolioManagement
 StrategyTracking --> InstrumentManagement
 WalletManagement --> CurrencyManagement
 DepositManagement --> CurrencyManagement
