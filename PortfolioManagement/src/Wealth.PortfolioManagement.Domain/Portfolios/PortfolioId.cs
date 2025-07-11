@@ -13,4 +13,9 @@ public record struct PortfolioId(int Id)
     {
         return new PortfolioId(id);
     }
+
+    public readonly override int GetHashCode()
+    {
+        return Id;
+    }
 }

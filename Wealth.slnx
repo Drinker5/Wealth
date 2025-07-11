@@ -41,7 +41,10 @@
     <Project Path="InstrumentManagement\tests\Wealth.InstrumentManagement.Domain.Tests\Wealth.InstrumentManagement.Domain.Tests.csproj" Type="Classic C#" />
     <File Path="InstrumentManagement\tests\Directory.Build.props" />
   </Folder>
-  <Folder Name="/PortfolioManagement/" />
+  <Folder Name="/PortfolioManagement/">
+    <File Path="PortfolioManagement\.dockerignore" />
+    <File Path="PortfolioManagement\Dockerfile" />
+  </Folder>
   <Folder Name="/PortfolioManagement/src/">
     <Project Path="PortfolioManagement\src\Wealth.PortfolioManagement.API\Wealth.PortfolioManagement.API.csproj" Type="Classic C#" />
     <Project Path="PortfolioManagement\src\Wealth.PortfolioManagement.Application\Wealth.PortfolioManagement.Application.csproj" Type="Classic C#" />
@@ -50,7 +53,9 @@
     <File Path="PortfolioManagement\src\Directory.Build.props" />
   </Folder>
   <Folder Name="/PortfolioManagement/tests/">
+    <Project Path="PortfolioManagement\tests\Wealth.PortfolioManagement.Application.Tests\Wealth.PortfolioManagement.Application.Tests.csproj" Type="Classic C#" />
     <Project Path="PortfolioManagement\tests\Wealth.PortfolioManagement.Domain.Tests\Wealth.PortfolioManagement.Domain.Tests.csproj" Type="Classic C#" />
+    <Project Path="PortfolioManagement\tests\Wealth.PortfolioManagement.Infrastructure.Tests\Wealth.PortfolioManagement.Infrastructure.Tests.csproj" Type="Classic C#" />
     <File Path="PortfolioManagement\tests\Directory.Build.props" />
   </Folder>
   <Folder Name="/Solution Items/">

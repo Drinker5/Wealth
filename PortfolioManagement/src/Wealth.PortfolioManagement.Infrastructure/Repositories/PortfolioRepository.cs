@@ -19,6 +19,7 @@ public class PortfolioRepository : IPortfolioRepository
         return await context.Portfolios.AsNoTracking()
             .Include(i => i.Currencies)
             .Include(i => i.Assets)
+            .AsSplitQuery()
             .ToListAsync();
     }
 

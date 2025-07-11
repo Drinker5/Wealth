@@ -15,10 +15,9 @@ public class PortfolioTests
         Assert.Equal("foo", portfolio.Name);
         Assert.Empty(portfolio.Currencies);
         Assert.Empty(portfolio.Assets);
-        Assert.NotNull(portfolio.Id);
+        Assert.Equal(0, portfolio.Id.Id);
         var ev = portfolio.HasEvent<PortfolioCreated>();
-        Assert.Equal(portfolio.Id, ev.PortfolioId);
-        Assert.Equal(portfolio.Name, ev.Name);
+        Assert.Same(portfolio, ev.Portfolio);
     }
 
     [Fact]

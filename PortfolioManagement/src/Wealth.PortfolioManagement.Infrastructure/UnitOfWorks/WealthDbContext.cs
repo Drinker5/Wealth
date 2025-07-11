@@ -6,6 +6,7 @@ using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Infrastructure.EFCore.Extensions;
 using Wealth.PortfolioManagement.Domain.Portfolios;
 using Wealth.PortfolioManagement.Infrastructure.Repositories;
+using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 
@@ -32,6 +33,11 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+        if (Database.IsInMemory())
+        {
+            modelBuilder.Entity<Portfolio>().Property(i => i.Id)
+                .HasValueGenerator((a, b) => new PortfolioIdInMemoryIntegerValueGenerator(0));
+        }
 
         base.OnModelCreating(modelBuilder);
     }
@@ -51,7 +57,7 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
         transaction = await Database.BeginTransactionAsync();
         return transaction;
     }
-    
+
     public async Task<int> Commit(CancellationToken cancellationToken)
     {
         var result = await SaveChangesAsync(cancellationToken);
