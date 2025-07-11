@@ -36,7 +36,7 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
         if (Database.IsInMemory())
         {
             modelBuilder.Entity<Portfolio>().Property(i => i.Id)
-                .HasValueGenerator((a, b) => new PortfolioIdInMemoryIntegerValueGenerator(0));
+                .HasValueGenerator<PortfolioIdInMemoryValueGenerator>();
         }
 
         base.OnModelCreating(modelBuilder);

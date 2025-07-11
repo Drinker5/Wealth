@@ -37,6 +37,9 @@ internal class UnitOfWorkCreateOutboxMessagesDecorator : IUnitOfWork
         if (aggregate is null)
             return;
 
+        if (aggregate.DomainEvents is null)
+            return;
+
         foreach (var domainEvent in aggregate.DomainEvents)
         {
             var outboxMessage = OutboxMessage.Create(
@@ -45,7 +48,7 @@ internal class UnitOfWorkCreateOutboxMessagesDecorator : IUnitOfWork
                 domainEvent);
             await repository.Add(outboxMessage, cancellationToken);
         }
-        
+
         aggregate.ClearDomainEvents();
     }
 

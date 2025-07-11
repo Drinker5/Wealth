@@ -5,16 +5,10 @@ using Wealth.BuildingBlocks.Domain;
 
 namespace Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
-public class WealthDbContext : IDisposable
+public class WealthDbContext(IConfiguration configuration) : IDisposable
 {
-    private readonly IConfiguration configuration;
     private IDbConnection? connection;
-    private List<IDomainEvent> trackedEvents = [];
-
-    public WealthDbContext(IConfiguration configuration)
-    {
-        this.configuration = configuration;
-    }
+    private readonly List<IDomainEvent> trackedEvents = [];
 
     public IReadOnlyList<IDomainEvent> TrackedEvents => trackedEvents.AsReadOnly();
 
@@ -25,9 +19,10 @@ public class WealthDbContext : IDisposable
 
     public void AddEvents(AggregateRoot aggregate)
     {
-        trackedEvents.AddRange(aggregate.DomainEvents);
+        if (aggregate.DomainEvents != null)
+            trackedEvents.AddRange(aggregate.DomainEvents);
     }
-    
+
     public IDbConnection CreateMasterConnection()
         => new NpgsqlConnection(configuration.GetConnectionString("Master"));
 

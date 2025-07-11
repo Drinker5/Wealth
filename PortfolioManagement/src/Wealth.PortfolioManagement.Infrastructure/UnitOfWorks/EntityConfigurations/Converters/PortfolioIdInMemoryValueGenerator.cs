@@ -1,19 +1,17 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.InMemory.ValueGeneration.Internal;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Wealth.PortfolioManagement.Domain.Portfolios;
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
 
-public class PortfolioIdInMemoryIntegerValueGenerator : InMemoryIntegerValueGenerator<PortfolioId>
+public class PortfolioIdInMemoryValueGenerator : ValueGenerator<PortfolioId>
 {
     private static int id;
-
-    public PortfolioIdInMemoryIntegerValueGenerator(int propertyIndex) : base(propertyIndex)
-    {
-    }
 
     public override PortfolioId Next(EntityEntry entry)
     {
         return Interlocked.Increment(ref id);
     }
+
+    public override bool GeneratesTemporaryValues => false;
 }
