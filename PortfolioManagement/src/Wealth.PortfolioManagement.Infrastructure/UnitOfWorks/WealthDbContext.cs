@@ -1,9 +1,8 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Storage;
 using Wealth.BuildingBlocks.Domain;
-using Wealth.BuildingBlocks.Infrastructure.EFCore.Extensions;
+using Wealth.PortfolioManagement.Domain.Operations;
 using Wealth.PortfolioManagement.Domain.Portfolios;
 using Wealth.PortfolioManagement.Infrastructure.Repositories;
 using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
@@ -18,6 +17,9 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
 {
     public virtual DbSet<Portfolio> Portfolios { get; internal init; }
     public virtual DbSet<OutboxMessage> OutboxMessages { get; internal init; }
+
+    public virtual DbSet<InstrumentOperation> InstrumentOperations { get; internal init; }
+    public virtual DbSet<CurrencyOperation> CurrencyOperations { get; internal init; }
 
     private IDbContextTransaction? transaction;
 

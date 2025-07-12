@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Wealth.PortfolioManagement.Application.Portfolios.Commands;
 using Wealth.PortfolioManagement.Application.Portfolios.Queries;
+using Wealth.PortfolioManagement.Domain.ValueObjects;
 
 namespace Wealth.PortfolioManagement.API.APIs;
 
@@ -14,8 +15,17 @@ public static class PortfolioApi
         api.MapGet("/", GetPortfolios);
         api.MapGet("{portfolioId:int}", GetPortfolio);
         api.MapPost("/", CreatePortfolio);
+        api.MapPut("/deposit", DepositCurrency);
 
         return api;
+    }
+
+    private static async Task<Ok> DepositCurrency(
+        DepositCurrencyRequest request,
+        [AsParameters] PortfolioServices services)
+    {
+        await services.Mediator.Command(new AddCurrency(request.PortfolioId, request.Money));
+        return TypedResults.Ok();
     }
 
     public static async Task<Results<Ok<int>, BadRequest<string>>> CreatePortfolio(
@@ -53,3 +63,5 @@ public static class PortfolioApi
 }
 
 public record CreatePortfolioRequest(string Name);
+
+public record DepositCurrencyRequest(int PortfolioId, Money Money);

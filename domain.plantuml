@@ -55,31 +55,49 @@ package PortfolioManagement {
         Delist(InstrumentId)
     }
 
-    object VIEW_PortfolioOperation {
+    Entity InstrumentOperation {
         Id
+        Date
+        InstrumentId
+        --
+        Add()
+    }
+
+    Entity CurrencyOperation {
+        Id
+        Date
         PortfolioId
-        InstrumentId
-        DateTime
         Money
-        Type : Trade, Cash, Currency
+        Type : Deposit, Withdraw
+        --
+        Add()
     }
 
-    object VIEW_GlobalOperation {
-        Id
-        InstrumentId
-        DateTime
-        Type: Split, Delist
+    object Trade {
+        PortfolioId
+        Money
+        Amount
+        Type : Buy, Sell
     }
 
-    enum IncomeType {
-        Coupon
-        Dividend
-        Amortization
+    object Cash {
+        PortfolioId
+        Money
+        Type : Coupon, Dividend, Amortization, Tax
+    }
+
+
+    object Split {
+        Rate
+    }
+
+    object Delist {
     }
     
-    enum ExpenseType {
-        Tax
-    }
+    InstrumentOperation --> Trade
+    InstrumentOperation --> Cash
+    InstrumentOperation --> Split
+    InstrumentOperation --> Delist
 }
 
 package CurrencyManagement {

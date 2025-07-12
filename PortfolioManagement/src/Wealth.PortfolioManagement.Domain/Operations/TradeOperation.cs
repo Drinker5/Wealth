@@ -1,0 +1,18 @@
+using Wealth.PortfolioManagement.Domain.Portfolios;
+using Wealth.PortfolioManagement.Domain.ValueObjects;
+
+namespace Wealth.PortfolioManagement.Domain.Operations;
+
+public class TradeOperation : InstrumentOperation
+{
+    public PortfolioId PortfolioId { get; set; }
+    public Money Money { get; set; }
+    public int Quantity { get; set; }
+    public TradeOperationType Type { get; set; }
+}
+
+public enum TradeOperationType
+{
+    Buy,
+    Sell
+}

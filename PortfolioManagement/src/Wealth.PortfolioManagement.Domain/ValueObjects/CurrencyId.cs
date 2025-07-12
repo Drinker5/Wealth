@@ -1,4 +1,4 @@
-namespace Wealth.PortfolioManagement.Domain.Portfolios;
+namespace Wealth.PortfolioManagement.Domain.ValueObjects;
 
 public record CurrencyId(string Code)
 {

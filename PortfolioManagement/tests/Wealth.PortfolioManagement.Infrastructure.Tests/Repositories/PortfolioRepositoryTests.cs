@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Wealth.PortfolioManagement.Domain;
 using Wealth.PortfolioManagement.Domain.Portfolios;
+using Wealth.PortfolioManagement.Domain.ValueObjects;
 using Wealth.PortfolioManagement.Infrastructure.Repositories;
 using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 
@@ -56,17 +58,16 @@ public class PortfolioRepositoryTests
     public async Task WhenAddAsset()
     {
         var instrumentId = new InstrumentId(Guid.NewGuid());
-        ISIN isin = "123123123123";
         var quantity = 32;
+        var money = new Money("FOO", 23.3m);
         var id = await CreatePortfolio("Foo");
 
-        await repository.AddAsset(id, instrumentId, isin, quantity);
+        await repository.Buy(id, instrumentId, money, quantity);
 
         var portfolio = await repository.GetPortfolio(id);
         Assert.NotNull(portfolio);
         var asset = Assert.Single(portfolio.Assets);
         Assert.Equal(instrumentId, asset.InstrumentId);
-        Assert.Equal(isin, asset.ISIN);
         Assert.Equal(quantity, asset.Quantity);
     }
 

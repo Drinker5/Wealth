@@ -9,7 +9,6 @@ internal class PortfolioAssetConfiguration : IEntityTypeConfiguration<PortfolioA
 {
     public void Configure(EntityTypeBuilder<PortfolioAsset> builder)
     {
-        // builder.Property<int>("PortfolioId");
         builder.Property<PortfolioId>("PortfolioId")
             .HasConversion<PortfolioIdConverter>();
 
@@ -17,11 +16,6 @@ internal class PortfolioAssetConfiguration : IEntityTypeConfiguration<PortfolioA
 
         builder.Property(x => x.InstrumentId)
             .HasConversion<InstrumentIdConverter>()
-            .IsRequired();
-
-        builder.Property(x => x.ISIN)
-            .HasConversion<ISINConverter>()
-            .HasMaxLength(12)
             .IsRequired();
 
         builder.Property(x => x.Quantity)

@@ -21,7 +21,7 @@ public class OutboxRepository : IOutboxRepository
         {
             Id = Guid.NewGuid(),
             OccurredOn = Clock.Now,
-            Data = JsonSerializer.Serialize(domainEvent),
+            Data = JsonSerializer.Serialize(domainEvent, domainEvent.GetType()),
             Type = domainEvent.GetType().Name,
         }, cancellationToken);
     }

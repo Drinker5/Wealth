@@ -1,6 +1,12 @@
 using Wealth.BuildingBlocks.Application;
+using Wealth.PortfolioManagement.Domain;
 using Wealth.PortfolioManagement.Domain.Portfolios;
+using Wealth.PortfolioManagement.Domain.ValueObjects;
 
 namespace Wealth.PortfolioManagement.Application.Portfolios.Commands;
 
-public record AddAsset(PortfolioId PortfolioId, InstrumentId InstrumentId, ISIN ISIN, int Quantity) : ICommand;
+public record BuyAsset(
+    PortfolioId PortfolioId,
+    InstrumentId InstrumentId,
+    Money TotalPrice,
+    int Quantity) : ICommand;

@@ -1,3 +1,5 @@
+using Wealth.PortfolioManagement.Domain.ValueObjects;
+
 namespace Wealth.PortfolioManagement.Domain.Portfolios;
 
 public class PortfolioCurrency

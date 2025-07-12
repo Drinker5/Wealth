@@ -21,3 +21,15 @@ Content-Type: application/json
 }
 
 ###
+
+PUT {{API}}/api/portfolio/deposit
+Accept: application/json
+Content-Type: application/json
+
+{
+  "portfolioId": "{{portfolioId}}",
+  "money": {
+    "CurrencyId" : { "code":  "RUB" },
+     "Amount" : "22.34"
+  }
+}

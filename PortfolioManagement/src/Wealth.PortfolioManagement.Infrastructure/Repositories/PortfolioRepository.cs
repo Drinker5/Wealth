@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Wealth.PortfolioManagement.Domain;
 using Wealth.PortfolioManagement.Domain.Portfolios;
 using Wealth.PortfolioManagement.Domain.Repositories;
+using Wealth.PortfolioManagement.Domain.ValueObjects;
 using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Repositories;
@@ -40,13 +42,13 @@ public class PortfolioRepository : IPortfolioRepository
         portfolio.Rename(newName);
     }
 
-    public async Task AddAsset(PortfolioId id, InstrumentId instrumentId, ISIN isin, int quantity)
+    public async Task Buy(PortfolioId id, InstrumentId instrumentId, Money totalPrice, int quantity)
     {
         var portfolio = await GetPortfolio(id);
         if (portfolio == null)
             return;
 
-        portfolio.AddAsset(instrumentId, isin, quantity);
+        portfolio.Buy(instrumentId, totalPrice, quantity);
     }
 
     public async Task AddCurrency(PortfolioId id, CurrencyId currencyId, decimal amount)
@@ -55,7 +57,7 @@ public class PortfolioRepository : IPortfolioRepository
         if (portfolio == null)
             return;
 
-        portfolio.AddCurrency(currencyId, amount);
+        portfolio.Deposit(currencyId, amount);
     }
 
     public Task<PortfolioId> CreatePortfolio(string requestName)
