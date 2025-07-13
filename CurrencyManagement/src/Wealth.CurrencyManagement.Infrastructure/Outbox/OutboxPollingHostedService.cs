@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Wealth.BuildingBlocks.Infrastructure.Mediation;
 using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Application.Outbox.Commands;
-using Wealth.CurrencyManagement.Infrastructure.Mediation;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Outbox;
 

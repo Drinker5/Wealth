@@ -1,5 +1,5 @@
 using Wealth.BuildingBlocks.Application;
-using Wealth.InstrumentManagement.Domain.Instruments;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Domain.Repositories;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Commands;

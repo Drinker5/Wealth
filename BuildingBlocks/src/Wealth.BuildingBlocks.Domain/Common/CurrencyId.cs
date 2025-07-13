@@ -1,8 +1,6 @@
-using Wealth.BuildingBlocks.Domain;
+namespace Wealth.BuildingBlocks.Domain.Common;
 
-namespace Wealth.CurrencyManagement.Domain.Currencies;
-
-public record CurrencyId : IValueObject
+public record struct CurrencyId : IValueObject
 {
     /// <summary>
     /// ISO 4217

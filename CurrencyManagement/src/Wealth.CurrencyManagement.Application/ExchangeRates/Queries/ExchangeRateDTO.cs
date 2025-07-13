@@ -1,4 +1,4 @@
-using Wealth.CurrencyManagement.Domain.Currencies;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.CurrencyManagement.Domain.ExchangeRates;
 
 namespace Wealth.CurrencyManagement.Application.ExchangeRates.Queries;

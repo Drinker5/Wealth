@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Storage;
 using Wealth.BuildingBlocks.Domain;
+using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.BuildingBlocks.Infrastructure.EFCore.Converters;
 using Wealth.PortfolioManagement.Domain.Operations;
 using Wealth.PortfolioManagement.Domain.Portfolios;
 using Wealth.PortfolioManagement.Infrastructure.Repositories;
@@ -49,6 +51,12 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
         var optionsBuilder = new DbContextOptionsBuilder<WealthDbContext>();
         optionsBuilder.UseNpgsql("Host=127.0.0.1;Username=postgres;Password=postgres;Database=Design");
         return new WealthDbContext(optionsBuilder.Options);
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.Properties<CurrencyId>().HaveConversion<CurrencyIdConverter>();
+        configurationBuilder.Properties<InstrumentId>().HaveConversion<InstrumentIdConverter>();
     }
 
     public async Task<IDisposable> BeginTransaction()

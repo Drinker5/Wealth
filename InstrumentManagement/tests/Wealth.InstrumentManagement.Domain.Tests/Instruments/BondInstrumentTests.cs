@@ -1,3 +1,4 @@
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Domain.Instruments;
 using Wealth.InstrumentManagement.Domain.Instruments.Events;
 
@@ -24,7 +25,7 @@ public class BondInstrumentTests
         var @event = instrument.HasEvent<BondCreated>();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(@event.Id, Is.Not.Null);
+            Assert.That(@event.Id, Is.Not.Default);
             Assert.That(@event.Name, Is.EqualTo(name));
             Assert.That(@event.ISIN, Is.EqualTo(isin));
             Assert.That(instrument.Id, Is.Not.Default);
@@ -46,7 +47,7 @@ public class BondInstrumentTests
         var @event = instrument.HasEvent<InstrumentPriceChanged>();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(@event.Id, Is.Not.Null);
+            Assert.That(@event.Id, Is.Not.Default);
             Assert.That(@event.ISIN, Is.EqualTo(isin));
             Assert.That(@event.NewPrice, Is.EqualTo(money));
         }
@@ -62,7 +63,7 @@ public class BondInstrumentTests
         var @event = instrument.HasEvent<BondCouponChanged>();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(@event.Id, Is.Not.Null);
+            Assert.That(@event.Id, Is.Not.Default);
             Assert.That(@event.ISIN, Is.EqualTo(isin));
             Assert.That(@event.NewCoupon, Is.EqualTo(coupon));
         }

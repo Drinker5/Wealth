@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.API\Wealth.BuildingBlocks.API.csproj" />
+    <ProjectReference Include="..\Wealth.Aggregation.Infrastructure\Wealth.Aggregation.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

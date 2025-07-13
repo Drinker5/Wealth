@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Wealth.CurrencyManagement.Domain.Currencies;
+using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks.EntityConfigurations;
 

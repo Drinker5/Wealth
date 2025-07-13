@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Wealth.PortfolioManagement.Domain.Portfolios;
+using Wealth.BuildingBlocks.Domain.Common;
 
-namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
+namespace Wealth.BuildingBlocks.Infrastructure.EFCore.Converters;
 
 public class InstrumentIdConverter() : ValueConverter<InstrumentId, Guid>(v => v.Id, v => new InstrumentId(v));

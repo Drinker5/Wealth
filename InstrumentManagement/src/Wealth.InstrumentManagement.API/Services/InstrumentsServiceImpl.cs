@@ -1,11 +1,8 @@
 using Grpc.Core;
 using MediatR;
-using Wealth.InstrumentManagement.API;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Instruments.Queries;
-using Wealth.InstrumentManagement.Application.Services;
-using Wealth.InstrumentManagement.Domain;
-using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.API.Services;
 

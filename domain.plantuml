@@ -1,7 +1,7 @@
 @startuml Domain
 allowmixing
 
-package Summary {
+package Aggregation {
     object IncomeSummary{
         Currencies
         Wallets
@@ -273,8 +273,8 @@ PortfolioManagement --> InstrumentManagement
 StrategyTracking --> InstrumentManagement
 WalletManagement --> CurrencyManagement
 DepositManagement --> CurrencyManagement
-Summary --> WalletManagement
-Summary --> PortfolioManagement
-Summary --> DepositManagement
+Aggregation --> WalletManagement
+Aggregation --> PortfolioManagement
+Aggregation --> DepositManagement
 @enduml
 

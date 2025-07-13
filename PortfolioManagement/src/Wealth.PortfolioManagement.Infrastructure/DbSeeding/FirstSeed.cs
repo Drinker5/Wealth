@@ -1,7 +1,6 @@
-﻿using Wealth.BuildingBlocks.Infrastructure.EFCore.DbSeeding;
-using Wealth.PortfolioManagement.Domain;
+﻿using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.BuildingBlocks.Infrastructure.EFCore.DbSeeding;
 using Wealth.PortfolioManagement.Domain.Portfolios;
-using Wealth.PortfolioManagement.Domain.ValueObjects;
 using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.PortfolioManagement.Infrastructure.DbSeeding;

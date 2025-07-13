@@ -1,5 +1,5 @@
 using Wealth.BuildingBlocks.Domain;
-using Wealth.CurrencyManagement.Domain.Currencies;
+using Wealth.BuildingBlocks.Domain.Common;
 
 #pragma warning disable CS8618
 

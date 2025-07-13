@@ -1,6 +1,6 @@
 using Wealth.BuildingBlocks.Application;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.CurrencyManagement.Application.Currencies.Queries;
-using Wealth.CurrencyManagement.Domain.Currencies;
 
 namespace Wealth.CurrencyManagement.Application.Currencies.Commands;
 

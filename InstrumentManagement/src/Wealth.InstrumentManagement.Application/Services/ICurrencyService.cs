@@ -1,4 +1,4 @@
-using Wealth.InstrumentManagement.Domain;
+using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.InstrumentManagement.Application.Services;
 

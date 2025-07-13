@@ -1,5 +1,6 @@
 
 using Wealth.BuildingBlocks.Domain;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Domain.ValueObjects;
 
 namespace Wealth.PortfolioManagement.Domain.Portfolios.Events;

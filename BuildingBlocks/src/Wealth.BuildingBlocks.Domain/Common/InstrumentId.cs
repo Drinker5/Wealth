@@ -1,6 +1,6 @@
-namespace Wealth.InstrumentManagement.Domain.Instruments;
+namespace Wealth.BuildingBlocks.Domain.Common;
 
-public record InstrumentId(Guid Id)
+public record struct InstrumentId(Guid Id) : IIdentity
 {
     public static InstrumentId New() => Guid.NewGuid();
 
@@ -17,5 +17,10 @@ public record InstrumentId(Guid Id)
     public override string ToString()
     {
         return Id.ToString("N");
+    }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
     }
 }

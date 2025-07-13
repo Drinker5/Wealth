@@ -1,4 +1,4 @@
-using Wealth.BuildingBlocks.Domain;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Domain.Instruments.Events;
 
 namespace Wealth.InstrumentManagement.Domain.Instruments;
@@ -12,6 +12,8 @@ public class StockInstrument : Instrument
     }
 
     public Dividend Dividend { get; set; }
+
+    public int LotSize { get; set; } = 1;
 
     public static StockInstrument Create(string name, ISIN isin)
     {
@@ -43,6 +45,16 @@ public class StockInstrument : Instrument
         });
     }
 
+    public void ChangeLotSize(int lotSize)
+    {
+        Apply(new StockLotSizeChanged
+        {
+            Id = Id,
+            ISIN = ISIN,
+            NewLotSize = lotSize,
+        });
+    }
+
     private void When(StockCreated @event)
     {
         Id = @event.Id;
@@ -53,5 +65,10 @@ public class StockInstrument : Instrument
     private void When(StockDividendChanged @event)
     {
         Dividend = @event.NewDividend;
+    }
+
+    private void When(StockLotSizeChanged @event)
+    {
+        LotSize = @event.NewLotSize;
     }
 }

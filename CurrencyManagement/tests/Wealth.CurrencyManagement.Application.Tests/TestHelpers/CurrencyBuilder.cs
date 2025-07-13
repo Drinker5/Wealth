@@ -1,4 +1,5 @@
-﻿using Wealth.CurrencyManagement.Domain.Currencies;
+﻿using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.CurrencyManagement.Domain.Currencies;
 
 namespace Wealth.CurrencyManagement.Application.Tests.TestHelpers;
 

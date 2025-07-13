@@ -1,6 +1,7 @@
 using System.Data;
 using Dapper;
 using Dommel;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Dapper;
@@ -29,9 +30,9 @@ public class CustomTableNameResolver : ITableNameResolver
 
 public class InstrumentIdHandler : SqlMapper.TypeHandler<InstrumentId>
 {
-    public override void SetValue(IDbDataParameter parameter, InstrumentId? value)
+    public override void SetValue(IDbDataParameter parameter, InstrumentId value)
     {
-        parameter.Value = value?.Id;
+        parameter.Value = value.Id;
     }
 
     public override InstrumentId Parse(object value)

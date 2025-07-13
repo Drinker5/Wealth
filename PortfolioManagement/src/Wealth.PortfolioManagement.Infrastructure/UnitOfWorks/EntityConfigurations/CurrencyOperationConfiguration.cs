@@ -21,7 +21,7 @@ internal class CurrencyOperationConfiguration : IEntityTypeConfiguration<Currenc
 
         builder.OwnsOne(y => y.Money, z =>
         {
-            z.Property(i => i.CurrencyId).HasConversion<CurrencyIdConverter>();
+            z.Property(i => i.CurrencyId);
             z.Property(i => i.Amount);
         });
     }

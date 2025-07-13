@@ -1,6 +1,6 @@
 using System.Data;
 using Dapper;
-using Wealth.InstrumentManagement.Domain;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Domain.Instruments;
 using Wealth.InstrumentManagement.Domain.Repositories;
 using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;

@@ -1,6 +1,5 @@
 using MediatR;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Infrastructure.EFCore.Extensions;
 using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 

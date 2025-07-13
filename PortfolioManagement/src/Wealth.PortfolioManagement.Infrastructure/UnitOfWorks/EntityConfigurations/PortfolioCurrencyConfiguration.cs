@@ -16,7 +16,6 @@ internal class PortfolioCurrencyConfiguration : IEntityTypeConfiguration<Portfol
         builder.HasKey("PortfolioId", nameof(PortfolioCurrency.CurrencyId));
 
         builder.Property(x => x.CurrencyId)
-            .HasConversion<CurrencyIdConverter>()
             .HasMaxLength(3)
             .IsRequired();
 

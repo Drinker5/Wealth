@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.CurrencyManagement.Application.Tests.TestHelpers;
-using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Domain.ExchangeRates;
 using Wealth.CurrencyManagement.Infrastructure.Repositories;
 using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;

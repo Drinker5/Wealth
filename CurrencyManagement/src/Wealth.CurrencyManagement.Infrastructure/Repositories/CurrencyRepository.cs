@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Domain.Repositories;
 using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;

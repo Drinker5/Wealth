@@ -15,7 +15,6 @@ internal class PortfolioAssetConfiguration : IEntityTypeConfiguration<PortfolioA
         builder.HasKey("PortfolioId", nameof(PortfolioAsset.InstrumentId));
 
         builder.Property(x => x.InstrumentId)
-            .HasConversion<InstrumentIdConverter>()
             .IsRequired();
 
         builder.Property(x => x.Quantity)

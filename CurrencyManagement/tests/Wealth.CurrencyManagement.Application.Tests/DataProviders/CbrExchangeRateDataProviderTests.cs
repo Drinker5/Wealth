@@ -1,11 +1,8 @@
 using System.Net;
-using System.Text;
-using Microsoft.Build.Framework;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using Wealth.CurrencyManagement.Domain.Currencies;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.CurrencyManagement.Infrastructure.DataProviders;
-using Xunit.Abstractions;
 
 namespace Wealth.CurrencyManagement.Application.Tests.DataProviders;
 

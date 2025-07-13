@@ -8,9 +8,9 @@ using Polly.Bulkhead;
 using Polly.CircuitBreaker;
 using Polly.RateLimit;
 using Polly.Retry;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.CurrencyManagement.Application.DataProviders;
-using Wealth.CurrencyManagement.Domain.Currencies;
 
 namespace Wealth.CurrencyManagement.Infrastructure.DataProviders;
 

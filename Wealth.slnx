@@ -1,4 +1,15 @@
 <Solution>
+  <Folder Name="/Aggregation/" />
+  <Folder Name="/Aggregation/src/">
+    <Project Path="Aggregation\src\Wealth.Aggregation.API\Wealth.Aggregation.API.csproj" Type="Classic C#" />
+    <Project Path="Aggregation\src\Wealth.Aggregation.Application\Wealth.Aggregation.Application.csproj" Type="Classic C#" />
+    <Project Path="Aggregation\src\Wealth.Aggregation.Domain\Wealth.Aggregation.Domain.csproj" Type="Classic C#" />
+    <Project Path="Aggregation\src\Wealth.Aggregation.Infrastructure\Wealth.Aggregation.Infrastructure.csproj" Type="Classic C#" />
+    <File Path="Aggregation\src\Directory.Build.props" />
+  </Folder>
+  <Folder Name="/Aggregation/tests/">
+    <Project Path="Aggregation\tests\Wealth.Aggregation.Domain.Tests\Wealth.Aggregation.Domain.Tests.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/BuildingBlocks/" />
   <Folder Name="/BuildingBlocks/src/">
     <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.API\Wealth.BuildingBlocks.API.csproj" Type="Classic C#" />

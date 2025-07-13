@@ -15,7 +15,6 @@ internal class InstrumentOperationConfiguration : IEntityTypeConfiguration<Instr
             .ValueGeneratedOnAdd();
 
         builder.Property(x => x.InstrumentId)
-            .HasConversion<InstrumentIdConverter>()
             .IsRequired();
 
         builder.Property(x => x.Date)
@@ -60,7 +59,7 @@ internal class CashOperationConfiguration : IEntityTypeConfiguration<CashOperati
 
         builder.OwnsOne(y => y.Money, z =>
         {
-            z.Property(i => i.CurrencyId).HasConversion<CurrencyIdConverter>();
+            z.Property(i => i.CurrencyId);
             z.Property(i => i.Amount);
         });
     }
@@ -81,7 +80,7 @@ internal class TradeOperationConfiguration : IEntityTypeConfiguration<TradeOpera
 
         builder.OwnsOne(y => y.Money, z =>
         {
-            z.Property(i => i.CurrencyId).HasConversion<CurrencyIdConverter>();
+            z.Property(i => i.CurrencyId);
             z.Property(i => i.Amount);
         });
     }

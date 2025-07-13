@@ -1,5 +1,6 @@
-using Wealth.CurrencyManagement.Domain.Currencies;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.CurrencyManagement.Domain.ExchangeRates;
+using Money = Wealth.CurrencyManagement.Domain.ExchangeRates.Money;
 
 namespace Wealth.CurrencyManagement.Domain.Tests.Entities;
 

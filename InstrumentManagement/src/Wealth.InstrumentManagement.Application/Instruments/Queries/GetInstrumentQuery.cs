@@ -1,5 +1,5 @@
 using Wealth.BuildingBlocks.Application;
-using Wealth.InstrumentManagement.Domain.Instruments;
+using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Queries;
 

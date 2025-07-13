@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Infrastructure;
 using Wealth.BuildingBlocks.Infrastructure.Mediation;
-using Wealth.PortfolioManagement.Infrastructure.Mediation.RequestProcessing;
 using Wealth.PortfolioManagement.Infrastructure.Mediation.RequestProcessing.CommandBehaviors;
 using Wealth.PortfolioManagement.Infrastructure.Mediation.RequestProcessing.QueryPipelines;
 

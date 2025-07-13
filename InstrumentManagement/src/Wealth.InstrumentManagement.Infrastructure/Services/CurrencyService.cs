@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
 using Microsoft.Extensions.Logging;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Application.Services;
-using Wealth.InstrumentManagement.Domain;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Services;
 

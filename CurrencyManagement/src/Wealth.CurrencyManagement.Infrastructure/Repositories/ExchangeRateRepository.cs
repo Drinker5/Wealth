@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Wealth.CurrencyManagement.Domain.Currencies;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.CurrencyManagement.Domain.ExchangeRates;
 using Wealth.CurrencyManagement.Domain.Repositories;
 using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;

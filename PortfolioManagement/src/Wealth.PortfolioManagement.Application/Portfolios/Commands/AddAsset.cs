@@ -1,7 +1,6 @@
 using Wealth.BuildingBlocks.Application;
-using Wealth.PortfolioManagement.Domain;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Domain.Portfolios;
-using Wealth.PortfolioManagement.Domain.ValueObjects;
 
 namespace Wealth.PortfolioManagement.Application.Portfolios.Commands;
 

@@ -1,7 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using Wealth.BuildingBlocks.API;
 using Wealth.PortfolioManagement.API.APIs;
-using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 
 var builder = WebApplication.CreateBuilder(args);
 

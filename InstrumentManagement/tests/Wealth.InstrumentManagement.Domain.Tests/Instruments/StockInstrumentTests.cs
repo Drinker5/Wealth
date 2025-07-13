@@ -1,3 +1,4 @@
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Domain.Instruments;
 using Wealth.InstrumentManagement.Domain.Instruments.Events;
 
@@ -24,7 +25,7 @@ public class StockInstrumentTests
         var @event = instrument.HasEvent<StockCreated>();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(@event.Id, Is.Not.Null);
+            Assert.That(@event.Id, Is.Not.Default);
             Assert.That(@event.Name, Is.EqualTo(name));
             Assert.That(@event.ISIN, Is.EqualTo(isin));
             Assert.That(instrument.Id, Is.Not.Default);
@@ -32,6 +33,7 @@ public class StockInstrumentTests
             Assert.That(instrument.ISIN, Is.EqualTo(isin));
             Assert.That(instrument.Dividend, Is.Null);
             Assert.That(instrument.Type, Is.EqualTo(InstrumentType.Stock));
+            Assert.That(instrument.LotSize, Is.EqualTo(1));
         }
     }
 
@@ -46,7 +48,7 @@ public class StockInstrumentTests
         var @event = instrument.HasEvent<InstrumentPriceChanged>();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(@event.Id, Is.Not.Null);
+            Assert.That(@event.Id, Is.Not.Default);
             Assert.That(@event.ISIN, Is.EqualTo(isin));
             Assert.That(@event.NewPrice, Is.EqualTo(money));
         }
@@ -62,9 +64,25 @@ public class StockInstrumentTests
         var @event = instrument.HasEvent<StockDividendChanged>();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(@event.Id, Is.Not.Null);
+            Assert.That(@event.Id, Is.Not.Default);
             Assert.That(@event.ISIN, Is.EqualTo(isin));
             Assert.That(@event.NewDividend, Is.EqualTo(dividend));
+        }
+    }
+
+    [Test]
+    public void WhenLotSizeChanged()
+    {
+        var instrument = CreateStockInstrument(name, isin);
+
+        instrument.ChangeLotSize(10);
+
+        var @event = instrument.HasEvent<StockLotSizeChanged>();
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(@event.Id, Is.Not.Default);
+            Assert.That(@event.ISIN, Is.EqualTo(isin));
+            Assert.That(@event.NewLotSize, Is.EqualTo(10));
         }
     }
 }

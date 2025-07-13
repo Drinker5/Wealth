@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Wealth.PortfolioManagement.Domain;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Domain.Portfolios;
 using Wealth.PortfolioManagement.Domain.Repositories;
-using Wealth.PortfolioManagement.Domain.ValueObjects;
 using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Repositories;

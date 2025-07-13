@@ -1,4 +1,4 @@
-using Wealth.InstrumentManagement.Domain;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Domain.Instruments;
 using Wealth.InstrumentManagement.Domain.Repositories;
 
