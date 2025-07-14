@@ -7,6 +7,11 @@ internal class StockDividendChangedEventHandler(IOutboxRepository outboxReposito
 {
     public async Task Handle(StockDividendChanged notification, CancellationToken cancellationToken)
     {
-        await outboxRepository.Add(notification, cancellationToken);
+        await outboxRepository.Add(new StockDividendChangedIntegrationEvent
+        {
+            InstrumentId = notification.Id,
+            ISIN = notification.ISIN,
+            NewDividend = notification.NewDividend,
+        }, cancellationToken);
     }
 }

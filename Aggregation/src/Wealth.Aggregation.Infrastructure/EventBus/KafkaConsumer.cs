@@ -1,0 +1,157 @@
+using System.Text;
+using System.Text.Json;
+using Confluent.Kafka;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Wealth.BuildingBlocks.Application;
+using Wealth.BuildingBlocks.Infrastructure.EventBus;
+
+namespace Wealth.Aggregation.Infrastructure.EventBus;
+
+public sealed class KafkaConsumer(
+    ILogger<KafkaConsumer> logger,
+    IServiceProvider serviceProvider,
+    IOptions<KafkaConsumerOptions> options,
+    IOptions<EventBusSubscriptionInfo> subscriptionOptions) : IDisposable, IHostedService
+{
+    private IConsumer<string, byte[]> consumer;
+    private CancellationTokenSource consumerCts;
+
+    public void Dispose()
+    {
+        consumerCts?.Cancel();
+        consumer?.Close();
+        consumer?.Dispose();
+    }
+
+    private async Task OnMessageReceived(ConsumeResult<string, byte[]> message)
+    {
+        var key = message.Message.Key;
+        var messageBody = message.Message.Value;
+        var eventNameHeader = message.Message.Headers.FirstOrDefault(i => i.Key == options.Value.EventNameHeader);
+        if (eventNameHeader == null)
+        {
+            logger.LogWarning("Received message without EventType header");
+            return;
+        }
+
+        try
+        {
+            var eventName = Encoding.UTF8.GetString(eventNameHeader.GetValueBytes());
+            await ProcessEvent(eventName, messageBody);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error Processing message \"{Message}\"", Encoding.UTF8.GetString(messageBody));
+            return;
+        }
+
+        // Commit the offset to mark message as processed
+        try
+        {
+            consumer.Commit(message);
+        }
+        catch (KafkaException ex)
+        {
+            logger.LogError(ex, "Commit error: {Reason}", ex.Error.Reason);
+        }
+    }
+
+    private async Task ProcessEvent(string eventName, byte[] message)
+    {
+        if (logger.IsEnabled(LogLevel.Trace))
+        {
+            logger.LogTrace("Processing Kafka event: {EventName}", eventName);
+        }
+
+        await using var scope = serviceProvider.CreateAsyncScope();
+
+        if (!subscriptionOptions.Value.EventTypes.TryGetValue(eventName, out var eventType))
+        {
+            logger.LogWarning("Unable to resolve event type for event name {EventName}", eventName);
+            return;
+        }
+
+        // Deserialize the event
+        var integrationEvent = DeserializeMessage(Encoding.UTF8.GetString(message), eventType);
+
+        // REVIEW: This could be done in parallel
+        foreach (var handler in scope.ServiceProvider.GetKeyedServices<IIntegrationEventHandler>(eventType))
+        {
+            if (integrationEvent == null)
+                throw new InvalidOperationException($"Unable to resolve integration event {eventType}");
+
+            await handler.Handle(integrationEvent);
+        }
+    }
+
+    private IntegrationEvent? DeserializeMessage(string message, Type eventType)
+    {
+        return JsonSerializer.Deserialize(message, eventType) as IntegrationEvent;
+    }
+
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        _ = Task.Factory.StartNew(async () =>
+            {
+                try
+                {
+                    await StartConsumer();
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Error starting Kafka connection");
+                }
+            },
+            TaskCreationOptions.LongRunning);
+
+        return Task.CompletedTask;
+    }
+
+    private async Task StartConsumer()
+    {
+        logger.LogInformation("Starting Kafka connection on a background thread");
+
+        var consumerConfig = new ConsumerConfig
+        {
+            BootstrapServers = options.Value.BootstrapServers,
+            GroupId = options.Value.GroupId,
+            AutoOffsetReset = AutoOffsetReset.Earliest,
+            EnableAutoCommit = false
+        };
+
+        consumer = new ConsumerBuilder<string, byte[]>(consumerConfig)
+            .SetErrorHandler((_, e) => logger.LogError("Kafka Consumer Error: {Reason}", e.Reason))
+            .Build();
+
+        consumer.Subscribe(options.Value.Topics);
+
+        consumerCts = new CancellationTokenSource();
+
+        while (!consumerCts.IsCancellationRequested)
+        {
+            try
+            {
+                var consumeResult = consumer.Consume(consumerCts.Token);
+                await OnMessageReceived(consumeResult);
+            }
+            catch (ConsumeException ex)
+            {
+                logger.LogError(ex, "Error consuming Kafka message");
+            }
+            catch (OperationCanceledException)
+            {
+                // Expected during shutdown
+                break;
+            }
+        }
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        consumerCts?.Cancel();
+        return Task.CompletedTask;
+    }
+}

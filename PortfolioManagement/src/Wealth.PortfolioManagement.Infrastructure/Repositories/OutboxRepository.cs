@@ -1,6 +1,5 @@
 using System.Text.Json;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 
@@ -15,14 +14,14 @@ public class OutboxRepository : IOutboxRepository
         this.dbContext = dbContext;
     }
 
-    public async Task Add(IDomainEvent domainEvent, CancellationToken cancellationToken)
+    public async Task Add(IntegrationEvent integrationEvent, CancellationToken cancellationToken)
     {
         await dbContext.OutboxMessages.AddAsync(new OutboxMessage
         {
-            Id = Guid.NewGuid(),
+            Id = integrationEvent.Id,
             OccurredOn = Clock.Now,
-            Data = JsonSerializer.Serialize(domainEvent, domainEvent.GetType()),
-            Type = domainEvent.GetType().Name,
+            Data = JsonSerializer.Serialize(integrationEvent, integrationEvent.GetType()),
+            Type = integrationEvent.GetType().Name,
         }, cancellationToken);
     }
 }

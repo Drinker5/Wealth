@@ -8,6 +8,7 @@ public abstract record InstrumentDTO(
     MoneyDTO Price,
     string Name)
 {
+    public abstract InstrumentType Type { get; }
     public static InstrumentDTO From(Instrument instrument)
     {
         switch (instrument)

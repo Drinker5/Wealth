@@ -13,4 +13,6 @@ public record BondDTO(Guid Id, string ISIN, MoneyDTO Price, string Name, MoneyDT
             instrument.Name,
             MoneyDTO.From(instrument.Coupon.ValuePerYear));
     }
+
+    public override InstrumentType Type { get; } = InstrumentType.Bond;
 }

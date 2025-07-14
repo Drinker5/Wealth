@@ -17,6 +17,21 @@ public class InstrumentsServiceImpl : InstrumentsService.InstrumentsServiceBase
         this.mediator = mediator;
     }
 
+    public override async Task<GetInstrumentResponse> GetInstrument(GetInstrumentRequest request, ServerCallContext context)
+    {
+        var id = new InstrumentId(Guid.Parse(request.Id));
+        var instrument = await mediator.Send<InstrumentDTO?>(new GetInstrumentQuery(id));
+        if (instrument == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Instrument not found"));
+
+        return new GetInstrumentResponse
+        {
+            Id = request.Id,
+            Name = instrument.Name,
+            Type = instrument.Type.ToProto(),
+        };
+    }
+
     public override async Task<ChangePriceResponse> ChangePrice(ChangePriceRequest request, ServerCallContext context)
     {
         var id = new InstrumentId(Guid.Parse(request.Id));
@@ -29,8 +44,7 @@ public class InstrumentsServiceImpl : InstrumentsService.InstrumentsServiceBase
             Id = Guid.Parse(request.Id),
             Price = new Money(instrument.Price.code, Convert.ToDecimal(request.Price)),
         });
-        
+
         return new ChangePriceResponse();
     }
-
 }

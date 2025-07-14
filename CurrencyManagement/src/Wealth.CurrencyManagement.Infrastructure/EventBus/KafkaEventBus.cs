@@ -9,6 +9,7 @@ using Polly;
 using Polly.Retry;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain.Utilities;
+using Wealth.BuildingBlocks.Infrastructure.EventBus;
 using Wealth.CurrencyManagement.Application.Abstractions;
 
 namespace Wealth.CurrencyManagement.Infrastructure.EventBus;

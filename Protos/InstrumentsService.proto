@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package Wealth.InstrumentManagement;
+
+service InstrumentsService {
+  rpc GetInstrument (GetInstrumentRequest) returns (GetInstrumentResponse);
+  rpc ChangePrice (ChangePriceRequest) returns (ChangePriceResponse);
+}
+
+message GetInstrumentRequest {
+  string id = 1;
+}
+
+message GetInstrumentResponse {
+  string id = 1;
+  InstrumentType type = 2;
+  string name = 3;
+}
+
+enum InstrumentType {
+  IT_STOCK = 0;
+  IT_BOND = 1;
+}
+
+message ChangePriceRequest {
+  string id = 1;
+  double price = 2;
+}
+
+message ChangePriceResponse {
+}

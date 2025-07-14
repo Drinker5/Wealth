@@ -5,7 +5,7 @@ public record struct CurrencyId : IValueObject
     /// <summary>
     /// ISO 4217
     /// </summary>
-    public string Code { get; private set; }
+    public string Code { get; init; }
 
     /// <summary>
     /// </summary>

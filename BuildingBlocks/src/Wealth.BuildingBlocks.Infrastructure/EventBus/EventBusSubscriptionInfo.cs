@@ -1,4 +1,4 @@
-﻿namespace Wealth.CurrencyManagement.Infrastructure.EventBus;
+﻿namespace Wealth.BuildingBlocks.Infrastructure.EventBus;
 
 public class EventBusSubscriptionInfo
 {

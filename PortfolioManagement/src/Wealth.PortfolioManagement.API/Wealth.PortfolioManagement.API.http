@@ -33,3 +33,20 @@ Content-Type: application/json
      "Amount" : "22.34"
   }
 }
+
+###
+
+PUT {{API}}/api/portfolio/{{portfolioId}}/asset
+Accept: application/json
+Content-Type: application/json
+
+{
+  "InstrumentId": {
+    "Id": "00000000-0000-0000-0000-000000000003"
+  },
+  "TotalPrice": {
+    "CurrencyId": { "code":  "RUB" },
+    "Amount": "22.34"
+  },
+  "quantity": 4
+}

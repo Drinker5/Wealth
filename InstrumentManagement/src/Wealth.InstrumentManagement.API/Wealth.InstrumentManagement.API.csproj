@@ -7,9 +7,6 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Protobuf Include="Protos\InstrumentsService.proto" GrpcServices="Server" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
@@ -19,6 +16,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Wealth.InstrumentManagement.Infrastructure\Wealth.InstrumentManagement.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\..\..\Protos\InstrumentsService.proto" GrpcServices="Server" />
   </ItemGroup>
 
 </Project>

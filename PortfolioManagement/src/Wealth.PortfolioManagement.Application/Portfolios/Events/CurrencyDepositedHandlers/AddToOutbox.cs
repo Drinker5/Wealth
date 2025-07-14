@@ -7,6 +7,11 @@ public class AddToOutbox(IOutboxRepository outboxRepository) : IDomainEventHandl
 {
     public Task Handle(CurrencyDeposited notification, CancellationToken cancellationToken)
     {
-        return outboxRepository.Add(notification, cancellationToken);
+        return outboxRepository.Add(new CurrencyDepositedIntegrationEvent
+        {
+            PortfolioId = notification.PortfolioId,
+            CurrencyId = notification.CurrencyId,
+            Amount = notification.Amount,
+        }, cancellationToken);
     }
 }

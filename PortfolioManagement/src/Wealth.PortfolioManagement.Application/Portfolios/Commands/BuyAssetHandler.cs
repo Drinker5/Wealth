@@ -3,7 +3,7 @@ using Wealth.PortfolioManagement.Domain.Repositories;
 
 namespace Wealth.PortfolioManagement.Application.Portfolios.Commands;
 
-public class AddAssetHandler(IPortfolioRepository repository) : ICommandHandler<BuyAsset>
+public class BuyAssetHandler(IPortfolioRepository repository) : ICommandHandler<BuyAsset>
 {
     public Task Handle(BuyAsset request, CancellationToken cancellationToken)
     {

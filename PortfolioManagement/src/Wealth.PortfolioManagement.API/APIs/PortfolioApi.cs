@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Application.Portfolios.Commands;
 using Wealth.PortfolioManagement.Application.Portfolios.Queries;
@@ -15,8 +16,18 @@ public static class PortfolioApi
         api.MapGet("{portfolioId:int}", GetPortfolio);
         api.MapPost("/", CreatePortfolio);
         api.MapPut("/deposit", DepositCurrency);
+        api.MapPut("{portfolioId:int}/asset", BuyAsset);
 
         return api;
+    }
+
+    private static async Task<Ok> BuyAsset(
+        int portfolioId,
+        [FromBody] BuyStockRequest request,
+        [AsParameters] PortfolioServices services)
+    {
+        await services.Mediator.Command(new BuyAsset(portfolioId, request.InstrumentId, request.TotalPrice, request.Quantity));
+        return TypedResults.Ok();
     }
 
     private static async Task<Ok> DepositCurrency(
@@ -60,6 +71,8 @@ public static class PortfolioApi
         return TypedResults.Ok(result);
     }
 }
+
+public record BuyStockRequest(InstrumentId InstrumentId, Money TotalPrice, int Quantity);
 
 public record CreatePortfolioRequest(string Name);
 

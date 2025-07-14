@@ -13,4 +13,6 @@ public record StockDTO(Guid Id, string ISIN, MoneyDTO Price, string Name, MoneyD
             instrument.Name,
             MoneyDTO.From(instrument.Dividend.ValuePerYear));
     }
+    
+    public override InstrumentType Type { get; } = InstrumentType.Stock;
 }

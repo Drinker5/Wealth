@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <PackageReference Include="MediatR" Version="13.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions"  Version="9.0.7" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Wealth.BuildingBlocks.Domain\Wealth.BuildingBlocks.Domain.csproj" />

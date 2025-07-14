@@ -2,7 +2,6 @@ using System.Data;
 using System.Text.Json;
 using Dapper;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
@@ -17,7 +16,7 @@ public class OutboxRepository : IOutboxRepository
         connection = dbContext.CreateConnection();
     }
 
-    public async Task Add(IDomainEvent domainEvent, CancellationToken cancellationToken)
+    public async Task Add(IntegrationEvent integrationEvent, CancellationToken cancellationToken)
     {
         var sql = """
                   INSERT INTO "OutboxMessages" 
@@ -28,8 +27,8 @@ public class OutboxRepository : IOutboxRepository
         await connection.ExecuteAsync(sql, new
         {
             Id = Guid.NewGuid(),
-            Type = domainEvent.GetType().Name,
-            Data = JsonSerializer.Serialize(domainEvent, domainEvent.GetType()),
+            Type = integrationEvent.GetType().Name,
+            Data = JsonSerializer.Serialize(integrationEvent, integrationEvent.GetType()),
             OccurredOn = Clock.Now,
         });
     }
