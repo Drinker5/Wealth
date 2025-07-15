@@ -14,7 +14,7 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
 {
     public virtual DbSet<Currency> Currencies { get; internal init; }
     public virtual DbSet<ExchangeRate> ExchangeRates { get; internal init; }
-    public virtual DbSet<OutboxMessage> OutboxMessages { get; internal init; }
+    public virtual DbSet<DefferedCommand> OutboxMessages { get; internal init; }
 
 
     private bool commited;

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Wealth.PortfolioManagement.Domain.Portfolios;
+using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
 

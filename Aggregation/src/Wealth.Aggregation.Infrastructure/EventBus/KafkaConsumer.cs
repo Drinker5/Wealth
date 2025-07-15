@@ -17,21 +17,73 @@ public sealed class KafkaConsumer(
     IOptions<EventBusSubscriptionInfo> subscriptionOptions) : IDisposable, IHostedService
 {
     private IConsumer<string, byte[]> consumer;
+
     private CancellationTokenSource consumerCts;
 
-    public void Dispose()
+    public Task StartAsync(CancellationToken cancellationToken)
     {
-        consumerCts?.Cancel();
-        consumer?.Close();
-        consumer?.Dispose();
+        _ = Task.Factory.StartNew(async () =>
+            {
+                try
+                {
+                    await StartConsumer();
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Error starting Kafka connection");
+                }
+            },
+            TaskCreationOptions.LongRunning);
+
+        return Task.CompletedTask;
+    }
+
+    private async Task StartConsumer()
+    {
+        logger.LogInformation("Starting Kafka connection on a background thread");
+
+        var consumerConfig = new ConsumerConfig
+        {
+            BootstrapServers = options.Value.BootstrapServers,
+            GroupId = options.Value.GroupId,
+            AutoOffsetReset = AutoOffsetReset.Earliest,
+            EnableAutoCommit = false,
+            // EnableAutoOffsetStore = false,
+        };
+
+        consumer = new ConsumerBuilder<string, byte[]>(consumerConfig)
+            .SetErrorHandler((_, e) => logger.LogError("Kafka Consumer Error: {Reason}", e.Reason))
+            .Build();
+
+        consumer.Subscribe(options.Value.Topics);
+
+        consumerCts = new CancellationTokenSource();
+
+        while (!consumerCts.IsCancellationRequested)
+        {
+            try
+            {
+                var consumeResult = consumer.Consume(consumerCts.Token);
+                await OnMessageReceived(consumeResult);
+            }
+            catch (ConsumeException ex)
+            {
+                logger.LogError(ex, "Error consuming Kafka message");
+            }
+            catch (OperationCanceledException)
+            {
+                // Expected during shutdown
+                break;
+            }
+        }
     }
 
     private async Task OnMessageReceived(ConsumeResult<string, byte[]> message)
     {
         var key = message.Message.Key;
         var messageBody = message.Message.Value;
-        var eventNameHeader = message.Message.Headers.FirstOrDefault(i => i.Key == options.Value.EventNameHeader);
-        if (eventNameHeader == null)
+        var eventTypeHeader = message.Message.Headers.FirstOrDefault(i => i.Key == options.Value.EventTypeHeader);
+        if (eventTypeHeader == null)
         {
             logger.LogWarning("Received message without EventType header");
             return;
@@ -39,18 +91,20 @@ public sealed class KafkaConsumer(
 
         try
         {
-            var eventName = Encoding.UTF8.GetString(eventNameHeader.GetValueBytes());
+            var eventName = Encoding.UTF8.GetString(eventTypeHeader.GetValueBytes());
             await ProcessEvent(eventName, messageBody);
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Error Processing message \"{Message}\"", Encoding.UTF8.GetString(messageBody));
+            consumer.Seek(message.TopicPartitionOffset);
             return;
         }
 
-        // Commit the offset to mark message as processed
         try
         {
+            // Commit the offset to mark message as processed
+            // consumer.StoreOffset(message);
             consumer.Commit(message);
         }
         catch (KafkaException ex)
@@ -92,66 +146,16 @@ public sealed class KafkaConsumer(
         return JsonSerializer.Deserialize(message, eventType) as IntegrationEvent;
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
-    {
-        _ = Task.Factory.StartNew(async () =>
-            {
-                try
-                {
-                    await StartConsumer();
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "Error starting Kafka connection");
-                }
-            },
-            TaskCreationOptions.LongRunning);
-
-        return Task.CompletedTask;
-    }
-
-    private async Task StartConsumer()
-    {
-        logger.LogInformation("Starting Kafka connection on a background thread");
-
-        var consumerConfig = new ConsumerConfig
-        {
-            BootstrapServers = options.Value.BootstrapServers,
-            GroupId = options.Value.GroupId,
-            AutoOffsetReset = AutoOffsetReset.Earliest,
-            EnableAutoCommit = false
-        };
-
-        consumer = new ConsumerBuilder<string, byte[]>(consumerConfig)
-            .SetErrorHandler((_, e) => logger.LogError("Kafka Consumer Error: {Reason}", e.Reason))
-            .Build();
-
-        consumer.Subscribe(options.Value.Topics);
-
-        consumerCts = new CancellationTokenSource();
-
-        while (!consumerCts.IsCancellationRequested)
-        {
-            try
-            {
-                var consumeResult = consumer.Consume(consumerCts.Token);
-                await OnMessageReceived(consumeResult);
-            }
-            catch (ConsumeException ex)
-            {
-                logger.LogError(ex, "Error consuming Kafka message");
-            }
-            catch (OperationCanceledException)
-            {
-                // Expected during shutdown
-                break;
-            }
-        }
-    }
-
     public Task StopAsync(CancellationToken cancellationToken)
     {
         consumerCts?.Cancel();
         return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        consumerCts?.Cancel();
+        consumer?.Close();
+        consumer?.Dispose();
     }
 }

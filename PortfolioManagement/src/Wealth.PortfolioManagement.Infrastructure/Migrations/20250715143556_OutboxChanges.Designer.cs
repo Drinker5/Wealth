@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
@@ -11,9 +12,11 @@ using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 namespace Wealth.PortfolioManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(WealthDbContext))]
-    partial class WealthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250715143556_OutboxChanges")]
+    partial class OutboxChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,10 +37,6 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                     b.Property<string>("Data")
                         .IsRequired()
                         .HasColumnType("jsonb");
-
-                    b.Property<string>("Key")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("OccurredOn")
                         .HasColumnType("timestamp with time zone");

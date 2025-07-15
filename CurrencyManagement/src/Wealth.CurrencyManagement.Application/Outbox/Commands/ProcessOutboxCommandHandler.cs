@@ -72,7 +72,7 @@ internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxComman
         }
     }
 
-    private async Task ProcessCommandAndDeleteAsync(OutboxMessage outboxMessage, CancellationToken cancellationToken)
+    private async Task ProcessCommandAndDeleteAsync(DefferedCommand outboxMessage, CancellationToken cancellationToken)
     {
         _executedTimes++;
         if (_executedTimes > 1)

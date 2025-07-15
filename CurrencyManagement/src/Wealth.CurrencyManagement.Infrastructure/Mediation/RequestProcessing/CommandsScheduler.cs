@@ -23,7 +23,7 @@ internal class CommandsScheduler : ICommandsScheduler
 
     public async Task EnqueueAsync(ICommand command, CancellationToken cancellationToken = default)
     {
-        var outboxMessage = OutboxMessage.Create(
+        var outboxMessage = DefferedCommand.Create(
             jsonSerializer,
             Clock.Now,
             command);
@@ -33,7 +33,7 @@ internal class CommandsScheduler : ICommandsScheduler
 
     public async Task EnqueueAsync<TResult>(ICommand<TResult> command, CancellationToken cancellationToken = default)
     {
-        var outboxMessage = OutboxMessage.Create(
+        var outboxMessage = DefferedCommand.Create(
             jsonSerializer,
             Clock.Now,
             command);
@@ -43,7 +43,7 @@ internal class CommandsScheduler : ICommandsScheduler
 
     public async Task EnqueuePublishingEventAsync(IntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
     {
-        var outboxMessage = OutboxMessage.Create(
+        var outboxMessage = DefferedCommand.Create(
             jsonSerializer,
             Clock.Now,
             integrationEvent);
@@ -53,7 +53,7 @@ internal class CommandsScheduler : ICommandsScheduler
 
     public async Task ScheduleAsync(ICommand command, DateTimeOffset date, CancellationToken cancellationToken = default)
     {
-        var outboxMessage = OutboxMessage.CreateDelayed(
+        var outboxMessage = DefferedCommand.CreateDelayed(
             jsonSerializer,
             Clock.Now,
             command,
@@ -62,7 +62,7 @@ internal class CommandsScheduler : ICommandsScheduler
         await AddOutboxMessageAsync(outboxMessage, cancellationToken);
     }
 
-    private async Task AddOutboxMessageAsync(OutboxMessage outboxMessage, CancellationToken cancellationToken = default)
+    private async Task AddOutboxMessageAsync(DefferedCommand outboxMessage, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("OutboxMessage added: {@Message}", outboxMessage);
         await repository.Add(outboxMessage, cancellationToken);

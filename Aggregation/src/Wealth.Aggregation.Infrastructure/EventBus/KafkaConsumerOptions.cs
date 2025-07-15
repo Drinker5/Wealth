@@ -3,14 +3,16 @@ namespace Wealth.Aggregation.Infrastructure.EventBus;
 public class KafkaConsumerOptions
 {
     public const string Section = "KafkaConsumer";
-    
-    public string BootstrapServers { get; set; } = "localhost:9092";
+
+    public string BootstrapServers { get; set; } = "localhost:9094";
     public string GroupId { get; set; } = "aggregation";
-    public IEnumerable<string> Topics { get; set; } = [
-        "currency-management",
-        "instrument-management",
-        "portfolio-management",
+
+    public IEnumerable<string> Topics { get; set; } =
+    [
+        @"^wealth\..*",
     ];
 
-    public string EventNameHeader { get; set; } = "EventName";
+    public string EventTypeHeader { get; set; } = "EventType";
+
+    public int RetryCount { get; set; } = 5;
 }

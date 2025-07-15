@@ -42,7 +42,7 @@ internal class UnitOfWorkCreateOutboxMessagesDecorator : IUnitOfWork
 
         foreach (var domainEvent in aggregate.DomainEvents)
         {
-            var outboxMessage = OutboxMessage.Create(
+            var outboxMessage = DefferedCommand.Create(
                 jsonSerializer,
                 Clock.Now,
                 domainEvent);

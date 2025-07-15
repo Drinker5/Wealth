@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Storage;
+using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Infrastructure.EFCore.Converters;
+using Wealth.BuildingBlocks.Infrastructure.EFCore.EntityConfigurations;
 using Wealth.PortfolioManagement.Domain.Operations;
 using Wealth.PortfolioManagement.Domain.Portfolios;
-using Wealth.PortfolioManagement.Infrastructure.Repositories;
 using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
@@ -37,6 +38,7 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+        modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
         if (Database.IsInMemory())
         {
             modelBuilder.Entity<Portfolio>().Property(i => i.Id)

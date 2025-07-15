@@ -1,27 +1,20 @@
 using System.Text.Json;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Repositories;
 
-public class OutboxRepository : IOutboxRepository
+public class OutboxRepository(WealthDbContext dbContext) : IOutboxRepository
 {
-    private readonly WealthDbContext dbContext;
-
-    public OutboxRepository(WealthDbContext dbContext)
-    {
-        this.dbContext = dbContext;
-    }
-
     public async Task Add(IntegrationEvent integrationEvent, CancellationToken cancellationToken)
     {
-        await dbContext.OutboxMessages.AddAsync(new OutboxMessage
+        await dbContext.OutboxMessages.AddAsync(
+            integrationEvent.ToOutboxMessage(Serializer),
+            cancellationToken);
+
+        string Serializer(IntegrationEvent arg)
         {
-            Id = integrationEvent.Id,
-            OccurredOn = Clock.Now,
-            Data = JsonSerializer.Serialize(integrationEvent, integrationEvent.GetType()),
-            Type = integrationEvent.GetType().Name,
-        }, cancellationToken);
+            return JsonSerializer.Serialize(arg, arg.GetType());
+        }
     }
 }

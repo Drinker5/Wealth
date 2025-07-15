@@ -1,5 +1,4 @@
 using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.PortfolioManagement.Domain.Portfolios;
 
 namespace Wealth.PortfolioManagement.Domain.Operations;
 

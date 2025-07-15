@@ -10,14 +10,14 @@ public class OutboxMessageBuilder
     private object obj = new Object();
     private DateTimeOffset? processingDate = null;
 
-    public OutboxMessage Build()
+    public DefferedCommand Build()
     {
         serializer.Serialize(Arg.Any<object?>()).Returns(string.Empty);
 
         if (processingDate.HasValue)
-            return OutboxMessage.CreateDelayed(serializer, date, obj, processingDate.Value);
+            return DefferedCommand.CreateDelayed(serializer, date, obj, processingDate.Value);
         
-        return OutboxMessage.Create(serializer, date, obj);
+        return DefferedCommand.Create(serializer, date, obj);
     }
 
     public OutboxMessageBuilder SetProcessingDate(DateTimeOffset newProcessingDate)

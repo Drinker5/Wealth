@@ -4,9 +4,9 @@ using Wealth.CurrencyManagement.Application.Abstractions;
 
 namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks.EntityConfigurations;
 
-internal class OutboxMessageConfiguration : IEntityTypeConfiguration<OutboxMessage>
+internal class DefferedCommandConfiguration : IEntityTypeConfiguration<DefferedCommand>
 {
-    public void Configure(EntityTypeBuilder<OutboxMessage> builder)
+    public void Configure(EntityTypeBuilder<DefferedCommand> builder)
     {
         builder.HasKey(x => x.Id);
 

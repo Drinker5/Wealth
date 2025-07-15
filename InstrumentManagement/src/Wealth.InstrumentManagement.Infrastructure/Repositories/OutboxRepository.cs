@@ -26,7 +26,7 @@ public class OutboxRepository : IOutboxRepository
         
         await connection.ExecuteAsync(sql, new
         {
-            Id = Guid.NewGuid(),
+            Id = integrationEvent.Id,
             Type = integrationEvent.GetType().Name,
             Data = JsonSerializer.Serialize(integrationEvent, integrationEvent.GetType()),
             OccurredOn = Clock.Now,

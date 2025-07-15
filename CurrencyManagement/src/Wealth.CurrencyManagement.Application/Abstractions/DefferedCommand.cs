@@ -1,6 +1,6 @@
 ﻿namespace Wealth.CurrencyManagement.Application.Abstractions;
 
-public class OutboxMessage
+public class DefferedCommand
 {
     public Guid Id { get; set; }
     public DateTimeOffset OccurredOn { get; set; }
@@ -13,11 +13,11 @@ public class OutboxMessage
 
     public bool IsInstantProcessing => ProcessingDate is null;
 
-    private OutboxMessage()
+    private DefferedCommand()
     {
     }
 
-    public static OutboxMessage Create(
+    public static DefferedCommand Create(
         IJsonSerializer jsonSerializer,
         DateTimeOffset occurredOn,
         object obj)
@@ -25,7 +25,7 @@ public class OutboxMessage
         return Create(jsonSerializer, occurredOn, obj, null);
     }
 
-    public static OutboxMessage CreateDelayed(
+    public static DefferedCommand CreateDelayed(
         IJsonSerializer jsonSerializer,
         DateTimeOffset occurredOn,
         object obj,
@@ -34,13 +34,13 @@ public class OutboxMessage
         return Create(jsonSerializer, occurredOn, obj, processingDate);
     }
 
-    private static OutboxMessage Create(
+    private static DefferedCommand Create(
         IJsonSerializer jsonSerializer,
         DateTimeOffset occurredOn,
         object obj,
         DateTimeOffset? processingDate)
     {
-        var message = new OutboxMessage();
+        var message = new DefferedCommand();
         message.Id = Guid.NewGuid();
         message.OccurredOn = occurredOn;
         message.AssemblyName = obj.GetType().Assembly.GetName().Name!;

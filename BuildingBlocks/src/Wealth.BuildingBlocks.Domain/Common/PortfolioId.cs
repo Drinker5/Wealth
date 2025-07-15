@@ -1,4 +1,4 @@
-namespace Wealth.PortfolioManagement.Domain.Portfolios;
+namespace Wealth.BuildingBlocks.Domain.Common;
 
 public record struct PortfolioId(int Id)
 {
@@ -17,5 +17,10 @@ public record struct PortfolioId(int Id)
     public readonly override int GetHashCode()
     {
         return Id;
+    }
+
+    public override string ToString()
+    {
+        return Id.ToString();
     }
 }

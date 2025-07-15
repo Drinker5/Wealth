@@ -20,7 +20,7 @@ func NewPostgresOutboxProvider(db *sql.DB) *PostgresOutboxProvider {
 
 func (p *PostgresOutboxProvider) PullMessages(batchSize int) []OutboxMessage {
 	query := `
-		SELECT "Id", "Type", "Data", "OccurredOn" 
+		SELECT "Id", "Key", "Type", "Data", "OccurredOn" 
 		FROM "OutboxMessages" 
 		WHERE "ProcessedOn" IS null
 		ORDER BY "OccurredOn" 
@@ -35,7 +35,7 @@ func (p *PostgresOutboxProvider) PullMessages(batchSize int) []OutboxMessage {
 	var messages []OutboxMessage
 	for rows.Next() {
 		var msg OutboxMessage
-		err := rows.Scan(&msg.Id, &msg.Type, &msg.Data, &msg.OccurredOn)
+		err := rows.Scan(&msg.Id, &msg.Key, &msg.Type, &msg.Data, &msg.OccurredOn)
 		if err != nil {
 			continue
 		}

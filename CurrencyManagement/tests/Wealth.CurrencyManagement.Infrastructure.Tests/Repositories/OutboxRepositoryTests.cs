@@ -60,13 +60,13 @@ public class DeferredOperationRepositoryTests
         Assert.Single(result);
     }
 
-    private async Task<OutboxMessage> CreateOutbox()
+    private async Task<DefferedCommand> CreateOutbox()
     {
         var outboxMessage = new OutboxMessageBuilder().Build();
         return await CreateOutbox(outboxMessage);
     }
 
-    private async Task<OutboxMessage> CreateOutbox(OutboxMessage outboxMessage)
+    private async Task<DefferedCommand> CreateOutbox(DefferedCommand outboxMessage)
     {
         await repo.Add(outboxMessage);
         await context.SaveChangesAsync();

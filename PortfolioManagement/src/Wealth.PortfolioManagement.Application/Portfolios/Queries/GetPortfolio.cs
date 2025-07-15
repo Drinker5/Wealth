@@ -1,5 +1,5 @@
 using Wealth.BuildingBlocks.Application;
-using Wealth.PortfolioManagement.Domain.Portfolios;
+using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.PortfolioManagement.Application.Portfolios.Queries;
 

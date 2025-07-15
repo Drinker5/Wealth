@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
-using Wealth.PortfolioManagement.Domain.Portfolios;
+using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
 

@@ -14,12 +14,12 @@ internal class DeferredOperationRepository : IDeferredOperationRepository
         this.context = context;
     }
 
-    public async Task Add(OutboxMessage message, CancellationToken cancellationToken = default)
+    public async Task Add(DefferedCommand message, CancellationToken cancellationToken = default)
     {
         await context.OutboxMessages.AddAsync(message, cancellationToken);
     }
 
-    public async Task<OutboxMessage?> LoadAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<DefferedCommand?> LoadAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await context
             .OutboxMessages
@@ -37,7 +37,7 @@ internal class DeferredOperationRepository : IDeferredOperationRepository
             .ToListAsync(cancellationToken);
     }
 
-    public void Remove(OutboxMessage outboxMessage)
+    public void Remove(DefferedCommand outboxMessage)
     {
         context.OutboxMessages.Remove(outboxMessage);
     }
