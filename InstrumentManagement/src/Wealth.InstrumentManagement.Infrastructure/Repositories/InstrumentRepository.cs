@@ -162,6 +162,26 @@ public class InstrumentRepository :
         dbContext.AddEvents(instrument);
     }
 
+    public async Task ChangeLotSize(InstrumentId id, int lotSize)
+    {
+        var instrument = await GetInstrument(id) as StockInstrument;
+        if (instrument == null)
+            return;
+        
+        instrument.ChangeLotSize(lotSize);
+        var sql = """
+                  UPDATE "Instruments" 
+                  SET "LotSize" = @LotSize
+                  WHERE "Id" = @Id
+                  """;
+        await connection.ExecuteAsync(sql, new
+        {
+            Id = id.Id,
+            LotSize = lotSize,
+        });
+        dbContext.AddEvents(instrument);
+    }
+
     private async Task<IEnumerable<Instrument>> GetInstruments(string sql, object? param = null)
     {
         using var reader = await connection.ExecuteReaderAsync(sql, param);
@@ -218,6 +238,7 @@ public class InstrumentRepository :
                     reader.GetDecimal(reader.GetOrdinal("Dividend_Amount")));
             }
 
+            stockInstrument.LotSize = reader.GetInt32(reader.GetOrdinal(nameof(stockInstrument.LotSize)));
             return stockInstrument;
         }
     }

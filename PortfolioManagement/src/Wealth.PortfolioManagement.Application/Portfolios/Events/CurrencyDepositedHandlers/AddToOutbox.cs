@@ -1,4 +1,5 @@
 using Wealth.BuildingBlocks.Application;
+using Wealth.BuildingBlocks.Application.Events;
 using Wealth.PortfolioManagement.Domain.Portfolios.Events;
 
 namespace Wealth.PortfolioManagement.Application.Portfolios.Events.CurrencyDepositedHandlers;

@@ -20,16 +20,24 @@ public class OutboxRepository : IOutboxRepository
     {
         var sql = """
                   INSERT INTO "OutboxMessages" 
-                  ("Id", "Type", "Data", "OccurredOn", "ProcessedOn")
-                  VALUES (@Id, @Type, @Data::jsonb, @OccurredOn, NULL)
+                  ("Id", "Type", "Data", "OccurredOn", "ProcessedOn", "Key")
+                  VALUES (@Id, @Type, @Data::jsonb, @OccurredOn, NULL, @Key)
                   """;
-        
-        await connection.ExecuteAsync(sql, new
+
+        var outboxMessage = integrationEvent.ToOutboxMessage(Serialize);
+
+        await connection.ExecuteAsync(sql, new 
         {
-            Id = integrationEvent.Id,
-            Type = integrationEvent.GetType().Name,
-            Data = JsonSerializer.Serialize(integrationEvent, integrationEvent.GetType()),
-            OccurredOn = Clock.Now,
+            Id = outboxMessage.Id,
+            Type = outboxMessage.Type,
+            Data = outboxMessage.Data,
+            OccurredOn = outboxMessage.OccurredOn,
+            Key = outboxMessage.Key
         });
+
+        string Serialize(IntegrationEvent arg)
+        {
+            return JsonSerializer.Serialize(arg, arg.GetType());
+        }
     }
 }

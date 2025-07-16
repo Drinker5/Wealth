@@ -64,7 +64,7 @@ namespace Wealth.Aggregation.Infrastructure.Migrations
                                 .HasForeignKey("StockAggregationId");
                         });
 
-                    b.OwnsOne("Wealth.BuildingBlocks.Domain.Common.Money", "Price", b1 =>
+                    b.OwnsOne("Wealth.BuildingBlocks.Domain.Common.Money", "StockPrice", b1 =>
                         {
                             b1.Property<Guid>("StockAggregationId")
                                 .HasColumnType("uuid");
@@ -127,7 +127,7 @@ namespace Wealth.Aggregation.Infrastructure.Migrations
                     b.Navigation("DividendPerYear")
                         .IsRequired();
 
-                    b.Navigation("Price")
+                    b.Navigation("StockPrice")
                         .IsRequired();
 
                     b.Navigation("TotalDividends")

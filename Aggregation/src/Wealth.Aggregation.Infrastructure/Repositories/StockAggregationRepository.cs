@@ -17,10 +17,11 @@ public class StockAggregationRepository(WealthDbContext context) : IStockAggrega
         return await context.StockAggregations.ToListAsync();
     }
 
-    public async Task Create(InstrumentId id, string name, Money price, Money dividendPerYear, int lotSize)
+    public async Task<StockAggregation> Create(InstrumentId id, string name, Money stockPrice, Money dividendPerYear, int lotSize)
     {
-        var stockAggregation = new StockAggregation(id, name, price, dividendPerYear, lotSize);
+        var stockAggregation = new StockAggregation(id, name, stockPrice, dividendPerYear, lotSize);
         await context.StockAggregations.AddAsync(stockAggregation);
+        return stockAggregation;
     }
 
     public async Task ChangeName(InstrumentId id, string name)

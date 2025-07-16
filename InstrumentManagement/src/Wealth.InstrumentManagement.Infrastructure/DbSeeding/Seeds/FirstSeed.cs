@@ -46,7 +46,8 @@ public class FirstSeed : IDbSeeder
         var stock1 = await stocksRepository.CreateStock(new Guid("00000000-0000-0000-0000-000000000003"), "test-stock-1", new ISIN("000000000003"));
         await stocksRepository.ChangePrice(stock1, new Money("RUB", 111m));
         await stocksRepository.ChangeDividend(stock1, new Dividend("USD", 222m));
-
+        await stocksRepository.ChangeLotSize(stock1, 10);
+        
         var stock2 = await stocksRepository.CreateStock(new Guid("00000000-0000-0000-0000-000000000004"), "test-stock-2", new ISIN("000000000004"));
         await stocksRepository.ChangePrice(stock2, new Money("USD", 222m));
         await stocksRepository.ChangeDividend(stock2, new Dividend("USD", 333m));

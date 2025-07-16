@@ -1,10 +1,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Wealth.BuildingBlocks.Infrastructure;
+using Wealth.BuildingBlocks.Application.Services;
 using Wealth.InstrumentManagement;
-using Wealth.PortfolioManagement.Application.Services;
 
-namespace Wealth.PortfolioManagement.Infrastructure.Services;
+namespace Wealth.BuildingBlocks.Infrastructure.Grpc.Services;
 
 public class ServicesModule : IServiceModule
 {

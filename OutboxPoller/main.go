@@ -39,7 +39,7 @@ func main() {
 }
 func OutboxCommand(cmd *flag.FlagSet) error {
 	connectionString := cmd.String("connectionString", "postgres://postgres:postgres@localhost/InstrumentManagement?sslmode=disable", "PostgreSQL connection string")
-	kafkaBrokers := cmd.String("kafka-brokers", "localhost:9094", "Kafka brokers addresses")
+	kafkaBrokers := cmd.String("kafka-brokers", "localhost:9092", "Kafka brokers addresses")
 	kafkaTopic := cmd.String("kafka-topic", "wealth", "Kafka topic name")
 	period := cmd.Int("period", 1000, "period in millisecond")
 	if err := cmd.Parse(os.Args[2:]); err != nil {

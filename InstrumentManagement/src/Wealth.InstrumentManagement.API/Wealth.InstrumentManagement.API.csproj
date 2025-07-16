@@ -18,8 +18,4 @@
     <ProjectReference Include="..\Wealth.InstrumentManagement.Infrastructure\Wealth.InstrumentManagement.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Protobuf Include="..\..\..\Protos\InstrumentsService.proto" GrpcServices="Server" />
-  </ItemGroup>
-
 </Project>

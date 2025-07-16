@@ -16,6 +16,6 @@ internal class CurrencyRenamedEventHandler : IDomainEventHandler<CurrencyRenamed
     
     public Task Handle(CurrencyRenamed notification, CancellationToken cancellationToken)
     {
-        return scheduler.EnqueuePublishingEventAsync(new SomeIntegrationEvent());
+        return scheduler.EnqueuePublishingEventAsync(new SomeIntegrationEvent(), cancellationToken);
     }
 }

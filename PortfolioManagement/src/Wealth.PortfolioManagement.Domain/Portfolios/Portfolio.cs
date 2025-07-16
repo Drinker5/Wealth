@@ -46,12 +46,12 @@ public class Portfolio : AggregateRoot
         Apply(new CurrencyWithdrew(Id, currencyId, amount));
     }
 
-    public void Buy(InstrumentId instrumentId, Money price, int quantity)
+    public void Buy(InstrumentId instrumentId, Money totalPrice, int quantity)
     {
         if (quantity == 0)
             return;
 
-        Apply(new AssetBought(Id, instrumentId, price, quantity));
+        Apply(new AssetBought(Id, instrumentId, totalPrice, quantity));
     }
 
     public void Sell(InstrumentId instrumentId, Money price, int quantity)
@@ -123,7 +123,7 @@ public class Portfolio : AggregateRoot
     private void When(AssetBought @event)
     {
         ChangeAssetQuantity(@event.InstrumentId, @event.Quantity);
-        ChangeCurrencyAmount(@event.Price.CurrencyId, -@event.Price.Amount);
+        ChangeCurrencyAmount(@event.TotalPrice.CurrencyId, -@event.TotalPrice.Amount);
     }
 
     private void When(AssetSold @event)

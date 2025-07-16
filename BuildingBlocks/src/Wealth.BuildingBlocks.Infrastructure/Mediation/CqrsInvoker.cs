@@ -4,7 +4,7 @@ using Wealth.BuildingBlocks.Application;
 
 namespace Wealth.BuildingBlocks.Infrastructure.Mediation;
 
-public class CqrsInvoker(IServiceProvider serviceProvider)
+public class CqrsInvoker(IServiceProvider serviceProvider) : ICqrsInvoker
 {
     public async Task<TResult> Command<TResult>(ICommand<TResult> command)
     {

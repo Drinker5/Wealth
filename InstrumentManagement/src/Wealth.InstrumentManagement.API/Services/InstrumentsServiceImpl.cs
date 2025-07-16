@@ -3,6 +3,7 @@ using MediatR;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Instruments.Queries;
+using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.API.Services;
 
@@ -19,30 +20,48 @@ public class InstrumentsServiceImpl : InstrumentsService.InstrumentsServiceBase
 
     public override async Task<GetInstrumentResponse> GetInstrument(GetInstrumentRequest request, ServerCallContext context)
     {
-        var id = new InstrumentId(Guid.Parse(request.Id));
-        var instrument = await mediator.Send<InstrumentDTO?>(new GetInstrumentQuery(id));
+        var id = request.Id;
+        var instrument = await mediator.Send<Instrument?>(new GetInstrumentQuery(id));
         if (instrument == null)
             throw new RpcException(new Status(StatusCode.NotFound, "Instrument not found"));
 
-        return new GetInstrumentResponse
+        var response = new GetInstrumentResponse
         {
             Id = request.Id,
             Name = instrument.Name,
-            Type = instrument.Type.ToProto(),
+            Price = instrument.Price,
         };
+
+        switch (instrument)
+        {
+            case StockInstrument stock:
+                response.StockInfo = new StockInstrumentProto
+                {
+                    DividendPerYear = stock.Dividend.ValuePerYear,
+                    LotSize = stock.LotSize,
+                };
+                break;
+            case BondInstrument bond:
+                response.BondInfo = new BondInstrumentProto();
+                break;
+            default:
+                throw new RpcException(new Status(StatusCode.NotFound, "Instrument type is not defined"));
+        }
+
+        return response;
     }
 
     public override async Task<ChangePriceResponse> ChangePrice(ChangePriceRequest request, ServerCallContext context)
     {
-        var id = new InstrumentId(Guid.Parse(request.Id));
-        var instrument = await mediator.Send<InstrumentDTO?>(new GetInstrumentQuery(id));
+        InstrumentId id = request.Id;
+        var instrument = await mediator.Send<Instrument?>(new GetInstrumentQuery(id));
         if (instrument == null)
             throw new RpcException(new Status(StatusCode.NotFound, "Instrument not found"));
 
         await mediator.Send(new ChangePriceCommand
         {
-            Id = Guid.Parse(request.Id),
-            Price = new Money(instrument.Price.code, Convert.ToDecimal(request.Price)),
+            Id = request.Id,
+            Price = instrument.Price,
         });
 
         return new ChangePriceResponse();

@@ -81,4 +81,13 @@ public class InMemoryInstrumentRepository :
         instruments.Add(stockInstrument);
         return Task.FromResult(stockInstrument.Id);
     }
+
+    public async Task ChangeLotSize(InstrumentId id, int lotSize)
+    {
+        var stockInstrument = await GetInstrument(id) as StockInstrument;
+        if (stockInstrument == null)
+            return;
+
+        stockInstrument.ChangeLotSize(lotSize);
+    }
 }

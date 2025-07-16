@@ -29,8 +29,8 @@ services:
     ports:
       - 5001:80
     restart: on-failure
-  
-  instrument-poller:
+
+  instrument-management-poller:
     build:
       context: ./OutboxPoller
       target: app
@@ -39,7 +39,7 @@ services:
       - "outbox"
       - "-connectionString=postgres://postgres:postgres@postgres/InstrumentManagement?sslmode=disable"
       - "-kafka-brokers=kafka"
-      - "-kafka-topic=instrument-management"
+      - "-kafka-topic=wealth.instrument-management"
       - "-period=2000"
     restart: on-failure
 
@@ -56,19 +56,39 @@ services:
     ports:
       - 5002:80
     restart: on-failure
+
+  portfolio-management-poller:
+    build:
+      context: ./OutboxPoller
+      target: app
+      dockerfile: ./Dockerfile
+    command:
+      - "outbox"
+      - "-connectionString=postgres://postgres:postgres@postgres/PortfolioManagement?sslmode=disable"
+      - "-kafka-brokers=kafka"
+      - "-kafka-topic=wealth.portfolio-management"
+      - "-period=2000"
+    restart: on-failure
+    
+
+  aggregation:
+    build:
+      context: ./Aggregation
+      dockerfile: ./Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Services__currency__http=currency-management
+      - Services__instrument__http=instrument-management
+      - Services__portfolio__http=portfolio-management
+      - ConnectionStrings__Aggregation=Host=postgres;Username=postgres;Password=postgres;Persist Security Info=True;Database=Aggregation;
+      - KafkaConsumer__BootstrapServers=kafka
+    ports:
+      - 5003:80
+    restart: on-failure
   
   rabbit:
     image: rabbitmq:management
-
-#  kafka:
-#    image: apache/kafka:latest
-#    healthcheck:
-#      test: [ "CMD", "kafka-topics.sh", "--bootstrap-server", "localhost:9092", "--list" ]
-#      interval: 5s
-#      timeout: 10s
-#      retries: 10
-#    ports:
-#      - 9092:9092
 
   kafka:
     image: bitnami/kafka:latest
@@ -85,8 +105,6 @@ services:
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
-    ports:
-      - 9094:9094
 
   init-kafka:
     image: apache/kafka:latest
@@ -96,8 +114,11 @@ services:
       kafka:
         condition: service_healthy
     command: |
+      kafka-topics.sh --create --if-not-exists --topic "wealth.currency-management" --replication-factor=1 --partitions=1 --bootstrap-server kafka:9092
+      kafka-topics.sh --create --if-not-exists --topic "wealth.instrument-management" --replication-factor=1 --partitions=1 --bootstrap-server kafka:9092
       kafka-topics.sh --create --if-not-exists --topic "wealth.portfolio-management" --replication-factor=1 --partitions=1 --bootstrap-server kafka:9092
   
+
   postgres:
     image: postgres
     environment:

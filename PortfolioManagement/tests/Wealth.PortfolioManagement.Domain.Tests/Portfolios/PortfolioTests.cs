@@ -80,7 +80,7 @@ public class PortfolioTests
         Assert.Equal(portfolio.Id, ev.PortfolioId);
         Assert.Equal(instrumentId, ev.InstrumentId);
         Assert.Equal(quantity, ev.Quantity);
-        Assert.Equal(price, ev.Price);
+        Assert.Equal(price, ev.TotalPrice);
         var asset = Assert.Single(portfolio.Assets);
         Assert.Equal(instrumentId, asset.InstrumentId);
         Assert.Equal(quantity, asset.Quantity);

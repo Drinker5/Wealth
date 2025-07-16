@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Wealth.Aggregation.Domain;
 using Wealth.Aggregation.Infrastructure.DbSeeding;
+using Wealth.Aggregation.Infrastructure.Repositories;
 using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Infrastructure;
 using Wealth.BuildingBlocks.Infrastructure.EFCore.Extensions;
@@ -27,7 +29,7 @@ public class UnitOfWorkModule : IServiceModule
         });
         services.AddMigration<WealthDbContext, FirstSeed>();
 
-        // services.AddScoped<IOperationRepository, OperationRepository>();
+        services.AddScoped<IStockAggregationRepository, StockAggregationRepository>();
 
         // UnitOfWork
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<WealthDbContext>());

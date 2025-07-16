@@ -1,5 +1,6 @@
 using Wealth.BuildingBlocks.Application;
-using Wealth.PortfolioManagement.Application.Services;
+using Wealth.BuildingBlocks.Application.Events;
+using Wealth.BuildingBlocks.Application.Services;
 using Wealth.PortfolioManagement.Domain.Portfolios.Events;
 
 namespace Wealth.PortfolioManagement.Application.Portfolios.Events.AssetBoughtHandlers;
@@ -19,7 +20,7 @@ public class AddToOutbox(IOutboxRepository outboxRepository, IInstrumentService 
                 {
                     PortfolioId = notification.PortfolioId,
                     InstrumentId = notification.InstrumentId,
-                    Price = notification.Price,
+                    TotalPrice = notification.TotalPrice,
                     Quantity = notification.Quantity,
                 }, cancellationToken);
                 break;
@@ -28,7 +29,7 @@ public class AddToOutbox(IOutboxRepository outboxRepository, IInstrumentService 
                 {
                     PortfolioId = notification.PortfolioId,
                     InstrumentId = notification.InstrumentId,
-                    Price = notification.Price,
+                    TotalPrice = notification.TotalPrice,
                     Quantity = notification.Quantity,
                 }, cancellationToken);
                 break;

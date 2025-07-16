@@ -8,12 +8,12 @@ public class StockAggregation : AggregateRoot
     public InstrumentId Id { get; init; }
     public string Name { get; private set; }
 
-    public Money Price { get; private set; }
+    public Money StockPrice { get; private set; }
     public Money DividendPerYear { get; private set; }
     public int LotSize { get; private set; }
     public int Quantity { get; private set; }
 
-    public Money CurrentValue => Price * Quantity;
+    public Money CurrentValue => StockPrice * Quantity;
     public Money CurrentDividendValue => DividendPerYear * Quantity;
 
     public Money TotalInvestments { get; private set; }
@@ -26,18 +26,18 @@ public class StockAggregation : AggregateRoot
     public StockAggregation(
         InstrumentId id,
         string name,
-        Money price,
+        Money stockPrice,
         Money dividendPerYear,
         int lotSize)
     {
         Id = id;
         Name = name;
-        Price = price;
+        StockPrice = stockPrice;
         DividendPerYear = dividendPerYear;
         LotSize = lotSize;
         Quantity = 0;
-        TotalInvestments = price with { Amount = 0 };
-        TotalDividends = price with { Amount = 0 };
+        TotalInvestments = stockPrice with { Amount = 0 };
+        TotalDividends = stockPrice with { Amount = 0 };
     }
 
     public void ChangeName(string name)
@@ -47,7 +47,7 @@ public class StockAggregation : AggregateRoot
 
     public void ChangePrice(Money price)
     {
-        Price = price;
+        StockPrice = price;
     }
 
     public void ChangeDividendPerYear(Money dividendPerYear)

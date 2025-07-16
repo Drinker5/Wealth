@@ -11,6 +11,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.EFCore\Wealth.BuildingBlocks.Infrastructure.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.Grpc\Wealth.BuildingBlocks.Infrastructure.Grpc.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" />
     <ProjectReference Include="..\Wealth.Aggregation.Application\Wealth.Aggregation.Application.csproj" />
   </ItemGroup>

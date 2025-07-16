@@ -4,7 +4,7 @@ public class KafkaConsumerOptions
 {
     public const string Section = "KafkaConsumer";
 
-    public string BootstrapServers { get; set; } = "localhost:9094";
+    public string BootstrapServers { get; set; } = "localhost:9092";
     public string GroupId { get; set; } = "aggregation";
 
     public IEnumerable<string> Topics { get; set; } =

@@ -1,7 +1,6 @@
-using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain.Common;
 
-namespace Wealth.PortfolioManagement.Application.Portfolios.Events;
+namespace Wealth.BuildingBlocks.Application.Events;
 
 public record CurrencyDepositedIntegrationEvent : IntegrationEvent
 {

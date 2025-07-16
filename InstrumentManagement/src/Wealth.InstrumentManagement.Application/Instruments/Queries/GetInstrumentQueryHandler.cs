@@ -1,9 +1,10 @@
 using Wealth.BuildingBlocks.Application;
+using Wealth.InstrumentManagement.Domain.Instruments;
 using Wealth.InstrumentManagement.Domain.Repositories;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Queries;
 
-public class GetInstrumentQueryHandler : IQueryHandler<GetInstrumentQuery, InstrumentDTO?>
+public class GetInstrumentQueryHandler : IQueryHandler<GetInstrumentQuery, Instrument?>
 {
     private readonly IInstrumentsRepository repository;
 
@@ -12,12 +13,12 @@ public class GetInstrumentQueryHandler : IQueryHandler<GetInstrumentQuery, Instr
         this.repository = repository;
     }
 
-    public async Task<InstrumentDTO?> Handle(GetInstrumentQuery request, CancellationToken cancellationToken)
+    public async Task<Instrument?> Handle(GetInstrumentQuery request, CancellationToken cancellationToken)
     {
         var instrument = await repository.GetInstrument(request.Id);
         if (instrument == null)
             return null;
 
-        return InstrumentDTO.From(instrument);
+        return instrument;
     }
 }

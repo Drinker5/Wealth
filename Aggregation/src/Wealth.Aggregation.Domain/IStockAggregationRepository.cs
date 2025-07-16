@@ -8,10 +8,10 @@ public interface IStockAggregationRepository
     
     Task<IEnumerable<StockAggregation>> GetAggregation();
     
-    Task Create(
+    Task<StockAggregation> Create(
         InstrumentId id,
         string name,
-        Money price,
+        Money stockPrice,
         Money dividendPerYear,
         int lotSize);
     

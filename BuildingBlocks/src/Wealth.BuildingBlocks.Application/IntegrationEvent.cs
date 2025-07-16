@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Wealth.BuildingBlocks.Domain.Utilities;
 
 namespace Wealth.BuildingBlocks.Application;
@@ -11,9 +12,11 @@ public abstract record IntegrationEvent
     /// <summary>
     /// kafka topic's key
     /// </summary>
+    [JsonIgnore]
     public virtual string Key => GetType().Name;
 
-    public virtual string Type => GetType().Name;
+    [JsonIgnore]
+    private string Type => GetType().Name;
 
     public OutboxMessage ToOutboxMessage(Func<IntegrationEvent, string> serializer)
     {

@@ -30,7 +30,7 @@ public class StockAggregationTests
     {
         Assert.Equal(id, aggregation.Id);
         Assert.Equal(name, aggregation.Name);
-        Assert.Equal(price, aggregation.Price);
+        Assert.Equal(price, aggregation.StockPrice);
         Assert.Equal(0, aggregation.Quantity);
         Assert.Equal(1, aggregation.LotSize);
         Assert.Equal(dividendPerYear, aggregation.DividendPerYear);
@@ -92,7 +92,7 @@ public class StockAggregationTests
 
         aggregation.ChangePrice(p1);
 
-        Assert.Equal(p1, aggregation.Price);
+        Assert.Equal(p1, aggregation.StockPrice);
         Assert.Equal(3 * p1, aggregation.CurrentValue);
     }
 

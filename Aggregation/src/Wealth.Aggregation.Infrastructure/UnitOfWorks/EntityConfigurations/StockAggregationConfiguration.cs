@@ -11,7 +11,7 @@ internal class StockAggregationConfiguration : IEntityTypeConfiguration<StockAgg
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id);
 
-        builder.OwnsOne(y => y.Price, z =>
+        builder.OwnsOne(y => y.StockPrice, z =>
         {
             z.Property(i => i.CurrencyId);
             z.Property(i => i.Amount);

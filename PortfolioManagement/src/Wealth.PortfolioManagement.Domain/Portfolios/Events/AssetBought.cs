@@ -6,5 +6,5 @@ namespace Wealth.PortfolioManagement.Domain.Portfolios.Events;
 public record AssetBought(
     PortfolioId PortfolioId,
     InstrumentId InstrumentId,
-    Money Price,
+    Money TotalPrice,
     int Quantity) : IDomainEvent;

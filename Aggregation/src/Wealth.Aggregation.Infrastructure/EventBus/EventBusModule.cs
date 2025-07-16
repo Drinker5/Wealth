@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.Aggregation.Application.Events;
+using Wealth.BuildingBlocks.Application.Events;
 using Wealth.BuildingBlocks.Infrastructure;
 
 namespace Wealth.Aggregation.Infrastructure.EventBus;
@@ -12,6 +13,6 @@ public class EventBusModule : IServiceModule
         services.Configure<KafkaConsumerOptions>(configuration.GetSection(KafkaConsumerOptions.Section));
         
         services.AddHostedService<KafkaConsumer>();
-        services.AddSubscription<StockBoughtIntegrationEvent, StockBoughtIntegrationEventEventHandler>();
+        services.AddSubscription<StockBoughtIntegrationEvent, StockBoughtIntegrationEventHandler>();
     }
 }
