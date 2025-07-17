@@ -4,7 +4,7 @@ using Wealth.InstrumentManagement.Domain.Instruments;
 namespace Wealth.InstrumentManagement.Infrastructure.Migrations;
 
 [Migration(2025070400)]
-public class Init_2025070400 : Migration
+public class _2025070400_Init : Migration
 {
     public override void Up()
     {

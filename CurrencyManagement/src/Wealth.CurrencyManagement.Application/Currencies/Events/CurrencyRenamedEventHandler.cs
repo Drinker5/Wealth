@@ -1,6 +1,5 @@
 using Wealth.BuildingBlocks.Application;
 using Wealth.CurrencyManagement.Application.Abstractions;
-using Wealth.CurrencyManagement.Application.DomainEvents;
 using Wealth.CurrencyManagement.Domain.Currencies;
 
 namespace Wealth.CurrencyManagement.Application.Currencies.Events;
@@ -16,6 +15,6 @@ internal class CurrencyRenamedEventHandler : IDomainEventHandler<CurrencyRenamed
     
     public Task Handle(CurrencyRenamed notification, CancellationToken cancellationToken)
     {
-        return scheduler.EnqueuePublishingEventAsync(new SomeIntegrationEvent(), cancellationToken);
+        return Task.CompletedTask; // TODO integration event
     }
 }

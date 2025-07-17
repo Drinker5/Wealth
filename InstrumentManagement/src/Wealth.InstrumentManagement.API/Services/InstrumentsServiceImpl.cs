@@ -1,6 +1,7 @@
 using Grpc.Core;
 using MediatR;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.BuildingBlocks.InstrumentManagement;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Instruments.Queries;
 using Wealth.InstrumentManagement.Domain.Instruments;

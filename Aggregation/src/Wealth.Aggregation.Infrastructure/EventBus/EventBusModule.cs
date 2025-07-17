@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.Aggregation.Application.Events;
-using Wealth.BuildingBlocks.Application.Events;
+using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Infrastructure;
 
 namespace Wealth.Aggregation.Infrastructure.EventBus;

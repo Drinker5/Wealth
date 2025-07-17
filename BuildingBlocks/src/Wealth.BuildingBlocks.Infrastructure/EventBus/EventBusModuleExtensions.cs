@@ -1,3 +1,4 @@
+using Google.Protobuf;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Infrastructure.EventBus;
@@ -7,7 +8,7 @@ namespace Wealth.BuildingBlocks.Infrastructure;
 public static class EventBusModuleExtensions
 {
     public static IServiceCollection AddSubscription<T, TH>(this IServiceCollection services)
-        where T : IntegrationEvent
+        where T : IMessage
         where TH : class, IIntegrationEventHandler<T>
     {
         // Use keyed services to register multiple handlers for the same event type

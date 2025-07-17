@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package Wealth.BuildingBlocks;
+
+message InstrumentIdProto {
+  GuidProto id = 1;
+}
+
+message GuidProto {
+  string value = 1;
+}
+
+message MoneyProto {
+  CurrencyIdProto currency_id = 1;
+  DecimalProto price = 2;
+}
+
+message CurrencyIdProto {
+  string code = 1;
+}
+
+message DecimalProto {
+
+  // Whole units part of the amount
+  int64 units = 1;
+
+  // Nano units of the amount (10^-9)
+  // Must be same sign as units
+  sfixed32 nanos = 2;
+}
+
+message PortfolioIdProto {
+  int32 id = 1;
+}
+
+message ISINProto {
+  string value = 1;
+}

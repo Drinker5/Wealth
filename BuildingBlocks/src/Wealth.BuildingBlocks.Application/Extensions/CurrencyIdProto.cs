@@ -1,6 +1,6 @@
 using Wealth.BuildingBlocks.Domain.Common;
 
-namespace Wealth.InstrumentManagement;
+namespace Wealth.BuildingBlocks;
 
 public partial class CurrencyIdProto
 {
@@ -9,12 +9,12 @@ public partial class CurrencyIdProto
         Code = code;
     }
 
-    public static implicit operator CurrencyId(Wealth.InstrumentManagement.CurrencyIdProto grpcMoney)
+    public static implicit operator CurrencyId(CurrencyIdProto grpcMoney)
     {
         return new CurrencyId(grpcMoney.Code);
     }
 
-    public static implicit operator Wealth.InstrumentManagement.CurrencyIdProto(CurrencyId value)
+    public static implicit operator CurrencyIdProto(CurrencyId value)
     {
         return new CurrencyIdProto(value.Code);
     }

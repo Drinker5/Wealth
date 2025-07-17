@@ -1,4 +1,4 @@
-namespace Wealth.InstrumentManagement;
+namespace Wealth.BuildingBlocks;
 
 public partial class DecimalProto
 {

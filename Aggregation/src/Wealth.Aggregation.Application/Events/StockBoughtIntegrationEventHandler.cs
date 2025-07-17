@@ -1,6 +1,5 @@
 using Wealth.Aggregation.Application.Commands;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Application.Events;
 
 namespace Wealth.Aggregation.Application.Events;
 

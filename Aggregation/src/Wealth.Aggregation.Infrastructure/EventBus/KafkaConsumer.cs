@@ -1,12 +1,16 @@
 using System.Text;
 using System.Text.Json;
 using Confluent.Kafka;
+using Google.Protobuf;
+using Google.Protobuf.Reflection;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Infrastructure.EventBus;
+using Type = System.Type;
 
 namespace Wealth.Aggregation.Infrastructure.EventBus;
 
@@ -129,7 +133,7 @@ public sealed class KafkaConsumer(
         }
 
         // Deserialize the event
-        var integrationEvent = DeserializeMessage(Encoding.UTF8.GetString(message), eventType);
+        var integrationEvent = DeserializeMessage(message, eventType);
 
         // REVIEW: This could be done in parallel
         foreach (var handler in scope.ServiceProvider.GetKeyedServices<IIntegrationEventHandler>(eventType))
@@ -141,9 +145,19 @@ public sealed class KafkaConsumer(
         }
     }
 
-    private IntegrationEvent? DeserializeMessage(string message, Type eventType)
+    private IMessage? DeserializeMessage(byte[] message, Type eventType)
     {
-        return JsonSerializer.Deserialize(message, eventType) as IntegrationEvent;
+        var descriptorProperty = eventType.GetProperty("Descriptor");
+        if (descriptorProperty == null)
+            throw new InvalidOperationException($"Type {eventType.Name} doesn't have Descriptor property");
+
+        var descriptor = descriptorProperty.GetValue(null) as MessageDescriptor;
+        if (descriptor == null)
+            throw new InvalidOperationException($"Type {eventType.Name} doesn't have a parser");
+
+        var any = Any.Parser.ParseFrom(message);
+        var typeRegistry = TypeRegistry.FromMessages(descriptor);
+        return any.Unpack(typeRegistry);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

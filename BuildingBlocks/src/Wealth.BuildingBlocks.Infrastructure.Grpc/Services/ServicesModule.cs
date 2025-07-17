@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.BuildingBlocks.Application.Services;
-using Wealth.InstrumentManagement;
+using Wealth.BuildingBlocks.InstrumentManagement;
 
 namespace Wealth.BuildingBlocks.Infrastructure.Grpc.Services;
 

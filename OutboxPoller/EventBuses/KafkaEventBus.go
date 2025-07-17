@@ -17,7 +17,7 @@ func (b *KafkaEventBus) Publish(message OutboxProviders.OutboxMessage) error {
 		context.Background(),
 		kafka.Message{
 			Key:   []byte(message.Key),
-			Value: []byte(message.Data),
+			Value: message.Data,
 			Headers: []kafka.Header{
 				{Key: "EventType", Value: []byte(message.Type)},
 				{Key: "OccurredOn", Value: []byte(message.OccurredOn.Format(time.RFC3339))},

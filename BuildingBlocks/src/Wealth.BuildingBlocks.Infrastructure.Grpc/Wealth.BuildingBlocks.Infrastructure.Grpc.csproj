@@ -15,4 +15,5 @@
   <ItemGroup>
     <Protobuf Include="..\..\..\Protos\InstrumentsService.proto" GrpcServices="Client,Server" />
   </ItemGroup>
+
 </Project>

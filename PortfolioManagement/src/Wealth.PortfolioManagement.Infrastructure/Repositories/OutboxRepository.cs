@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Wealth.BuildingBlocks.Application;
 using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 
@@ -9,12 +8,7 @@ public class OutboxRepository(WealthDbContext dbContext) : IOutboxRepository
     public async Task Add(IntegrationEvent integrationEvent, CancellationToken cancellationToken)
     {
         await dbContext.OutboxMessages.AddAsync(
-            integrationEvent.ToOutboxMessage(Serializer),
+            integrationEvent.ToOutboxMessage(),
             cancellationToken);
-
-        string Serializer(IntegrationEvent arg)
-        {
-            return JsonSerializer.Serialize(arg, arg.GetType());
-        }
     }
 }

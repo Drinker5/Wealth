@@ -11,7 +11,7 @@ public class OutboxMessageConfiguration : IEntityTypeConfiguration<OutboxMessage
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).IsRequired();
         builder.Property(x => x.Key).IsRequired();
-        builder.Property(x => x.Data).HasColumnType("jsonb").IsRequired();
+        builder.Property(x => x.Data).IsRequired();
         builder.Property(x => x.Type).HasMaxLength(255).IsRequired();
         builder.Property(i => i.OccurredOn).IsRequired();
         builder.Property(i => i.ProcessedOn);

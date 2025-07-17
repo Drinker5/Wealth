@@ -4,7 +4,7 @@ using Wealth.InstrumentManagement.Domain.Instruments;
 namespace Wealth.InstrumentManagement.Infrastructure.Migrations;
 
 [Migration(2025071601)]
-public class StockLotSize_2025071601 : Migration
+public class _2025071601_StockLotSize : Migration
 {
     public override void Up()
     {

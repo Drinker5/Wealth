@@ -1,9 +1,6 @@
 using Wealth.BuildingBlocks.Application.Services;
 using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.InstrumentManagement;
-using InstrumentId = Wealth.BuildingBlocks.Domain.Common.InstrumentId;
-using InstrumentType = Wealth.BuildingBlocks.Application.Services.InstrumentType;
-using Money = Wealth.BuildingBlocks.Domain.Common.Money;
+using Wealth.BuildingBlocks.InstrumentManagement;
 
 namespace Wealth.BuildingBlocks.Infrastructure.Grpc.Services;
 

@@ -4,7 +4,7 @@ using Wealth.InstrumentManagement.Domain.Instruments;
 namespace Wealth.InstrumentManagement.Infrastructure.Migrations;
 
 [Migration(2025070500)]
-public class Outbox_2025070500 : Migration
+public class _2025070500_Outbox : Migration
 {
     public override void Up()
     {

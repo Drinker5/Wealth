@@ -1,5 +1,4 @@
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Application.Events;
 using Wealth.BuildingBlocks.Application.Services;
 using Wealth.PortfolioManagement.Domain.Portfolios.Events;
 
@@ -22,7 +21,7 @@ public class AddToOutbox(IOutboxRepository outboxRepository, IInstrumentService 
                     InstrumentId = notification.InstrumentId,
                     TotalPrice = notification.TotalPrice,
                     Quantity = notification.Quantity,
-                }, cancellationToken);
+                }, notification.PortfolioId.ToString(), cancellationToken);
                 break;
             case InstrumentType.Bond:
                 await outboxRepository.Add(new BondBoughtIntegrationEvent
@@ -31,7 +30,7 @@ public class AddToOutbox(IOutboxRepository outboxRepository, IInstrumentService 
                     InstrumentId = notification.InstrumentId,
                     TotalPrice = notification.TotalPrice,
                     Quantity = notification.Quantity,
-                }, cancellationToken);
+                }, notification.PortfolioId.ToString(), cancellationToken);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

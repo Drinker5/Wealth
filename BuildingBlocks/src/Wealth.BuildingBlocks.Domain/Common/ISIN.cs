@@ -1,6 +1,4 @@
-using Wealth.BuildingBlocks.Domain;
-
-namespace Wealth.InstrumentManagement.Domain.Instruments;
+namespace Wealth.BuildingBlocks.Domain.Common;
 
 /// <summary>
 /// An ISIN, or International Securities Identification Number, is a 12-character

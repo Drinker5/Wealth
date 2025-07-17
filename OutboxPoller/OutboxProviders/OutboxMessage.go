@@ -6,6 +6,6 @@ type OutboxMessage struct {
 	Id         string
 	Key        string
 	Type       string
-	Data       string
+	Data       []byte
 	OccurredOn time.Time
 }

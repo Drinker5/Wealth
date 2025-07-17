@@ -1,6 +1,6 @@
 using Wealth.BuildingBlocks.Domain.Common;
 
-namespace Wealth.InstrumentManagement;
+namespace Wealth.BuildingBlocks;
 
 public partial class InstrumentIdProto
 {
@@ -9,12 +9,12 @@ public partial class InstrumentIdProto
         Id = id;
     }
     
-    public static implicit operator InstrumentId(Wealth.InstrumentManagement.InstrumentIdProto grpcValue)
+    public static implicit operator InstrumentId(InstrumentIdProto grpcValue)
     {
         return new InstrumentId(grpcValue.Id);
     }
 
-    public static implicit operator Wealth.InstrumentManagement.InstrumentIdProto(InstrumentId value)
+    public static implicit operator InstrumentIdProto(InstrumentId value)
     {
         return new InstrumentIdProto(value.Id);
     }

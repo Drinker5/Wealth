@@ -9,7 +9,6 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Infrastructure;
-using Wealth.CurrencyManagement.Application.DomainEvents;
 
 namespace Wealth.CurrencyManagement.Infrastructure.EventBus;
 
@@ -22,7 +21,6 @@ public class EventBusModule : IServiceModule
         services.AddSingleton<IHostedService>(sp => (RabbitMQEventBus)sp.GetRequiredService<IEventBus>());
 
         services.Configure<EventBusOptions>(configuration.GetSection(EventBusOptions.Section));
-        services.AddSubscription<SomeIntegrationEvent, SomeIntegrationEventHandler>();
 
         AddRabbitMQClient(services, configuration);
     }

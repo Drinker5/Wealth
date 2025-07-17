@@ -1,14 +1,17 @@
-﻿namespace Wealth.BuildingBlocks.Application;
+﻿
+using Google.Protobuf;
+
+namespace Wealth.BuildingBlocks.Application;
 
 public interface IIntegrationEventHandler<in TIntegrationEvent> : IIntegrationEventHandler
-    where TIntegrationEvent : IntegrationEvent
+    where TIntegrationEvent : IMessage
 {
     Task Handle(TIntegrationEvent @event, CancellationToken token = default);
 
-    Task IIntegrationEventHandler.Handle(IntegrationEvent @event, CancellationToken token) => Handle((TIntegrationEvent)@event, token);
+    Task IIntegrationEventHandler.Handle(IMessage @event, CancellationToken token) => Handle((TIntegrationEvent)@event, token);
 }
 
 public interface IIntegrationEventHandler
 {
-    Task Handle(IntegrationEvent @event, CancellationToken token = default);
+    Task Handle(IMessage @event, CancellationToken token = default);
 }
