@@ -1,4 +1,4 @@
-@API = http://localhost:5018
+@API = http://localhost:5002
 @portfolioId = 2
 @name = Test3
 

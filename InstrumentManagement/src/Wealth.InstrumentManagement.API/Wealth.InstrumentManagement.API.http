@@ -1,4 +1,4 @@
-@API_HostAddress = localhost:5229
+@API_HostAddress = localhost:5001
 
 ###
 GRPC {{API_HostAddress}}/Wealth.BuildingBlocks.InstrumentManagement.InstrumentsService/ChangePrice
