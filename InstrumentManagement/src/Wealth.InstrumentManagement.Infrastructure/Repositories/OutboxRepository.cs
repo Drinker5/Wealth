@@ -19,7 +19,7 @@ public class OutboxRepository : IOutboxRepository
         var sql = """
                   INSERT INTO "OutboxMessages" 
                   ("Id", "Type", "Data", "OccurredOn", "ProcessedOn", "Key")
-                  VALUES (@Id, @Type, @Data::jsonb, @OccurredOn, NULL, @Key)
+                  VALUES (@Id, @Type, @Data, @OccurredOn, NULL, @Key)
                   """;
 
         var outboxMessage = integrationEvent.ToOutboxMessage();

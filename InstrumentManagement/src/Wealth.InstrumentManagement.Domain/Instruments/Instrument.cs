@@ -25,7 +25,8 @@ public abstract class Instrument : AggregateRoot
         {
             Id = Id,
             ISIN = ISIN,
-            NewPrice = newPrice
+            NewPrice = newPrice,
+            Type = Type,
         });
     }
 

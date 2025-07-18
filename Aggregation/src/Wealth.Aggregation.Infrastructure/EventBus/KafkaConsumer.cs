@@ -1,5 +1,4 @@
 using System.Text;
-using System.Text.Json;
 using Confluent.Kafka;
 using Google.Protobuf;
 using Google.Protobuf.Reflection;

@@ -55,14 +55,14 @@ public class InstrumentsServiceImpl : InstrumentsService.InstrumentsServiceBase
     public override async Task<ChangePriceResponse> ChangePrice(ChangePriceRequest request, ServerCallContext context)
     {
         InstrumentId id = request.Id;
-        var instrument = await mediator.Send<Instrument?>(new GetInstrumentQuery(id));
+        var instrument = await mediator.Send(new GetInstrumentQuery(id));
         if (instrument == null)
             throw new RpcException(new Status(StatusCode.NotFound, "Instrument not found"));
 
         await mediator.Send(new ChangePriceCommand
         {
             Id = request.Id,
-            Price = instrument.Price,
+            Price = request.Price,
         });
 
         return new ChangePriceResponse();

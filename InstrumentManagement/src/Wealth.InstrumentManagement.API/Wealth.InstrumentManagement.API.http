@@ -1,10 +1,15 @@
 @API_HostAddress = localhost:5229
 
 ###
-GRPC {{API_HostAddress}}/InstrumentManagement.InstrumentsService/ChangePrice
+GRPC {{API_HostAddress}}/Wealth.BuildingBlocks.InstrumentManagement.InstrumentsService/ChangePrice
 Content-Type: application/grpc
 
 {
-    id: "2f1ef715-827b-49a3-9d93-324b4719b2f5",
-    price: 43.42
+    "id": {
+        "id": { "value": "00000000-0000-0000-0000-000000000003" }
+    },
+    "price": {
+        "currency_id": { "code": "RUB" },
+        "price": { "units": "42", "nanos": 230000000 }
+    }
 }

@@ -32,11 +32,6 @@ message StockInstrumentProto {
 message BondInstrumentProto {
 }
 
-enum InstrumentTypeProto {
-  IT_STOCK = 0;
-  IT_BOND = 1;
-}
-
 message ChangePriceRequest {
   InstrumentIdProto id = 1;
   MoneyProto price = 2;

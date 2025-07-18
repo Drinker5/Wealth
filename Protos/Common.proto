@@ -36,3 +36,8 @@ message PortfolioIdProto {
 message ISINProto {
   string value = 1;
 }
+
+enum InstrumentTypeProto {
+  InstrumentTypeProto_STOCK = 0;
+  InstrumentTypeProto_BOND = 1;
+}
