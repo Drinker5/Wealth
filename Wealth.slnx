@@ -4,23 +4,23 @@
     <File Path="Aggregation\Dockerfile" />
   </Folder>
   <Folder Name="/Aggregation/src/">
-    <Project Path="Aggregation\src\Wealth.Aggregation.API\Wealth.Aggregation.API.csproj" Type="Classic C#" />
-    <Project Path="Aggregation\src\Wealth.Aggregation.Application\Wealth.Aggregation.Application.csproj" Type="Classic C#" />
-    <Project Path="Aggregation\src\Wealth.Aggregation.Domain\Wealth.Aggregation.Domain.csproj" Type="Classic C#" />
-    <Project Path="Aggregation\src\Wealth.Aggregation.Infrastructure\Wealth.Aggregation.Infrastructure.csproj" Type="Classic C#" />
+    <Project Path="Aggregation\src\Wealth.Aggregation.API\Wealth.Aggregation.API.csproj" />
+    <Project Path="Aggregation\src\Wealth.Aggregation.Application\Wealth.Aggregation.Application.csproj" />
+    <Project Path="Aggregation\src\Wealth.Aggregation.Domain\Wealth.Aggregation.Domain.csproj" />
+    <Project Path="Aggregation\src\Wealth.Aggregation.Infrastructure\Wealth.Aggregation.Infrastructure.csproj" />
     <File Path="Aggregation\src\Directory.Build.props" />
   </Folder>
   <Folder Name="/Aggregation/tests/">
-    <Project Path="Aggregation\tests\Wealth.Aggregation.Domain.Tests\Wealth.Aggregation.Domain.Tests.csproj" Type="Classic C#" />
+    <Project Path="Aggregation\tests\Wealth.Aggregation.Domain.Tests\Wealth.Aggregation.Domain.Tests.csproj" />
   </Folder>
   <Folder Name="/BuildingBlocks/" />
   <Folder Name="/BuildingBlocks/src/">
-    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.API\Wealth.BuildingBlocks.API.csproj" Type="Classic C#" />
-    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Application\Wealth.BuildingBlocks.Application.csproj" Type="Classic C#" />
-    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Domain\Wealth.BuildingBlocks.Domain.csproj" Type="Classic C#" />
-    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.EFCore\Wealth.BuildingBlocks.Infrastructure.EFCore.csproj" Type="Classic C#" />
-    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.Grpc\Wealth.BuildingBlocks.Infrastructure.Grpc.csproj" Type="Classic C#" />
-    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" Type="Classic C#" />
+    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.API\Wealth.BuildingBlocks.API.csproj" />
+    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Application\Wealth.BuildingBlocks.Application.csproj" />
+    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Domain\Wealth.BuildingBlocks.Domain.csproj" />
+    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.EFCore\Wealth.BuildingBlocks.Infrastructure.EFCore.csproj" />
+    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.Grpc\Wealth.BuildingBlocks.Infrastructure.Grpc.csproj" />
+    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" />
     <File Path="BuildingBlocks\Directory.Build.props" />
   </Folder>
   <Folder Name="/CurrencyManagement/">
@@ -28,32 +28,47 @@
     <File Path="CurrencyManagement/.dockerignore" />
   </Folder>
   <Folder Name="/CurrencyManagement/src/">
-    <Project Path="CurrencyManagement/src/Wealth.CurrencyManagement.API/Wealth.CurrencyManagement.API.csproj" Type="Classic C#" />
-    <Project Path="CurrencyManagement/src/Wealth.CurrencyManagement.Application/Wealth.CurrencyManagement.Application.csproj" Type="Classic C#" />
+    <Project Path="CurrencyManagement/src/Wealth.CurrencyManagement.API/Wealth.CurrencyManagement.API.csproj" />
+    <Project Path="CurrencyManagement/src/Wealth.CurrencyManagement.Application/Wealth.CurrencyManagement.Application.csproj" />
     <Project Path="CurrencyManagement/src/Wealth.CurrencyManagement.Domain/Wealth.CurrencyManagement.Domain.csproj" />
     <Project Path="CurrencyManagement/src/Wealth.CurrencyManagement.Infrastructure/Wealth.CurrencyManagement.Infrastructure.csproj" />
     <File Path="CurrencyManagement/src/Directory.Build.props" />
   </Folder>
   <Folder Name="/CurrencyManagement/tests/">
-    <Project Path="CurrencyManagement/tests/Wealth.CurrencyManagement.Application.Tests/Wealth.CurrencyManagement.Application.Tests.csproj" Type="Classic C#" />
+    <Project Path="CurrencyManagement/tests/Wealth.CurrencyManagement.Application.Tests/Wealth.CurrencyManagement.Application.Tests.csproj" />
     <Project Path="CurrencyManagement/tests/Wealth.CurrencyManagement.Domain.Tests/Wealth.CurrencyManagement.Domain.Tests.csproj" />
-    <Project Path="CurrencyManagement/tests/Wealth.CurrencyManagement.Infrastructure.Tests/Wealth.CurrencyManagement.Infrastructure.Tests.csproj" Type="Classic C#" />
+    <Project Path="CurrencyManagement/tests/Wealth.CurrencyManagement.Infrastructure.Tests/Wealth.CurrencyManagement.Infrastructure.Tests.csproj" />
     <File Path="CurrencyManagement/tests/Directory.Build.props" />
+  </Folder>
+  <Folder Name="/DepositManagement/">
+    <File Path="DepositManagement\.dockerignore" />
+    <File Path="DepositManagement\Dockerfile" />
+  </Folder>
+  <Folder Name="/DepositManagement/src/">
+    <Project Path="DepositManagement/src/Wealth.DepositManagement.API/Wealth.DepositManagement.API.csproj" />
+    <Project Path="DepositManagement/src/Wealth.DepositManagement.Application/Wealth.DepositManagement.Application.csproj" />
+    <Project Path="DepositManagement/src/Wealth.DepositManagement.Domain/Wealth.DepositManagement.Domain.csproj" />
+    <Project Path="DepositManagement/src/Wealth.DepositManagement.Infrastructure/Wealth.DepositManagement.Infrastructure.csproj" />
+    <File Path="DepositManagement\src\Directory.Build.props" />
+  </Folder>
+  <Folder Name="/DepositManagement/tests/">
+    <File Path="DepositManagement\tests\Directory.Build.props" />
+    <Project Path="DepositManagement/tests/Wealth.DepositManagement.Domain.Tests/Wealth.DepositManagement.Domain.Tests.csproj" />
   </Folder>
   <Folder Name="/InstrumentManagement/">
     <File Path="InstrumentManagement/Dockerfile" />
     <File Path="InstrumentManagement/.dockerignore" />
   </Folder>
   <Folder Name="/InstrumentManagement/src/">
-    <Project Path="InstrumentManagement\src\Wealth.InstrumentManagement.API\Wealth.InstrumentManagement.API.csproj" Type="Classic C#" />
-    <Project Path="InstrumentManagement\src\Wealth.InstrumentManagement.Application\Wealth.InstrumentManagement.Application.csproj" Type="Classic C#" />
-    <Project Path="InstrumentManagement\src\Wealth.InstrumentManagement.Domain\Wealth.InstrumentManagement.Domain.csproj" Type="Classic C#" />
-    <Project Path="InstrumentManagement\src\Wealth.InstrumentManagement.Infrastructure\Wealth.InstrumentManagement.Infrastructure.csproj" Type="Classic C#" />
+    <Project Path="InstrumentManagement\src\Wealth.InstrumentManagement.API\Wealth.InstrumentManagement.API.csproj" />
+    <Project Path="InstrumentManagement\src\Wealth.InstrumentManagement.Application\Wealth.InstrumentManagement.Application.csproj" />
+    <Project Path="InstrumentManagement\src\Wealth.InstrumentManagement.Domain\Wealth.InstrumentManagement.Domain.csproj" />
+    <Project Path="InstrumentManagement\src\Wealth.InstrumentManagement.Infrastructure\Wealth.InstrumentManagement.Infrastructure.csproj" />
     <File Path="InstrumentManagement\src\Directory.Build.props" />
   </Folder>
   <Folder Name="/InstrumentManagement/tests/">
-    <Project Path="InstrumentManagement\tests\Wealth.InstrumentManagement.Application.Tests\Wealth.InstrumentManagement.Application.Tests.csproj" Type="Classic C#" />
-    <Project Path="InstrumentManagement\tests\Wealth.InstrumentManagement.Domain.Tests\Wealth.InstrumentManagement.Domain.Tests.csproj" Type="Classic C#" />
+    <Project Path="InstrumentManagement\tests\Wealth.InstrumentManagement.Application.Tests\Wealth.InstrumentManagement.Application.Tests.csproj" />
+    <Project Path="InstrumentManagement\tests\Wealth.InstrumentManagement.Domain.Tests\Wealth.InstrumentManagement.Domain.Tests.csproj" />
     <File Path="InstrumentManagement\tests\Directory.Build.props" />
   </Folder>
   <Folder Name="/PortfolioManagement/">
@@ -61,16 +76,16 @@
     <File Path="PortfolioManagement\Dockerfile" />
   </Folder>
   <Folder Name="/PortfolioManagement/src/">
-    <Project Path="PortfolioManagement\src\Wealth.PortfolioManagement.API\Wealth.PortfolioManagement.API.csproj" Type="Classic C#" />
-    <Project Path="PortfolioManagement\src\Wealth.PortfolioManagement.Application\Wealth.PortfolioManagement.Application.csproj" Type="Classic C#" />
-    <Project Path="PortfolioManagement\src\Wealth.PortfolioManagement.Domain\Wealth.PortfolioManagement.Domain.csproj" Type="Classic C#" />
-    <Project Path="PortfolioManagement\src\Wealth.PortfolioManagement.Infrastructure\Wealth.PortfolioManagement.Infrastructure.csproj" Type="Classic C#" />
+    <Project Path="PortfolioManagement\src\Wealth.PortfolioManagement.API\Wealth.PortfolioManagement.API.csproj" />
+    <Project Path="PortfolioManagement\src\Wealth.PortfolioManagement.Application\Wealth.PortfolioManagement.Application.csproj" />
+    <Project Path="PortfolioManagement\src\Wealth.PortfolioManagement.Domain\Wealth.PortfolioManagement.Domain.csproj" />
+    <Project Path="PortfolioManagement\src\Wealth.PortfolioManagement.Infrastructure\Wealth.PortfolioManagement.Infrastructure.csproj" />
     <File Path="PortfolioManagement\src\Directory.Build.props" />
   </Folder>
   <Folder Name="/PortfolioManagement/tests/">
-    <Project Path="PortfolioManagement\tests\Wealth.PortfolioManagement.Application.Tests\Wealth.PortfolioManagement.Application.Tests.csproj" Type="Classic C#" />
-    <Project Path="PortfolioManagement\tests\Wealth.PortfolioManagement.Domain.Tests\Wealth.PortfolioManagement.Domain.Tests.csproj" Type="Classic C#" />
-    <Project Path="PortfolioManagement\tests\Wealth.PortfolioManagement.Infrastructure.Tests\Wealth.PortfolioManagement.Infrastructure.Tests.csproj" Type="Classic C#" />
+    <Project Path="PortfolioManagement\tests\Wealth.PortfolioManagement.Application.Tests\Wealth.PortfolioManagement.Application.Tests.csproj" />
+    <Project Path="PortfolioManagement\tests\Wealth.PortfolioManagement.Domain.Tests\Wealth.PortfolioManagement.Domain.Tests.csproj" />
+    <Project Path="PortfolioManagement\tests\Wealth.PortfolioManagement.Infrastructure.Tests\Wealth.PortfolioManagement.Infrastructure.Tests.csproj" />
     <File Path="PortfolioManagement\tests\Directory.Build.props" />
   </Folder>
   <Folder Name="/Solution Items/">

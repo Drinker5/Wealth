@@ -90,6 +90,19 @@ services:
       - 5003:80
     restart: on-failure
   
+  deposit-management:
+    build:
+      context: ./DepositManagement
+      dockerfile: ./Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Services__currency__http=currency-management
+      - ConnectionStrings__DepositManagement=Host=postgres;Username=postgres;Password=postgres;Persist Security Info=True;Database=DepositManagement;
+    ports:
+      - 5004:80
+    restart: on-failure
+
   rabbit:
     image: rabbitmq:management
 

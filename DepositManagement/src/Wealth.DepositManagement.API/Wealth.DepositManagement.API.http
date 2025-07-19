@@ -1,0 +1,9 @@
+@API_HostAddress = localhost:5004
+
+###
+GRPC {{API_HostAddress}}/greet.Greeter/SayHello
+Content-Type: application/grpc
+
+{
+  name: "foo"
+}
