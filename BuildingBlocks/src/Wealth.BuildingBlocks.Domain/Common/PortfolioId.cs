@@ -1,6 +1,6 @@
 namespace Wealth.BuildingBlocks.Domain.Common;
 
-public record struct PortfolioId(int Id)
+public record struct PortfolioId(int Id) : IIdentity
 {
     public static PortfolioId New() => new(0);
 

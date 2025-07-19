@@ -2,7 +2,7 @@ using Wealth.BuildingBlocks.Domain.Utilities;
 
 namespace Wealth.BuildingBlocks.Domain;
 
-public abstract class AggregateRoot
+public abstract class AggregateRoot : IEntity
 {
     private List<IDomainEvent>? events;
     public IReadOnlyCollection<IDomainEvent>? DomainEvents => events?.AsReadOnly();

@@ -12,5 +12,11 @@ public record Money(CurrencyId CurrencyId, decimal Amount) : IValueObject
         return a with { Amount = a.Amount * b };
     }
     
+    public static Money operator /(Money a, int b)
+    {
+        return a with { Amount = a.Amount / b };
+    }
+
+    
     public static Money operator *(int b, Money a) => a * b;
 }

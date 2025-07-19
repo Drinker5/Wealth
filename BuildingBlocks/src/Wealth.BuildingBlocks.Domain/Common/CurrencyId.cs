@@ -1,6 +1,6 @@
 namespace Wealth.BuildingBlocks.Domain.Common;
 
-public record struct CurrencyId : IValueObject
+public record struct CurrencyId : IIdentity
 {
     /// <summary>
     /// ISO 4217

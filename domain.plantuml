@@ -237,10 +237,11 @@ package DepositManagement {
         Id
         Name
         Yield
-        Operations
+        Investment
+        InterestPerYear
+        --
         Invest(Money)
         Withdraw(Money)
-        Interest(Money)
     }
 
     entity DepositOperation {
@@ -255,9 +256,7 @@ package DepositManagement {
         PercentPerYear
     }
 
-
     Deposit --> Yield
-    Deposit --> DepositOperation
 
     interface API {
         Deposits
