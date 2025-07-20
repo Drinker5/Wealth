@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Wealth.BuildingBlocks.Infrastructure.Mediation;
+using Wealth.BuildingBlocks.Application;
 using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Application.Outbox.Commands;
 
@@ -11,12 +11,12 @@ public class OutboxPollingHostedService : IHostedService
 {
     private readonly ILogger<OutboxPollingHostedService> logger;
     private readonly IServiceProvider serviceProvider;
-    private readonly CqrsInvoker invoker;
+    private readonly ICqrsInvoker invoker;
 
     public OutboxPollingHostedService(
         ILogger<OutboxPollingHostedService> logger,
         IServiceProvider serviceProvider,
-        CqrsInvoker invoker)
+        ICqrsInvoker invoker)
     {
         this.logger = logger;
         this.serviceProvider = serviceProvider;

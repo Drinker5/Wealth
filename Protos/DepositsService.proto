@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+import "Common.proto";
+
+package Wealth.BuildingBlocks.DepositManagement;
+
+service DepositsService {
+  rpc GetDeposits (GetDepositsRequest) returns (GetDepositsResponse);
+  rpc GetDeposit (GetDepositRequest) returns (GetDepositResponse);
+  rpc CreateDeposit (CreateDepositRequest) returns (CreateDepositResponse);
+  rpc Invest (InvestRequest) returns (EmptyResponse);
+  rpc Withdraw (WithdrawRequest) returns (EmptyResponse);
+}
+
+message GetDepositsRequest {}
+message GetDepositsResponse {
+  repeated DepositProto deposits = 1;
+}
+
+message GetDepositRequest {
+  DepositIdProto deposit_id = 1;
+}
+
+message GetDepositResponse {
+  DepositProto deposit = 1;
+}
+
+message CreateDepositRequest {
+  string name = 1;
+  YieldProto yield = 2;
+  CurrencyIdProto currency = 3;
+}
+
+message CreateDepositResponse {
+  DepositIdProto deposit_id = 1;
+}
+
+message DepositIdProto {
+  int32 id = 1;
+}
+
+message DepositProto {
+  DepositIdProto deposit_id = 1;
+  string name = 2;
+  YieldProto yield = 3;
+  MoneyProto investment = 4;
+  MoneyProto interest_per_year = 5;
+}
+
+message YieldProto {
+  DecimalProto percent_per_year = 1;
+}
+
+message InvestRequest {
+  DepositIdProto deposit_id = 1;
+  MoneyProto investment = 2;
+}
+
+message WithdrawRequest {
+  DepositIdProto deposit_id = 1;
+  MoneyProto withdrawal = 2;
+}
+
+message EmptyResponse {}

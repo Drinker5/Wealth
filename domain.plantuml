@@ -246,6 +246,7 @@ package DepositManagement {
 
     entity DepositOperation {
         Id
+        DepositId
         Type
         Money
         DateTime
@@ -263,7 +264,6 @@ package DepositManagement {
         Deposit
         Invest(Money)
         Withdraw(Money)
-        AddInterest(Money)
     }
 }
 

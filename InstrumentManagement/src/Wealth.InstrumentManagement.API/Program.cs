@@ -1,6 +1,5 @@
 using Wealth.BuildingBlocks.API;
 using Wealth.InstrumentManagement.API.Extensions;
-using Wealth.InstrumentManagement.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

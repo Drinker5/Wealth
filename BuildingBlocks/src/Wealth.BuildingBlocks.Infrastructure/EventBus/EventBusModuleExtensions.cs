@@ -1,9 +1,8 @@
 using Google.Protobuf;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Infrastructure.EventBus;
 
-namespace Wealth.BuildingBlocks.Infrastructure;
+namespace Wealth.BuildingBlocks.Infrastructure.EventBus;
 
 public static class EventBusModuleExtensions
 {

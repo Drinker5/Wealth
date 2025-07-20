@@ -19,4 +19,9 @@ public record struct Yield(decimal PercentPerYear) : IValueObject
     {
         return a with { Amount = a.Amount * b.PercentPerYear };
     }
+    
+    public static implicit operator Yield(decimal value)
+    {
+        return new Yield(value);
+    }
 }

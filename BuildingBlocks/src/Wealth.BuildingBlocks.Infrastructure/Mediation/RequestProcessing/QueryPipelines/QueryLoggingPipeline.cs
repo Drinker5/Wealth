@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Logging;
 using Wealth.BuildingBlocks.Application;
 
-namespace Wealth.PortfolioManagement.Infrastructure.Mediation.RequestProcessing.QueryPipelines;
+namespace Wealth.BuildingBlocks.Infrastructure.Mediation.RequestProcessing.QueryPipelines;
 
-internal class QueryLoggingPipeline<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public class QueryLoggingPipeline<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IQuery
 {
     private readonly ILogger logger;

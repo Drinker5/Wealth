@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Infrastructure;
-using Wealth.BuildingBlocks.Infrastructure.Mediation;
 using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Application.Validators;
 using Wealth.CurrencyManagement.Infrastructure.Mediation.RequestProcessing;
@@ -16,7 +15,6 @@ public class MediatorModule : IServiceModule
 {
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton<CqrsInvoker>();
         services.AddScoped<ICommandsScheduler, CommandsScheduler>();
         services.AddMediatR(cfg =>
         {

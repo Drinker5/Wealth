@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.BuildingBlocks.Infrastructure;
-using Wealth.BuildingBlocks.Infrastructure.Mediation;
+using Wealth.BuildingBlocks.Infrastructure.Mediation.RequestProcessing.CommandBehaviors;
+using Wealth.BuildingBlocks.Infrastructure.Mediation.RequestProcessing.QueryPipelines;
 using Wealth.PortfolioManagement.Infrastructure.Mediation.RequestProcessing.CommandBehaviors;
-using Wealth.PortfolioManagement.Infrastructure.Mediation.RequestProcessing.QueryPipelines;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Mediation;
 
@@ -11,7 +11,6 @@ public class MediatorModule : IServiceModule
 {
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton<CqrsInvoker>();
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());

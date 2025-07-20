@@ -1,9 +1,58 @@
 @API_HostAddress = localhost:5004
+@API_Service = {{API_HostAddress}}/Wealth.BuildingBlocks.DepositManagement.DepositsService
+@Deposit_Id = 1
+###
+GRPC {{API_Service}}/GetDeposits
+Content-Type: application/grpc
 
 ###
-GRPC {{API_HostAddress}}/greet.Greeter/SayHello
+GRPC {{API_Service}}/GetDeposit
 Content-Type: application/grpc
 
 {
-  name: "foo"
+  deposit_id: { id: {{Deposit_Id}} }
+}
+
+###
+GRPC {{API_Service}}/CreateDeposit
+Content-Type: application/grpc
+
+{
+  name: test,
+  yield: {
+   percentPerYear: { "nanos": 200000000 }
+  },
+  currency: { code: "RUB" }
+}
+
+###
+GRPC {{API_Service}}/Invest
+Content-Type: application/grpc
+
+{
+  deposit_id: { id: {{Deposit_Id}} },
+  investment: {
+    currencyId: {
+        code: RUB
+    },
+    price: {
+        units: 1000
+    }
+  }
+}
+
+###
+GRPC {{API_Service}}/Withdraw
+Content-Type: application/grpc
+
+{
+  deposit_id: { id: {{Deposit_Id}} },
+  withdrawal: {
+    currencyId: {
+        code: RUB
+    },
+    price: {
+        units: 1000
+    }
+  }
 }

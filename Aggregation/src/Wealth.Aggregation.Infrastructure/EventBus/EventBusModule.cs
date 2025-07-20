@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Wealth.Aggregation.Application.Events;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Infrastructure;
+using Wealth.BuildingBlocks.Infrastructure.EventBus;
 
 namespace Wealth.Aggregation.Infrastructure.EventBus;
 

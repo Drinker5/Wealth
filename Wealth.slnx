@@ -19,9 +19,11 @@
     <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Application\Wealth.BuildingBlocks.Application.csproj" />
     <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Domain\Wealth.BuildingBlocks.Domain.csproj" />
     <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.EFCore\Wealth.BuildingBlocks.Infrastructure.EFCore.csproj" />
-    <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.Grpc\Wealth.BuildingBlocks.Infrastructure.Grpc.csproj" />
     <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" />
     <File Path="BuildingBlocks\Directory.Build.props" />
+  </Folder>
+  <Folder Name="/BuildingBlocks/src/GrpcClients/">
+    <Project Path="BuildingBlocks/src/GrpcClients/Wealth.GrpcClients.InstrumentsService/Wealth.GrpcClients.InstrumentsService.csproj" />
   </Folder>
   <Folder Name="/CurrencyManagement/">
     <File Path="CurrencyManagement/Dockerfile" />
@@ -52,8 +54,10 @@
     <File Path="DepositManagement\src\Directory.Build.props" />
   </Folder>
   <Folder Name="/DepositManagement/tests/">
-    <File Path="DepositManagement\tests\Directory.Build.props" />
+    <Project Path="DepositManagement/tests/Wealth.DepositManagement.Application.Tests/Wealth.DepositManagement.Application.Tests.csproj" />
     <Project Path="DepositManagement/tests/Wealth.DepositManagement.Domain.Tests/Wealth.DepositManagement.Domain.Tests.csproj" />
+    <Project Path="DepositManagement/tests/Wealth.DepositManagement.Infrastructure.Tests/Wealth.DepositManagement.Infrastructure.Tests.csproj" />
+    <File Path="DepositManagement\tests\Directory.Build.props" />
   </Folder>
   <Folder Name="/InstrumentManagement/">
     <File Path="InstrumentManagement/Dockerfile" />

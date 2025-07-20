@@ -1,11 +1,11 @@
-using Wealth.BuildingBlocks.Infrastructure.Mediation;
+using Wealth.BuildingBlocks.Application;
 
 namespace Wealth.PortfolioManagement.API.APIs;
 
 public class PortfolioServices(
-    CqrsInvoker mediator,
+    ICqrsInvoker mediator,
     ILogger<PortfolioServices> logger)
 {
-    public CqrsInvoker Mediator { get; } = mediator;
+    public ICqrsInvoker Mediator { get; } = mediator;
     public ILogger<PortfolioServices> Logger { get; } = logger;
 }

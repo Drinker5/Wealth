@@ -2,9 +2,9 @@ using MediatR;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain;
 
-namespace Wealth.PortfolioManagement.Infrastructure.Mediation.RequestProcessing.CommandBehaviors;
+namespace Wealth.BuildingBlocks.Infrastructure.Mediation.RequestProcessing.CommandBehaviors;
 
-internal class CommandUnitOfWorkBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public class CommandUnitOfWorkBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : ICommand
 {
     private readonly IUnitOfWork unitOfWork;

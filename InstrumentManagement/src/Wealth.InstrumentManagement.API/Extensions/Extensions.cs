@@ -1,8 +1,6 @@
 using FluentMigrator.Runner;
 using Wealth.InstrumentManagement.API.Services;
 using Wealth.InstrumentManagement.Infrastructure.Dapper;
-using Wealth.InstrumentManagement.Infrastructure.DbSeeding;
-using Wealth.InstrumentManagement.Infrastructure.DbSeeding.Seeds;
 
 namespace Wealth.InstrumentManagement.API.Extensions;
 

@@ -1,0 +1,5 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Wealth.DepositManagement.Infrastructure\Wealth.DepositManagement.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Logging;
 using Wealth.BuildingBlocks.Application;
 
-namespace Wealth.PortfolioManagement.Infrastructure.Mediation.RequestProcessing.CommandBehaviors;
+namespace Wealth.BuildingBlocks.Infrastructure.Mediation.RequestProcessing.CommandBehaviors;
 
-internal class CommandLoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public class CommandLoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : ICommand
 {
     private readonly ILogger<CommandLoggingBehavior<TRequest, TResponse>> logger;

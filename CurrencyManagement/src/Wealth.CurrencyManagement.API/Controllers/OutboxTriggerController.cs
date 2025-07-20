@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Wealth.BuildingBlocks.Infrastructure.Mediation;
+using Wealth.BuildingBlocks.Application;
 using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Application.Outbox.Commands;
 
@@ -9,12 +9,12 @@ namespace Wealth.CurrencyManagement.API.Controllers;
 public class OutboxTriggerController : Controller
 {
     private readonly ILogger logger;
-    private readonly CqrsInvoker cqrsInvoker;
+    private readonly ICqrsInvoker cqrsInvoker;
     private readonly IDeferredOperationRepository deferredOperationRepository;
 
     public OutboxTriggerController(
         ILogger<OutboxTriggerController> logger,
-        CqrsInvoker cqrsInvoker,
+        ICqrsInvoker cqrsInvoker,
         IDeferredOperationRepository deferredOperationRepository)
     {
         this.logger = logger;

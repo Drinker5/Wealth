@@ -16,7 +16,7 @@ public class DepositTests
 
     public DepositTests()
     {
-        deposit = Deposit.CreateDeposit(id, name, yield, currencyId);
+        deposit = Deposit.Create(id, name, yield, currencyId);
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public class DepositTests
     [Fact]
     public void WhenCreateWithoutId()
     {
-        var deposit = Deposit.CreateDeposit(name, yield, currencyId);
+        var deposit = Deposit.Create(name, yield, currencyId);
 
         Assert.Equal(0, deposit.Id.Id);
         Assert.Equal(name, deposit.Name);

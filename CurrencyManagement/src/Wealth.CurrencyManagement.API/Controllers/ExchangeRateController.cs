@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.BuildingBlocks.Infrastructure.Mediation;
 using Wealth.CurrencyManagement.API.Controllers.Requests;
 using Wealth.CurrencyManagement.Application.ExchangeRates.Commands;
 using Wealth.CurrencyManagement.Application.ExchangeRates.Queries;
@@ -11,9 +11,9 @@ namespace Wealth.CurrencyManagement.API.Controllers;
 [Route("api/[controller]")]
 public class ExchangeRateController : Controller
 {
-    private readonly CqrsInvoker invoker;
+    private readonly ICqrsInvoker invoker;
 
-    public ExchangeRateController(CqrsInvoker invoker)
+    public ExchangeRateController(ICqrsInvoker invoker)
     {
         this.invoker = invoker;
     }

@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Application\Wealth.BuildingBlocks.Application.csproj" />
+    <ProjectReference Include="..\Wealth.DepositManagement.Domain\Wealth.DepositManagement.Domain.csproj" />
   </ItemGroup>
 </Project>

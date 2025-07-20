@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Wealth.BuildingBlocks.Infrastructure.Mediation;
+using Wealth.BuildingBlocks.Application;
 using Wealth.CurrencyManagement.API.Controllers.Requests;
 using Wealth.CurrencyManagement.Application.Currencies.Commands;
 using Wealth.CurrencyManagement.Application.Currencies.Queries;
@@ -9,9 +9,9 @@ namespace Wealth.CurrencyManagement.API.Controllers;
 [Route("api/[controller]")]
 public class CurrencyController : Controller
 {
-    private readonly CqrsInvoker invoker;
+    private readonly ICqrsInvoker invoker;
 
-    public CurrencyController(CqrsInvoker invoker)
+    public CurrencyController(ICqrsInvoker invoker)
     {
         this.invoker = invoker;
     }

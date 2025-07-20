@@ -10,18 +10,19 @@ public class Deposit : AggregateRoot
     public string Name { get; private set; }
     public Yield Yield { get; private set; }
     public Money Investment { get; private set; }
+
     public Money InterestPerYear => Investment * Yield;
 
     private Deposit()
     {
     }
 
-    public static Deposit CreateDeposit(string name, Yield yield, CurrencyId currency)
+    public static Deposit Create(string name, Yield yield, CurrencyId currency)
     {
-        return CreateDeposit(DepositId.New(), name, yield, currency);
+        return Create(DepositId.New(), name, yield, currency);
     }
 
-    public static Deposit CreateDeposit(DepositId id, string name, Yield yield, CurrencyId currency)
+    public static Deposit Create(DepositId id, string name, Yield yield, CurrencyId currency)
     {
         var deposit = new Deposit
         {
@@ -62,10 +63,10 @@ public class Deposit : AggregateRoot
     {
         if (Investment.CurrencyId != withdraw.CurrencyId)
             throw new InvalidOperationException("Cannot withdraw in different currencies");
-        
+
         if (Investment.Amount < withdraw.Amount)
             throw new InvalidOperationException("Not enough to withdraw");
-        
+
         Apply(new DepositWithdrew(Id, withdraw));
     }
 
@@ -90,7 +91,7 @@ public class Deposit : AggregateRoot
     {
         Investment = Investment with { Amount = Investment.Amount + @event.Investment.Amount };
     }
-    
+
     private void When(DepositWithdrew @event)
     {
         Investment = Investment with { Amount = Investment.Amount - @event.Withdraw.Amount };
