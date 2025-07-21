@@ -3,4 +3,4 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.PortfolioManagement.Domain.Portfolios.Events;
 
-public record PortfolioRenamed(PortfolioId Id, string NewName) : IDomainEvent;
+public record PortfolioRenamed(PortfolioId PortfolioId, string NewName) : DomainEvent;

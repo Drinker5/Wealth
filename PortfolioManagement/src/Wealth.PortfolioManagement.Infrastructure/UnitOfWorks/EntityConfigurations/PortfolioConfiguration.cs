@@ -28,8 +28,6 @@ internal class PortfolioConfiguration : IEntityTypeConfiguration<Portfolio>
             .HasForeignKey("PortfolioId")
             .IsRequired();
 
-        builder.Ignore(x => x.DomainEvents);
-
         builder.HasNoDiscriminator();
     }
 }

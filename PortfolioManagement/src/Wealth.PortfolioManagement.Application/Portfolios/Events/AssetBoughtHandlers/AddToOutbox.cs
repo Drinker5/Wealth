@@ -15,22 +15,26 @@ public class AddToOutbox(IOutboxRepository outboxRepository, IInstrumentService 
         switch (instrumentInfo.Type)
         {
             case InstrumentType.Stock:
-                await outboxRepository.Add(new StockBoughtIntegrationEvent
-                {
-                    PortfolioId = notification.PortfolioId,
-                    InstrumentId = notification.InstrumentId,
-                    TotalPrice = notification.TotalPrice,
-                    Quantity = notification.Quantity,
-                }, notification.PortfolioId.ToString(), cancellationToken);
+                await outboxRepository.Add(
+                    notification,
+                    new StockBoughtIntegrationEvent
+                    {
+                        PortfolioId = notification.PortfolioId,
+                        InstrumentId = notification.InstrumentId,
+                        TotalPrice = notification.TotalPrice,
+                        Quantity = notification.Quantity,
+                    }, notification.PortfolioId.ToString(), cancellationToken);
                 break;
             case InstrumentType.Bond:
-                await outboxRepository.Add(new BondBoughtIntegrationEvent
-                {
-                    PortfolioId = notification.PortfolioId,
-                    InstrumentId = notification.InstrumentId,
-                    TotalPrice = notification.TotalPrice,
-                    Quantity = notification.Quantity,
-                }, notification.PortfolioId.ToString(), cancellationToken);
+                await outboxRepository.Add(
+                    notification,
+                    new BondBoughtIntegrationEvent
+                    {
+                        PortfolioId = notification.PortfolioId,
+                        InstrumentId = notification.InstrumentId,
+                        TotalPrice = notification.TotalPrice,
+                        Quantity = notification.Quantity,
+                    }, notification.PortfolioId.ToString(), cancellationToken);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

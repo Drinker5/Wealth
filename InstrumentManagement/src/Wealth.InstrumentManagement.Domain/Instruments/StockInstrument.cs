@@ -25,7 +25,7 @@ public class StockInstrument : Instrument
         var stock = new StockInstrument(instrumentId);
         stock.Apply(new StockCreated
         {
-            Id = instrumentId,
+            InstrumentId = instrumentId,
             Name = name,
             ISIN = isin,
         });
@@ -39,7 +39,7 @@ public class StockInstrument : Instrument
 
         Apply(new StockDividendChanged
         {
-            Id = Id,
+            InstrumentId = Id,
             ISIN = ISIN,
             NewDividend = dividend
         });
@@ -49,7 +49,7 @@ public class StockInstrument : Instrument
     {
         Apply(new StockLotSizeChanged
         {
-            Id = Id,
+            InstrumentId = Id,
             ISIN = ISIN,
             NewLotSize = lotSize,
         });
@@ -57,7 +57,7 @@ public class StockInstrument : Instrument
 
     private void When(StockCreated @event)
     {
-        Id = @event.Id;
+        Id = @event.InstrumentId;
         Name = @event.Name;
         ISIN = @event.ISIN;
     }

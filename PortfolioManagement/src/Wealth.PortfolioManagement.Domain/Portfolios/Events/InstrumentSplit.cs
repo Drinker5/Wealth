@@ -8,4 +8,4 @@ namespace Wealth.PortfolioManagement.Domain.Portfolios.Events;
 public record InstrumentSplit(
     PortfolioId PortfolioId,
     InstrumentId InstrumentId,
-    SplitRatio Ratio) : IDomainEvent;
+    SplitRatio Ratio) : DomainEvent;

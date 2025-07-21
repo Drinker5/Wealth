@@ -1,13 +1,16 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using Wealth.BuildingBlocks.Domain.Utilities;
 
 namespace Wealth.BuildingBlocks.Domain;
 
 public abstract class AggregateRoot : IEntity
 {
-    private List<IDomainEvent>? events;
-    public IReadOnlyCollection<IDomainEvent>? DomainEvents => events?.AsReadOnly();
+    private List<DomainEvent>? events;
 
-    private void AddDomainEvent(IDomainEvent domainEvent)
+    [NotMapped]
+    public IReadOnlyCollection<DomainEvent>? DomainEvents => events?.AsReadOnly();
+
+    private void AddDomainEvent(DomainEvent domainEvent)
     {
         events ??= [];
         events.Add(domainEvent);
@@ -17,7 +20,7 @@ public abstract class AggregateRoot : IEntity
     /// Invoke "When" method, then append the event to changes
     /// </summary>
     /// <param name="event"></param>
-    protected void Apply(IDomainEvent @event)
+    protected void Apply(DomainEvent @event)
     {
         this.Invoke("When", @event);
         AddDomainEvent(@event);

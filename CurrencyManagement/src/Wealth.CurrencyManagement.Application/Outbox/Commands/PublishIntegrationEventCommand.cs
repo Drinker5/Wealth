@@ -2,4 +2,4 @@
 
 namespace Wealth.CurrencyManagement.Application.Outbox.Commands;
 
-internal record PublishIntegrationEventCommand(IntegrationEvent IntegrationEvent) : ICommand;
+internal record PublishIntegrationEventCommand(OutboxMessage IntegrationEvent) : ICommand;

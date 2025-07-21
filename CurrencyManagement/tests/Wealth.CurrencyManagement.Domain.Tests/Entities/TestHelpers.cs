@@ -4,7 +4,7 @@ namespace Wealth.CurrencyManagement.Domain.Tests.Entities;
 
 public static class TestHelpers
 {
-    public static T HasEvent<T>(this AggregateRoot root) where T : IDomainEvent
+    public static T HasEvent<T>(this AggregateRoot root) where T : DomainEvent
     {
         Assert.NotNull(root.DomainEvents);
         var ev = Assert.Single(root.DomainEvents.OfType<T>());

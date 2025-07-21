@@ -41,7 +41,7 @@ internal class CommandsScheduler : ICommandsScheduler
         await AddOutboxMessageAsync(outboxMessage, cancellationToken);
     }
 
-    public async Task EnqueuePublishingEventAsync(IntegrationEvent integrationEvent, CancellationToken cancellationToken = default)
+    public async Task EnqueuePublishingEventAsync(OutboxMessage integrationEvent, CancellationToken cancellationToken = default)
     {
         var outboxMessage = DefferedCommand.Create(
             jsonSerializer,

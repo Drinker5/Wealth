@@ -2,10 +2,10 @@
 
 namespace Wealth.CurrencyManagement.Application.Outbox.Commands;
 
-internal class PublishIntegrationEventCommandHandler(IEventBus eventBus) : ICommandHandler<PublishIntegrationEventCommand>
+internal class PublishIntegrationEventCommandHandler(IOutboxRepository outboxRepository) : ICommandHandler<PublishIntegrationEventCommand>
 {
     public async Task Handle(PublishIntegrationEventCommand request, CancellationToken cancellationToken)
     {
-        await eventBus.Publish(request.IntegrationEvent, cancellationToken);
+        await outboxRepository.Add(request.IntegrationEvent, cancellationToken);
     }
 }

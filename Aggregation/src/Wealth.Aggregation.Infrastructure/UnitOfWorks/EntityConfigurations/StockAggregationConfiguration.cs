@@ -39,6 +39,7 @@ internal class StockAggregationConfiguration : IEntityTypeConfiguration<StockAgg
 
         builder.Ignore(x => x.CurrentDividendValue);
         builder.Ignore(x => x.CurrentValue);
+
         builder.HasNoDiscriminator();
     }
 }

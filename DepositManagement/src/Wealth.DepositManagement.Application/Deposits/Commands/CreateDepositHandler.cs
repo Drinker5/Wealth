@@ -1,5 +1,5 @@
 using Wealth.BuildingBlocks.Application;
-using Wealth.DepositManagement.Domain.Deposits;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.DepositManagement.Domain.Repositories;
 
 namespace Wealth.DepositManagement.Application.Deposits.Commands;

@@ -6,14 +6,6 @@ import "google/protobuf/any.proto";
 
 package Wealth.BuildingBlocks.Application;
 
-message IntegrationEvent {
-  GuidProto id = 1;
-  string key = 2;
-  string type = 3;
-  google.protobuf.Timestamp occured_on = 4;
-  google.protobuf.Any event = 5;
-}
-
 message StockBoughtIntegrationEvent {
   PortfolioIdProto portfolio_id = 1;
   InstrumentIdProto instrument_id = 2;
@@ -51,4 +43,14 @@ message CurrencyDepositedIntegrationEvent {
   PortfolioIdProto portfolio_id = 1;
   CurrencyIdProto currency_id = 2;
   DecimalProto Amount = 3;
+}
+
+message DepositInvestedIntegrationEvent {
+  DepositIdProto deposit_id = 1;
+  MoneyProto Investment = 2;
+}
+
+message DepositWithdrawalIntegrationEvent {
+  DepositIdProto deposit_id = 1;
+  MoneyProto Withdraw = 2;
 }

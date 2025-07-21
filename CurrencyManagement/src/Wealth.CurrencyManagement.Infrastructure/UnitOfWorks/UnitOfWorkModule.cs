@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Infrastructure;
 using Wealth.BuildingBlocks.Infrastructure.EFCore.Extensions;
@@ -9,6 +10,7 @@ using Wealth.CurrencyManagement.Domain.Repositories;
 using Wealth.CurrencyManagement.Infrastructure.DbSeeding;
 using Wealth.CurrencyManagement.Infrastructure.Repositories;
 using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks.Decorators;
+using Wealth.DepositManagement.Infrastructure.Repositories;
 
 namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 
@@ -34,6 +36,7 @@ public class UnitOfWorkModule : IServiceModule
         services.AddScoped<ICurrencyRepository, CurrencyRepository>();
         services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
         services.AddScoped<IDeferredOperationRepository, DeferredOperationRepository>();
+        services.AddScoped<IOutboxRepository, OutboxRepository>();
 
         // UnitOfWork
         services.AddScoped<IUnitOfWork, UnitOfWork>();

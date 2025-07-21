@@ -11,10 +11,10 @@ public class OutboxModule : IServiceModule
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         // Outbox Polling
-        var outboxPollingOptions = configuration.GetSection(OutboxPollingOptions.Section).Get<OutboxPollingOptions>();
+        var outboxPollingOptions = configuration.GetSection(DeferredOperationPollingOptions.Section).Get<DeferredOperationPollingOptions>();
         if (outboxPollingOptions?.Enabled ?? false)
         {
-            services.Configure<OutboxPollingOptions>(configuration.GetSection(OutboxPollingOptions.Section));
+            services.Configure<DeferredOperationPollingOptions>(configuration.GetSection(DeferredOperationPollingOptions.Section));
             services.AddSingleton<IHostedService, OutboxPollingHostedService>();
         }
     }

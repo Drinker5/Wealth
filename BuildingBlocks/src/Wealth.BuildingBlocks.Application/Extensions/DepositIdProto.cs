@@ -1,12 +1,12 @@
 using Wealth.BuildingBlocks.Domain.Common;
 
-namespace Wealth.BuildingBlocks.DepositManagement;
+namespace Wealth.BuildingBlocks;
 
 public partial class DepositIdProto
 {
-    public DepositIdProto(int value)
+    public DepositIdProto(int id)
     {
-        Id = value;
+        Id = id;
     }
     
     public static implicit operator DepositId(DepositIdProto grpcValue)

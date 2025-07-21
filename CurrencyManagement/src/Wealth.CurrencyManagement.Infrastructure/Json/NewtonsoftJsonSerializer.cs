@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Wealth.BuildingBlocks.Application;
 using Wealth.CurrencyManagement.Application.Abstractions;
 
 namespace Wealth.CurrencyManagement.Infrastructure.Json;
@@ -32,10 +31,4 @@ public class NewtonsoftJsonSerializer : IJsonSerializer
     {
         return JsonConvert.DeserializeObject<T>(data, _jsonSerializerSettings);
     }
-
-    public byte[] SerializeToUtf8Bytes(IntegrationEvent @event)
-    {
-        var body = Serialize(@event);
-        return System.Text.Encoding.UTF8.GetBytes(body);
-    }   
 }

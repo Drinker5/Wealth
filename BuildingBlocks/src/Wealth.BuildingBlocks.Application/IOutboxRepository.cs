@@ -1,19 +1,23 @@
 ﻿using Google.Protobuf;
+using Wealth.BuildingBlocks.Domain;
 
 namespace Wealth.BuildingBlocks.Application;
 
 public interface IOutboxRepository
 {
-    Task Add(IntegrationEvent integrationEvent, CancellationToken cancellationToken);
+    Task Add(OutboxMessage integrationEvent, CancellationToken cancellationToken);
 }
 
 public static class OutboxRepositoryExtensions
 {
     public static Task Add(this IOutboxRepository repository,
-        IMessage integrationEvent,
+        DomainEvent domainEvent,
+        IMessage message,
         string? key = null,
         CancellationToken cancellationToken = default)
     {
-        return repository.Add(IntegrationEvent.Create(integrationEvent, key), cancellationToken);
+        return repository.Add(
+            domainEvent.ToOutboxMessage(message, key), 
+            cancellationToken);
     }
 }

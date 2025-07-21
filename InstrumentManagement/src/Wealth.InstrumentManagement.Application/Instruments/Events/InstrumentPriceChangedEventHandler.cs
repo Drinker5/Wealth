@@ -8,14 +8,14 @@ internal class InstrumentPriceChangedEventHandler(IOutboxRepository outboxReposi
     public async Task Handle(InstrumentPriceChanged notification, CancellationToken cancellationToken)
     {
         await outboxRepository.Add(
-            IntegrationEvent.Create(
-                new InstrumentPriceChangedIntegrationEvent
-                {
-                    InstrumentId = notification.Id,
-                    ISIN = notification.ISIN,
-                    NewPrice = notification.NewPrice,
-                },
-                notification.Id.ToString()),
+            notification,
+            new InstrumentPriceChangedIntegrationEvent
+            {
+                InstrumentId = notification.InstrumentId,
+                ISIN = notification.ISIN,
+                NewPrice = notification.NewPrice,
+            },
+            notification.InstrumentId.ToString(),
             cancellationToken);
     }
 }

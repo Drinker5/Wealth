@@ -1,44 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Wealth.BuildingBlocks.Domain.Utilities;
-using Wealth.CurrencyManagement.Application.Abstractions;
+using Wealth.BuildingBlocks.Application;
 using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 
-namespace Wealth.CurrencyManagement.Infrastructure.Repositories;
+namespace Wealth.DepositManagement.Infrastructure.Repositories;
 
-internal class DeferredOperationRepository : IDeferredOperationRepository
+public class OutboxRepository(WealthDbContext dbContext) : IOutboxRepository
 {
-    private readonly WealthDbContext context;
-
-    public DeferredOperationRepository(WealthDbContext context)
+    public async Task Add(OutboxMessage outboxMessage, CancellationToken cancellationToken)
     {
-        this.context = context;
-    }
-
-    public async Task Add(DefferedCommand message, CancellationToken cancellationToken = default)
-    {
-        await context.OutboxMessages.AddAsync(message, cancellationToken);
-    }
-
-    public async Task<DefferedCommand?> LoadAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        return await context
-            .OutboxMessages
-            .Where(x => x.Id == id)
-            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
-    }
-
-    public async Task<IEnumerable<Guid>> LoadUnprocessed(int take, CancellationToken cancellationToken = default)
-    {
-        return await context.OutboxMessages.AsNoTracking()
-            .OrderBy(i => i.OccurredOn) // old first
-            .Where(i => i.ProcessedDate == null && (i.ProcessingDate < Clock.Now || i.ProcessingDate == null))
-            .Select(x => x.Id)
-            .Take(take)
-            .ToListAsync(cancellationToken);
-    }
-
-    public void Remove(DefferedCommand outboxMessage)
-    {
-        context.OutboxMessages.Remove(outboxMessage);
+        await dbContext.OutboxMessages.AddAsync(
+            outboxMessage,
+            cancellationToken);
     }
 }

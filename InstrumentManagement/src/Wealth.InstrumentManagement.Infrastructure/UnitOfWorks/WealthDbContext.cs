@@ -8,9 +8,9 @@ namespace Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 public class WealthDbContext(IConfiguration configuration) : IDisposable
 {
     private IDbConnection? connection;
-    private readonly List<IDomainEvent> trackedEvents = [];
+    private readonly List<DomainEvent> trackedEvents = [];
 
-    public IReadOnlyList<IDomainEvent> TrackedEvents => trackedEvents.AsReadOnly();
+    public IReadOnlyList<DomainEvent> TrackedEvents => trackedEvents.AsReadOnly();
 
     public IDbConnection CreateConnection()
     {

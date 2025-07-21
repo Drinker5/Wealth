@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.DepositManagement.Domain.DepositOperations;
 using Wealth.DepositManagement.Domain.Deposits;
 using Wealth.DepositManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
@@ -37,7 +36,6 @@ internal class DepositConfiguration : IEntityTypeConfiguration<Deposit>
             .HasForeignKey(x => x.DepositId)
             .IsRequired();
 
-        builder.Ignore(x => x.DomainEvents);
         builder.HasNoDiscriminator();
     }
 }

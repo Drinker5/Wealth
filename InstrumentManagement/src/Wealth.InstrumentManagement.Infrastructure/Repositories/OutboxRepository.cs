@@ -14,7 +14,7 @@ public class OutboxRepository : IOutboxRepository
         connection = dbContext.CreateConnection();
     }
 
-    public async Task Add(IntegrationEvent integrationEvent, CancellationToken cancellationToken)
+    public async Task Add(OutboxMessage outboxMessage, CancellationToken cancellationToken)
     {
         var sql = """
                   INSERT INTO "OutboxMessages" 
@@ -22,7 +22,6 @@ public class OutboxRepository : IOutboxRepository
                   VALUES (@Id, @Type, @Data, @OccurredOn, NULL, @Key)
                   """;
 
-        var outboxMessage = integrationEvent.ToOutboxMessage();
         await connection.ExecuteAsync(sql, new 
         {
             Id = outboxMessage.Id,

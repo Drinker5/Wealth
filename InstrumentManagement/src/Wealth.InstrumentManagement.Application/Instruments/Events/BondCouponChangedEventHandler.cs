@@ -8,14 +8,14 @@ internal class BondCouponChangedEventHandler(IOutboxRepository outboxRepository)
     public async Task Handle(BondCouponChanged notification, CancellationToken cancellationToken)
     {
         await outboxRepository.Add(
-            IntegrationEvent.Create(
-                new BondCouponChangedIntegrationEvent
-                {
-                    InstrumentId = notification.Id,
-                    ISIN = notification.ISIN,
-                    NewCoupon = notification.NewCoupon.ValuePerYear,
-                },
-                notification.Id.ToString()),
+            notification,
+            new BondCouponChangedIntegrationEvent
+            {
+                InstrumentId = notification.InstrumentId,
+                ISIN = notification.ISIN,
+                NewCoupon = notification.NewCoupon.ValuePerYear,
+            },
+            notification.InstrumentId.ToString(),
             cancellationToken);
     }
 }

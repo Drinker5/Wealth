@@ -5,10 +5,10 @@ namespace Wealth.DepositManagement.Infrastructure.Repositories;
 
 public class OutboxRepository(WealthDbContext dbContext) : IOutboxRepository
 {
-    public async Task Add(IntegrationEvent integrationEvent, CancellationToken cancellationToken)
+    public async Task Add(OutboxMessage outboxMessage, CancellationToken cancellationToken)
     {
         await dbContext.OutboxMessages.AddAsync(
-            integrationEvent.ToOutboxMessage(),
+            outboxMessage,
             cancellationToken);
     }
 }

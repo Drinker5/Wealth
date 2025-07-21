@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
-using Wealth.DepositManagement.Domain.Deposits;
+using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.DepositManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
 

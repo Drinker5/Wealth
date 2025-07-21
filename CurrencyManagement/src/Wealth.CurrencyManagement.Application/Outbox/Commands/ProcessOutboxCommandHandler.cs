@@ -15,7 +15,7 @@ namespace Wealth.CurrencyManagement.Application.Outbox.Commands;
 internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxCommand>
 {
     private readonly IDeferredOperationRepository deferredOperationRepository;
-    private readonly IOptions<OutboxPollingOptions> options;
+    private readonly IOptions<DeferredOperationPollingOptions> options;
     private readonly IJsonSerializer jsonSerializer;
     private readonly ILogger<ProcessOutboxCommandHandler> logger;
     private readonly IServiceProvider serviceProvider;
@@ -25,7 +25,7 @@ internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxComman
 
     public ProcessOutboxCommandHandler(
         IDeferredOperationRepository deferredOperationRepository,
-        IOptions<OutboxPollingOptions> options,
+        IOptions<DeferredOperationPollingOptions> options,
         IJsonSerializer jsonSerializer,
         ILogger<ProcessOutboxCommandHandler> logger,
         IServiceProvider serviceProvider)
@@ -98,7 +98,7 @@ internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxComman
 
         if (type.IsAssignableTo(typeof(INotification)))
         {
-            await mediator.Publish((deserializedMessage as IDomainEvent)!, cancellationToken);
+            await mediator.Publish((deserializedMessage as DomainEvent)!, cancellationToken);
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
             await unitOfWork.Commit(cancellationToken);
         }
@@ -107,9 +107,9 @@ internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxComman
         {
             await mediator.Send(deserializedMessage, cancellationToken);
         }
-        else if (type.IsAssignableTo(typeof(IntegrationEvent)))
+        else if (type.IsAssignableTo(typeof(OutboxMessage)))
         {
-            var publishIntegrationEventCommand = new PublishIntegrationEventCommand((IntegrationEvent)deserializedMessage);
+            var publishIntegrationEventCommand = new PublishIntegrationEventCommand((OutboxMessage)deserializedMessage);
             await mediator.Send(publishIntegrationEventCommand, cancellationToken);
         }
         else

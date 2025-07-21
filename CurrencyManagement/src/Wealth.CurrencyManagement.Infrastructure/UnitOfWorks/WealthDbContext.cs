@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Wealth.BuildingBlocks.Application;
+using Wealth.BuildingBlocks.Infrastructure.EFCore.EntityConfigurations;
 using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Domain.ExchangeRates;
@@ -14,7 +16,8 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
 {
     public virtual DbSet<Currency> Currencies { get; internal init; }
     public virtual DbSet<ExchangeRate> ExchangeRates { get; internal init; }
-    public virtual DbSet<DefferedCommand> OutboxMessages { get; internal init; }
+    public virtual DbSet<DefferedCommand> DefferedCommands { get; internal init; }
+    public virtual DbSet<OutboxMessage> OutboxMessages { get; internal init; }
 
 
     private bool commited;
@@ -30,6 +33,7 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+        modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }
@@ -46,7 +50,7 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
     public WealthDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<WealthDbContext>();
-        optionsBuilder.UseInMemoryDatabase("Design");
+        optionsBuilder.UseNpgsql("Host=127.0.0.1;Username=postgres;Password=postgres;Database=Design");
         return new WealthDbContext(optionsBuilder.Options);
     }
 }

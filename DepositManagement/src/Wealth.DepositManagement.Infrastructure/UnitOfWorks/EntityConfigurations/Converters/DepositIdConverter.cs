@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Wealth.DepositManagement.Domain.Deposits;
+using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.DepositManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
 

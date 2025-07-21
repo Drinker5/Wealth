@@ -41,3 +41,7 @@ enum InstrumentTypeProto {
   InstrumentTypeProto_STOCK = 0;
   InstrumentTypeProto_BOND = 1;
 }
+
+message DepositIdProto {
+  int32 id = 1;
+}

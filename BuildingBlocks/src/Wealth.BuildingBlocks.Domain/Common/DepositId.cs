@@ -1,6 +1,4 @@
-using Wealth.BuildingBlocks.Domain;
-
-namespace Wealth.DepositManagement.Domain.Deposits;
+namespace Wealth.BuildingBlocks.Domain.Common;
 
 public readonly record struct DepositId(int Id) : IIdentity
 {

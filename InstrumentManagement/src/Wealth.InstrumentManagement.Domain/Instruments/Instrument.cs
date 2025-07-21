@@ -23,7 +23,7 @@ public abstract class Instrument : AggregateRoot
 
         Apply(new InstrumentPriceChanged
         {
-            Id = Id,
+            InstrumentId = Id,
             ISIN = ISIN,
             NewPrice = newPrice,
             Type = Type,

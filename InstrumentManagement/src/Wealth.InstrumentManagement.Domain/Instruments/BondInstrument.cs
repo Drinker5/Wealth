@@ -23,7 +23,7 @@ public class BondInstrument : Instrument
         var bond = new BondInstrument(instrumentId);
         bond.Apply(new BondCreated
         {
-            Id = instrumentId,
+            InstrumentId = instrumentId,
             Name = name,
             ISIN = isin,
         });
@@ -32,7 +32,7 @@ public class BondInstrument : Instrument
     
     private void When(BondCreated @event)
     {
-        Id = @event.Id;
+        Id = @event.InstrumentId;
         Name = @event.Name;
         ISIN = @event.ISIN;
     }
@@ -44,7 +44,7 @@ public class BondInstrument : Instrument
         
         Apply(new BondCouponChanged
         {
-            Id = Id,
+            InstrumentId = Id,
             ISIN = ISIN,
             NewCoupon = coupon
         });

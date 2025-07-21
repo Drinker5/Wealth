@@ -4,9 +4,9 @@ using Wealth.DepositManagement.Domain.DepositOperations;
 using Wealth.DepositManagement.Domain.Deposits.Events;
 using Wealth.DepositManagement.Domain.Repositories;
 
-namespace Wealth.DepositManagement.Application.Deposits.Events;
+namespace Wealth.DepositManagement.Application.Deposits.Events.DepositWithdrewHandlers;
 
-public class DepositWithdrewHandler(IDepositOperationRepository repository) : IDomainEventHandler<DepositWithdrew>
+public class AddOperation(IDepositOperationRepository repository) : IDomainEventHandler<Domain.Deposits.Events.DepositWithdrew>
 {
     public Task Handle(DepositWithdrew notification, CancellationToken cancellationToken)
     {

@@ -1,6 +1,5 @@
 using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.DepositManagement.Domain.Deposits;
 
 namespace Wealth.DepositManagement.Domain.DepositOperations;
 

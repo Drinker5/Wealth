@@ -4,7 +4,7 @@ namespace Wealth.PortfolioManagement.Domain.Tests.TestHelpers;
 
 public static class Helpers
 {
-    public static T HasEvent<T>(this AggregateRoot root) where T : IDomainEvent
+    public static T HasEvent<T>(this AggregateRoot root) where T : DomainEvent
     {
         Assert.NotNull(root.DomainEvents);
         var ev = Assert.Single(root.DomainEvents.OfType<T>());

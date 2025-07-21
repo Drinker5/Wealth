@@ -7,4 +7,4 @@ public record AssetSold(
     PortfolioId PortfolioId,
     InstrumentId InstrumentId,
     Money Price,
-    int Quantity) : IDomainEvent;
+    int Quantity) : DomainEvent;
