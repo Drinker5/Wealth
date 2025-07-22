@@ -12,26 +12,24 @@ using Wealth.BuildingBlocks.Domain.Utilities;
 
 namespace Wealth.CurrencyManagement.Application.Outbox.Commands;
 
-internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxCommand>
+internal class ProcessDeferredOperationCommandHandler : ICommandHandler<ProcessDeferredOperationCommand>
 {
     private readonly IDeferredOperationRepository deferredOperationRepository;
-    private readonly IOptions<DeferredOperationPollingOptions> options;
     private readonly IJsonSerializer jsonSerializer;
-    private readonly ILogger<ProcessOutboxCommandHandler> logger;
+    private readonly ILogger<ProcessDeferredOperationCommandHandler> logger;
     private readonly IServiceProvider serviceProvider;
     private int _executedTimes;
     private readonly ConcurrentDictionary<string, Type?> _typeCache;
     private readonly ResiliencePipeline _pipeline;
 
-    public ProcessOutboxCommandHandler(
+    public ProcessDeferredOperationCommandHandler(
         IDeferredOperationRepository deferredOperationRepository,
         IOptions<DeferredOperationPollingOptions> options,
         IJsonSerializer jsonSerializer,
-        ILogger<ProcessOutboxCommandHandler> logger,
+        ILogger<ProcessDeferredOperationCommandHandler> logger,
         IServiceProvider serviceProvider)
     {
         this.deferredOperationRepository = deferredOperationRepository;
-        this.options = options;
         _pipeline = CreateResiliencePipeline(options.Value.RetryCount);
         this.jsonSerializer = jsonSerializer;
         this.logger = logger;
@@ -40,9 +38,9 @@ internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxComman
         _typeCache = new();
     }
 
-    public async Task Handle(ProcessOutboxCommand request, CancellationToken cancellationToken)
+    public async Task Handle(ProcessDeferredOperationCommand request, CancellationToken cancellationToken)
     {
-        var outboxMessage = await deferredOperationRepository.LoadAsync(request.MessageId, cancellationToken);
+        var outboxMessage = await deferredOperationRepository.LoadAsync(request.OperationId, cancellationToken);
 
         if (outboxMessage is null)
         {
@@ -106,11 +104,6 @@ internal class ProcessOutboxCommandHandler : ICommandHandler<ProcessOutboxComman
                  type.IsAssignableTo(typeof(ICommand<>)))
         {
             await mediator.Send(deserializedMessage, cancellationToken);
-        }
-        else if (type.IsAssignableTo(typeof(OutboxMessage)))
-        {
-            var publishIntegrationEventCommand = new PublishIntegrationEventCommand((OutboxMessage)deserializedMessage);
-            await mediator.Send(publishIntegrationEventCommand, cancellationToken);
         }
         else
         {

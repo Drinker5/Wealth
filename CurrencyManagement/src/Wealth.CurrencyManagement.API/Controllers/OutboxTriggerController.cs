@@ -23,20 +23,20 @@ public class OutboxTriggerController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post(Guid outboxMessageId)
+    public async Task<IActionResult> Post(Guid operationId)
     {
-        if (outboxMessageId == Guid.Empty)
-            return BadRequest("Invalid outbox message id");
+        if (operationId == Guid.Empty)
+            return BadRequest("Invalid operation Id");
 
-        logger.LogInformation("C# ServiceBus queue trigger function processed message: {Item}", outboxMessageId);
+        logger.LogInformation("C# ServiceBus queue trigger function processed message: {Item}", operationId);
         try
         {
-            await cqrsInvoker.Command(new ProcessOutboxCommand(outboxMessageId));
+            await cqrsInvoker.Command(new ProcessDeferredOperationCommand(operationId));
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Processing OutboxMessage failed");
-            return BadRequest("Processing OutboxMessage failed");
+            logger.LogError(ex, "Processing failed");
+            return BadRequest("Processing failed");
         }
 
         return Ok();
@@ -48,17 +48,15 @@ public class OutboxTriggerController : Controller
         var unprocessed = await deferredOperationRepository.LoadUnprocessed(1, cancellationToken);
         try
         {
-            foreach (var outboxMessageId in unprocessed)
-                await cqrsInvoker.Command(new ProcessOutboxCommand(outboxMessageId));
+            foreach (var operationId in unprocessed)
+                await cqrsInvoker.Command(new ProcessDeferredOperationCommand(operationId));
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Processing OutboxMessage failed");
-            return BadRequest("Processing OutboxMessage failed");
+            logger.LogError(ex, "Processing failed");
+            return BadRequest("Processing failed");
         }
 
         return Ok();
     }
-
-    private record OutboxMessageReference(Guid OutboxMessageId);
 }

@@ -23,7 +23,10 @@ public class UnitOfWorkModule : IServiceModule
             var usePostgres = configuration.GetSection("UsePostgres").Get<bool>();
             if (usePostgres)
             {
-                options.UseNpgsql(configuration.GetConnectionString("CurrencyManagement"));
+                options.UseNpgsql(configuration.GetConnectionString("CurrencyManagement"), builder =>
+                {
+                    builder.EnableRetryOnFailure(5);
+                });
             }
             else
             {

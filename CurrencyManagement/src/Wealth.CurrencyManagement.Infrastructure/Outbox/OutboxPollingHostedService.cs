@@ -40,7 +40,7 @@ public class OutboxPollingHostedService : IHostedService
         {
             var unprocessed = await repository.LoadUnprocessed(1, cancellationToken);
             foreach (var outboxMessageId in unprocessed)
-                await invoker.Command(new ProcessOutboxCommand(outboxMessageId));
+                await invoker.Command(new ProcessDeferredOperationCommand(outboxMessageId));
         }
     }
 
