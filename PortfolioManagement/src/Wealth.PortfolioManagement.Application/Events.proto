@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+import "Common.proto";
+
+package wealth;
+
+option csharp_namespace = "Wealth.PortfolioManagement";
+
+message StockBoughtIntegrationEvent {
+  PortfolioIdProto portfolio_id = 1;
+  InstrumentIdProto instrument_id = 2;
+  MoneyProto total_price = 3;
+  int32 quantity = 4;
+}
+
+message BondBoughtIntegrationEvent {
+  PortfolioIdProto portfolio_id = 1;
+  InstrumentIdProto instrument_id = 2;
+  MoneyProto total_price = 3;
+  int32 quantity = 4;
+}
+
+message CurrencyDepositedIntegrationEvent {
+  PortfolioIdProto portfolio_id = 1;
+  CurrencyIdProto currency_id = 2;
+  DecimalProto Amount = 3;
+}

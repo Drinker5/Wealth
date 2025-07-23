@@ -22,9 +22,6 @@
     <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" />
     <File Path="BuildingBlocks\Directory.Build.props" />
   </Folder>
-  <Folder Name="/BuildingBlocks/src/GrpcClients/">
-    <Project Path="BuildingBlocks/src/GrpcClients/Wealth.GrpcClients.InstrumentsService/Wealth.GrpcClients.InstrumentsService.csproj" />
-  </Folder>
   <Folder Name="/CurrencyManagement/">
     <File Path="CurrencyManagement/Dockerfile" />
     <File Path="CurrencyManagement/.dockerignore" />

@@ -1,8 +1,9 @@
 syntax = "proto3";
-
 import "Common.proto";
 
-package Wealth.BuildingBlocks.DepositManagement;
+package wealth;
+
+option csharp_namespace = "Wealth.DepositManagement";
 
 service DepositsService {
   rpc GetDeposits (GetDepositsRequest) returns (GetDepositsResponse);
@@ -33,10 +34,6 @@ message CreateDepositRequest {
 
 message CreateDepositResponse {
   DepositIdProto deposit_id = 1;
-}
-
-message DepositIdProto {
-  int32 id = 1;
 }
 
 message DepositProto {

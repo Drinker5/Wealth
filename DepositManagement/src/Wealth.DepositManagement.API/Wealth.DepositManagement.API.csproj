@@ -7,8 +7,4 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.API\Wealth.BuildingBlocks.API.csproj" />
     <ProjectReference Include="..\Wealth.DepositManagement.Infrastructure\Wealth.DepositManagement.Infrastructure.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf Include="..\..\..\Protos\DepositsService.proto" GrpcServices="Server" />
-  </ItemGroup>
 </Project>

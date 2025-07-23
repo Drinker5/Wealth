@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+import "Common.proto";
+
+package wealth;
+
+option csharp_namespace = "Wealth.InstrumentManagement";
+
+service InstrumentsService {
+  rpc GetInstrument (GetInstrumentRequest) returns (GetInstrumentResponse);
+}
+
+message GetInstrumentRequest {
+  InstrumentIdProto id = 1;
+}
+
+message GetInstrumentResponse {
+  InstrumentIdProto id = 1;
+  InstrumentTypeProto type = 2;
+  string name = 3;
+  MoneyProto price = 4;
+  oneof instrument {
+    StockInstrumentProto stock_info = 5;
+    BondInstrumentProto bond_info = 6;
+  }
+}
+
+message StockInstrumentProto {
+  int32 lot_size = 4;
+  MoneyProto dividend_per_year = 5;
+}
+
+message BondInstrumentProto {
+}
+

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+import "Common.proto";
+
+package wealth;
+
+option csharp_namespace = "Wealth.DepositManagement";
+
+message DepositInvestedIntegrationEvent {
+  DepositIdProto deposit_id = 1;
+  MoneyProto Investment = 2;
+}
+
+message DepositWithdrawalIntegrationEvent {
+  DepositIdProto deposit_id = 1;
+  MoneyProto Withdraw = 2;
+}

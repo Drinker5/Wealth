@@ -1,6 +1,5 @@
 using Grpc.Core;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.DepositManagement;
 using Wealth.DepositManagement.Application.Deposits.Commands;
 using Wealth.DepositManagement.Application.Deposits.Queries;
 

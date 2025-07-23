@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+import "Common.proto";
+
+package wealth;
+
+option csharp_namespace = "Wealth.InstrumentManagement";
+
+message BondCouponChangedIntegrationEvent {
+  InstrumentIdProto instrument_id = 1;
+  ISINProto ISIN = 2;
+  MoneyProto new_coupon = 3;
+}
+
+message StockDividendChangedIntegrationEvent {
+  InstrumentIdProto instrument_id = 1;
+  ISINProto ISIN = 2;
+  MoneyProto new_dividend = 3;
+}
+
+message InstrumentPriceChangedIntegrationEvent {
+  InstrumentIdProto instrument_id = 1;
+  ISINProto ISIN = 2;
+  MoneyProto new_price = 3;
+  InstrumentTypeProto instrument_type = 4;
+}

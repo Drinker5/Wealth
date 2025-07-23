@@ -1,10 +1,10 @@
 using Wealth.BuildingBlocks.Application.Services;
 using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.BuildingBlocks.InstrumentManagement;
+using Wealth.InstrumentManagement;
 
-namespace Wealth.GrpcClients.InstrumentsService.Services;
+namespace Wealth.Aggregation.API.Services;
 
-public class GrpcInstrumentService(BuildingBlocks.InstrumentManagement.InstrumentsService.InstrumentsServiceClient client) : IInstrumentService
+public class GrpcInstrumentService(InstrumentManagement.InstrumentsService.InstrumentsServiceClient client) : IInstrumentService
 {
     public async Task<InstrumentInfo> GetInstrumentInfo(InstrumentId instrumentId)
     {

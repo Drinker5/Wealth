@@ -1,20 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.31.1" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.71.0" />
-    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.71.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.72.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="MediatR" Version="13.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions"  Version="9.0.7" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Wealth.BuildingBlocks.Domain\Wealth.BuildingBlocks.Domain.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Protobuf Include="..\..\..\Protos\Common.proto" GrpcServices="Client" />
-    <Protobuf Include="..\..\..\Protos\Events.proto" GrpcServices="Client" />
   </ItemGroup>
 </Project>

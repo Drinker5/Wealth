@@ -1,6 +1,8 @@
 syntax = "proto3";
 
-package Wealth.BuildingBlocks;
+package wealth;
+
+option csharp_namespace = "Wealth.BuildingBlocks";
 
 message InstrumentIdProto {
   GuidProto id = 1;
@@ -20,17 +22,8 @@ message CurrencyIdProto {
 }
 
 message DecimalProto {
-
-  // Whole units part of the amount
   int64 units = 1;
-
-  // Nano units of the amount (10^-9)
-  // Must be same sign as units
   sfixed32 nanos = 2;
-}
-
-message PortfolioIdProto {
-  int32 id = 1;
 }
 
 message ISINProto {
@@ -40,8 +33,4 @@ message ISINProto {
 enum InstrumentTypeProto {
   InstrumentTypeProto_STOCK = 0;
   InstrumentTypeProto_BOND = 1;
-}
-
-message DepositIdProto {
-  int32 id = 1;
 }

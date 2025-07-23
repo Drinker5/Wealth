@@ -1,6 +1,6 @@
 using Wealth.DepositManagement.Domain.Deposits;
 
-namespace Wealth.BuildingBlocks.DepositManagement;
+namespace Wealth.DepositManagement;
 
 public partial class DepositProto
 {

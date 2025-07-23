@@ -2,7 +2,9 @@ syntax = "proto3";
 
 import "Common.proto";
 
-package Wealth.BuildingBlocks.InstrumentManagement;
+package wealth;
+
+option csharp_namespace = "Wealth.InstrumentManagement";
 
 service InstrumentsService {
   rpc GetInstrument (GetInstrumentRequest) returns (GetInstrumentResponse);
