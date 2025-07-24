@@ -18,21 +18,18 @@ public sealed class CurrencyManagementApiTests : IClassFixture<CurrencyManagemen
     }
 
     [Fact]
-    public async Task GetCurrencies()
-    {
-        var response = await httpClient.GetAsync("/api/currency/");
-
-        response.EnsureSuccessStatusCode();
-        var body = await response.Content.ReadAsStringAsync();
-        var result = JsonSerializer.Deserialize<IEnumerable<CurrencyDTO>>(body, jsonSerializerOptions);
-
-        Assert.NotNull(result);
-        Assert.Equal(2, result.Count());
-    }
-
-    [Fact]
     public async Task AddAndChangeCurrency()
     {
+        // get all currencies, after seeding we have 2 currencies
+        var responseGet = await httpClient.GetAsync("/api/currency/");
+
+        responseGet.EnsureSuccessStatusCode();
+        var currenciesJson = await responseGet.Content.ReadAsStringAsync();
+        var currencies = JsonSerializer.Deserialize<IEnumerable<CurrencyDTO>>(currenciesJson, jsonSerializerOptions);
+
+        Assert.NotNull(currencies);
+        Assert.Equal(2, currencies.Count());
+
         // get not existed currency
         var currencyId = "FOO";
         var response0 = await httpClient.GetAsync($"/api/currency/{currencyId}");
@@ -85,6 +82,16 @@ public sealed class CurrencyManagementApiTests : IClassFixture<CurrencyManagemen
         Assert.Equal(currencyId, result2.CurrencyId);
         Assert.Equal(newName.newName, result2.Name);
         Assert.Equal(obj.symbol, result2.Symbol);
+        
+        // get all currencies
+        var responseGet2 = await httpClient.GetAsync("/api/currency/");
+
+        responseGet2.EnsureSuccessStatusCode();
+        var currenciesJson2 = await responseGet2.Content.ReadAsStringAsync();
+        var currencies2 = JsonSerializer.Deserialize<IEnumerable<CurrencyDTO>>(currenciesJson2, jsonSerializerOptions);
+
+        Assert.NotNull(currencies2);
+        Assert.Equal(3, currencies2.Count());
     }
 
     [Fact]

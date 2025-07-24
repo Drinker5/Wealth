@@ -69,6 +69,7 @@
     <File Path="InstrumentManagement\src\Directory.Build.props" />
   </Folder>
   <Folder Name="/InstrumentManagement/tests/">
+    <Project Path="InstrumentManagement/tests/Wealth.InstrumentManagement.API.Tests/Wealth.InstrumentManagement.API.Tests.csproj" />
     <Project Path="InstrumentManagement\tests\Wealth.InstrumentManagement.Application.Tests\Wealth.InstrumentManagement.Application.Tests.csproj" />
     <Project Path="InstrumentManagement\tests\Wealth.InstrumentManagement.Domain.Tests\Wealth.InstrumentManagement.Domain.Tests.csproj" />
     <File Path="InstrumentManagement\tests\Directory.Build.props" />

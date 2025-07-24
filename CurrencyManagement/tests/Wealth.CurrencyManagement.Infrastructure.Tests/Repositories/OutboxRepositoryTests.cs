@@ -21,6 +21,8 @@ public class DeferredOperationRepositoryTests
             .Options;
         context = new WealthDbContext(options);
         context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+
         repo = new DeferredOperationRepository(context);
         Clock.SetCustomDate(now);
     }
