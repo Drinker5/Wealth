@@ -86,6 +86,7 @@
     <File Path="PortfolioManagement\src\Directory.Build.props" />
   </Folder>
   <Folder Name="/PortfolioManagement/tests/">
+    <Project Path="PortfolioManagement/tests/Wealth.PortfolioManagement.API.Tests/Wealth.PortfolioManagement.API.Tests.csproj" />
     <Project Path="PortfolioManagement\tests\Wealth.PortfolioManagement.Application.Tests\Wealth.PortfolioManagement.Application.Tests.csproj" />
     <Project Path="PortfolioManagement\tests\Wealth.PortfolioManagement.Domain.Tests\Wealth.PortfolioManagement.Domain.Tests.csproj" />
     <Project Path="PortfolioManagement\tests\Wealth.PortfolioManagement.Infrastructure.Tests\Wealth.PortfolioManagement.Infrastructure.Tests.csproj" />

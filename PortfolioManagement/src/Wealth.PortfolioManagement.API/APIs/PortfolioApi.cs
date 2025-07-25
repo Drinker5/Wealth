@@ -21,21 +21,22 @@ public static class PortfolioApi
         return api;
     }
 
-    private static async Task<Ok> BuyAsset(
-        int portfolioId,
-        [FromBody] BuyStockRequest request,
+    public static async Task<Results<Ok<IEnumerable<PortfolioDTO>>, ProblemHttpResult>> GetPortfolios(
         [AsParameters] PortfolioServices services)
     {
-        await services.Mediator.Command(new BuyAsset(portfolioId, request.InstrumentId, request.TotalPrice, request.Quantity));
-        return TypedResults.Ok();
+        var results = await services.Mediator.Query(new GetPortfolios());
+        return TypedResults.Ok(results);
     }
 
-    private static async Task<Ok> DepositCurrency(
-        DepositCurrencyRequest request,
+    public static async Task<Results<Ok<PortfolioDTO>, NotFound>> GetPortfolio(
+        int portfolioId,
         [AsParameters] PortfolioServices services)
     {
-        await services.Mediator.Command(new AddCurrency(request.PortfolioId, request.Money));
-        return TypedResults.Ok();
+        var result = await services.Mediator.Query(new GetPortfolio(portfolioId));
+        if (result == null)
+            return TypedResults.NotFound();
+
+        return TypedResults.Ok(result);
     }
 
     public static async Task<Results<Ok<int>, BadRequest<string>>> CreatePortfolio(
@@ -53,22 +54,21 @@ public static class PortfolioApi
         }
     }
 
-    public static async Task<Results<Ok<IEnumerable<PortfolioDTO>>, ProblemHttpResult>> GetPortfolios(
+    private static async Task<Ok> DepositCurrency(
+        DepositCurrencyRequest request,
         [AsParameters] PortfolioServices services)
     {
-        var results = await services.Mediator.Query(new GetPortfolios());
-        return TypedResults.Ok(results);
+        await services.Mediator.Command(new AddCurrency(request.PortfolioId, request.Money));
+        return TypedResults.Ok();
     }
 
-    public static async Task<Results<Ok<PortfolioDTO>, NotFound>> GetPortfolio(
+    private static async Task<Ok> BuyAsset(
         int portfolioId,
+        [FromBody] BuyStockRequest request,
         [AsParameters] PortfolioServices services)
     {
-        var result = await services.Mediator.Query(new GetPortfolio(portfolioId));
-        if (result == null)
-            return TypedResults.NotFound();
-
-        return TypedResults.Ok(result);
+        await services.Mediator.Command(new BuyAsset(portfolioId, request.InstrumentId, request.TotalPrice, request.Quantity));
+        return TypedResults.Ok();
     }
 }
 
