@@ -40,6 +40,8 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
         {
             modelBuilder.Entity<Deposit>().Property(i => i.Id)
                 .HasValueGenerator<DepositIdInMemoryValueGenerator>();
+
+            modelBuilder.Entity<Deposit>().Ignore(i => i.Investment);
         }
 
         base.OnModelCreating(modelBuilder);

@@ -8,7 +8,6 @@ namespace Wealth.DepositManagement.Domain.Tests.Deposits;
 [TestSubject(typeof(Deposit))]
 public class DepositTests
 {
-    private readonly DepositId id = 12;
     private readonly string name = "foo";
     private Yield yield = new Yield(23.42m);
     private CurrencyId currencyId = "FOO";
@@ -16,26 +15,12 @@ public class DepositTests
 
     public DepositTests()
     {
-        deposit = Deposit.Create(id, name, yield, currencyId);
+        deposit = Deposit.Create(name, yield, currencyId);
     }
 
     [Fact]
     public void WhenCreate()
     {
-        Assert.Equal(id, deposit.Id);
-        Assert.Equal(name, deposit.Name);
-        Assert.Equal(yield, deposit.Yield);
-        Assert.Equal(0, deposit.Investment.Amount);
-        Assert.Equal(currencyId, deposit.Investment.CurrencyId);
-        Assert.Equal(0, deposit.InterestPerYear.Amount);
-        Assert.Equal(currencyId, deposit.InterestPerYear.CurrencyId);
-    }
-
-    [Fact]
-    public void WhenCreateWithoutId()
-    {
-        var deposit = Deposit.Create(name, yield, currencyId);
-
         Assert.Equal(0, deposit.Id.Id);
         Assert.Equal(name, deposit.Name);
         Assert.Equal(yield, deposit.Yield);
@@ -54,7 +39,6 @@ public class DepositTests
 
         Assert.Equal(newName, deposit.Name);
         var ev = deposit.HasEvent<DepositRenamed>();
-        Assert.Equal(id, ev.DepositId);
         Assert.Equal(newName, ev.Name);
     }
 
@@ -67,7 +51,6 @@ public class DepositTests
 
         Assert.Equal(newYield, deposit.Yield);
         var ev = deposit.HasEvent<DepositYieldChanged>();
-        Assert.Equal(id, ev.DepositId);
         Assert.Equal(newYield, ev.Yield);
     }
 
@@ -80,7 +63,6 @@ public class DepositTests
 
         Assert.Equal(investment, deposit.Investment);
         var ev = deposit.HasEvent<DepositInvested>();
-        Assert.Equal(id, ev.DepositId);
         Assert.Equal(investment, ev.Investment);
     }
 
@@ -114,7 +96,6 @@ public class DepositTests
         
         Assert.Equal(1, deposit.Investment.Amount);
         var ev = deposit.HasEvent<DepositWithdrew>();
-        Assert.Equal(id, ev.DepositId);
         Assert.Equal(withdraw, ev.Withdraw);
     }
     

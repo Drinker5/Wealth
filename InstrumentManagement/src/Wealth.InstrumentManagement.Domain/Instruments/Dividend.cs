@@ -3,8 +3,10 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.InstrumentManagement.Domain.Instruments;
 
-public record Dividend : IValueObject
+public record struct Dividend : IValueObject
 {
+    public static Dividend Empty = new Dividend(Money.Empty);
+    
     public Money ValuePerYear { get; init; }
 
     public Dividend(Money ValuePerYear)

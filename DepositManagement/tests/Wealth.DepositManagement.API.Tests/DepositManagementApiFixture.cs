@@ -3,25 +3,25 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Testcontainers.PostgreSql;
 
-namespace Wealth.CurrencyManagement.API.Tests;
+namespace Wealth.DepositManagement.API.Tests;
 
-public sealed class CurrencyManagementApiFixture : WebApplicationFactory<Program>, IAsyncLifetime
+public sealed class DepositManagementApiFixture : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly IHost app;
 
     private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder()
         .WithImage("postgres")
-        .WithDatabase("CurrencyManagement")
+        .WithDatabase("DepositManagement")
         .WithUsername("postgres")
         .WithPassword("postgres")
         .Build();
 
     private string postgresConnectionString;
 
-    public CurrencyManagementApiFixture()
+    public DepositManagementApiFixture()
     {
         var appBuilder = new HostApplicationBuilder();
-
+        
         app = appBuilder.Build();
     }
 
@@ -31,10 +31,15 @@ public sealed class CurrencyManagementApiFixture : WebApplicationFactory<Program
         {
             var data = new Dictionary<string, string>
             {
-                { $"ConnectionStrings:CurrencyManagement", postgresConnectionString }
+                { "ConnectionStrings:DepositManagement", postgresConnectionString },
             };
             config.AddInMemoryCollection(data!);
         });
+
+        builder.ConfigureServices(services =>
+        {
+        });
+        
         return base.CreateHost(builder);
     }
 
@@ -50,7 +55,7 @@ public sealed class CurrencyManagementApiFixture : WebApplicationFactory<Program
         {
             app.Dispose();
         }
-
+        
         await postgresContainer.StopAsync();
     }
 

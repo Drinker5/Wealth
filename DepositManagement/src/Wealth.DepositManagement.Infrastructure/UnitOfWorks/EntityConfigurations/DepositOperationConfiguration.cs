@@ -23,7 +23,7 @@ internal class DepositOperationConfiguration : IEntityTypeConfiguration<DepositO
             .HasConversion<DepositIdConverter>()
             .IsRequired();
 
-        builder.OwnsOne(y => y.Money, z =>
+        builder.ComplexProperty(y => y.Money, z =>
         {
             z.Property(i => i.CurrencyId).IsRequired();
             z.Property(i => i.Amount).IsRequired();

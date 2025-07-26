@@ -8,6 +8,8 @@ option csharp_namespace = "Wealth.InstrumentManagement";
 
 service InstrumentsService {
   rpc GetInstrument (GetInstrumentRequest) returns (GetInstrumentResponse);
+  rpc CreateStock (CreateStockRequest) returns (CreateStockResponse);
+  rpc CreateBond (CreateBondRequest) returns (CreateBondResponse);
   rpc ChangePrice (ChangePriceRequest) returns (ChangePriceResponse);
 }
 
@@ -20,10 +22,29 @@ message GetInstrumentResponse {
   InstrumentTypeProto type = 2;
   string name = 3;
   MoneyProto price = 4;
+  ISINProto isin = 5;
   oneof instrument {
-    StockInstrumentProto stock_info = 5;
-    BondInstrumentProto bond_info = 6;
+    StockInstrumentProto stock_info = 17;
+    BondInstrumentProto bond_info = 18;
   }
+}
+
+message CreateStockRequest {
+  string name = 1;
+  ISINProto isin = 2;
+}
+
+message CreateStockResponse {
+  InstrumentIdProto id = 1;
+}
+
+message CreateBondRequest {
+  string name = 1;
+  ISINProto isin = 2;
+}
+
+message CreateBondResponse {
+  InstrumentIdProto id = 1;
 }
 
 message StockInstrumentProto {

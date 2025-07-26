@@ -18,4 +18,9 @@ public partial class DepositIdProto
     {
         return new DepositIdProto(value.Id);
     }
+    
+    public static implicit operator DepositIdProto(int value)
+    {
+        return new DepositIdProto(value);
+    }
 }

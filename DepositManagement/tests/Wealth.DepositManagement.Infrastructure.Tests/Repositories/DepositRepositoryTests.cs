@@ -36,7 +36,7 @@ public class DepositRepositoryTests
     }
 
     [Fact]
-    public async Task METHOD()
+    public async Task WhenGetNotExistedDeposit()
     {
         var result = await repository.GetDeposit(4);
 
@@ -71,7 +71,7 @@ public class DepositRepositoryTests
         Assert.NotNull(deposit);
         Assert.Equal(100m, deposit.Investment.Amount);
     }
-    
+
     [Fact]
     public async Task WhenWithdraw()
     {

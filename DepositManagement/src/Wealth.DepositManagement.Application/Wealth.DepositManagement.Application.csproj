@@ -13,7 +13,7 @@
   </ItemGroup>
   <ItemGroup>
     <Protobuf Include="Common.proto" GrpcServices="Client" />
-    <Protobuf Include="DepositsService.proto" GrpcServices="Server" />
+    <Protobuf Include="DepositsService.proto" GrpcServices="Client,Server" />
     <Protobuf Include="Events.proto" GrpcServices="Client" />
   </ItemGroup>
 </Project>

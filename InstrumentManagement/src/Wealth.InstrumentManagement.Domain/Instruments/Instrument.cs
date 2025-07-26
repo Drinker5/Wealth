@@ -12,7 +12,7 @@ public abstract class Instrument : AggregateRoot
 
     public ISIN ISIN { get; set; }
 
-    public Money Price { get; set; }
+    public Money Price { get; set; } = Money.Empty;
 
     public InstrumentType Type { get; protected init; }
 

@@ -18,4 +18,9 @@ public partial class CurrencyIdProto
     {
         return new CurrencyIdProto(value.Code);
     }
+    
+    public static implicit operator CurrencyIdProto(string value)
+    {
+        return new CurrencyIdProto(value);
+    }
 }

@@ -10,10 +10,7 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
     public async Task SeedAsync(WealthDbContext context)
     {
         if (!context.Portfolios.Any())
-        {
-            foreach (var portfolio in GetPredefinedPortfolios())
-                await context.Portfolios.AddAsync(portfolio);
-        }
+            await context.Portfolios.AddRangeAsync(GetPredefinedPortfolios());
 
         await context.SaveChangesAsync();
     }

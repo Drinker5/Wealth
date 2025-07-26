@@ -22,11 +22,11 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
 
     private static IEnumerable<Deposit> GetPredefinedDeposits()
     {
-        var foo = Deposit.Create(1, "Foo", 0.20m, "RUB");
+        var foo = Deposit.Create("Foo", 0.20m, "RUB");
         foo.Invest(new Money("RUB", 1000));
         yield return foo;
         
-        var bar = Deposit.Create(2, "Bar", 0.05m, "USD");
+        var bar = Deposit.Create("Bar", 0.05m, "USD");
         bar.Invest(new Money("USD", 500));
         bar.Withdraw(new Money("USD", 100));
         

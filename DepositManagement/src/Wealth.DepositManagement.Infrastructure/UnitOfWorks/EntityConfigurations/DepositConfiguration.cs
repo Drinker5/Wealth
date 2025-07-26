@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Wealth.BuildingBlocks.Infrastructure.EFCore.Converters;
 using Wealth.DepositManagement.Domain.DepositOperations;
 using Wealth.DepositManagement.Domain.Deposits;
 using Wealth.DepositManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
@@ -23,10 +24,10 @@ internal class DepositConfiguration : IEntityTypeConfiguration<Deposit>
             .HasConversion<YieldConverter>()
             .IsRequired();
 
-        builder.OwnsOne(y => y.Investment, z =>
+        builder.ComplexProperty(x => x.Investment, y =>
         {
-            z.Property(i => i.CurrencyId).IsRequired();
-            z.Property(i => i.Amount).IsRequired();
+            y.Property(i => i.CurrencyId).IsRequired();
+            y.Property(i => i.Amount).IsRequired();
         });
 
         builder.Ignore(x => x.InterestPerYear);

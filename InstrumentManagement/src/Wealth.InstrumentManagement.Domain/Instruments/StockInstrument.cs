@@ -11,7 +11,7 @@ public class StockInstrument : Instrument
         Type = InstrumentType.Stock;
     }
 
-    public Dividend Dividend { get; set; }
+    public Dividend Dividend { get; set; } = Dividend.Empty;
 
     public int LotSize { get; set; } = 1;
 

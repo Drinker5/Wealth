@@ -1,11 +1,11 @@
 namespace Wealth.BuildingBlocks.Domain.Common;
 
-public record struct CurrencyId : IIdentity
+public readonly record struct CurrencyId : IIdentity
 {
     /// <summary>
     /// ISO 4217
     /// </summary>
-    public string Code { get; init; }
+    public string Code { get; init; /* init for serialization */ } = string.Empty;
 
     /// <summary>
     /// </summary>

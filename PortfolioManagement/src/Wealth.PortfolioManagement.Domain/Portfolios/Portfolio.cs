@@ -16,13 +16,11 @@ public class Portfolio : AggregateRoot
     {
     }
 
-    public static Portfolio Create(string name) => Create(PortfolioId.New(), name);
-
-    public static Portfolio Create(PortfolioId id, string name)
-    {
+    public static Portfolio Create(string name)
+    { 
         var portfolio = new Portfolio
         {
-            Id = id,
+            Id = PortfolioId.New(),
             Name = name
         };
 

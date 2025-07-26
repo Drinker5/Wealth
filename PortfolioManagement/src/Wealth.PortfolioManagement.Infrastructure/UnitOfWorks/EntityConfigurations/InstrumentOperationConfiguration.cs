@@ -57,7 +57,7 @@ internal class CashOperationConfiguration : IEntityTypeConfiguration<CashOperati
             .IsRequired();
         builder.Property(x => x.Type);
 
-        builder.OwnsOne(y => y.Money, z =>
+        builder.ComplexProperty(y => y.Money, z =>
         {
             z.Property(i => i.CurrencyId);
             z.Property(i => i.Amount);
@@ -78,7 +78,7 @@ internal class TradeOperationConfiguration : IEntityTypeConfiguration<TradeOpera
         builder.Property(x => x.Quantity);
         builder.Property(x => x.Type);
 
-        builder.OwnsOne(y => y.Money, z =>
+        builder.ComplexProperty(y => y.Money, z =>
         {
             z.Property(i => i.CurrencyId);
             z.Property(i => i.Amount);

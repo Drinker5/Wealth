@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
 using Testcontainers.PostgreSql;
+using Wealth.InstrumentManagement.Application.Services;
+using Wealth.InstrumentManagement.Infrastructure.Services;
 using Xunit;
 
 namespace Wealth.InstrumentManagement.API.Tests;
@@ -10,6 +13,7 @@ namespace Wealth.InstrumentManagement.API.Tests;
 public sealed class InstrumentManagementApiFixture : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly IHost app;
+    public ICurrencyService CurrencyService = A.Fake<ICurrencyService>();
 
     private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder()
         .WithImage("postgres")
@@ -38,6 +42,11 @@ public sealed class InstrumentManagementApiFixture : WebApplicationFactory<Progr
                 { "ConnectionStrings:Master", masterConnectionString },
             };
             config.AddInMemoryCollection(data!);
+        });
+
+        builder.ConfigureServices(services =>
+        {
+            services.AddSingleton(CurrencyService);
         });
         return base.CreateHost(builder);
     }

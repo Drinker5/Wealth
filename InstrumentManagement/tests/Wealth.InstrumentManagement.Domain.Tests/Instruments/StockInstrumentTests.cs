@@ -31,7 +31,7 @@ public class StockInstrumentTests
             Assert.That(instrument.Id, Is.Not.Default);
             Assert.That(instrument.Name, Is.EqualTo(name));
             Assert.That(instrument.ISIN, Is.EqualTo(isin));
-            Assert.That(instrument.Dividend, Is.Null);
+            Assert.That(instrument.Dividend, Is.EqualTo(Dividend.Empty));
             Assert.That(instrument.Type, Is.EqualTo(InstrumentType.Stock));
             Assert.That(instrument.LotSize, Is.EqualTo(1));
         }

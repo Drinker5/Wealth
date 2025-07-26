@@ -19,14 +19,9 @@ public class Deposit : AggregateRoot
 
     public static Deposit Create(string name, Yield yield, CurrencyId currency)
     {
-        return Create(DepositId.New(), name, yield, currency);
-    }
-
-    public static Deposit Create(DepositId id, string name, Yield yield, CurrencyId currency)
-    {
         var deposit = new Deposit
         {
-            Id = id,
+            Id = DepositId.New(),
             Name = name,
             Yield = yield,
             Investment = new Money(currency, 0m),
