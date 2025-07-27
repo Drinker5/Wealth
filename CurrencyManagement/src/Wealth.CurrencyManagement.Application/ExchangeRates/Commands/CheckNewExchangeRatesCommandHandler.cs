@@ -44,7 +44,7 @@ public class CheckNewExchangeRatesCommandHandler : ICommandHandler<CheckNewExcha
             var provideNewExchangeRateCommand = new ProvideNewExchangeRateCommand(request.FromCurrency, request.ToCurrency, d);
             await scheduler.ScheduleAsync(provideNewExchangeRateCommand, whenToExecute, cancellationToken);
             scheduled++;
-            if (scheduled > 30) // schedule only 30 per command
+            if (scheduled >= 30) // schedule only 30 per command
                 break;
         }
     }

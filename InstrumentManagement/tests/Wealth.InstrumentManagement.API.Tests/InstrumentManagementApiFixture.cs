@@ -5,7 +5,6 @@ using Microsoft.Extensions.Hosting;
 using Npgsql;
 using Testcontainers.PostgreSql;
 using Wealth.InstrumentManagement.Application.Services;
-using Wealth.InstrumentManagement.Infrastructure.Services;
 using Xunit;
 
 namespace Wealth.InstrumentManagement.API.Tests;

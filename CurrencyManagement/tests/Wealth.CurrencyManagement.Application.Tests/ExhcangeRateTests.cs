@@ -3,7 +3,6 @@ using Wealth.CurrencyManagement.Application.ExchangeRates.Commands;
 using Wealth.CurrencyManagement.Application.ExchangeRates.Queries;
 using Wealth.CurrencyManagement.Application.Tests.TestHelpers;
 using Wealth.CurrencyManagement.Domain.Repositories;
-using Money = Wealth.CurrencyManagement.Domain.ExchangeRates.Money;
 
 namespace Wealth.CurrencyManagement.Application.Tests;
 

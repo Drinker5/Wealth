@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Wealth.BuildingBlocks.Infrastructure.EFCore.Converters;
 using Wealth.DepositManagement.Domain.DepositOperations;
 using Wealth.DepositManagement.Domain.Deposits;
 using Wealth.DepositManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;

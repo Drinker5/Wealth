@@ -6,12 +6,12 @@ using Wealth.CurrencyManagement.Application.Currencies.Queries;
 
 namespace Wealth.CurrencyManagement.API.Tests;
 
-public sealed class CurrencyManagementApiTests : IClassFixture<CurrencyManagementApiFixture>
+public sealed class CurrencyControllersTests : IClassFixture<CurrencyManagementApiFixture>
 {
     private readonly JsonSerializerOptions jsonSerializerOptions = new(JsonSerializerDefaults.Web);
     private readonly HttpClient httpClient;
 
-    public CurrencyManagementApiTests(CurrencyManagementApiFixture fixture)
+    public CurrencyControllersTests(CurrencyManagementApiFixture fixture)
     {
         WebApplicationFactory<Program> webApplicationFactory = fixture;
         httpClient = webApplicationFactory.CreateDefaultClient();

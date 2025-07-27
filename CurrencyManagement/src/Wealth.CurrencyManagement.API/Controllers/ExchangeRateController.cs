@@ -4,7 +4,6 @@ using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.CurrencyManagement.API.Controllers.Requests;
 using Wealth.CurrencyManagement.Application.ExchangeRates.Commands;
 using Wealth.CurrencyManagement.Application.ExchangeRates.Queries;
-using Money = Wealth.CurrencyManagement.Domain.ExchangeRates.Money;
 
 namespace Wealth.CurrencyManagement.API.Controllers;
 

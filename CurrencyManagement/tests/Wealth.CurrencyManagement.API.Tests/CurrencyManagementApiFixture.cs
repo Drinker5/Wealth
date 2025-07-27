@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Testcontainers.PostgreSql;
+using Wealth.CurrencyManagement.Application.Abstractions;
 
 namespace Wealth.CurrencyManagement.API.Tests;
 
 public sealed class CurrencyManagementApiFixture : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly IHost app;
+    public ICommandsScheduler CommandsScheduler = Substitute.For<ICommandsScheduler>();
 
     private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder()
         .WithImage("postgres")
@@ -35,6 +38,12 @@ public sealed class CurrencyManagementApiFixture : WebApplicationFactory<Program
             };
             config.AddInMemoryCollection(data!);
         });
+
+        builder.ConfigureServices(services =>
+        {
+            services.AddSingleton(CommandsScheduler);
+        });
+
         return base.CreateHost(builder);
     }
 
