@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Testcontainers.PostgreSql;
-using Wealth.BuildingBlocks.Application.Services;
+using Wealth.PortfolioManagement.Application.Services;
 
 namespace Wealth.PortfolioManagement.API.Tests;
 
@@ -51,15 +51,7 @@ public sealed class PortfolioManagementApiFixture : WebApplicationFactory<Progra
     {
         await base.DisposeAsync();
         await app.StopAsync();
-        if (app is IAsyncDisposable asyncDisposable)
-        {
-            await asyncDisposable.DisposeAsync().ConfigureAwait(false);
-        }
-        else
-        {
-            app.Dispose();
-        }
-        
+        app.Dispose();
         await postgresContainer.StopAsync();
     }
 

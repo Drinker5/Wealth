@@ -1,4 +1,4 @@
-using Wealth.BuildingBlocks.Application.Services;
+using Wealth.Aggregation.Application.Services;
 using Wealth.BuildingBlocks.Infrastructure;
 using Wealth.InstrumentManagement;
 

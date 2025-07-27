@@ -99,4 +99,19 @@
     <File Path="docker-compose.yml" />
     <File Path="domain.plantuml" />
   </Folder>
+  <Folder Name="/WalletManagement/">
+    <File Path="WalletManagement\.dockerignore" />
+    <File Path="WalletManagement\Dockerfile" />
+  </Folder>
+  <Folder Name="/WalletManagement/src/">
+    <Project Path="WalletManagement/src/Wealth.WalletManagement.API/Wealth.WalletManagement.API.csproj" />
+    <Project Path="WalletManagement/src/Wealth.WalletManagement.Application/Wealth.WalletManagement.Application.csproj" />
+    <Project Path="WalletManagement/src/Wealth.WalletManagement.Domain/Wealth.WalletManagement.Domain.csproj" />
+    <Project Path="WalletManagement/src/Wealth.WalletManagement.Infrastructure/Wealth.WalletManagement.Infrastructure.csproj" />
+    <File Path="WalletManagement\src\Directory.Build.props" />
+  </Folder>
+  <Folder Name="/WalletManagement/tests/">
+    <Project Path="WalletManagement/tests/Wealth.WalletManagement.Domain.Tests/Wealth.WalletManagement.Domain.Tests.csproj" />
+    <File Path="WalletManagement\tests\Directory.Build.props" />
+  </Folder>
 </Solution>

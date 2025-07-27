@@ -141,30 +141,35 @@ package WalletManagement {
     abstract Wallet {
         Id
         Name
-        Money
-        Operations
+        Currencies
         --
-        Add
-        Change(NewMoney)
+        Create
+        Insert(Money)
+        Eject(Money)
     }
 
+    object WalletCurrency {
+        CurrencyId
+        Amount
+    }
+    
     entity WalletOperation {
         Id
         WalletId
         Money
-        Type : Income, Expense
+        Type : Insert, Eject
         Date
     }
 
     interface API {
         Wallets
-        AddWallet(CurrencyId)
-        ChangeMoney(WalletId, Money)
-        AddExpense(WalletId, Money)
-        AddIncome(WalletId, Money)
+        --
+        AddWallet(Name)
+        Insert(WalletId, Money)
+        Eject(WalletId, Money)
     }
 
-    Wallet --> WalletOperation
+    Wallet --> WalletCurrency
 }
 
 package StrategyTracking {

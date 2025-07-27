@@ -1,5 +1,5 @@
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Application.Services;
+using Wealth.PortfolioManagement.Application.Services;
 using Wealth.PortfolioManagement.Domain.Portfolios.Events;
 
 namespace Wealth.PortfolioManagement.Application.Portfolios.Events.AssetBoughtHandlers;

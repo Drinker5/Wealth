@@ -2,9 +2,9 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Wealth.BuildingBlocks.Application.Services;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Application.Portfolios.Queries;
+using Wealth.PortfolioManagement.Application.Services;
 using Assert = Xunit.Assert;
 
 namespace Wealth.PortfolioManagement.API.Tests;

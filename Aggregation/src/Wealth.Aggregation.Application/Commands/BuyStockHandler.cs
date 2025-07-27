@@ -1,6 +1,6 @@
+using Wealth.Aggregation.Application.Services;
 using Wealth.Aggregation.Domain;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Application.Services;
 using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.Aggregation.Application.Commands;

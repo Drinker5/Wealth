@@ -1,6 +1,6 @@
 using Wealth.BuildingBlocks.Domain.Common;
 
-namespace Wealth.BuildingBlocks.Application.Services;
+namespace Wealth.PortfolioManagement.Application.Services;
 
 public interface IInstrumentService
 {

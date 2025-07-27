@@ -1,6 +1,6 @@
-using Wealth.BuildingBlocks.Application.Services;
 using Wealth.BuildingBlocks.Infrastructure;
 using Wealth.InstrumentManagement;
+using Wealth.PortfolioManagement.Application.Services;
 
 namespace Wealth.PortfolioManagement.API.Services;
 
