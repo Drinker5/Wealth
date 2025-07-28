@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+import "Common.proto";
+
+package wealth;
+
+option csharp_namespace = "Wealth.WalletManagement";
+
+message WalletMoneyInsertedDomainEvent {
+  WalletIdProto wallet_id = 1;
+  MoneyProto money = 2;
+}
+
+message WalletMoneyEjectedDomainEvent {
+  WalletIdProto wallet_id = 1;
+  MoneyProto money = 2;
+}

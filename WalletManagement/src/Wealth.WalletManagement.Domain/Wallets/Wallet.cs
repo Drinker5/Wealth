@@ -42,6 +42,14 @@ public class Wallet : AggregateRoot
         Apply(new WalletMoneyEjected(Id, money));
     }
 
+    public void Rename(string newName)
+    {
+        if (Name == newName)
+            return;
+
+        Apply(new WalletRenamed(Id, newName));
+    }
+    
     private void When(WalletCreated @event)
     {
         Id = @event.Wallet.Id;
@@ -56,6 +64,11 @@ public class Wallet : AggregateRoot
     private void When(WalletMoneyEjected @event)
     {
         ChangeCurrencyAmount(-@event.Money);
+    }
+
+    private void When(WalletRenamed @event)
+    {
+        Name = @event.NewName;
     }
     
     private void ChangeCurrencyAmount(Money money)

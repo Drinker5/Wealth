@@ -3,7 +3,7 @@ using Wealth.WalletManagement.Domain.Wallets;
 
 namespace Wealth.WalletManagement.Domain.WalletOperations;
 
-public abstract class WalletOperation
+public class WalletOperation
 {
     public Guid Id { get; set; }
     public DateTimeOffset Date { get; set; }

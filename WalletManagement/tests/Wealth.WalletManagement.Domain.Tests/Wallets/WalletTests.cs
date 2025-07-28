@@ -68,4 +68,17 @@ public class WalletTests
 
         Assert.Empty(wallet.Currencies);
     }
+
+    [Fact]
+    public void WhenRenamed()
+    {
+        var newName = "Bar";
+        
+        wallet.Rename(newName);
+        
+        Assert.Equal(newName, wallet.Name);
+        var ev = wallet.HasEvent<WalletRenamed>();
+        Assert.Equal(wallet.Id, ev.WalletId);
+        Assert.Equal(newName, ev.NewName);
+    }
 }
