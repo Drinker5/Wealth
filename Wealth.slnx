@@ -111,8 +111,10 @@
     <File Path="WalletManagement\src\Directory.Build.props" />
   </Folder>
   <Folder Name="/WalletManagement/tests/">
+    <Project Path="WalletManagement/tests/Wealth.WalletManagement.API.Tests/Wealth.WalletManagement.API.Tests.csproj" />
     <Project Path="WalletManagement/tests/Wealth.WalletManagement.Application.Tests/Wealth.WalletManagement.Application.Tests.csproj" />
     <Project Path="WalletManagement/tests/Wealth.WalletManagement.Domain.Tests/Wealth.WalletManagement.Domain.Tests.csproj" />
     <File Path="WalletManagement\tests\Directory.Build.props" />
+    <Project Path="WalletManagement/tests/Wealth.WalletManagement.Insfrastructure.Tests/Wealth.WalletManagement.Insfrastructure.Tests.csproj" />
   </Folder>
 </Solution>

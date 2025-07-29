@@ -68,6 +68,18 @@ public class WalletTests
 
         Assert.Empty(wallet.Currencies);
     }
+    
+    [Fact]
+    public void WhenEjectNotExistedMoney()
+    {
+        var money = new Money("FOO", 10);
+        
+        wallet.Eject(money);
+
+        var currency = Assert.Single(wallet.Currencies);
+        Assert.Equal(money.CurrencyId, currency.CurrencyId);
+        Assert.Equal(-money.Amount, currency.Amount);
+    }
 
     [Fact]
     public void WhenRenamed()

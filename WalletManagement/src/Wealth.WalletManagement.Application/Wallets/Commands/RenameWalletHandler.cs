@@ -7,6 +7,6 @@ public class RenameWalletHandler(IWalletRepository repository) : ICommandHandler
 {
     public Task Handle(RenameWallet request, CancellationToken cancellationToken)
     {
-        return repository.Rename(request.NewName);
+        return repository.Rename(request.WalletId, request.NewName);
     }
 }

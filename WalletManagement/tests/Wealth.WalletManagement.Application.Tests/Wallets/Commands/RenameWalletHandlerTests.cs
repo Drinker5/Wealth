@@ -17,10 +17,10 @@ public class RenameWalletHandlerTests
     [Fact]
     public async Task WhenHandle()
     {
-        var command = new RenameWallet("foo");
+        var command = new RenameWallet(3, "foo");
 
         await handler.Handle(command, CancellationToken.None);
 
-        walletRepositoryMock.Verify(i => i.Rename(command.NewName), Times.Once);
+        walletRepositoryMock.Verify(i => i.Rename(command.WalletId, command.NewName), Times.Once);
     }
 }

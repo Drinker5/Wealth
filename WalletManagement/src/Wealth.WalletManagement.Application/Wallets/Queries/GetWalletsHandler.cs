@@ -1,13 +1,13 @@
 using Wealth.BuildingBlocks.Application;
 using Wealth.WalletManagement.Domain.Repositories;
-using Wealth.WalletManagement.Domain.Wallets;
 
 namespace Wealth.WalletManagement.Application.Wallets.Queries;
 
-public class GetWalletsHandler(IWalletRepository repository) : IQueryHandler<GetWallets, IReadOnlyCollection<Wallet>>
+public class GetWalletsHandler(IWalletRepository repository) : IQueryHandler<GetWallets, IEnumerable<WalletDTO>>
 {
-    public Task<IReadOnlyCollection<Wallet>> Handle(GetWallets request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<WalletDTO>> Handle(GetWallets request, CancellationToken cancellationToken)
     {
-        return repository.GetWallets();
+        var wallets = await repository.GetWallets();
+        return wallets.Select(WalletDTO.ToDTO);
     }
 }
