@@ -132,7 +132,7 @@
     <Project Path="WalletManagement/tests/Wealth.WalletManagement.API.Tests/Wealth.WalletManagement.API.Tests.csproj" />
     <Project Path="WalletManagement/tests/Wealth.WalletManagement.Application.Tests/Wealth.WalletManagement.Application.Tests.csproj" />
     <Project Path="WalletManagement/tests/Wealth.WalletManagement.Domain.Tests/Wealth.WalletManagement.Domain.Tests.csproj" />
+    <Project Path="WalletManagement\tests\Wealth.WalletManagement.Infrastructure.Tests\Wealth.WalletManagement.Infrastructure.Tests.csproj" />
     <File Path="WalletManagement\tests\Directory.Build.props" />
-    <Project Path="WalletManagement/tests/Wealth.WalletManagement.Insfrastructure.Tests/Wealth.WalletManagement.Insfrastructure.Tests.csproj" />
   </Folder>
 </Solution>

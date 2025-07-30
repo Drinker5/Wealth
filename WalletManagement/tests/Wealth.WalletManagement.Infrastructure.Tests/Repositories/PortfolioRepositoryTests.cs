@@ -4,7 +4,7 @@ using Wealth.WalletManagement.Domain.Wallets;
 using Wealth.WalletManagement.Infrastructure.Repositories;
 using Wealth.WalletManagement.Infrastructure.UnitOfWorks;
 
-namespace Wealth.WalletManagement.Insfrastructure.Tests.Repositories;
+namespace Wealth.WalletManagement.Infrastructure.Tests.Repositories;
 
 [TestSubject(typeof(WalletRepository))]
 public class WalletRepositoryTests
