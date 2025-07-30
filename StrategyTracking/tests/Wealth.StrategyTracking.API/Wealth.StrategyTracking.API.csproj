@@ -1,0 +1,5 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Wealth.StrategyTracking.API\Wealth.StrategyTracking.API.csproj" />
+  </ItemGroup>
+</Project>
