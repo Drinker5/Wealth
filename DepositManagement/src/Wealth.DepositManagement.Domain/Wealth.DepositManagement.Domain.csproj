@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Domain\Wealth.BuildingBlocks.Domain.csproj" />
+    <PackageReference Include="Wealth.BuildingBlocks.Domain" Version="0.0.1" />
   </ItemGroup>
 </Project>

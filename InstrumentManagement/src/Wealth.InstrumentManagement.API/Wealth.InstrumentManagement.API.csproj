@@ -6,7 +6,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.API\Wealth.BuildingBlocks.API.csproj" />
+    <PackageReference Include="Wealth.BuildingBlocks.API" Version="0.0.1" />
     <ProjectReference Include="..\Wealth.InstrumentManagement.Infrastructure\Wealth.InstrumentManagement.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

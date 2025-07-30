@@ -5,7 +5,7 @@
     <PackageReference Include="Microsoft.Extensions.ServiceDiscovery" Version="9.4.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.API\Wealth.BuildingBlocks.API.csproj" />
+    <PackageReference Include="Wealth.BuildingBlocks.API" Version="0.0.1" />
     <ProjectReference Include="..\Wealth.PortfolioManagement.Infrastructure\Wealth.PortfolioManagement.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

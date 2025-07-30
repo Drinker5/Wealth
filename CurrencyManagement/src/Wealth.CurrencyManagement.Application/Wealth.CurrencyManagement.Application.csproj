@@ -6,7 +6,7 @@
     <PackageReference Include="Polly" Version="8.6.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Application\Wealth.BuildingBlocks.Application.csproj" />
+    <PackageReference Include="Wealth.BuildingBlocks.Application" Version="0.0.1" />
     <ProjectReference Include="..\Wealth.CurrencyManagement.Domain\Wealth.CurrencyManagement.Domain.csproj" />
   </ItemGroup>
 </Project>

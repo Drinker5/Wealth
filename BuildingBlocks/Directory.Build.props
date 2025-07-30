@@ -3,5 +3,12 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>..\..\..\packages</PackageOutputPath>
+    <Version>0.0.1</Version>
+    <Authors>Gleb</Authors>
+    <Company>Wealth</Company>
+    <RepositoryUrl>https://github.com/Drinker5/Wealth</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Drinker5/Wealth</PackageProjectUrl>
   </PropertyGroup>
 </Project>

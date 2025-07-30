@@ -130,6 +130,24 @@ services:
       postgres:
         condition: service_healthy
 
+  strategy-tracking:
+    build:
+      context: ./StrategyTracking
+      dockerfile: ./Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Services__currency__http=currency-management
+      - Services__instrument__http=instrument-management
+      - ConnectionStrings__StrategyTracking=Host=postgres;Username=postgres;Password=postgres;Persist Security Info=True;Database=StrategyTracking;
+    ports:
+      - 5006:80
+    restart: on-failure
+    depends_on:
+      postgres:
+        condition: service_healthy
+        
+
   kafka:
     image: bitnami/kafka:latest
     healthcheck:

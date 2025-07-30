@@ -98,6 +98,7 @@
     <File Path=".editorconfig" />
     <File Path="docker-compose.yml" />
     <File Path="domain.plantuml" />
+    <File Path="nuget.config" />
   </Folder>
   <Folder Name="/StrategyTracking/">
     <File Path="StrategyTracking\.dockerignore" />
@@ -111,10 +112,10 @@
     <File Path="StrategyTracking\src\Directory.Build.props" />
   </Folder>
   <Folder Name="/StrategyTracking/tests/">
-    <Project Path="StrategyTracking/tests/Wealth.StrategyTracking.API/Wealth.StrategyTracking.API.csproj" />
-    <Project Path="StrategyTracking/tests/Wealth.StrategyTracking.Application/Wealth.StrategyTracking.Application.csproj" />
-    <Project Path="StrategyTracking/tests/Wealth.StrategyTracking.Domain/Wealth.StrategyTracking.Domain.csproj" />
-    <Project Path="StrategyTracking/tests/Wealth.StrategyTracking.Infrastructure/Wealth.StrategyTracking.Infrastructure.csproj" />
+    <Project Path="StrategyTracking/tests/Wealth.StrategyTracking.API.Tests/Wealth.StrategyTracking.API.Tests.csproj" />
+    <Project Path="StrategyTracking/tests/Wealth.StrategyTracking.Application.Tests/Wealth.StrategyTracking.Application.Tests.csproj" />
+    <Project Path="StrategyTracking/tests/Wealth.StrategyTracking.Domain.Tests/Wealth.StrategyTracking.Domain.Tests.csproj" />
+    <Project Path="StrategyTracking/tests/Wealth.StrategyTracking.Infrastructure.Tests/Wealth.StrategyTracking.Infrastructure.Tests.csproj" />
     <File Path="StrategyTracking\tests\Directory.Build.props" />
   </Folder>
   <Folder Name="/WalletManagement/">
