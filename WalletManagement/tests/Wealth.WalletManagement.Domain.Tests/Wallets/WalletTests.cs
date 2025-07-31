@@ -1,5 +1,5 @@
 using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.WalletManagement.Domain.Tests.TestHelpers;
+using Wealth.BuildingBlocks.Tests.TestHelpers;
 using Wealth.WalletManagement.Domain.Wallets;
 
 namespace Wealth.WalletManagement.Domain.Tests.Wallets;

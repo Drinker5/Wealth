@@ -2,4 +2,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Wealth.WalletManagement.Domain\Wealth.WalletManagement.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Wealth.BuildingBlocks.Tests" Version="0.0.1" />
+  </ItemGroup>
 </Project>

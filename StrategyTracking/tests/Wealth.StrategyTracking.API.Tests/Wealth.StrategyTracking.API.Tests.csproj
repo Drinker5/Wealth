@@ -2,4 +2,12 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Wealth.StrategyTracking.API\Wealth.StrategyTracking.API.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="9.0.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Testcontainers" Version="4.6.0" />
+    <PackageReference Include="Testcontainers.PostgreSql" Version="4.6.0" />
+  </ItemGroup>
 </Project>

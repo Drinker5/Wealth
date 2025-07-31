@@ -1,6 +1,6 @@
 namespace Wealth.BuildingBlocks.Domain.Common;
 
-public record struct InstrumentId(Guid Id) : IIdentity
+public readonly record struct InstrumentId(Guid Id) : IIdentity
 {
     public static InstrumentId New() => Guid.NewGuid();
 
