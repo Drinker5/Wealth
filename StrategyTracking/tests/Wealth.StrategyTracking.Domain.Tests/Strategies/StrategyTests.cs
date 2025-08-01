@@ -12,6 +12,7 @@ public class StrategyTests
     private readonly Strategy strategy;
     private readonly string name = "Foo";
     private readonly InstrumentId instrumentId1 = InstrumentId.New();
+
     public StrategyTests()
     {
         strategy = Strategy.Create(name);
@@ -31,9 +32,9 @@ public class StrategyTests
     public void Rename()
     {
         var newName = "bar";
-        
+
         strategy.Rename(newName);
-        
+
         Assert.Equal(newName, strategy.Name);
         var ev = strategy.HasEvent<StrategyRenamed>();
         Assert.Equal(strategy.Id, ev.StrategyId);
@@ -44,7 +45,7 @@ public class StrategyTests
     public void AddComponent()
     {
         var weight = 0.42f;
-        
+
         strategy.AddOrUpdateComponent(instrumentId1, weight);
 
         var component = Assert.Single(strategy.Components);
@@ -57,10 +58,23 @@ public class StrategyTests
     }
 
     [Fact]
+    public void RemoveComponent_AsExpected()
+    {
+        strategy.AddOrUpdateComponent(instrumentId1, 0.42f);
+
+        strategy.RemoveStrategyComponent(instrumentId1);
+
+        Assert.Empty(strategy.Components);
+        var ev = strategy.HasEvent<StrategyComponentRemoved>();
+        Assert.Equal(strategy.Id, ev.StrategyId);
+        Assert.Equal(instrumentId1, ev.InstrumentId);
+    }
+
+    [Fact]
     public void RemoveComponent_NotExisted()
     {
-        strategy.RemoveComponent(instrumentId1);
-        
+        strategy.RemoveStrategyComponent(instrumentId1);
+
         strategy.HasNoEvents<StrategyComponentRemoved>();
     }
 }

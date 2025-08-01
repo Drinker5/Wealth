@@ -8,8 +8,9 @@ public class Strategy : AggregateRoot
 {
     public StrategyId Id { get; private set; }
     public string Name { get; private set; }
-    public ICollection<StrategyComponent> Components { get; } = [];
-
+    
+    public List<StrategyComponent> Components { get; } = [];
+    
     private Strategy()
     {
     }
@@ -47,7 +48,7 @@ public class Strategy : AggregateRoot
         Apply(new StrategyComponentAdded(Id, instrumentId, weight));
     }
 
-    public void RemoveComponent(InstrumentId instrumentId)
+    public void RemoveStrategyComponent(InstrumentId instrumentId)
     {
         var component = Components.SingleOrDefault(s => s.InstrumentId == instrumentId);
         if (component != null)
@@ -80,5 +81,11 @@ public class Strategy : AggregateRoot
             InstrumentId = @event.InstrumentId,
             Weight = @event.Weight
         });
+    }
+
+    private void When(StrategyComponentRemoved @event)
+    {
+        var component = Components.Single(s => s.InstrumentId == @event.InstrumentId);
+        Components.Remove(component);
     }
 }

@@ -1,7 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.7" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Wealth.BuildingBlocks.Infrastructure.EFCore" Version="0.0.1" />
     <PackageReference Include="Wealth.BuildingBlocks.Infrastructure" Version="0.0.1" />
     <ProjectReference Include="..\Wealth.StrategyTracking.Application\Wealth.StrategyTracking.Application.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 </Project>
