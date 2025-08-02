@@ -17,5 +17,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.MapWalletApi();
+app.MapStrategiesApi();
+app.MapStrategyApi();
 app.Run();

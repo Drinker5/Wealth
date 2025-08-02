@@ -3,9 +3,9 @@ using Wealth.StrategyTracking.Application.Strategies.Queries;
 
 namespace Wealth.StrategyTracking.API.APIs;
 
-public static class StrategyTrackingApi
+public static class StrategiesApi
 {
-    public static RouteGroupBuilder MapWalletApi(this IEndpointRouteBuilder app)
+    public static RouteGroupBuilder MapStrategiesApi(this IEndpointRouteBuilder app)
     {
         var api = app.MapGroup("api/strategies");
 

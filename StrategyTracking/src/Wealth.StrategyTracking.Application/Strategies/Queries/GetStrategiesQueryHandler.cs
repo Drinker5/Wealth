@@ -1,5 +1,6 @@
 using Wealth.BuildingBlocks.Application;
 using Wealth.StrategyTracking.Domain.Repositories;
+using Wealth.StrategyTracking.Domain.Strategies;
 
 namespace Wealth.StrategyTracking.Application.Strategies.Queries;
 
@@ -8,11 +9,6 @@ public class GetStrategiesQueryHandler(IStrategyRepository repository) : IQueryH
     public async Task<IEnumerable<StrategyDTO>> Handle(GetStrategies request, CancellationToken cancellationToken)
     {
         var strategies = await repository.GetStrategies();
-        return strategies.Select(s => new StrategyDTO
-        {
-            StrategyId = s.Id,
-            Name = s.Name,
-            Components = s.Components,
-        });
+        return strategies.Select(StrategyDTO.Convert);
     }
 }

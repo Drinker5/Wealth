@@ -17,6 +17,9 @@ public class Strategy : AggregateRoot
 
     public static Strategy Create(string name)
     {
+        if (string.IsNullOrEmpty(name))
+            throw new ArgumentException("Name cannot be null or empty", nameof(name));
+
         var strategy = new Strategy
         {
             Id = StrategyId.New(),

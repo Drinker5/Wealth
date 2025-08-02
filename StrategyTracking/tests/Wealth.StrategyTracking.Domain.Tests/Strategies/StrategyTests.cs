@@ -19,13 +19,19 @@ public class StrategyTests
     }
 
     [Fact]
-    public void Create()
+    public void Create_AsExpected()
     {
         Assert.Equal(0, strategy.Id.Id);
         Assert.Equal(name, strategy.Name);
         Assert.Empty(strategy.Components);
         var ev = strategy.HasEvent<StrategyCreated>();
         Assert.Same(strategy, ev.Strategy);
+    }
+
+    [Fact]
+    public void Create_EmptyName()
+    {
+        Assert.ThrowsAny<ArgumentException>(() => Strategy.Create(string.Empty));
     }
 
     [Fact]

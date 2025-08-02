@@ -9,7 +9,7 @@ public sealed class StrategyTrackingApiFixture : WebApplicationFactory<Program>,
 
     private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder()
         .WithImage("postgres")
-        .WithDatabase("WalletManagement")
+        .WithDatabase("StrategyTracking")
         .WithUsername("postgres")
         .WithPassword("postgres")
         .Build();
@@ -29,7 +29,7 @@ public sealed class StrategyTrackingApiFixture : WebApplicationFactory<Program>,
         {
             var data = new Dictionary<string, string>
             {
-                { "ConnectionStrings:WalletManagement", postgresConnectionString },
+                { "ConnectionStrings:StrategyTracking", postgresConnectionString },
             };
             config.AddInMemoryCollection(data!);
         });
