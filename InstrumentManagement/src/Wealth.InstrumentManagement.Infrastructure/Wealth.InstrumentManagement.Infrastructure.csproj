@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <PackageReference Include="Wealth.BuildingBlocks.Infrastructure" Version="0.0.1" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" />
     <ProjectReference Include="..\Wealth.InstrumentManagement.Application\Wealth.InstrumentManagement.Application.csproj" />
   </ItemGroup>
   <ItemGroup>

@@ -34,7 +34,6 @@ public class UnitOfWorkModule : IServiceModule
         services.AddScoped<IOutboxRepository, OutboxRepository>();
         services.AddScoped<IOperationRepository, OperationRepository>();
 
-        // UnitOfWork
-        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<WealthDbContext>());
+        services.AddScoped<DbContext>(sp => sp.GetRequiredService<WealthDbContext>());
     }
 }

@@ -21,12 +21,12 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
 
     private static IEnumerable<Wallet> GetPredefinedWallets()
     {
-        var foo = Wallet.Create("Test-wallet-1");
+        var foo = Wallet.Create("Seed-wallet-1");
         foo.Insert(new Money("RUB", 13.4m));
         foo.Insert(new Money("USD", 43.5m));
         yield return foo;
         
-        var bar = Wallet.Create("Test-wallet-2");
+        var bar = Wallet.Create("Seed-wallet-2");
         bar.Insert(new Money("RUB", 23.6m));
         bar.Insert(new Money("USD", 33.7m));
         yield return bar;

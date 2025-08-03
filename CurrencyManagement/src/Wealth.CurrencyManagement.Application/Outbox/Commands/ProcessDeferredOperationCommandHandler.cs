@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Text.Json;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.CurrencyManagement.Application.Abstractions;
@@ -7,7 +8,7 @@ using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Retry;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Domain;
+using Wealth.BuildingBlocks.Application.CommandScheduler;
 using Wealth.BuildingBlocks.Domain.Utilities;
 
 namespace Wealth.CurrencyManagement.Application.Outbox.Commands;
@@ -15,7 +16,6 @@ namespace Wealth.CurrencyManagement.Application.Outbox.Commands;
 internal class ProcessDeferredOperationCommandHandler : ICommandHandler<ProcessDeferredOperationCommand>
 {
     private readonly IDeferredOperationRepository deferredOperationRepository;
-    private readonly IJsonSerializer jsonSerializer;
     private readonly ILogger<ProcessDeferredOperationCommandHandler> logger;
     private readonly IServiceProvider serviceProvider;
     private int _executedTimes;
@@ -25,13 +25,11 @@ internal class ProcessDeferredOperationCommandHandler : ICommandHandler<ProcessD
     public ProcessDeferredOperationCommandHandler(
         IDeferredOperationRepository deferredOperationRepository,
         IOptions<DeferredOperationPollingOptions> options,
-        IJsonSerializer jsonSerializer,
         ILogger<ProcessDeferredOperationCommandHandler> logger,
         IServiceProvider serviceProvider)
     {
         this.deferredOperationRepository = deferredOperationRepository;
         _pipeline = CreateResiliencePipeline(options.Value.RetryCount);
-        this.jsonSerializer = jsonSerializer;
         this.logger = logger;
         this.serviceProvider = serviceProvider;
         _executedTimes = 0;
@@ -86,7 +84,7 @@ internal class ProcessDeferredOperationCommandHandler : ICommandHandler<ProcessD
             throw new InvalidOperationException($"Could not find type '{outboxMessage.Type}'");
         }
 
-        var deserializedMessage = jsonSerializer.Deserialize(outboxMessage.Data, type);
+        var deserializedMessage = JsonSerializer.Deserialize(outboxMessage.Data, type);
         if (deserializedMessage is null)
             throw new InvalidOperationException($"Could not deserialize message '{outboxMessage.Data}'");
 
@@ -94,14 +92,7 @@ internal class ProcessDeferredOperationCommandHandler : ICommandHandler<ProcessD
 
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-        if (type.IsAssignableTo(typeof(INotification)))
-        {
-            await mediator.Publish((deserializedMessage as DomainEvent)!, cancellationToken);
-            var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-            await unitOfWork.Commit(cancellationToken);
-        }
-        else if (type.IsAssignableTo(typeof(ICommand)) ||
-                 type.IsAssignableTo(typeof(ICommand<>)))
+        if (type.IsAssignableTo(typeof(ICommand)) || type.IsAssignableTo(typeof(ICommand<>)))
         {
             await mediator.Send(deserializedMessage, cancellationToken);
         }

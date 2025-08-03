@@ -1,12 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="12.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.7" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.7" />
     <PackageReference Include="Polly" Version="8.6.2" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Wealth.BuildingBlocks.Application" Version="0.0.1" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Application\Wealth.BuildingBlocks.Application.csproj" />
     <ProjectReference Include="..\Wealth.CurrencyManagement.Domain\Wealth.CurrencyManagement.Domain.csproj" />
   </ItemGroup>
 </Project>

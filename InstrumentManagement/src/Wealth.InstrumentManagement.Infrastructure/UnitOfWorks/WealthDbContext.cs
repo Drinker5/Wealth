@@ -2,15 +2,14 @@ using System.Data;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using Wealth.BuildingBlocks.Domain;
+using Wealth.BuildingBlocks.Infrastructure.Mediation;
 
 namespace Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
-public class WealthDbContext(IConfiguration configuration) : IDisposable
+public class WealthDbContext(IConfiguration configuration) : IDisposable, IDomainEventsResolver
 {
     private IDbConnection? connection;
     private readonly List<DomainEvent> trackedEvents = [];
-
-    public IReadOnlyList<DomainEvent> TrackedEvents => trackedEvents.AsReadOnly();
 
     public IDbConnection CreateConnection()
     {
@@ -29,5 +28,12 @@ public class WealthDbContext(IConfiguration configuration) : IDisposable
     public void Dispose()
     {
         connection?.Dispose();
+    }
+
+    public IReadOnlyCollection<DomainEvent> Resolve()
+    {
+        var events = trackedEvents.ToList();
+        trackedEvents.Clear();
+        return events;
     }
 }

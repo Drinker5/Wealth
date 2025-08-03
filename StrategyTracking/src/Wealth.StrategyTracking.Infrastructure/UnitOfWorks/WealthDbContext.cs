@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.BuildingBlocks.Infrastructure;
 using Wealth.BuildingBlocks.Infrastructure.EFCore.Converters;
 using Wealth.BuildingBlocks.Infrastructure.EFCore.EntityConfigurations;
 using Wealth.StrategyTracking.Domain.Strategies;
@@ -15,12 +16,10 @@ namespace Wealth.StrategyTracking.Infrastructure.UnitOfWorks;
 /// dotnet ef migrations add --project src\Wealth.StrategyTracking.Infrastructure --startup-project .\src\Wealth.StrategyTracking.API Name
 /// dotnet ef database update --project src\Wealth.StrategyTracking.Infrastructure --startup-project .\src\Wealth.StrategyTracking.API
 /// </summary>
-public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbContext>, IUnitOfWork
+public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbContext>
 {
     public virtual DbSet<Strategy> Strategies { get; internal init; }
     public virtual DbSet<OutboxMessage> OutboxMessages { get; internal init; }
-
-    private IDbContextTransaction? transaction;
 
     public WealthDbContext()
     {
@@ -55,23 +54,5 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
     {
         configurationBuilder.Properties<InstrumentId>().HaveConversion<InstrumentIdConverter>();
         configurationBuilder.Properties<StrategyId>().HaveConversion<StrategyIdConverter>();
-    }
-
-    public async Task<IDisposable> BeginTransaction()
-    {
-        if (transaction != null)
-            return transaction;
-
-        transaction = await Database.BeginTransactionAsync();
-        return transaction;
-    }
-
-    public async Task<int> Commit(CancellationToken cancellationToken)
-    {
-        var result = await SaveChangesAsync(cancellationToken);
-        if (transaction != null)
-            await transaction.CommitAsync(cancellationToken);
-
-        return result;
     }
 }

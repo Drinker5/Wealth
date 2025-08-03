@@ -1,33 +1,32 @@
-﻿using Wealth.BuildingBlocks.Domain.Common;
+﻿using MediatR;
+using Wealth.BuildingBlocks.Application;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Domain.Instruments;
 using Wealth.InstrumentManagement.Domain.Repositories;
 using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.InstrumentManagement.Infrastructure.DbSeeding.Seeds;
 
-public class FirstSeed : IDbSeeder
+public class FirstSeed(
+    IUnitOfWork unitOfWork, 
+    IBondsRepository bondsRepository, 
+    IStocksRepository stocksRepository) : IDbSeeder
 {
-    private readonly UnitOfWork unitOfWork;
-    private readonly IBondsRepository bondsRepository;
-    private readonly IStocksRepository stocksRepository;
-
-    public FirstSeed(UnitOfWork unitOfWork, IBondsRepository bondsRepository, IStocksRepository stocksRepository)
-    {
-        this.unitOfWork = unitOfWork;
-        this.bondsRepository = bondsRepository;
-        this.stocksRepository = stocksRepository;
-    }
-
     public async Task SeedAsync()
     {
-        await unitOfWork.BeginTransaction();
+        await unitOfWork.Transaction(Action, CancellationToken.None);
+    }
+
+    private async Task<Unit> Action(CancellationToken t)
+    {
         var bonds = await bondsRepository.GetInstruments();
         if (!bonds.Any())
         {
             await CreateBonds();
             await CreateStocks();
         }
-        await unitOfWork.Commit(CancellationToken.None);
+
+        return Unit.Value;
     }
 
     private async Task CreateBonds()

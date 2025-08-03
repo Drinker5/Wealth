@@ -1,23 +1,22 @@
+using Wealth.BuildingBlocks.Application;
+using Wealth.BuildingBlocks.Application.CommandScheduler;
 using Wealth.BuildingBlocks.Domain.Utilities;
-using Wealth.CurrencyManagement.Application.Abstractions;
 
 namespace Wealth.CurrencyManagement.Application.Tests.TestHelpers;
 
 public class OutboxMessageBuilder
 {
+    private record struct EmptyCommand : ICommand;
     private DateTimeOffset date = Clock.Now;
-    private IJsonSerializer serializer = Substitute.For<IJsonSerializer>();
-    private object obj = new Object();
+    private ICommand obj = new EmptyCommand();
     private DateTimeOffset? processingDate = null;
 
     public DefferedCommand Build()
     {
-        serializer.Serialize(Arg.Any<object?>()).Returns(string.Empty);
-
         if (processingDate.HasValue)
-            return DefferedCommand.CreateDelayed(serializer, date, obj, processingDate.Value);
+            return DefferedCommand.CreateDelayed(date, obj, processingDate.Value);
         
-        return DefferedCommand.Create(serializer, date, obj);
+        return DefferedCommand.Create(date, obj);
     }
 
     public OutboxMessageBuilder SetProcessingDate(DateTimeOffset newProcessingDate)
@@ -32,15 +31,9 @@ public class OutboxMessageBuilder
         return this;
     }
 
-    public OutboxMessageBuilder SetObject(object newObj)
+    public OutboxMessageBuilder SetObject(ICommand newObj)
     {
         this.obj = newObj;
-        return this;
-    }
-
-    public OutboxMessageBuilder SetSerializer(IJsonSerializer newSerializer)
-    {
-        this.serializer = newSerializer;
         return this;
     }
 }

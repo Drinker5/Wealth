@@ -15,13 +15,11 @@ namespace Wealth.DepositManagement.Infrastructure.UnitOfWorks;
 /// <summary>
 /// dotnet ef migrations add Init --project .\DepositManagement\src\Wealth.DepositManagement.Infrastructure\ --startup-project .\DepositManagement\src\Wealth.DepositManagement.API\
 /// </summary>
-public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbContext>, IUnitOfWork
+public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbContext>
 {
     public virtual DbSet<Deposit> Deposits { get; internal init; }
     public virtual DbSet<DepositOperation> DepositOperations { get; internal init; }
     public virtual DbSet<OutboxMessage> OutboxMessages { get; internal init; }
-
-    private IDbContextTransaction? transaction;
 
     public WealthDbContext()
     {
@@ -58,23 +56,5 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
     {
         configurationBuilder.Properties<CurrencyId>().HaveConversion<CurrencyIdConverter>();
         configurationBuilder.Properties<InstrumentId>().HaveConversion<InstrumentIdConverter>();
-    }
-
-    public async Task<IDisposable> BeginTransaction()
-    {
-        if (transaction != null)
-            return transaction;
-
-        transaction = await Database.BeginTransactionAsync();
-        return transaction;
-    }
-
-    public async Task<int> Commit(CancellationToken cancellationToken)
-    {
-        var result = await SaveChangesAsync(cancellationToken);
-        if (transaction != null)
-            await transaction.CommitAsync(cancellationToken);
-
-        return result;
     }
 }

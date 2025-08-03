@@ -1,5 +1,5 @@
 using FluentValidation;
-using Wealth.CurrencyManagement.Application.Validators;
+using Wealth.BuildingBlocks.Application.Validators;
 
 namespace Wealth.CurrencyManagement.Application.ExchangeRates.Commands;
 

@@ -19,12 +19,12 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
 
     private static IEnumerable<Strategy> GetPredefinedStrategies()
     {
-        var foo = Strategy.Create("Test-strategy-1");
+        var foo = Strategy.Create("Seed-strategy-1");
         foo.AddOrUpdateComponent(new InstrumentId(new Guid("00000000-0000-0000-0000-000000000001")), 50f);
         foo.AddOrUpdateComponent(new InstrumentId(new Guid("00000000-0000-0000-0000-000000000002")), 50f);
         yield return foo;
         
-        var bar = Strategy.Create("Test-strategy-2");
+        var bar = Strategy.Create("Seed-strategy-2");
         bar.AddOrUpdateComponent(new InstrumentId(new Guid("00000000-0000-0000-0000-000000000002")), 30f);
         bar.AddOrUpdateComponent(new InstrumentId(new Guid("00000000-0000-0000-0000-000000000003")), 30f);
         bar.AddOrUpdateComponent(new InstrumentId(new Guid("00000000-0000-0000-0000-000000000004")), 40f);

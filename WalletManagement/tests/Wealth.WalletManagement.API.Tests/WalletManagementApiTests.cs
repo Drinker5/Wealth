@@ -22,27 +22,32 @@ public sealed class WalletManagementApiTests : IClassFixture<WalletManagementApi
     [Fact]
     public async Task GetWallets()
     {
-        // get all currencies, after seeding we have 2 currencies
         var responseGet = await httpClient.GetAsync("/api/wallet/");
 
         responseGet.EnsureSuccessStatusCode();
         var currenciesJson = await responseGet.Content.ReadAsStringAsync();
-        var wallets = JsonSerializer.Deserialize<IEnumerable<WalletDTO>>(currenciesJson, jsonSerializerOptions);
-
+        var wallets = JsonSerializer.Deserialize<IReadOnlyCollection<WalletDTO>>(currenciesJson, jsonSerializerOptions);
         Assert.NotNull(wallets);
-        Assert.Equal(2, wallets.Count());
+        var seededWallets = wallets.Where(w => w.Name.StartsWith("Seed-wallet")).ToArray();
+        Assert.Equal(2, seededWallets.Length);
+        Assert.All(seededWallets, w => Assert.NotEmpty(w.Currencies));
+    }
 
+    [Fact]
+    public async Task CreateNewWallet()
+    {
         // create new wallet
         var obj = new
         {
             name = "Foo",
         };
+
         var response1 = await httpClient.PostAsync("/api/wallet/", JsonContent.Create(obj, options: jsonSerializerOptions));
 
         response1.EnsureSuccessStatusCode();
         var newWalletId = int.Parse(await response1.Content.ReadAsStringAsync());
 
-        // get created portfolio
+        // get created wallet
         var response2 = await httpClient.GetAsync($"/api/wallet/{newWalletId}");
 
         response2.EnsureSuccessStatusCode();
@@ -54,7 +59,7 @@ public sealed class WalletManagementApiTests : IClassFixture<WalletManagementApi
         Assert.Equal(obj.name, result.Name);
         Assert.Empty(result.Currencies);
 
-        // insert
+        // insert money
         var insertMoney = new
         {
             WalletId = newWalletId,
@@ -65,7 +70,7 @@ public sealed class WalletManagementApiTests : IClassFixture<WalletManagementApi
 
         insertResponse.EnsureSuccessStatusCode();
 
-        // eject
+        // eject money
         var ejectMoney = new
         {
             WalletId = newWalletId,

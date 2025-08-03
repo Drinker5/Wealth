@@ -4,8 +4,8 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Wealth.BuildingBlocks.Infrastructure.EFCore" Version="0.0.1" />
-    <PackageReference Include="Wealth.BuildingBlocks.Infrastructure" Version="0.0.1" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.EFCore\Wealth.BuildingBlocks.Infrastructure.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" />
     <ProjectReference Include="..\Wealth.PortfolioManagement.Application\Wealth.PortfolioManagement.Application.csproj" />
   </ItemGroup>
 </Project>

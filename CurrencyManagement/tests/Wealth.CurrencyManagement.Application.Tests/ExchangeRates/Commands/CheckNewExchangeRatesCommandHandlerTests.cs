@@ -1,3 +1,4 @@
+using Wealth.BuildingBlocks.Application.CommandScheduler;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.CurrencyManagement.Application.Abstractions;

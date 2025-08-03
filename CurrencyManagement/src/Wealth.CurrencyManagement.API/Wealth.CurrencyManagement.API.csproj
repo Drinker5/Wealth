@@ -12,7 +12,7 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Wealth.BuildingBlocks.API" Version="0.0.1" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.API\Wealth.BuildingBlocks.API.csproj" />
     <ProjectReference Include="..\Wealth.CurrencyManagement.Infrastructure\Wealth.CurrencyManagement.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

@@ -4,11 +4,12 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Wealth.BuildingBlocks.Infrastructure.EFCore" Version="0.0.1" />
-    <PackageReference Include="Wealth.BuildingBlocks.Infrastructure" Version="0.0.1" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.EFCore\Wealth.BuildingBlocks.Infrastructure.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" />
     <ProjectReference Include="..\Wealth.StrategyTracking.Application\Wealth.StrategyTracking.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Mediation\RequestProcessing\CommandBehaviors\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 </Project>

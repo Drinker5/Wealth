@@ -1,6 +1,5 @@
 using MediatR;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Domain;
 
 namespace Wealth.BuildingBlocks.Infrastructure.Mediation.RequestProcessing.CommandBehaviors;
 
@@ -14,11 +13,8 @@ public class CommandUnitOfWorkBehavior<TRequest, TResponse> : IPipelineBehavior<
         this.unitOfWork = unitOfWork;
     }
 
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        using var transaction = await unitOfWork.BeginTransaction();
-        var result = await next(cancellationToken);
-        await unitOfWork.Commit(cancellationToken);
-        return result;
+        return unitOfWork.Transaction(next, cancellationToken);
     }
 }

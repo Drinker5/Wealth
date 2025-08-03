@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <ItemGroup>
-    <PackageReference Include="Wealth.BuildingBlocks.API" Version="0.0.1" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.API\Wealth.BuildingBlocks.API.csproj" />
     <ProjectReference Include="..\Wealth.WalletManagement.Infrastructure\Wealth.WalletManagement.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>

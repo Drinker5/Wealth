@@ -1,7 +1,7 @@
 using Wealth.BuildingBlocks.Application;
 using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 
-namespace Wealth.DepositManagement.Infrastructure.Repositories;
+namespace Wealth.CurrencyManagement.Infrastructure.Repositories;
 
 public class OutboxRepository(WealthDbContext dbContext) : IOutboxRepository
 {

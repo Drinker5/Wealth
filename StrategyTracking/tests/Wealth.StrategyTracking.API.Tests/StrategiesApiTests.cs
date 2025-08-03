@@ -27,8 +27,9 @@ public sealed class StrategiesApiTests : IClassFixture<StrategyTrackingApiFixtur
         var strategies = JsonSerializer.Deserialize<IReadOnlyCollection<StrategyDTO>>(currenciesJson, jsonSerializerOptions);
 
         Assert.NotNull(strategies);
-        Assert.Equal(2, strategies.Count());
-        Assert.All(strategies, s => Assert.NotEmpty(s.Components));
+        var seededStrategies = strategies.Where(s => s.Name.StartsWith("Seed-strategy")).ToArray();
+        Assert.Equal(2, seededStrategies.Length);
+        Assert.All(seededStrategies, s => Assert.NotEmpty(s.Components));
     }
 
     [Fact]
