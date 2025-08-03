@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Http.HttpResults;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.StrategyTracking.Application.Strategies.Commands;
 using Wealth.StrategyTracking.Application.Strategies.Queries;
+using Wealth.StrategyTracking.Domain.Strategies;
 
 namespace Wealth.StrategyTracking.API.APIs;
 
@@ -12,7 +14,23 @@ public static class StrategyApi
 
         api.MapGet("{strategyId:int}", GetStrategy);
         api.MapPost("/", CreateStrategy);
+        api.MapPut("/add-component", AddStrategyComponent);
         return api;
+    }
+
+    private static async Task<Results<Ok, BadRequest<string>>> AddStrategyComponent(
+        AddStrategyComponentRequest request,
+        [AsParameters] StrategyTrackingServices services)
+    {
+        try
+        {
+            await services.Mediator.Command(new AddStrategyComponent(request.StrategyId, request.InstrumentId, request.Weight));
+            return TypedResults.Ok();
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
+        }
     }
 
     private static async Task<Results<Ok<StrategyDTO>, NotFound>> GetStrategy(
@@ -41,5 +59,7 @@ public static class StrategyApi
         }
     }
 }
+
+internal record AddStrategyComponentRequest(StrategyId StrategyId, InstrumentId InstrumentId, float Weight);
 
 internal record struct CreateStrategyRequest(string Name);

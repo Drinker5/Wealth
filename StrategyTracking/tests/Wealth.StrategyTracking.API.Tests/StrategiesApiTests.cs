@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using System.Text.Json;
+using AutoFixture;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.StrategyTracking.Application.Strategies.Queries;
 
 namespace Wealth.StrategyTracking.API.Tests;
@@ -9,10 +11,11 @@ public sealed class StrategiesApiTests : IClassFixture<StrategyTrackingApiFixtur
 {
     private readonly JsonSerializerOptions jsonSerializerOptions = new(JsonSerializerDefaults.Web);
     private readonly HttpClient httpClient;
+    private Fixture fixture = new Fixture();
 
-    public StrategiesApiTests(StrategyTrackingApiFixture fixture)
+    public StrategiesApiTests(StrategyTrackingApiFixture apiFixture)
     {
-        WebApplicationFactory<Program> webApplicationFactory = fixture;
+        WebApplicationFactory<Program> webApplicationFactory = apiFixture;
         httpClient = webApplicationFactory.CreateDefaultClient();
     }
 
@@ -68,6 +71,18 @@ public sealed class StrategiesApiTests : IClassFixture<StrategyTrackingApiFixtur
         var strategyId = int.Parse(await createResponse.Content.ReadAsStringAsync());
         Assert.NotEqual(0, strategyId);
 
+        // add instruments
+        var addComponent = new
+        {
+            strategyId = strategyId,
+            instrumentId = InstrumentId.New(),
+            weight = fixture.Create<float>(),
+        };
+
+        var insertResponse = await httpClient.PutAsync("/api/strategy/add-component", JsonContent.Create(addComponent, options: jsonSerializerOptions));
+
+        insertResponse.EnsureSuccessStatusCode();
+        
         // get new strategy
         var responseGet = await httpClient.GetAsync($"/api/strategy/{strategyId}");
 
@@ -77,6 +92,9 @@ public sealed class StrategiesApiTests : IClassFixture<StrategyTrackingApiFixtur
         Assert.NotNull(strategy);
         Assert.Equal(strategyId, strategy.StrategyId.Id);
         Assert.Equal(obj.name, strategy.Name);
+        var component = Assert.Single(strategy.Components);
+        Assert.Equal(addComponent.instrumentId, component.InstrumentId);
+        Assert.Equal(addComponent.weight, component.Weight);
     }
 
     [Fact]
