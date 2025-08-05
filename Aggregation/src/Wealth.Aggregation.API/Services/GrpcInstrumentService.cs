@@ -15,24 +15,24 @@ public class GrpcInstrumentService(InstrumentsService.InstrumentsServiceClient c
 
 internal static class ProtoConverters
 {
-    public static InstrumentInfo FromProto(this GetInstrumentResponse response)
+    public static InstrumentInfo FromProto(this InstrumentProto instrument)
     {
-        InstrumentInfo info = response.InstrumentCase switch
+        InstrumentInfo info = instrument.TypeCase switch
         {
-            GetInstrumentResponse.InstrumentOneofCase.StockInfo => new StockInstrumentInfo
+            InstrumentProto.TypeOneofCase.StockInfo => new StockInstrumentInfo
             {
-                DividendPerYear = response.StockInfo.DividendPerYear,
-                LotSize = response.StockInfo.LotSize,
+                DividendPerYear = instrument.StockInfo.DividendPerYear,
+                LotSize = instrument.StockInfo.LotSize,
             },
-            GetInstrumentResponse.InstrumentOneofCase.BondInfo => new BondInstrumentInfo
+            InstrumentProto.TypeOneofCase.BondInfo => new BondInstrumentInfo
             {
             },
             _ => throw new ArgumentOutOfRangeException()
         };
         
-        info.Id = response.Id;
-        info.Name = response.Name;
-        info.Price = response.Price;
+        info.Id = instrument.Id;
+        info.Name = instrument.Name;
+        info.Price = instrument.Price;
         return info;
     }
 }

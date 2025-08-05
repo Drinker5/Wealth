@@ -56,13 +56,18 @@ public class InstrumentsServiceImpl : InstrumentsService.InstrumentsServiceBase
     public override async Task<GetInstrumentResponse> GetInstrument(GetInstrumentRequest request, ServerCallContext context)
     {
         var id = request.Id;
-        var instrument = await mediator.Query(new GetInstrumentQuery(id));
+        var instrument = await mediator.Query(new GetInstrument(id));
         if (instrument == null)
             throw new RpcException(new Status(StatusCode.NotFound, "Instrument not found"));
 
+        return GetInstrumentResponse(instrument);
+    }
+
+    private static GetInstrumentResponse GetInstrumentResponse(Instrument instrument)
+    {
         var response = new GetInstrumentResponse
         {
-            Id = request.Id,
+            Id = instrument.Id,
             Name = instrument.Name,
             Price = instrument.Price,
             Isin = instrument.ISIN,
@@ -90,7 +95,7 @@ public class InstrumentsServiceImpl : InstrumentsService.InstrumentsServiceBase
     public override async Task<ChangePriceResponse> ChangePrice(ChangePriceRequest request, ServerCallContext context)
     {
         InstrumentId id = request.Id;
-        var instrument = await mediator.Query(new GetInstrumentQuery(id));
+        var instrument = await mediator.Query(new GetInstrument(id));
         if (instrument == null)
             throw new RpcException(new Status(StatusCode.NotFound, "Instrument not found"));
 

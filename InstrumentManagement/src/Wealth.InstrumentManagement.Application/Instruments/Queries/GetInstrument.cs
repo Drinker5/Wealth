@@ -4,4 +4,4 @@ using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Queries;
 
-public record GetInstrumentQuery(InstrumentId Id) : IQuery<Instrument?>;
+public record GetInstrument(InstrumentId Id) : IQuery<Instrument?>;

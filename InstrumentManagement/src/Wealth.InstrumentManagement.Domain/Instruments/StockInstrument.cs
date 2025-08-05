@@ -13,7 +13,7 @@ public class StockInstrument : Instrument
 
     public Dividend Dividend { get; set; } = Dividend.Empty;
 
-    public int LotSize { get; set; } = 1;
+    public LotSize LotSize { get; set; } = 1;
 
     public static StockInstrument Create(string name, ISIN isin)
     {

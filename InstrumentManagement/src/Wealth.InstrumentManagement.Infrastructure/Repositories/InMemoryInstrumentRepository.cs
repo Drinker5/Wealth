@@ -21,6 +21,11 @@ public class InMemoryInstrumentRepository :
         return Task.FromResult(instruments.FirstOrDefault(i => i.Id == instrumentId));
     }
 
+    public Task<Instrument?> GetInstrument(ISIN isin)
+    {
+        return Task.FromResult(instruments.FirstOrDefault(i => i.ISIN == isin));
+    }
+
     public Task DeleteInstrument(InstrumentId instrumentId)
     {
         instruments.RemoveAll(i => i.Id == instrumentId);

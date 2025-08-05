@@ -23,7 +23,7 @@ public class InstrumentRepository :
 
     public async Task<IEnumerable<Instrument>> GetInstruments()
     {
-        var sql = """SELECT * FROM "Instruments" LIMIT 10 """;
+        var sql = """SELECT * FROM "Instruments" LIMIT 10""";
         return await GetInstruments(sql);
     }
 
@@ -34,9 +34,17 @@ public class InstrumentRepository :
         return instruments.FirstOrDefault();
     }
 
+    public async Task<Instrument?> GetInstrument(ISIN isin)
+    {
+        var sql = """SELECT * FROM "Instruments" WHERE "ISIN" = @isin""";
+        var instruments = await GetInstruments(sql, new { isin = isin.Value });
+        return instruments.FirstOrDefault();
+    }
+
     public async Task DeleteInstrument(InstrumentId instrumentId)
     {
-        await connection.ExecuteAsync("""DELETE FROM "Instruments" WHERE "Id" = @Id""", new { Id = instrumentId.Id });
+        var sql = """DELETE FROM "Instruments" WHERE "Id" = @Id""";
+        await connection.ExecuteAsync(sql, new { Id = instrumentId.Id });
     }
 
     public async Task ChangePrice(InstrumentId id, Money price)

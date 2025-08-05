@@ -7,19 +7,18 @@ package wealth;
 option csharp_namespace = "Wealth.InstrumentManagement";
 
 service InstrumentsService {
-  rpc GetInstrument (GetInstrumentRequest) returns (GetInstrumentResponse);
+  rpc GetInstrument (GetInstrumentRequest) returns (InstrumentProto);
 }
 
 message GetInstrumentRequest {
   InstrumentIdProto id = 1;
 }
 
-message GetInstrumentResponse {
+message InstrumentProto {
   InstrumentIdProto id = 1;
-  InstrumentTypeProto type = 2;
-  string name = 3;
-  MoneyProto price = 4;
-  oneof instrument {
+  string name = 2;
+  MoneyProto price = 3;
+  oneof type {
     StockInstrumentProto stock_info = 5;
     BondInstrumentProto bond_info = 6;
   }

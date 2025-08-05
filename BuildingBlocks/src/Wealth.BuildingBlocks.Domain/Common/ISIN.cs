@@ -4,7 +4,7 @@ namespace Wealth.BuildingBlocks.Domain.Common;
 /// An ISIN, or International Securities Identification Number, is a 12-character
 /// alphanumeric code that uniquely identifies a specific security
 /// </summary>
-public record struct ISIN : IValueObject
+public readonly record struct ISIN : IValueObject
 {
     public static ISIN Empty = new ISIN("000000000000"); 
 
