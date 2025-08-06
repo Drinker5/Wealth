@@ -6,7 +6,7 @@ namespace Wealth.Aggregation.Domain.Tests;
 [TestSubject(typeof(StockAggregation))]
 public class StockAggregationTests
 {
-    private InstrumentId id = InstrumentId.New();
+    private StockId id = StockId.New();
     private Money price = new Money("FOO", 12.34m);
     private Money p1 = new Money("FOO", 1m);
 

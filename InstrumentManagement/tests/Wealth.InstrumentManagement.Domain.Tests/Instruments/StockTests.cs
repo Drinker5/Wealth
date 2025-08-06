@@ -5,16 +5,16 @@ using Wealth.InstrumentManagement.Domain.Instruments.Events;
 namespace Wealth.InstrumentManagement.Domain.Tests.Instruments;
 
 [TestFixture]
-[TestOf(typeof(StockInstrument))]
-public class StockInstrumentTests
+[TestOf(typeof(Stock))]
+public class StockTests
 {
     readonly string name = "foo";
     readonly ISIN isin = "barbarbarbar";
     readonly Dividend dividend = new Dividend("FOO", Decimal.One);
 
-    private StockInstrument CreateStockInstrument(string name, ISIN isin)
+    private Stock CreateStockInstrument(string name, ISIN isin)
     {
-        return StockInstrument.Create(name, isin);
+        return Stock.Create(name, isin);
     }
 
     [Test]

@@ -70,17 +70,17 @@ public class InstrumentRepository :
 
     public Task<InstrumentId> CreateBond(InstrumentId id, string name, ISIN isin)
     {
-        var bondInstrument = BondInstrument.Create(id, name, isin);
+        var bondInstrument = Bond.Create(id, name, isin);
         return CreateBond(bondInstrument);
     }
 
     public Task<InstrumentId> CreateBond(string name, ISIN isin)
     {
-        var bondInstrument = BondInstrument.Create(name, isin);
+        var bondInstrument = Bond.Create(name, isin);
         return CreateBond(bondInstrument);
     }
 
-    private async Task<InstrumentId> CreateBond(BondInstrument bondInstrument)
+    private async Task<InstrumentId> CreateBond(Bond bond)
     {
         var sql = """
                   INSERT INTO "Instruments" ("Id", "Name", "ISIN", "Type") 
@@ -88,29 +88,29 @@ public class InstrumentRepository :
                   """;
         await connection.ExecuteAsync(sql, new
         {
-            Id = bondInstrument.Id.Id,
-            Name = bondInstrument.Name,
-            ISIN = bondInstrument.ISIN.Value,
-            Type = bondInstrument.Type
+            Id = bond.Id.Id,
+            Name = bond.Name,
+            ISIN = bond.ISIN.Value,
+            Type = bond.Type
         });
-        dbContext.AddEvents(bondInstrument);
+        dbContext.AddEvents(bond);
 
-        return bondInstrument.Id;
+        return bond.Id;
     }
 
     public Task<InstrumentId> CreateStock(InstrumentId id, string name, ISIN isin)
     {
-        var stockInstrument = StockInstrument.Create(id, name, isin);
+        var stockInstrument = Stock.Create(id, name, isin);
         return CreateStock(stockInstrument);
     }
 
     public Task<InstrumentId> CreateStock(string name, ISIN isin)
     {
-        var stockInstrument = StockInstrument.Create(name, isin);
+        var stockInstrument = Stock.Create(name, isin);
         return CreateStock(stockInstrument);
     }
 
-    private async Task<InstrumentId> CreateStock(StockInstrument stockInstrument)
+    private async Task<InstrumentId> CreateStock(Stock stock)
     {
         var sql = """
                   INSERT INTO "Instruments" ("Id", "Name", "ISIN", "Type") 
@@ -118,19 +118,19 @@ public class InstrumentRepository :
                   """;
         await connection.ExecuteAsync(sql, new
         {
-            Id = stockInstrument.Id.Id,
-            Name = stockInstrument.Name,
-            ISIN = stockInstrument.ISIN.Value,
-            Type = stockInstrument.Type
+            Id = stock.Id.Id,
+            Name = stock.Name,
+            ISIN = stock.ISIN.Value,
+            Type = stock.Type
         });
-        dbContext.AddEvents(stockInstrument);
+        dbContext.AddEvents(stock);
 
-        return stockInstrument.Id;
+        return stock.Id;
     }
 
     public async Task ChangeCoupon(InstrumentId id, Coupon coupon)
     {
-        var instrument = await GetInstrument(id) as BondInstrument;
+        var instrument = await GetInstrument(id) as Bond;
         if (instrument == null)
             return;
 
@@ -151,7 +151,7 @@ public class InstrumentRepository :
 
     public async Task ChangeDividend(InstrumentId id, Dividend dividend)
     {
-        var instrument = await GetInstrument(id) as StockInstrument;
+        var instrument = await GetInstrument(id) as Stock;
         if (instrument == null)
             return;
 
@@ -172,7 +172,7 @@ public class InstrumentRepository :
 
     public async Task ChangeLotSize(InstrumentId id, int lotSize)
     {
-        var instrument = await GetInstrument(id) as StockInstrument;
+        var instrument = await GetInstrument(id) as Stock;
         if (instrument == null)
             return;
         
@@ -223,9 +223,9 @@ public class InstrumentRepository :
 
         return instruments;
 
-        BondInstrument BondParse(IDataReader reader)
+        Bond BondParse(IDataReader reader)
         {
-            var bondInstrument = new BondInstrument(reader.GetGuid(reader.GetOrdinal(nameof(BondInstrument.Id))));
+            var bondInstrument = new Bond(reader.GetGuid(reader.GetOrdinal(nameof(Bond.Id))));
             if (!reader.IsDBNull(reader.GetOrdinal("Coupon_CurrencyId")))
             {
                 bondInstrument.Coupon = new Coupon(
@@ -238,7 +238,7 @@ public class InstrumentRepository :
 
         Instrument? StockParse(IDataReader reader)
         {
-            var stockInstrument = new StockInstrument(reader.GetGuid(reader.GetOrdinal(nameof(StockInstrument.Id))));
+            var stockInstrument = new Stock(reader.GetGuid(reader.GetOrdinal(nameof(Stock.Id))));
             if (!reader.IsDBNull(reader.GetOrdinal("Dividend_CurrencyId")))
             {
                 stockInstrument.Dividend = new Dividend(

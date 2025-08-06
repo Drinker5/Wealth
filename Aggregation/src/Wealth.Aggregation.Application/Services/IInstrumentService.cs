@@ -4,32 +4,24 @@ namespace Wealth.Aggregation.Application.Services;
 
 public interface IInstrumentService
 {
-    Task<InstrumentInfo> GetInstrumentInfo(InstrumentId instrumentId);
+    Task<StockInfo> GetBondInfo(StockId stockId);
+    Task<BondInfo> GetBondInfo(BondId bondId);
 }
 
 public abstract class InstrumentInfo
 {
-    public InstrumentId Id { get; set; }
-    public abstract InstrumentType Type { get; }
     public string Name { get; set; }
     public Money Price { get; set; }
 }
 
-public class StockInstrumentInfo : InstrumentInfo
+public class StockInfo : InstrumentInfo
 {
-    public override InstrumentType Type => InstrumentType.Stock;
+    public StockId Id { get; set; }
     public Money DividendPerYear { get; set; }
     public int LotSize { get; set; }
 }
 
-public class BondInstrumentInfo : InstrumentInfo
+public class BondInfo : InstrumentInfo
 {
-    public override InstrumentType Type => InstrumentType.Stock;
-}
-
-
-public enum InstrumentType
-{
-    Stock,
-    Bond
+    public BondId Id { get; set; }
 }

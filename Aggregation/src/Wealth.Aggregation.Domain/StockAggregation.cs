@@ -5,7 +5,7 @@ namespace Wealth.Aggregation.Domain;
 
 public class StockAggregation : AggregateRoot
 {
-    public InstrumentId Id { get; init; }
+    public StockId Id { get; init; }
     public string Name { get; private set; }
 
     public Money StockPrice { get; private set; }
@@ -24,7 +24,7 @@ public class StockAggregation : AggregateRoot
     }
 
     public StockAggregation(
-        InstrumentId id,
+        StockId id,
         string name,
         Money stockPrice,
         Money dividendPerYear,

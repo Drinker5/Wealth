@@ -5,7 +5,12 @@ namespace Wealth.InstrumentManagement.Domain.Repositories;
 
 public interface IBondsRepository : IInstrumentsRepository
 {
-    Task<InstrumentId> CreateBond(InstrumentId id, string name, ISIN isin);
-    Task<InstrumentId> CreateBond(string name, ISIN isin);
-    Task ChangeCoupon(InstrumentId id, Coupon coupon);
+    Task<IEnumerable<Bond>> GetBonds();
+    Task<Bond?> GetBond(BondId id);
+    Task<Bond?> GetBond(ISIN isin);
+    Task DeleteBond(BondId id);
+    Task ChangePrice(BondId id, Money price);
+    Task<BondId> CreateBond(BondId id, string name, ISIN isin);
+    Task<BondId> CreateBond(string name, ISIN isin);
+    Task ChangeCoupon(BondId id, Coupon coupon);
 }

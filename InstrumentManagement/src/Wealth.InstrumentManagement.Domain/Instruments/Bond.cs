@@ -1,11 +1,20 @@
+using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Domain.Instruments.Events;
 
 namespace Wealth.InstrumentManagement.Domain.Instruments;
 
-public class BondInstrument : Instrument
+public class Bond : AggregateRoot
 {
-    public BondInstrument(Guid id)
+    public BondId Id { get; protected set; }
+    
+    public string Name { get; set; }
+
+    public ISIN ISIN { get; set; }
+
+    public Money Price { get; set; } = Money.Empty;
+    
+    public Bond(Guid id)
     {
         this.Id = id;
         Type = InstrumentType.Bond;
@@ -13,14 +22,14 @@ public class BondInstrument : Instrument
 
     public Coupon Coupon { get; set; }
 
-    public static BondInstrument Create(string name, ISIN isin)
+    public static Bond Create(string name, ISIN isin)
     {
         return Create(InstrumentId.New(), name, isin);
     }
     
-    public static BondInstrument Create(InstrumentId instrumentId, string name, ISIN isin)
+    public static Bond Create(InstrumentId instrumentId, string name, ISIN isin)
     {
-        var bond = new BondInstrument(instrumentId);
+        var bond = new Bond(instrumentId);
         bond.Apply(new BondCreated
         {
             InstrumentId = instrumentId,
@@ -29,7 +38,21 @@ public class BondInstrument : Instrument
         });
         return bond;
     }
-    
+
+    public void ChangePrice(Money newPrice)
+    {
+        if (Price == newPrice)
+            return;
+
+        Apply(new InstrumentPriceChanged
+        {
+            InstrumentId = Id,
+            ISIN = ISIN,
+            NewPrice = newPrice,
+            Type = Type,
+        });
+    }
+
     private void When(BondCreated @event)
     {
         Id = @event.InstrumentId;
@@ -53,5 +76,10 @@ public class BondInstrument : Instrument
     private void When(BondCouponChanged @event)
     {
         Coupon = @event.NewCoupon;
+    }
+
+    private void When(InstrumentPriceChanged @event)
+    {
+        Price = @event.NewPrice;
     }
 }

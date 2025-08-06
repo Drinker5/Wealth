@@ -75,14 +75,14 @@ public class InstrumentsServiceImpl : InstrumentsService.InstrumentsServiceBase
 
         switch (instrument)
         {
-            case StockInstrument stock:
+            case Stock stock:
                 response.StockInfo = new StockInstrumentProto
                 {
                     DividendPerYear = stock.Dividend.ValuePerYear,
                     LotSize = stock.LotSize,
                 };
                 break;
-            case BondInstrument bond:
+            case Bond bond:
                 response.BondInfo = new BondInstrumentProto();
                 break;
             default:

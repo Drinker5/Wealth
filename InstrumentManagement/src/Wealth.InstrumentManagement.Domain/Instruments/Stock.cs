@@ -1,28 +1,35 @@
+using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Domain.Instruments.Events;
 
 namespace Wealth.InstrumentManagement.Domain.Instruments;
 
-public class StockInstrument : Instrument
+public class Stock : AggregateRoot
 {
-    public StockInstrument(Guid id)
+    public StockId Id { get; protected set; }
+    
+    public string Name { get; set; }
+
+    public ISIN ISIN { get; set; }
+
+    public Money Price { get; set; } = Money.Empty;
+    
+    private Stock()
     {
-        Id = id;
-        Type = InstrumentType.Stock;
     }
 
     public Dividend Dividend { get; set; } = Dividend.Empty;
 
     public LotSize LotSize { get; set; } = 1;
 
-    public static StockInstrument Create(string name, ISIN isin)
+    public static Stock Create(string name, ISIN isin)
     {
         return Create(InstrumentId.New(), name, isin);
     }
 
-    public static StockInstrument Create(InstrumentId instrumentId, string name, ISIN isin)
+    public static Stock Create(InstrumentId instrumentId, string name, ISIN isin)
     {
-        var stock = new StockInstrument(instrumentId);
+        var stock = new Stock(instrumentId);
         stock.Apply(new StockCreated
         {
             InstrumentId = instrumentId,
@@ -70,5 +77,24 @@ public class StockInstrument : Instrument
     private void When(StockLotSizeChanged @event)
     {
         LotSize = @event.NewLotSize;
+    }
+
+    public void ChangePrice(Money newPrice)
+    {
+        if (Price == newPrice)
+            return;
+
+        Apply(new InstrumentPriceChanged
+        {
+            InstrumentId = Id,
+            ISIN = ISIN,
+            NewPrice = newPrice,
+            Type = Type,
+        });
+    }
+
+    private void When(InstrumentPriceChanged @event)
+    {
+        Price = @event.NewPrice;
     }
 }

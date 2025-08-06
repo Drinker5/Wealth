@@ -4,28 +4,28 @@ namespace Wealth.Aggregation.Domain;
 
 public interface IStockAggregationRepository
 {
-    Task<StockAggregation?> GetStock(InstrumentId id);
+    Task<StockAggregation?> GetStock(StockId id);
     
     Task<IEnumerable<StockAggregation>> GetAggregation();
     
     Task<StockAggregation> Create(
-        InstrumentId id,
+        StockId id,
         string name,
         Money stockPrice,
         Money dividendPerYear,
         int lotSize);
     
-    Task ChangeName(InstrumentId id, string name);
+    Task ChangeName(StockId id, string name);
 
-    Task ChangePrice(InstrumentId id, Money price);
+    Task ChangePrice(StockId id, Money price);
 
-    Task ChangeDividendPerYear(InstrumentId id, Money dividendPerYear);
+    Task ChangeDividendPerYear(StockId id, Money dividendPerYear);
 
-    Task ChangeLotSize(InstrumentId id, int lotSize);
+    Task ChangeLotSize(StockId id, int lotSize);
 
-    Task Buy(InstrumentId id, int quantity, Money investment);
+    Task Buy(StockId id, int quantity, Money investment);
 
-    Task Sell(InstrumentId id, int quantity, Money profit);
+    Task Sell(StockId id, int quantity, Money profit);
 
-    Task AddDividend(InstrumentId id, Money dividend);
+    Task AddDividend(StockId id, Money dividend);
 }
