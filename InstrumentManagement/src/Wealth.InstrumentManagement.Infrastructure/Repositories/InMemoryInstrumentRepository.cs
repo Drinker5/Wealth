@@ -43,21 +43,21 @@ public class InMemoryInstrumentRepository :
 
     public Task<InstrumentId> CreateBond(string name, ISIN isin)
     {
-        var bondInstrument = BondInstrument.Create(name, isin);
+        var bondInstrument = Bond.Create(name, isin);
         instruments.Add(bondInstrument);
         return Task.FromResult(bondInstrument.Id);
     }
 
     public Task<InstrumentId> CreateBond(InstrumentId id, string name, ISIN isin)
     {
-        var bondInstrument = BondInstrument.Create(id, name, isin);
+        var bondInstrument = Bond.Create(id, name, isin);
         instruments.Add(bondInstrument);
         return Task.FromResult(bondInstrument.Id);
     }
 
     public async Task ChangeCoupon(InstrumentId id, Coupon coupon)
     {
-        var bondInstrument = await GetInstrument(id) as BondInstrument;
+        var bondInstrument = await GetInstrument(id) as Bond;
         if (bondInstrument == null)
             return;
 
@@ -66,7 +66,7 @@ public class InMemoryInstrumentRepository :
 
     public async Task ChangeDividend(InstrumentId id, Dividend dividend)
     {
-        var stockInstrument = await GetInstrument(id) as StockInstrument;
+        var stockInstrument = await GetInstrument(id) as Stock;
         if (stockInstrument == null)
             return;
 
@@ -75,21 +75,21 @@ public class InMemoryInstrumentRepository :
 
     public Task<InstrumentId> CreateStock(string name, ISIN isin)
     {
-        var stockInstrument = StockInstrument.Create(name, isin);
+        var stockInstrument = Stock.Create(name, isin);
         instruments.Add(stockInstrument);
         return Task.FromResult(stockInstrument.Id);
     }
 
     public Task<InstrumentId> CreateStock(InstrumentId id, string name, ISIN isin)
     {
-        var stockInstrument = StockInstrument.Create(id, name, isin);
+        var stockInstrument = Stock.Create(id, name, isin);
         instruments.Add(stockInstrument);
         return Task.FromResult(stockInstrument.Id);
     }
 
     public async Task ChangeLotSize(InstrumentId id, int lotSize)
     {
-        var stockInstrument = await GetInstrument(id) as StockInstrument;
+        var stockInstrument = await GetInstrument(id) as Stock;
         if (stockInstrument == null)
             return;
 

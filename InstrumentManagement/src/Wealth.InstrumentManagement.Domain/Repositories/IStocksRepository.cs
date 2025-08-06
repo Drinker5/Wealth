@@ -5,8 +5,13 @@ namespace Wealth.InstrumentManagement.Domain.Repositories;
 
 public interface IStocksRepository : IInstrumentsRepository
 {
-    Task ChangeDividend(InstrumentId id, Dividend dividend);
-    Task<InstrumentId> CreateStock(InstrumentId id, string name, ISIN isin);
-    Task<InstrumentId> CreateStock(string name, ISIN isin);
-    Task ChangeLotSize(InstrumentId id, int lotSize);
+    Task<IEnumerable<Stock>> GetStocks();
+    Task<Stock?> GetStock(StockId id);
+    Task<Stock?> GetStock(ISIN isin);
+    Task DeleteStock(StockId id);
+    Task ChangePrice(StockId id, Money price);
+    Task ChangeDividend(StockId id, Dividend dividend);
+    Task<StockId> CreateStock(StockId id, string name, ISIN isin);
+    Task<StockId> CreateStock(string name, ISIN isin);
+    Task ChangeLotSize(StockId id, int lotSize);
 }

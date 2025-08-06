@@ -11,10 +11,10 @@ public class ChangeNumeric : Migration
         Alter.Column($"{nameof(Instrument.Price)}_Amount")
             .OnTable("Instruments").InSchema("public")
             .AsCustom("numeric");
-        Alter.Column($"{nameof(BondInstrument.Coupon)}_Amount")
+        Alter.Column($"{nameof(Bond.Coupon)}_Amount")
             .OnTable("Instruments").InSchema("public")
             .AsCustom("numeric");
-        Alter.Column($"{nameof(StockInstrument.Dividend)}_Amount")
+        Alter.Column($"{nameof(Stock.Dividend)}_Amount")
             .OnTable("Instruments").InSchema("public")
             .AsCustom("numeric");;
     }
@@ -24,10 +24,10 @@ public class ChangeNumeric : Migration
         Alter.Column($"{nameof(Instrument.Price)}_Amount")
             .OnTable("Instruments").InSchema("public")
             .AsDecimal();
-        Alter.Column($"{nameof(BondInstrument.Coupon)}_Amount")
+        Alter.Column($"{nameof(Bond.Coupon)}_Amount")
             .OnTable("Instruments").InSchema("public")
             .AsDecimal();
-        Alter.Column($"{nameof(StockInstrument.Dividend)}_Amount")
+        Alter.Column($"{nameof(Stock.Dividend)}_Amount")
             .OnTable("Instruments").InSchema("public")
             .AsDecimal();
     }

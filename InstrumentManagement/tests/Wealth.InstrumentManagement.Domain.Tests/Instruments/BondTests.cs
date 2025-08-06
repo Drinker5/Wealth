@@ -5,16 +5,16 @@ using Wealth.InstrumentManagement.Domain.Instruments.Events;
 namespace Wealth.InstrumentManagement.Domain.Tests.Instruments;
 
 [TestFixture]
-[TestOf(typeof(BondInstrument))]
-public class BondInstrumentTests
+[TestOf(typeof(Bond))]
+public class BondTests
 {
     readonly string name = "foo";
     readonly ISIN isin = "barbarbarbar";
     readonly Coupon coupon = new Coupon("FOO", Decimal.One);
 
-    private BondInstrument CreateBondInstrument(string name, ISIN isin)
+    private Bond CreateBondInstrument(string name, ISIN isin)
     {
-        return BondInstrument.Create(name, isin);
+        return Bond.Create(name, isin);
     }
 
     [Test]

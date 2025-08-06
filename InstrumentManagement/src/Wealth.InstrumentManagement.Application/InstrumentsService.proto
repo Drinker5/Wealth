@@ -7,27 +7,38 @@ package wealth;
 option csharp_namespace = "Wealth.InstrumentManagement";
 
 service InstrumentsService {
-  rpc GetInstrument (GetInstrumentRequest) returns (GetInstrumentResponse);
+  rpc GetBond (GetBondRequest) returns (GetBondResponse);
+  rpc GetStock (GetStockRequest) returns (GetStockResponse);
   rpc CreateStock (CreateStockRequest) returns (CreateStockResponse);
   rpc CreateBond (CreateBondRequest) returns (CreateBondResponse);
-  rpc ChangePrice (ChangePriceRequest) returns (ChangePriceResponse);
+  rpc ChangeStockPrice (ChangeStockPriceRequest) returns (ChangePriceResponse);
+  rpc ChangeBondPrice (ChangeBondPriceRequest) returns (ChangePriceResponse);
 }
 
-message GetInstrumentRequest {
-  InstrumentIdProto id = 1;
+message GetBondRequest {
+  int32 bond_id = 1;
 }
 
-message GetInstrumentResponse {
-  InstrumentIdProto id = 1;
-  InstrumentTypeProto type = 2;
-  string name = 3;
-  MoneyProto price = 4;
-  ISINProto isin = 5;
-  oneof instrument {
-    StockInstrumentProto stock_info = 17;
-    BondInstrumentProto bond_info = 18;
-  }
+message GetStockRequest {
+  int32 stock_id = 1;
 }
+
+message GetBondResponse {
+  int32 id = 1;
+  string name = 2;
+  MoneyProto price = 3;
+  ISINProto isin = 4;
+}
+
+message GetStockResponse {
+  int32 id = 1;
+  string name = 2;
+  MoneyProto price = 3;
+  ISINProto isin = 4;
+  int32 lot_size = 5;
+  MoneyProto dividend_per_year = 6;
+}
+
 
 message CreateStockRequest {
   string name = 1;
@@ -35,7 +46,7 @@ message CreateStockRequest {
 }
 
 message CreateStockResponse {
-  InstrumentIdProto id = 1;
+  int32 stock_id = 1;
 }
 
 message CreateBondRequest {
@@ -44,19 +55,16 @@ message CreateBondRequest {
 }
 
 message CreateBondResponse {
-  InstrumentIdProto id = 1;
+  int32 bond_id = 1;
 }
 
-message StockInstrumentProto {
-  int32 lot_size = 4;
-  MoneyProto dividend_per_year = 5;
+message ChangeStockPriceRequest {
+  int32 stock_id = 1;
+  MoneyProto price = 2;
 }
 
-message BondInstrumentProto {
-}
-
-message ChangePriceRequest {
-  InstrumentIdProto id = 1;
+message ChangeBondPriceRequest {
+  int32 bond_id = 1;
   MoneyProto price = 2;
 }
 

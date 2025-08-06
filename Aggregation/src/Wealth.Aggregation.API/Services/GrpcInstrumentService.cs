@@ -6,7 +6,13 @@ namespace Wealth.Aggregation.API.Services;
 
 public class GrpcInstrumentService(InstrumentsService.InstrumentsServiceClient client) : IInstrumentService
 {
-    public async Task<InstrumentInfo> GetInstrumentInfo(InstrumentId instrumentId)
+    public Task<StockInfo> GetBondInfo(StockId stockId)
+    {
+        var response = await client.GetInstrumentAsync(new GetInstrumentRequest { Id = instrumentId });
+        return response.FromProto();
+    }
+
+    public Task<BondInfo> GetBondInfo(BondId bondId)
     {
         var response = await client.GetInstrumentAsync(new GetInstrumentRequest { Id = instrumentId });
         return response.FromProto();
