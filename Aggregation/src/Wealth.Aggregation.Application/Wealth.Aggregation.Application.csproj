@@ -14,6 +14,6 @@
   <ItemGroup>
     <Protobuf Include="Common.proto" GrpcServices="Client" />
     <Protobuf Include="Events.proto" GrpcServices="Client" />
-    <Protobuf Include="InstrumentsService.proto" GrpcServices="Client" />
+    <Protobuf Include="..\..\..\protos\InstrumentsService.proto" GrpcServices="Client" />
   </ItemGroup>
 </Project>

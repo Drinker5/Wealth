@@ -8,9 +8,9 @@ public class Strategy : AggregateRoot
 {
     public StrategyId Id { get; private set; }
     public string Name { get; private set; }
-    
+
     public List<StrategyComponent> Components { get; } = [];
-    
+
     private Strategy()
     {
     }
@@ -38,17 +38,16 @@ public class Strategy : AggregateRoot
         Apply(new StrategyRenamed(Id, newName));
     }
 
-    public void AddOrUpdateComponent(InstrumentId instrumentId, float weight)
+    public void AddOrUpdateComponent(StrategyComponent component)
     {
-        var component = Components.SingleOrDefault(s => s.InstrumentId == instrumentId);
-        if (component != null)
+        var c = Components.SingleOrDefault(s => s == component);
+        if (c != null)
         {
-            Apply(new StrategyComponentWeightChanged(Id, instrumentId, weight));
-            component.Weight = weight;
+            Apply(new StrategyComponentWeightChanged(Id, component));
             return;
         }
 
-        Apply(new StrategyComponentAdded(Id, instrumentId, weight));
+        Apply(new StrategyComponentAdded(Id, component));
     }
 
     public void RemoveStrategyComponent(InstrumentId instrumentId)
@@ -73,17 +72,13 @@ public class Strategy : AggregateRoot
 
     private void When(StrategyComponentWeightChanged @event)
     {
-        var component = Components.Single(s => s.InstrumentId == @event.InstrumentId);
-        component.Weight = @event.Weight;
+        var component = Components.Single(c => c == @event.Component);
+        component.Weight = @event.Component.Weight;
     }
 
     private void When(StrategyComponentAdded @event)
     {
-        Components.Add(new StrategyComponent
-        {
-            InstrumentId = @event.InstrumentId,
-            Weight = @event.Weight
-        });
+        Components.Add(@event.Component);
     }
 
     private void When(StrategyComponentRemoved @event)
