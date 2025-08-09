@@ -9,7 +9,7 @@ public class StockBoughtIntegrationEventHandler(ICqrsInvoker cqrsInvoker) : IInt
     {
         return cqrsInvoker.Command(new BuyStock
         {
-            InstrumentId = @event.InstrumentId,
+            StockId = @event.StockId,
             Quantity = @event.Quantity,
             TotalPrice = @event.TotalPrice,
         });

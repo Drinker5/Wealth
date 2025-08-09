@@ -3,7 +3,7 @@ using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.Domain.Repositories;
 
-public interface IBondsRepository : IInstrumentsRepository
+public interface IBondsRepository
 {
     Task<IEnumerable<Bond>> GetBonds();
     Task<Bond?> GetBond(BondId id);

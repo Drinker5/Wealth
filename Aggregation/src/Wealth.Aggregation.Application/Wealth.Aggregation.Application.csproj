@@ -12,8 +12,14 @@
     <ProjectReference Include="..\Wealth.Aggregation.Domain\Wealth.Aggregation.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Protobuf Include="Common.proto" GrpcServices="Client" />
-    <Protobuf Include="Events.proto" GrpcServices="Client" />
-    <Protobuf Include="..\..\..\protos\InstrumentsService.proto" GrpcServices="Client" />
+    <Protobuf Include="Events.proto" 
+              GrpcServices="Client"
+              AdditionalImportDirs="..\..\..\protos\" />
+    <Protobuf Include="..\..\..\protos\Common.proto"
+              GrpcServices="Client"
+              Link="Common.proto" />
+    <Protobuf Include="..\..\..\protos\InstrumentsService.proto"
+              GrpcServices="Client"
+              Link="InstrumentsService.proto" />
   </ItemGroup>
 </Project>

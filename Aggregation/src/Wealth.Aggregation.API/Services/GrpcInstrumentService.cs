@@ -6,39 +6,44 @@ namespace Wealth.Aggregation.API.Services;
 
 public class GrpcInstrumentService(InstrumentsService.InstrumentsServiceClient client) : IInstrumentService
 {
-    public Task<StockInfo> GetBondInfo(StockId stockId)
+    public async Task<StockInfo?> GetStockInfo(StockId stockId)
     {
-        var response = await client.GetInstrumentAsync(new GetInstrumentRequest { Id = instrumentId });
+        var response = await client.GetStockAsync(new GetStockRequest { StockId = stockId });
         return response.FromProto();
     }
 
-    public Task<BondInfo> GetBondInfo(BondId bondId)
+    public async Task<BondInfo?> GetBondInfo(BondId bondId)
     {
-        var response = await client.GetInstrumentAsync(new GetInstrumentRequest { Id = instrumentId });
+        var response = await client.GetBondAsync(new GetBondRequest { BondId = bondId });
         return response.FromProto();
     }
 }
 
 internal static class ProtoConverters
 {
-    public static InstrumentInfo FromProto(this InstrumentProto instrument)
+    public static BondInfo FromProto(this GetBondResponse bond)
     {
-        InstrumentInfo info = instrument.TypeCase switch
+        BondInfo info = new()
         {
-            InstrumentProto.TypeOneofCase.StockInfo => new StockInstrumentInfo
-            {
-                DividendPerYear = instrument.StockInfo.DividendPerYear,
-                LotSize = instrument.StockInfo.LotSize,
-            },
-            InstrumentProto.TypeOneofCase.BondInfo => new BondInstrumentInfo
-            {
-            },
-            _ => throw new ArgumentOutOfRangeException()
+            Id = bond.Id,
+            Name = bond.Name,
+            Price = bond.Price
         };
-        
-        info.Id = instrument.Id;
-        info.Name = instrument.Name;
-        info.Price = instrument.Price;
+
+        return info;
+    }
+
+    public static StockInfo FromProto(this GetStockResponse stock)
+    {
+        StockInfo info = new()
+        {
+            DividendPerYear = stock.DividendPerYear,
+            LotSize = stock.LotSize,
+            Id = stock.Id,
+            Name = stock.Name,
+            Price = stock.Price
+        };
+
         return info;
     }
 }

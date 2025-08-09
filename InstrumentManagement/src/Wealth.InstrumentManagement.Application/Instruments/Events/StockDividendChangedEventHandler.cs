@@ -11,11 +11,11 @@ internal class StockDividendChangedEventHandler(IOutboxRepository outboxReposito
             notification,
             new StockDividendChangedIntegrationEvent
             {
-                InstrumentId = notification.InstrumentId,
+                InstrumentId = notification.StockId,
                 ISIN = notification.ISIN,
                 NewDividend = notification.NewDividend.ValuePerYear,
             },
-            notification.InstrumentId.ToString(),
+            notification.StockId.ToString(),
             cancellationToken);
     }
 }

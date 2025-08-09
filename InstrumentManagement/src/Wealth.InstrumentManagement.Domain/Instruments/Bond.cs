@@ -14,25 +14,23 @@ public class Bond : AggregateRoot
 
     public Money Price { get; set; } = Money.Empty;
     
-    public Bond(Guid id)
+    private Bond()
     {
-        this.Id = id;
-        Type = InstrumentType.Bond;
     }
 
     public Coupon Coupon { get; set; }
 
     public static Bond Create(string name, ISIN isin)
     {
-        return Create(InstrumentId.New(), name, isin);
+        return Create(BondId.New(), name, isin);
     }
     
-    public static Bond Create(InstrumentId instrumentId, string name, ISIN isin)
+    public static Bond Create(BondId bondId, string name, ISIN isin)
     {
-        var bond = new Bond(instrumentId);
+        var bond = new Bond();
         bond.Apply(new BondCreated
         {
-            InstrumentId = instrumentId,
+            BondId = bondId,
             Name = name,
             ISIN = isin,
         });
@@ -44,18 +42,17 @@ public class Bond : AggregateRoot
         if (Price == newPrice)
             return;
 
-        Apply(new InstrumentPriceChanged
+        Apply(new BondPriceChanged
         {
-            InstrumentId = Id,
+            BondId = Id,
             ISIN = ISIN,
             NewPrice = newPrice,
-            Type = Type,
         });
     }
 
     private void When(BondCreated @event)
     {
-        Id = @event.InstrumentId;
+        Id = @event.BondId;
         Name = @event.Name;
         ISIN = @event.ISIN;
     }
@@ -67,7 +64,7 @@ public class Bond : AggregateRoot
         
         Apply(new BondCouponChanged
         {
-            InstrumentId = Id,
+            BondId = Id,
             ISIN = ISIN,
             NewCoupon = coupon
         });
@@ -78,7 +75,7 @@ public class Bond : AggregateRoot
         Coupon = @event.NewCoupon;
     }
 
-    private void When(InstrumentPriceChanged @event)
+    private void When(BondPriceChanged @event)
     {
         Price = @event.NewPrice;
     }

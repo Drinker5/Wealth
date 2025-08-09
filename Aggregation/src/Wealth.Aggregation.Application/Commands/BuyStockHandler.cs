@@ -9,21 +9,21 @@ public class BuyStockHandler(IStockAggregationRepository repository, IInstrument
 {
     public async Task Handle(BuyStock request, CancellationToken cancellationToken)
     {
-        var stockAggregation = await repository.GetStock(request.InstrumentId);
+        var stockAggregation = await repository.GetStock(request.StockId);
         if (stockAggregation is null)
-            await CreateStock(request.InstrumentId);
+            await CreateStock(request.StockId);
 
-        await repository.Buy(request.InstrumentId, request.Quantity, request.TotalPrice);
+        await repository.Buy(request.StockId, request.Quantity, request.TotalPrice);
     }
 
-    private async Task CreateStock(InstrumentId instrumentId)
+    private async Task CreateStock(StockId stockId)
     {
-        var instrumentInfo = await instrumentService.GetInstrumentInfo(instrumentId) as StockInstrumentInfo;
+        var instrumentInfo = await instrumentService.GetStockInfo(stockId);
         if (instrumentInfo == null)
             return;
             
         await repository.Create(
-            instrumentId,
+            stockId,
             instrumentInfo.Name,
             instrumentInfo.Price,
             instrumentInfo.DividendPerYear,

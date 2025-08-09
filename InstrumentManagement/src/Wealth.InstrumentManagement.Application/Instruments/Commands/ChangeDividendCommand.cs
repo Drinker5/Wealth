@@ -6,6 +6,6 @@ namespace Wealth.InstrumentManagement.Application.Instruments.Commands;
 
 public class ChangeDividendCommand : ICommand
 {
-    public InstrumentId Id { get; set; }
+    public StockId Id { get; set; }
     public Dividend Dividend { get; set; }
 }

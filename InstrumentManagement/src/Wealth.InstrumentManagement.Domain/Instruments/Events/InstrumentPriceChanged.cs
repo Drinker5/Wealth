@@ -3,10 +3,9 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.InstrumentManagement.Domain.Instruments.Events;
 
-public record InstrumentPriceChanged : DomainEvent
+public record BondPriceChanged : DomainEvent
 {
-    public InstrumentId InstrumentId { get; set; }
+    public BondId BondId { get; set; }
     public ISIN ISIN { get; set; }
     public Money NewPrice { get; set; }
-    public InstrumentType Type { get; set; }
 }

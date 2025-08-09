@@ -5,7 +5,7 @@ namespace Wealth.InstrumentManagement.Domain.Instruments.Events;
 
 public record StockLotSizeChanged : DomainEvent
 {
-    public InstrumentId InstrumentId { get; set; }
+    public StockId StockId { get; set; }
     public ISIN ISIN { get; set; }
     public int NewLotSize { get; set; }
 }
