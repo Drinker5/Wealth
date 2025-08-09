@@ -64,7 +64,7 @@ public class StockTests
         var @event = instrument.HasEvent<StockDividendChanged>();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(@event.InstrumentId, Is.Not.Default);
+            Assert.That(@event.StockId, Is.Not.Default);
             Assert.That(@event.ISIN, Is.EqualTo(isin));
             Assert.That(@event.NewDividend, Is.EqualTo(dividend));
         }
@@ -80,7 +80,7 @@ public class StockTests
         var @event = instrument.HasEvent<StockLotSizeChanged>();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(@event.InstrumentId, Is.Not.Default);
+            Assert.That(@event.StockId, Is.Not.Default);
             Assert.That(@event.ISIN, Is.EqualTo(isin));
             Assert.That(@event.NewLotSize, Is.EqualTo(10));
         }

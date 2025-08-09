@@ -12,8 +12,10 @@
     <ProjectReference Include="..\Wealth.DepositManagement.Domain\Wealth.DepositManagement.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Protobuf Include="Common.proto" GrpcServices="Client" />
-    <Protobuf Include="DepositsService.proto" GrpcServices="Client,Server" />
     <Protobuf Include="Events.proto" GrpcServices="Client" />
+    <Protobuf Include="..\..\..\protos\Common.proto"
+              GrpcServices="Client"
+              Link="Common.proto" />
+    <Protobuf Include="DepositsService.proto" GrpcServices="Client,Server" />
   </ItemGroup>
 </Project>

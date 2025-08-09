@@ -5,7 +5,7 @@ namespace Wealth.Aggregation.Application.Commands;
 
 public record BuyStock : ICommand
 {
-    public InstrumentId InstrumentId { get; set; }
+    public StockId StockId { get; set; }
     public Money TotalPrice { get; set; }
     public int Quantity { get; set; }
 }

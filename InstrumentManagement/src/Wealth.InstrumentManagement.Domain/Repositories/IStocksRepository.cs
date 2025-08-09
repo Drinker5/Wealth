@@ -3,7 +3,7 @@ using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.Domain.Repositories;
 
-public interface IStocksRepository : IInstrumentsRepository
+public interface IStocksRepository
 {
     Task<IEnumerable<Stock>> GetStocks();
     Task<Stock?> GetStock(StockId id);

@@ -4,8 +4,8 @@ namespace Wealth.Aggregation.Application.Services;
 
 public interface IInstrumentService
 {
-    Task<StockInfo> GetBondInfo(StockId stockId);
-    Task<BondInfo> GetBondInfo(BondId bondId);
+    Task<StockInfo?> GetStockInfo(StockId stockId);
+    Task<BondInfo?> GetBondInfo(BondId bondId);
 }
 
 public abstract class InstrumentInfo

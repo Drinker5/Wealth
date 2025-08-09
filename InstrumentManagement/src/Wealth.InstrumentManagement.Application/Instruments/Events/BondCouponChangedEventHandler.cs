@@ -11,11 +11,11 @@ internal class BondCouponChangedEventHandler(IOutboxRepository outboxRepository)
             notification,
             new BondCouponChangedIntegrationEvent
             {
-                InstrumentId = notification.InstrumentId,
+                InstrumentId = notification.BondId,
                 ISIN = notification.ISIN,
                 NewCoupon = notification.NewCoupon.ValuePerYear,
             },
-            notification.InstrumentId.ToString(),
+            notification.BondId.ToString(),
             cancellationToken);
     }
 }

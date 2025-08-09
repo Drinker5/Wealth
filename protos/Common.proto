@@ -4,10 +4,6 @@ package wealth;
 
 option csharp_namespace = "Wealth.BuildingBlocks";
 
-message InstrumentIdProto {
-  GuidProto id = 1;
-}
-
 message GuidProto {
   string value = 1;
 }
@@ -33,4 +29,8 @@ message ISINProto {
 enum InstrumentTypeProto {
   InstrumentTypeProto_STOCK = 0;
   InstrumentTypeProto_BOND = 1;
+}
+
+message PortfolioIdProto {
+  int32 id = 1;
 }

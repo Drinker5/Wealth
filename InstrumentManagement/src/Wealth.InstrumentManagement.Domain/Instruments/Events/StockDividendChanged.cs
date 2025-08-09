@@ -5,7 +5,7 @@ namespace Wealth.InstrumentManagement.Domain.Instruments.Events;
 
 public record  StockDividendChanged : DomainEvent
 {
-    public InstrumentId InstrumentId { get; set; }
+    public StockId StockId { get; set; }
     public ISIN ISIN { get; set; }
     public Dividend NewDividend { get; set; }
 }

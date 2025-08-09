@@ -8,14 +8,13 @@ option csharp_namespace = "Wealth.BuildingBlocks.Application";
 
 message StockBoughtIntegrationEvent {
   PortfolioIdProto portfolio_id = 1;
-  InstrumentIdProto instrument_id = 2;
+  int32 stock_id = 2;
   MoneyProto total_price = 3;
   int32 quantity = 4;
 }
 
-message InstrumentPriceChangedIntegrationEvent {
-  InstrumentIdProto instrument_id = 1;
+message StockPriceChangedIntegrationEvent {
+  int32 stock_id = 1;
   ISINProto ISIN = 2;
   MoneyProto new_price = 3;
-  InstrumentTypeProto instrument_type = 4;
 }

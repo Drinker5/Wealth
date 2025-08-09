@@ -7,6 +7,6 @@ public class StockChangePriceHandler(IStockAggregationRepository repository) : I
 {
     public Task Handle(StockChangePrice request, CancellationToken cancellationToken)
     {
-        return repository.ChangePrice(request.InstrumentId, request.NewPrice);
+        return repository.ChangePrice(request.StockId, request.NewPrice);
     }
 }
