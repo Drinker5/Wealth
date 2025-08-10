@@ -1,5 +1,3 @@
-using Castle.Components.DictionaryAdapter.Xml;
-using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Tests.TestHelpers;
 using Wealth.StrategyTracking.Domain.Strategies;
 using Wealth.StrategyTracking.Domain.Strategies.Events;

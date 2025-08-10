@@ -16,22 +16,22 @@ service InstrumentsService {
 }
 
 message GetBondRequest {
-  int32 bond_id = 1;
+  BondIdProto bond_id = 1;
 }
 
 message GetStockRequest {
-  int32 stock_id = 1;
+  StockIdProto stock_id = 1;
 }
 
 message GetBondResponse {
-  int32 id = 1;
+  BondIdProto bond_id = 1;
   string name = 2;
   MoneyProto price = 3;
   ISINProto isin = 4;
 }
 
 message GetStockResponse {
-  int32 id = 1;
+  StockIdProto stock_id = 1;
   string name = 2;
   MoneyProto price = 3;
   ISINProto isin = 4;
@@ -46,7 +46,7 @@ message CreateStockRequest {
 }
 
 message CreateStockResponse {
-  int32 stock_id = 1;
+  StockIdProto stock_id = 1;
 }
 
 message CreateBondRequest {
@@ -55,16 +55,16 @@ message CreateBondRequest {
 }
 
 message CreateBondResponse {
-  int32 bond_id = 1;
+  BondIdProto bond_id = 1;
 }
 
 message ChangeStockPriceRequest {
-  int32 stock_id = 1;
+  StockIdProto stock_id = 1;
   MoneyProto price = 2;
 }
 
 message ChangeBondPriceRequest {
-  int32 bond_id = 1;
+  BondIdProto bond_id = 1;
   MoneyProto price = 2;
 }
 

@@ -34,3 +34,19 @@ enum InstrumentTypeProto {
 message PortfolioIdProto {
   int32 id = 1;
 }
+
+message BondIdProto {
+  int32 id = 1;
+}
+
+message StockIdProto {
+  int32 id = 1;
+}
+
+message DepositIdProto {
+  int32 id = 1;
+}
+
+message WalletIdProto {
+  int32 id = 1;
+}

@@ -8,26 +8,26 @@ public class ChangeNumeric : Migration
 {
     public override void Up()
     {
-        Alter.Column($"{nameof(Instrument.Price)}_Amount")
+        Alter.Column($"Price_Amount")
             .OnTable("Instruments").InSchema("public")
             .AsCustom("numeric");
-        Alter.Column($"{nameof(Bond.Coupon)}_Amount")
+        Alter.Column($"Coupon_Amount")
             .OnTable("Instruments").InSchema("public")
             .AsCustom("numeric");
-        Alter.Column($"{nameof(Stock.Dividend)}_Amount")
+        Alter.Column($"Dividend_Amount")
             .OnTable("Instruments").InSchema("public")
             .AsCustom("numeric");;
     }
 
     public override void Down()
     {
-        Alter.Column($"{nameof(Instrument.Price)}_Amount")
+        Alter.Column($"Price_Amount")
             .OnTable("Instruments").InSchema("public")
             .AsDecimal();
-        Alter.Column($"{nameof(Bond.Coupon)}_Amount")
+        Alter.Column($"Coupon_Amount")
             .OnTable("Instruments").InSchema("public")
             .AsDecimal();
-        Alter.Column($"{nameof(Stock.Dividend)}_Amount")
+        Alter.Column($"Dividend_Amount")
             .OnTable("Instruments").InSchema("public")
             .AsDecimal();
     }

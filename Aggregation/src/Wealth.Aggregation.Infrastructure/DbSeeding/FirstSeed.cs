@@ -18,7 +18,7 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
     private static IEnumerable<StockAggregation> GetStockAggregations()
     {
         var foo = new StockAggregation(
-            new InstrumentId(new Guid("00000000-0000-0000-0000-000000000001")),
+            new StockId(1),
             "First",
             new Money("RUB", 120.35m),
             new Money("RUB", 10m),

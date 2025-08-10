@@ -4,11 +4,11 @@ using Wealth.PortfolioManagement.Domain.Portfolios.Events;
 
 namespace Wealth.PortfolioManagement.Application.Portfolios.Events.AssetBoughtHandlers;
 
-public class AddToOutbox(IOutboxRepository outboxRepository, IInstrumentService instrumentService) : IDomainEventHandler<AssetBought>
+public class AddToOutbox(IOutboxRepository outboxRepository, IInstrumentService instrumentService) : IDomainEventHandler<StockBought>
 {
-    public async Task Handle(AssetBought notification, CancellationToken cancellationToken)
+    public async Task Handle(StockBought notification, CancellationToken cancellationToken)
     {
-        var instrumentInfo = await instrumentService.GetInstrumentInfo(notification.InstrumentId);
+        var instrumentInfo = await instrumentService.GetInstrumentInfo(notification.StockId);
         if (instrumentInfo == null)
             throw new ApplicationException("The instrument could not be found");
 

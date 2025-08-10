@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.WalletManagement.Application.Wallets.Commands;
 using Wealth.WalletManagement.Application.Wallets.Queries;
-using Wealth.WalletManagement.Domain.Wallets;
 
 namespace Wealth.WalletManagement.API.APIs;
 

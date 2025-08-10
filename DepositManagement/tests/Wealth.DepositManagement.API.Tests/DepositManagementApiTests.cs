@@ -2,6 +2,7 @@
 using Grpc.Core;
 using Grpc.Net.Client;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Wealth.BuildingBlocks;
 using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.DepositManagement.API.Tests;

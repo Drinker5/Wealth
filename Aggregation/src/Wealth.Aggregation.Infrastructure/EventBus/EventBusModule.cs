@@ -15,6 +15,6 @@ public class EventBusModule : IServiceModule
 
         services.AddHostedService<KafkaConsumer>();
         services.AddSubscription<StockBoughtIntegrationEvent, StockBoughtIntegrationEventHandler>();
-        services.AddSubscription<InstrumentPriceChangedIntegrationEvent, InstrumentPriceChangedIntegrationEventHandler>();
+        services.AddSubscription<StockPriceChangedIntegrationEvent, StockPriceChangedIntegrationEventHandler>();
     }
 }

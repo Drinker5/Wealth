@@ -15,9 +15,6 @@
     <Protobuf Include="Events.proto" 
               GrpcServices="Client"
               AdditionalImportDirs="..\..\..\protos\" />
-    <Protobuf Include="..\..\..\protos\Common.proto"
-              GrpcServices="Client"
-              Link="Common.proto" />
     <Protobuf Include="..\..\..\protos\InstrumentsService.proto"
               GrpcServices="Client"
               Link="InstrumentsService.proto" />

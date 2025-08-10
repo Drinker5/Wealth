@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.StrategyTracking.Domain.Strategies;
 using Wealth.StrategyTracking.Infrastructure.Repositories;
 using Wealth.StrategyTracking.Infrastructure.UnitOfWorks;

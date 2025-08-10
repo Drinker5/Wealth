@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.WalletManagement.Domain.Wallets;
 
 namespace Wealth.WalletManagement.Infrastructure.UnitOfWorks.EntityConfigurations;

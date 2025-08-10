@@ -14,8 +14,9 @@ public class Stock : AggregateRoot
 
     public Money Price { get; set; } = Money.Empty;
     
-    private Stock()
+    public Stock(StockId Id)
     {
+        this.Id = Id;
     }
 
     public Dividend Dividend { get; set; } = Dividend.Empty;
@@ -27,12 +28,12 @@ public class Stock : AggregateRoot
         return Create(StockId.New(), name, isin);
     }
 
-    public static Stock Create(StockId instrumentId, string name, ISIN isin)
+    public static Stock Create(StockId id, string name, ISIN isin)
     {
-        var stock = new Stock();
+        var stock = new Stock(id);
         stock.Apply(new StockCreated
         {
-            StockId = instrumentId,
+            StockId = id,
             Name = name,
             ISIN = isin,
         });

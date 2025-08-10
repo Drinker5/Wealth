@@ -1,5 +1,4 @@
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.StrategyTracking.Domain.Strategies;
 
 namespace Wealth.StrategyTracking.Application.Strategies.Commands;

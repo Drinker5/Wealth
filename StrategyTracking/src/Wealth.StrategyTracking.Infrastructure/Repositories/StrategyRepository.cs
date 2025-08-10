@@ -36,7 +36,21 @@ public class StrategyRepository(WealthDbContext context) : IStrategyRepository
         strategy?.Rename(newName);
     }
 
-    public async Task AddStrategyComponent(StrategyId strategyId, InstrumentId instrumentId, float weight)
+    public async Task AddStrategyComponent(StrategyId strategyId, StockId stockId, float weight)
+    {
+        var strategy = await GetStrategy(strategyId);
+
+        strategy?.AddOrUpdateComponent(instrumentId, weight);
+    }
+    
+    public async Task AddStrategyComponent(StrategyId strategyId, BondId bondId, float weight)
+    {
+        var strategy = await GetStrategy(strategyId);
+
+        strategy?.AddOrUpdateComponent(instrumentId, weight);
+    }
+    
+    public async Task AddStrategyComponent(StrategyId strategyId, CurrencyId currencyId, float weight)
     {
         var strategy = await GetStrategy(strategyId);
 

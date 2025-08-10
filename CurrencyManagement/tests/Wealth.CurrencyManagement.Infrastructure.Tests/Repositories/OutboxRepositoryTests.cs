@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Wealth.BuildingBlocks.Application.CommandScheduler;
 using Wealth.BuildingBlocks.Domain.Utilities;
-using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Application.Tests.TestHelpers;
 using Wealth.CurrencyManagement.Infrastructure.Repositories;
 using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;

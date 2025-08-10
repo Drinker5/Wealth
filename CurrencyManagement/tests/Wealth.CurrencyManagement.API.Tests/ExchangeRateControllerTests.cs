@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Wealth.BuildingBlocks.Application.CommandScheduler;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Domain.Utilities;
-using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Application.ExchangeRates.Commands;
 
 namespace Wealth.CurrencyManagement.API.Tests;

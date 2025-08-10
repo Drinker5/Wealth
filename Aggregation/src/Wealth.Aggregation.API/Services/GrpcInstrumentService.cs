@@ -25,7 +25,7 @@ internal static class ProtoConverters
     {
         BondInfo info = new()
         {
-            Id = bond.Id,
+            Id = bond.BondId,
             Name = bond.Name,
             Price = bond.Price
         };
@@ -39,7 +39,7 @@ internal static class ProtoConverters
         {
             DividendPerYear = stock.DividendPerYear,
             LotSize = stock.LotSize,
-            Id = stock.Id,
+            Id = stock.StockId,
             Name = stock.Name,
             Price = stock.Price
         };

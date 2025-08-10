@@ -3,19 +3,19 @@ using Wealth.InstrumentManagement.Domain.Instruments.Events;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Events;
 
-internal class InstrumentPriceChangedEventHandler(IOutboxRepository outboxRepository) : IDomainEventHandler<InstrumentPriceChanged>
+internal class InstrumentPriceChangedEventHandler(IOutboxRepository outboxRepository) : IDomainEventHandler<StockPriceChanged>
 {
-    public async Task Handle(InstrumentPriceChanged notification, CancellationToken cancellationToken)
+    public async Task Handle(StockPriceChanged notification, CancellationToken cancellationToken)
     {
         await outboxRepository.Add(
             notification,
-            new InstrumentPriceChangedIntegrationEvent
+            new StockPriceChangedIntegrationEvent
             {
-                InstrumentId = notification.InstrumentId,
+                StockId = notification.StockId,
                 ISIN = notification.ISIN,
                 NewPrice = notification.NewPrice,
             },
-            notification.InstrumentId.ToString(),
+            notification.StockId.ToString(),
             cancellationToken);
     }
 }

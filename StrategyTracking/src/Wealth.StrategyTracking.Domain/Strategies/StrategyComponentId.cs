@@ -2,9 +2,9 @@ using Wealth.BuildingBlocks.Domain;
 
 namespace Wealth.StrategyTracking.Domain.Strategies;
 
-public record StrategyComponentId(int Id) : IIdentity
+public record StrategyComponentId(Guid Id) : IIdentity
 {
-    public static StrategyComponentId New() => new(0);
+    public static StrategyComponentId New() => new(Guid.NewGuid());
 
     public override string ToString()
     {
@@ -15,14 +15,14 @@ public record StrategyComponentId(int Id) : IIdentity
     {
         return Id.GetHashCode();
     }
-    
-    public static implicit operator int(StrategyComponentId value)
+
+    public static implicit operator Guid(StrategyComponentId walletId)
     {
-        return value.Id;
+        return walletId.Id;
     }
-    
-    public static implicit operator StrategyComponentId(int value)
+
+    public static implicit operator StrategyComponentId(Guid id)
     {
-        return new StrategyComponentId(value);
+        return new StrategyComponentId(id);
     }
 }

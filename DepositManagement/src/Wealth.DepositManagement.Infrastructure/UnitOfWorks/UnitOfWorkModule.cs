@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Infrastructure;
 using Wealth.BuildingBlocks.Infrastructure.EFCore.Extensions;
 using Microsoft.EntityFrameworkCore;

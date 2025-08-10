@@ -1,7 +1,6 @@
 using System.Data;
 using MediatR;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Domain;
 
 namespace Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 

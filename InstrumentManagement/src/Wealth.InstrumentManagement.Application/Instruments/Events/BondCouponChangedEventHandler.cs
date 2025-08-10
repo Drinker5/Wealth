@@ -11,7 +11,7 @@ internal class BondCouponChangedEventHandler(IOutboxRepository outboxRepository)
             notification,
             new BondCouponChangedIntegrationEvent
             {
-                InstrumentId = notification.BondId,
+                BondId = notification.BondId,
                 ISIN = notification.ISIN,
                 NewCoupon = notification.NewCoupon.ValuePerYear,
             },

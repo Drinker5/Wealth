@@ -5,6 +5,7 @@ namespace Wealth.StrategyTracking.Domain.Strategies;
 
 public abstract class StrategyComponent : IEntity
 {
+    public StrategyComponentId Id { get; set; }
     public float Weight { get; set; }
     public abstract StrategyComponentType Type { get; }
 }

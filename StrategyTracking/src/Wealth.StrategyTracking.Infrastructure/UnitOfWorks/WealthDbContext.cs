@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Storage;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Domain;
-using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.BuildingBlocks.Infrastructure;
-using Wealth.BuildingBlocks.Infrastructure.EFCore.Converters;
 using Wealth.BuildingBlocks.Infrastructure.EFCore.EntityConfigurations;
 using Wealth.StrategyTracking.Domain.Strategies;
 using Wealth.StrategyTracking.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;

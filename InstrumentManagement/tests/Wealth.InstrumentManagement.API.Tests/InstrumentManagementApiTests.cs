@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using Grpc.Net.Client;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Wealth.BuildingBlocks;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Application.Services;
 using Xunit;
