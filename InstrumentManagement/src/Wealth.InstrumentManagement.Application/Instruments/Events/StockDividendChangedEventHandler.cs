@@ -11,7 +11,7 @@ internal class StockDividendChangedEventHandler(IOutboxRepository outboxReposito
             notification,
             new StockDividendChangedIntegrationEvent
             {
-                InstrumentId = notification.StockId,
+                StockId = notification.StockId,
                 ISIN = notification.ISIN,
                 NewDividend = notification.NewDividend.ValuePerYear,
             },

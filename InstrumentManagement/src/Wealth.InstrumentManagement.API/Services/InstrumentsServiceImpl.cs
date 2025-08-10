@@ -1,9 +1,7 @@
 using Grpc.Core;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Instruments.Queries;
-using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.API.Services;
 
@@ -30,7 +28,7 @@ public class InstrumentsServiceImpl : InstrumentsService.InstrumentsServiceBase
 
             return new CreateStockResponse
             {
-                Id = stockId
+                StockId = stockId
             };
         }
         catch (Exception ex)
@@ -49,59 +47,71 @@ public class InstrumentsServiceImpl : InstrumentsService.InstrumentsServiceBase
 
         return new CreateBondResponse
         {
-            Id = bondId
+            BondId = bondId
         };
     }
 
-    public override async Task<GetInstrumentResponse> GetInstrument(GetInstrumentRequest request, ServerCallContext context)
+    public override async Task<GetBondResponse> GetBond(GetBondRequest request, ServerCallContext context)
     {
-        var id = request.Id;
-        var instrument = await mediator.Query(new GetInstrument(id));
+        var id = request.BondId;
+        var instrument = await mediator.Query(new GetBond(id));
         if (instrument == null)
             throw new RpcException(new Status(StatusCode.NotFound, "Instrument not found"));
 
-        return GetInstrumentResponse(instrument);
-    }
-
-    private static GetInstrumentResponse GetInstrumentResponse(Instrument instrument)
-    {
-        var response = new GetInstrumentResponse
+        var response = new GetBondResponse
         {
-            Id = instrument.Id,
+            BondId = instrument.Id,
             Name = instrument.Name,
             Price = instrument.Price,
             Isin = instrument.ISIN,
         };
 
-        switch (instrument)
+        return response;
+    }
+
+    public override async Task<GetStockResponse> GetStock(GetStockRequest request, ServerCallContext context)
+    {
+        var instrument = await mediator.Query(new GetStock(request.StockId));
+        if (instrument == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Instrument not found"));
+
+        var response = new GetStockResponse
         {
-            case Stock stock:
-                response.StockInfo = new StockInstrumentProto
-                {
-                    DividendPerYear = stock.Dividend.ValuePerYear,
-                    LotSize = stock.LotSize,
-                };
-                break;
-            case Bond bond:
-                response.BondInfo = new BondInstrumentProto();
-                break;
-            default:
-                throw new RpcException(new Status(StatusCode.NotFound, "Instrument type is not defined"));
-        }
+            StockId = instrument.Id,
+            Name = instrument.Name,
+            Price = instrument.Price,
+            Isin = instrument.ISIN,
+            DividendPerYear = instrument.Dividend.ValuePerYear,
+            LotSize = instrument.LotSize,
+        };
 
         return response;
     }
 
-    public override async Task<ChangePriceResponse> ChangePrice(ChangePriceRequest request, ServerCallContext context)
+    public override async Task<ChangePriceResponse> ChangeStockPrice(ChangeStockPriceRequest request, ServerCallContext context)
     {
-        InstrumentId id = request.Id;
-        var instrument = await mediator.Query(new GetInstrument(id));
+        var instrument = await mediator.Query(new GetStock(request.StockId));
         if (instrument == null)
             throw new RpcException(new Status(StatusCode.NotFound, "Instrument not found"));
 
-        await mediator.Command(new ChangePriceCommand
+        await mediator.Command(new ChangeStockPriceCommand
         {
-            Id = request.Id,
+            StockId = request.StockId,
+            Price = request.Price,
+        });
+
+        return new ChangePriceResponse();
+    }
+    
+    public override async Task<ChangePriceResponse> ChangeBondPrice(ChangeBondPriceRequest request, ServerCallContext context)
+    {
+        var instrument = await mediator.Query(new GetBond(request.BondId));
+        if (instrument == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Instrument not found"));
+
+        await mediator.Command(new ChangeBondPriceCommand
+        {
+            BondId = request.BondId,
             Price = request.Price,
         });
 

@@ -4,32 +4,22 @@ namespace Wealth.PortfolioManagement.Application.Services;
 
 public interface IInstrumentService
 {
-    Task<InstrumentInfo> GetInstrumentInfo(InstrumentId instrumentId);
+    Task<StockInstrumentInfo> GetStockInfo(StockId instrumentId);
+    Task<BondInstrumentInfo> GetBondInfo(BondId instrumentId);
 }
 
-public abstract class InstrumentInfo
+public class StockInstrumentInfo
 {
-    public InstrumentId Id { get; set; }
-    public abstract InstrumentType Type { get; }
+    public StockId Id { get; set; }
     public string Name { get; set; }
     public Money Price { get; set; }
-}
-
-public class StockInstrumentInfo : InstrumentInfo
-{
-    public override InstrumentType Type => InstrumentType.Stock;
     public Money DividendPerYear { get; set; }
     public int LotSize { get; set; }
 }
 
-public class BondInstrumentInfo : InstrumentInfo
+public class BondInstrumentInfo
 {
-    public override InstrumentType Type => InstrumentType.Stock;
-}
-
-
-public enum InstrumentType
-{
-    Stock,
-    Bond
+    public BondId Id { get; set; }
+    public string Name { get; set; }
+    public Money Price { get; set; }
 }

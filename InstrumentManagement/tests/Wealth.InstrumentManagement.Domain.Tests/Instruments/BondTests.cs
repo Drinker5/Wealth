@@ -32,7 +32,6 @@ public class BondTests
             Assert.That(instrument.Name, Is.EqualTo(name));
             Assert.That(instrument.ISIN, Is.EqualTo(isin));
             Assert.That(instrument.Coupon, Is.Null);
-            Assert.That(instrument.Type, Is.EqualTo(InstrumentType.Bond));
         }
     }
 
@@ -44,10 +43,10 @@ public class BondTests
 
         instrument.ChangePrice(money);
 
-        var @event = instrument.HasEvent<InstrumentPriceChanged>();
+        var @event = instrument.HasEvent<BondPriceChanged>();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(@event.InstrumentId, Is.Not.Default);
+            Assert.That(@event.BondId, Is.Not.Default);
             Assert.That(@event.ISIN, Is.EqualTo(isin));
             Assert.That(@event.NewPrice, Is.EqualTo(money));
         }

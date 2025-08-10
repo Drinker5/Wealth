@@ -17,7 +17,7 @@ public class Portfolio : AggregateRoot
     }
 
     public static Portfolio Create(string name)
-    { 
+    {
         var portfolio = new Portfolio
         {
             Id = PortfolioId.New(),
@@ -44,7 +44,7 @@ public class Portfolio : AggregateRoot
         Apply(new CurrencyWithdrew(Id, currencyId, amount));
     }
 
-    public void Buy(InstrumentId instrumentId, Money totalPrice, int quantity)
+    public void Buy(StockId instrumentId, Money totalPrice, int quantity)
     {
         if (quantity == 0)
             return;
@@ -52,7 +52,7 @@ public class Portfolio : AggregateRoot
         Apply(new AssetBought(Id, instrumentId, totalPrice, quantity));
     }
 
-    public void Sell(InstrumentId instrumentId, Money price, int quantity)
+    public void Sell(StockId instrumentId, Money price, int quantity)
     {
         if (quantity == 0)
             return;
@@ -91,7 +91,7 @@ public class Portfolio : AggregateRoot
         if (ratio.Old == ratio.New)
             return;
 
-        Apply(new InstrumentSplit(Id, instrumentId, ratio));
+        Apply(new StockSplit(Id, instrumentId, ratio));
     }
 
     public void Delist(InstrumentId instrumentId)
@@ -99,7 +99,7 @@ public class Portfolio : AggregateRoot
         if (Assets.All(i => i.InstrumentId != instrumentId))
             return;
 
-        Apply(new InstrumentDelisted(Id, instrumentId));
+        Apply(new StockDelisted(Id, instrumentId));
     }
 
     private void When(PortfolioCreated @event)
@@ -118,15 +118,27 @@ public class Portfolio : AggregateRoot
         ChangeCurrencyAmount(@event.CurrencyId, -@event.Amount);
     }
 
-    private void When(AssetBought @event)
+    private void When(StockBought @event)
     {
-        ChangeAssetQuantity(@event.InstrumentId, @event.Quantity);
+        ChangeAssetQuantity(@event.StockId, @event.Quantity);
         ChangeCurrencyAmount(@event.TotalPrice.CurrencyId, -@event.TotalPrice.Amount);
     }
 
-    private void When(AssetSold @event)
+    private void When(StockSold @event)
     {
-        ChangeAssetQuantity(@event.InstrumentId, -@event.Quantity);
+        ChangeAssetQuantity(@event.StockId, -@event.Quantity);
+        ChangeCurrencyAmount(@event.Price.CurrencyId, @event.Price.Amount);
+    }
+
+    private void When(BondBought @event)
+    {
+        ChangeAssetQuantity(@event.BondId, @event.Quantity);
+        ChangeCurrencyAmount(@event.TotalPrice.CurrencyId, -@event.TotalPrice.Amount);
+    }
+
+    private void When(BondSold @event)
+    {
+        ChangeAssetQuantity(@event.BondId, -@event.Quantity);
         ChangeCurrencyAmount(@event.Price.CurrencyId, @event.Price.Amount);
     }
 
@@ -140,15 +152,15 @@ public class Portfolio : AggregateRoot
         ChangeCurrencyAmount(@event.Expense.CurrencyId, -@event.Expense.Amount);
     }
 
-    private void When(InstrumentSplit @event)
+    private void When(StockSplit @event)
     {
-        var asset = GetOrCreate(@event.InstrumentId);
+        var asset = GetOrCreate(@event.StockId);
         asset.Quantity = @event.Ratio.Apply(asset.Quantity);
     }
 
-    private void When(InstrumentDelisted @event)
+    private void When(StockDelisted @event)
     {
-        var asset = GetOrCreate(@event.InstrumentId);
+        var asset = GetOrCreate(@event.StockId);
         Assets.Remove(asset);
     }
 

@@ -5,7 +5,7 @@ namespace Wealth.InstrumentManagement.Domain.Repositories;
 
 public interface IBondsRepository
 {
-    Task<IEnumerable<Bond>> GetBonds();
+    Task<IReadOnlyCollection<Bond>> GetBonds();
     Task<Bond?> GetBond(BondId id);
     Task<Bond?> GetBond(ISIN isin);
     Task DeleteBond(BondId id);

@@ -7,20 +7,25 @@ package wealth;
 option csharp_namespace = "Wealth.InstrumentManagement";
 
 message BondCouponChangedIntegrationEvent {
-  InstrumentIdProto instrument_id = 1;
+  BondIdProto bond_id = 1;
   ISINProto ISIN = 2;
   MoneyProto new_coupon = 3;
 }
 
 message StockDividendChangedIntegrationEvent {
-  InstrumentIdProto instrument_id = 1;
+  StockIdProto stock_id = 1;
   ISINProto ISIN = 2;
   MoneyProto new_dividend = 3;
 }
 
-message InstrumentPriceChangedIntegrationEvent {
-  InstrumentIdProto instrument_id = 1;
+message StockPriceChangedIntegrationEvent {
+  StockIdProto stock_id = 1;
   ISINProto ISIN = 2;
   MoneyProto new_price = 3;
-  InstrumentTypeProto instrument_type = 4;
+}
+
+message BondPriceChangedIntegrationEvent {
+  BondIdProto bond_id = 1;
+  ISINProto ISIN = 2;
+  MoneyProto new_price = 3;
 }

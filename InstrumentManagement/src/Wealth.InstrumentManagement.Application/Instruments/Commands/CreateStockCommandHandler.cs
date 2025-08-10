@@ -4,7 +4,7 @@ using Wealth.InstrumentManagement.Domain.Repositories;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Commands;
 
-public class CreateStockCommandHandler : ICommandHandler<CreateStockCommand, InstrumentId>
+public class CreateStockCommandHandler : ICommandHandler<CreateStockCommand, StockId>
 {
     private readonly IStocksRepository repository;
 
@@ -13,7 +13,7 @@ public class CreateStockCommandHandler : ICommandHandler<CreateStockCommand, Ins
         this.repository = repository;
     }
 
-    public Task<InstrumentId> Handle(CreateStockCommand request, CancellationToken cancellationToken)
+    public Task<StockId> Handle(CreateStockCommand request, CancellationToken cancellationToken)
     {
         return repository.CreateStock(request.Name, request.ISIN);
     }

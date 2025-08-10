@@ -1,7 +1,5 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Storage;
 using Wealth.Aggregation.Domain;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Infrastructure.EFCore.Converters;
@@ -41,6 +39,6 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<CurrencyId>().HaveConversion<CurrencyIdConverter>();
-        configurationBuilder.Properties<InstrumentId>().HaveConversion<InstrumentIdConverter>();
+        configurationBuilder.Properties<StockId>().HaveConversion<StockIdConverter>();
     }
 }

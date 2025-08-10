@@ -1,6 +1,5 @@
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Application.CommandScheduler;
-using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Domain.Currencies;
 
 namespace Wealth.CurrencyManagement.Application.Currencies.Events;

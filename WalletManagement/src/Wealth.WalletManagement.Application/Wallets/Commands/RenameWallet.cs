@@ -1,5 +1,5 @@
 using Wealth.BuildingBlocks.Application;
-using Wealth.WalletManagement.Domain.Wallets;
+using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.WalletManagement.Application.Wallets.Commands;
 

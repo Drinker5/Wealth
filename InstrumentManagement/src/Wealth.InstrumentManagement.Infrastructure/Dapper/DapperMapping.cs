@@ -13,7 +13,7 @@ public static class DapperMapping
         DommelMapper.SetKeyPropertyResolver(new KeyResolver());
         DommelMapper.SetTableNameResolver(new CustomTableNameResolver());
 
-        SqlMapper.AddTypeHandler(typeof(InstrumentId), new InstrumentIdHandler());
+        SqlMapper.AddTypeHandler(typeof(StockId), new StockIdHandler());
     }
 }
 
@@ -21,23 +21,23 @@ public class CustomTableNameResolver : ITableNameResolver
 {
     public string ResolveTableName(Type type)
     {
-        if (type.IsAssignableTo(typeof(Instrument)))
-            return "Instruments";
-
+        if (type.IsAssignableTo(typeof(Stock)))
+            return "Stocks";
+        if (type.IsAssignableTo(typeof(Bond)))
+            return "Bonds";
         return type.Name;
     }
 }
 
-public class InstrumentIdHandler : SqlMapper.TypeHandler<InstrumentId>
+public class StockIdHandler : SqlMapper.TypeHandler<StockId>
 {
-    public override void SetValue(IDbDataParameter parameter, InstrumentId value)
+    public override void SetValue(IDbDataParameter parameter, StockId value)
     {
         parameter.Value = value.Id;
     }
 
-    public override InstrumentId Parse(object value)
+    public override StockId Parse(object value)
     {
-        return new InstrumentId((Guid)value);
+        return new StockId((int)value);
     }
 }
-

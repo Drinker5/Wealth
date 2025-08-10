@@ -1,6 +1,5 @@
 using Wealth.BuildingBlocks.Application;
 using Wealth.StrategyTracking.Domain.Repositories;
-using Wealth.StrategyTracking.Domain.Strategies;
 
 namespace Wealth.StrategyTracking.Application.Strategies.Queries;
 

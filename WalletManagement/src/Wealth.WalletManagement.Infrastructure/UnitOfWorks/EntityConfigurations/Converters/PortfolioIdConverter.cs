@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Wealth.WalletManagement.Domain.Wallets;
+using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.WalletManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
 

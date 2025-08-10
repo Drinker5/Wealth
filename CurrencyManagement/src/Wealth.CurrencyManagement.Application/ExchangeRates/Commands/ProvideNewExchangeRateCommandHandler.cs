@@ -1,6 +1,5 @@
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Application.CommandScheduler;
-using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Application.DataProviders;
 
 namespace Wealth.CurrencyManagement.Application.ExchangeRates.Commands;

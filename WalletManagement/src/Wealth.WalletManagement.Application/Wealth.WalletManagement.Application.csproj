@@ -12,9 +12,9 @@
     <ProjectReference Include="..\Wealth.WalletManagement.Domain\Wealth.WalletManagement.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Protobuf Include="..\..\..\protos\Common.proto"
-              GrpcServices="Client"
-              Link="Common.proto" />
-    <Protobuf Include="Events.proto" GrpcServices="Client" />
+    <Protobuf Include="Events.proto" GrpcServices="Client" AdditionalImportDirs="..\..\..\protos\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
 </Project>

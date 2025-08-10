@@ -1,5 +1,4 @@
-﻿using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.BuildingBlocks.Infrastructure.EFCore.DbSeeding;
+﻿using Wealth.BuildingBlocks.Infrastructure.EFCore.DbSeeding;
 using Wealth.StrategyTracking.Domain.Strategies;
 using Wealth.StrategyTracking.Infrastructure.UnitOfWorks;
 
@@ -20,14 +19,39 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
     private static IEnumerable<Strategy> GetPredefinedStrategies()
     {
         var foo = Strategy.Create("Seed-strategy-1");
-        foo.AddOrUpdateComponent(new InstrumentId(new Guid("00000000-0000-0000-0000-000000000001")), 50f);
-        foo.AddOrUpdateComponent(new InstrumentId(new Guid("00000000-0000-0000-0000-000000000002")), 50f);
+        foo.AddOrUpdateComponent(new StockStrategyComponent
+        {
+            Id = new Guid("00000000-0000-0000-0000-000000000001"),
+            StockId = 1,
+            Weight = 50f,
+        });
+        foo.AddOrUpdateComponent(new BondStrategyComponent(
+        {
+            Id = new Guid("00000000-0000-0000-0000-000000000002"),
+            BondId = 1,
+            Weight = 50f,
+        });
         yield return foo;
-        
+
         var bar = Strategy.Create("Seed-strategy-2");
-        bar.AddOrUpdateComponent(new InstrumentId(new Guid("00000000-0000-0000-0000-000000000002")), 30f);
-        bar.AddOrUpdateComponent(new InstrumentId(new Guid("00000000-0000-0000-0000-000000000003")), 30f);
-        bar.AddOrUpdateComponent(new InstrumentId(new Guid("00000000-0000-0000-0000-000000000004")), 40f);
+        bar.AddOrUpdateComponent(new StockStrategyComponent
+        {
+            Id = new Guid("00000000-0000-0000-0000-000000000003"),
+            StockId = 2,
+            Weight = 30f,
+        });
+        bar.AddOrUpdateComponent(new BondStrategyComponent()
+        {
+            Id =  new Guid("00000000-0000-0000-0000-000000000004"),
+            BondId = 2,
+            Weight = 30f,
+        });
+        bar.AddOrUpdateComponent(new CurrencyStrategyComponent()
+        {
+            Id =  new Guid("00000000-0000-0000-0000-000000000005"),
+            CurrencyId = "RUB",
+            Weight = 40f,
+        });
         yield return bar;
     }
 }

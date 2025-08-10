@@ -4,18 +4,18 @@ using Wealth.InstrumentManagement.Domain.Repositories;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Queries;
 
-public class GetInstrumentsQueryHandler : IQueryHandler<GetInstrumentsQuery, IEnumerable<Instrument>>
+public class GetBondsQueryHandler : IQueryHandler<GetBondsQuery, IReadOnlyCollection<Bond>>
 {
-    private readonly IInstrumentsRepository repository;
+    private readonly IBondsRepository repository;
 
-    public GetInstrumentsQueryHandler(IInstrumentsRepository repository)
+    public GetBondsQueryHandler(IBondsRepository repository)
     {
         this.repository = repository;
     }
 
-    public async Task<IEnumerable<Instrument>> Handle(GetInstrumentsQuery request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<Bond>> Handle(GetBondsQuery request, CancellationToken cancellationToken)
     {
-        var instruments = await repository.GetInstruments();
+        var instruments = await repository.GetBonds();
         return instruments;
     }
 }

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Application.CommandScheduler;
-using Wealth.CurrencyManagement.Application.Abstractions;
 using Wealth.CurrencyManagement.Application.Outbox.Commands;
 
 namespace Wealth.CurrencyManagement.API.Controllers;

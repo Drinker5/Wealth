@@ -7,7 +7,7 @@ namespace Wealth.Aggregation.Infrastructure.Repositories;
 
 public class StockAggregationRepository(WealthDbContext context) : IStockAggregationRepository
 {
-    public async Task<StockAggregation?> GetStock(InstrumentId id)
+    public async Task<StockAggregation?> GetStock(StockId id)
     {
         return await context.StockAggregations.SingleOrDefaultAsync(i => i.Id == id);
     }
@@ -17,14 +17,14 @@ public class StockAggregationRepository(WealthDbContext context) : IStockAggrega
         return await context.StockAggregations.ToListAsync();
     }
 
-    public async Task<StockAggregation> Create(InstrumentId id, string name, Money stockPrice, Money dividendPerYear, int lotSize)
+    public async Task<StockAggregation> Create(StockId id, string name, Money stockPrice, Money dividendPerYear, int lotSize)
     {
         var stockAggregation = new StockAggregation(id, name, stockPrice, dividendPerYear, lotSize);
         await context.StockAggregations.AddAsync(stockAggregation);
         return stockAggregation;
     }
 
-    public async Task ChangeName(InstrumentId id, string name)
+    public async Task ChangeName(StockId id, string name)
     {
         var stockAggregation = await GetStock(id);
         if (stockAggregation != null)
@@ -34,7 +34,7 @@ public class StockAggregationRepository(WealthDbContext context) : IStockAggrega
         }
     }
 
-    public async Task ChangePrice(InstrumentId id, Money price)
+    public async Task ChangePrice(StockId id, Money price)
     {
         var stockAggregation = await GetStock(id);
         if (stockAggregation != null)
@@ -44,7 +44,7 @@ public class StockAggregationRepository(WealthDbContext context) : IStockAggrega
         }
     }
 
-    public async Task ChangeDividendPerYear(InstrumentId id, Money dividendPerYear)
+    public async Task ChangeDividendPerYear(StockId id, Money dividendPerYear)
     {
         var stockAggregation = await GetStock(id);
         if (stockAggregation != null)
@@ -54,7 +54,7 @@ public class StockAggregationRepository(WealthDbContext context) : IStockAggrega
         }
     }
 
-    public async Task ChangeLotSize(InstrumentId id, int lotSize)
+    public async Task ChangeLotSize(StockId id, int lotSize)
     {
         var stockAggregation = await GetStock(id);
         if (stockAggregation != null)
@@ -64,7 +64,7 @@ public class StockAggregationRepository(WealthDbContext context) : IStockAggrega
         }
     }
 
-    public async Task Buy(InstrumentId id, int quantity, Money investment)
+    public async Task Buy(StockId id, int quantity, Money investment)
     {
         var stockAggregation = await GetStock(id);
         if (stockAggregation != null)
@@ -74,7 +74,7 @@ public class StockAggregationRepository(WealthDbContext context) : IStockAggrega
         }
     }
 
-    public async Task Sell(InstrumentId id, int quantity, Money profit)
+    public async Task Sell(StockId id, int quantity, Money profit)
     {
         var stockAggregation = await GetStock(id);
         if (stockAggregation != null)
@@ -84,7 +84,7 @@ public class StockAggregationRepository(WealthDbContext context) : IStockAggrega
         }
     }
 
-    public async Task AddDividend(InstrumentId id, Money dividend)
+    public async Task AddDividend(StockId id, Money dividend)
     {
         var stockAggregation = await GetStock(id);
         if (stockAggregation != null)

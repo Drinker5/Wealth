@@ -155,7 +155,7 @@ public class PortfolioTests
 
         var asset = Assert.Single(portfolio.Assets);
         Assert.Equal(1, asset.Quantity);
-        var ev = portfolio.HasEvent<InstrumentSplit>();
+        var ev = portfolio.HasEvent<StockSplit>();
         Assert.Equal(portfolio.Id, ev.PortfolioId);
         Assert.Equal(instrumentId, ev.InstrumentId);
         Assert.Equal(splitRatio, ev.Ratio);
@@ -171,7 +171,7 @@ public class PortfolioTests
 
         var asset = Assert.Single(portfolio.Assets);
         Assert.Equal(10000, asset.Quantity);
-        var ev = portfolio.HasEvent<InstrumentSplit>();
+        var ev = portfolio.HasEvent<StockSplit>();
         Assert.Equal(portfolio.Id, ev.PortfolioId);
         Assert.Equal(instrumentId, ev.InstrumentId);
         Assert.Equal(splitRatio, ev.Ratio);
@@ -184,7 +184,7 @@ public class PortfolioTests
         
         portfolio.Delist(instrumentId);
         
-        var ev = portfolio.HasEvent<InstrumentDelisted>();
+        var ev = portfolio.HasEvent<StockDelisted>();
         Assert.Equal(portfolio.Id, ev.PortfolioId);
         Assert.Equal(instrumentId, ev.InstrumentId);
         Assert.Empty(portfolio.Assets);
