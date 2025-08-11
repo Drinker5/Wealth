@@ -10,7 +10,6 @@ public interface IBondsRepository
     Task<Bond?> GetBond(ISIN isin);
     Task DeleteBond(BondId id);
     Task ChangePrice(BondId id, Money price);
-    Task<BondId> CreateBond(BondId id, string name, ISIN isin);
     Task<BondId> CreateBond(string name, ISIN isin);
     Task ChangeCoupon(BondId id, Coupon coupon);
 }

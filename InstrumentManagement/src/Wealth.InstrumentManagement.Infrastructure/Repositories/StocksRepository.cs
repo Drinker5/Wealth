@@ -19,22 +19,22 @@ public class StocksRepository : IStocksRepository
         connection = dbContext.CreateConnection();
     }
 
-    public async Task<IEnumerable<Stock>> GetStocks()
+    public async Task<IReadOnlyCollection<Stock>> GetStocks()
     {
-        var sql = """SELECT * FROM "GetStocks" LIMIT 10""";
+        const string sql = """SELECT * FROM "GetStocks" LIMIT 10""";
         return await GetStocks(sql);
     }
 
     public async Task<Stock?> GetStock(ISIN isin)
     {
-        var sql = """SELECT * FROM "Stocks" WHERE "ISIN" = @isin""";
+        const string sql = """SELECT * FROM "Stocks" WHERE "ISIN" = @isin""";
         var instruments = await GetStocks(sql, new { isin = isin.Value });
         return instruments.FirstOrDefault();
     }
 
     public async Task DeleteStock(StockId id)
     {
-        var sql = """DELETE FROM "Stocks" WHERE "Id" = @Id""";
+        const string sql = """DELETE FROM "Stocks" WHERE "Id" = @Id""";
         await connection.ExecuteAsync(sql, new { Id = id.Id });
     }
 
@@ -45,11 +45,11 @@ public class StocksRepository : IStocksRepository
             return;
 
         instrument.ChangePrice(price);
-        var sql = """
-                  UPDATE "Stocks" 
-                  SET "Price_CurrencyId" = @CurrencyId, "Price_Amount" = @Amount
-                  WHERE "Id" = @Id
-                  """;
+        const string sql = """
+                           UPDATE "Stocks" 
+                           SET "Price_CurrencyId" = @CurrencyId, "Price_Amount" = @Amount
+                           WHERE "Id" = @Id
+                           """;
         await connection.ExecuteAsync(sql, new
         {
             Id = id.Id,
@@ -67,7 +67,7 @@ public class StocksRepository : IStocksRepository
 
     public async Task<Stock?> GetStock(StockId id)
     {
-        var sql = """SELECT * FROM "Stocks" WHERE "Id" = @Id""";
+        const string sql = """SELECT * FROM "Stocks" WHERE "Id" = @Id""";
         var instruments = await GetStocks(sql, new { Id = id.Id });
         return instruments.FirstOrDefault();
     }
@@ -80,10 +80,10 @@ public class StocksRepository : IStocksRepository
 
     private async Task<StockId> CreateStock(Stock stock)
     {
-        var sql = """
-                  INSERT INTO "Stocks" ("Id", "Name", "ISIN") 
-                  VALUES (@Id, @Name, @ISIN)
-                  """;
+        const string sql = """
+                           INSERT INTO "Stocks" ("Id", "Name", "ISIN") 
+                           VALUES (@Id, @Name, @ISIN)
+                           """;
         await connection.ExecuteAsync(sql, new
         {
             Id = stock.Id.Id,
@@ -102,11 +102,11 @@ public class StocksRepository : IStocksRepository
             return;
 
         instrument.ChangeDividend(dividend);
-        var sql = """
-                  UPDATE "Stocks" 
-                  SET "Dividend_CurrencyId" = @CurrencyId, "Dividend_Amount" = @Amount
-                  WHERE "Id" = @Id
-                  """;
+        const string sql = """
+                           UPDATE "Stocks" 
+                           SET "Dividend_CurrencyId" = @CurrencyId, "Dividend_Amount" = @Amount
+                           WHERE "Id" = @Id
+                           """;
         await connection.ExecuteAsync(sql, new
         {
             Id = id.Id,
@@ -123,11 +123,11 @@ public class StocksRepository : IStocksRepository
             return;
 
         instrument.ChangeLotSize(lotSize);
-        var sql = """
-                  UPDATE "Stocks" 
-                  SET "LotSize" = @LotSize
-                  WHERE "Id" = @Id
-                  """;
+        const string sql = """
+                           UPDATE "Stocks" 
+                           SET "LotSize" = @LotSize
+                           WHERE "Id" = @Id
+                           """;
         await connection.ExecuteAsync(sql, new
         {
             Id = id.Id,
