@@ -14,8 +14,9 @@ public class Bond : AggregateRoot
 
     public Money Price { get; set; } = Money.Empty;
     
-    private Bond()
+    public Bond(BondId Id)
     {
+        Id = Id;
     }
 
     public Coupon Coupon { get; set; }
@@ -27,7 +28,7 @@ public class Bond : AggregateRoot
     
     public static Bond Create(BondId bondId, string name, ISIN isin)
     {
-        var bond = new Bond();
+        var bond = new Bond(bondId);
         bond.Apply(new BondCreated
         {
             BondId = bondId,

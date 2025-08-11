@@ -17,13 +17,13 @@ public class UnitOfWorksModule : IServiceModule
     {
         if (configuration.GetValue<bool>("InMemoryRepository"))
         {
-            services.AddSingleton<IBondsRepository, InMemoryInstrumentRepository>();
-            services.AddSingleton<IStocksRepository, InMemoryInstrumentRepository>();
+            services.AddSingleton<IBondsRepository, InMemoryBondsRepository>();
+            services.AddSingleton<IStocksRepository, InMemoryStocksRepository>();
         }
         else
         {
-            services.AddScoped<IBondsRepository, InstrumentRepository>();
-            services.AddScoped<IStocksRepository, InstrumentRepository>();
+            services.AddScoped<IBondsRepository, BondsRepository>();
+            services.AddScoped<IStocksRepository, StocksRepository>();
         }
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
