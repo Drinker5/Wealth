@@ -17,7 +17,7 @@ public class CreateStockCommandHandlerTests
             ISIN = ISIN.Empty,
             Name = "Foo",
         };
-        InstrumentId id = new Guid("00000000-0000-0000-0000-000000000001");
+        StockId id = 1;
         A.CallTo(() => stocksRepository.CreateStock(command.Name, command.ISIN)).Returns(id);
         var handler = new CreateStockCommandHandler(stocksRepository);
         

@@ -1,3 +1,4 @@
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Services;
 using Wealth.InstrumentManagement.Domain.Instruments;
@@ -17,7 +18,7 @@ public class ChangeCouponCommandHandlerTests
         A.CallTo(() => currencyService.IsCurrencyExists("FOO")).Returns(true);
         var command = new ChangeCouponCommand
         {
-            Id = InstrumentId.New(),
+            Id = BondId.New(),
             Coupon = new Coupon("FOO", 3.42m),
         };
         var handler = new ChangeCouponCommandHandler(bondsRepository, currencyService);

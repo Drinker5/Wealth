@@ -18,4 +18,9 @@ public partial class ISINProto
     {
         return new ISINProto(value.Value);
     }
+    
+    public static implicit operator ISINProto(string value)
+    {
+        return new ISINProto(value);
+    }
 }

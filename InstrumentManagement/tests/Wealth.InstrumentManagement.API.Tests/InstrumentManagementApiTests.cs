@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Grpc.Net.Client;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Wealth.BuildingBlocks;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Application.Services;
 using Xunit;
@@ -27,41 +28,45 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
 
         client = new InstrumentsService.InstrumentsServiceClient(channel);
         currencyService = fixture.CurrencyService;
-        
+
         A.CallTo(() => currencyService.IsCurrencyExists("RUB")).Returns(true);
     }
 
     [Fact]
     public async Task GetBond()
     {
-        var instrumentId = new InstrumentIdProto
+        var instrumentId = new BondIdProto
         {
-            Id = new Guid("00000000-0000-0000-0000-000000000001"),
+            Id = 1,
         };
 
-        var instrument = await client.GetInstrumentAsync(new GetInstrumentRequest
+        var instrument = await client.GetBondAsync(new GetBondRequest
         {
-            Id = instrumentId
+            BondId = instrumentId
         });
 
-        Assert.Equal(GetInstrumentResponse.InstrumentOneofCase.BondInfo, instrument.InstrumentCase);
+
+        Assert.Equal(1, instrument.BondId.Id);
+        Assert.Equal(0, instrument.Price.Price);
         Assert.Equal("test-bond-1", instrument.Name);
     }
 
     [Fact]
     public async Task GetStock()
     {
-        var instrumentId = new InstrumentIdProto
+        var instrumentId = new StockIdProto
         {
-            Id = new Guid("00000000-0000-0000-0000-000000000003"),
+            Id = 1,
         };
 
-        var instrument = await client.GetInstrumentAsync(new GetInstrumentRequest
+        var instrument = await client.GetStockAsync(new GetStockRequest
         {
-            Id = instrumentId
+            StockId = instrumentId
         });
 
-        Assert.Equal(GetInstrumentResponse.InstrumentOneofCase.StockInfo, instrument.InstrumentCase);
+        Assert.Equal(1, instrument.StockId.Id);
+        Assert.Equal(1, instrument.LotSize);
+        Assert.Equal(0, instrument.Price.Price);
         Assert.Equal("test-stock-1", instrument.Name);
     }
 
@@ -76,21 +81,20 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
 
         var createStockResponse = await client.CreateStockAsync(createStockRequest);
 
-        Assert.NotEmpty(createStockResponse.Id.Id.Value);
-        InstrumentId stockId = createStockResponse.Id;
+        Assert.NotEqual(0, createStockResponse.StockId.Id);
+        var stockId = createStockResponse.StockId;
 
-        var instrument = await client.GetInstrumentAsync(new GetInstrumentRequest { Id = stockId });
+        var instrument = await client.GetStockAsync(new GetStockRequest { StockId = stockId });
 
-        Assert.Equal(GetInstrumentResponse.InstrumentOneofCase.StockInfo, instrument.InstrumentCase);
         Assert.Equal(createStockRequest.Name, instrument.Name);
         Assert.Equal(createStockRequest.Isin, instrument.Isin);
         Assert.Equal(0, instrument.Price.Price);
         var newPrice = new Money("RUB", 123);
 
-        await client.ChangePriceAsync(new ChangePriceRequest { Id = stockId, Price = newPrice });
-        
-        instrument = await client.GetInstrumentAsync(new GetInstrumentRequest { Id = stockId });
-        
+        await client.ChangeStockPriceAsync(new ChangeStockPriceRequest { StockId = stockId, Price = newPrice });
+
+        instrument = await client.GetStockAsync(new GetStockRequest { StockId = stockId });
+
         Assert.Equal(newPrice, (Money)instrument.Price);
     }
 
@@ -105,24 +109,23 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
 
         var createBondResponse = await client.CreateBondAsync(createStockRequest);
 
-        Assert.NotEmpty(createBondResponse.Id.Id.Value);
-        InstrumentId bondId = createBondResponse.Id;
+        Assert.NotEqual(0, createBondResponse.BondId.Id);
+        var bondId = createBondResponse.BondId;
 
-        var instrument = await client.GetInstrumentAsync(new GetInstrumentRequest
+        var instrument = await client.GetBondAsync(new GetBondRequest
         {
-            Id = bondId
+            BondId = bondId
         });
-        
-        Assert.Equal(GetInstrumentResponse.InstrumentOneofCase.BondInfo, instrument.InstrumentCase);
+
         Assert.Equal(createStockRequest.Name, instrument.Name);
         Assert.Equal(createStockRequest.Isin, instrument.Isin);
         Assert.Equal(0, instrument.Price.Price);
         var newPrice = new Money("RUB", 123);
 
-        await client.ChangePriceAsync(new ChangePriceRequest { Id = bondId, Price = newPrice });
-        
-        instrument = await client.GetInstrumentAsync(new GetInstrumentRequest { Id = bondId });
-        
+        await client.ChangeBondPriceAsync(new ChangeBondPriceRequest { BondId = bondId, Price = newPrice });
+
+        instrument = await client.GetBondAsync(new GetBondRequest { BondId = bondId });
+
         Assert.Equal(newPrice, (Money)instrument.Price);
     }
 }
