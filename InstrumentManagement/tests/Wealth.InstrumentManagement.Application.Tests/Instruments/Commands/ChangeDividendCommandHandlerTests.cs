@@ -1,3 +1,4 @@
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Services;
 using Wealth.InstrumentManagement.Domain.Instruments;
@@ -17,7 +18,7 @@ public class ChangeDividendCommandHandlerTests
         A.CallTo(() => currencyService.IsCurrencyExists("FOO")).Returns(true);
         var command = new ChangeDividendCommand
         {
-            Id = InstrumentId.New(),
+            Id = StockId.New(),
             Dividend = new Dividend("FOO", 3.42m),
         };
         var handler = new ChangeDividendCommandHandler(stocksRepository, currencyService);

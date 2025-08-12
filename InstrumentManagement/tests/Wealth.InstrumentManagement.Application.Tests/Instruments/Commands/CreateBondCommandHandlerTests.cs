@@ -17,7 +17,7 @@ public class CreateBondCommandHandlerTests
             ISIN = ISIN.Empty,
             Name = "Foo",
         };
-        InstrumentId id = new Guid("00000000-0000-0000-0000-000000000001");
+        BondId id = 1;
         A.CallTo(() => bondsRepository.CreateBond(command.Name, command.ISIN)).Returns(id);
         var handler = new CreateBondCommandHandler(bondsRepository);
 
