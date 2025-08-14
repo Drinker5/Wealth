@@ -1,3 +1,4 @@
+using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.PortfolioManagement.Domain.Portfolios.Events;
@@ -5,4 +6,4 @@ namespace Wealth.PortfolioManagement.Domain.Portfolios.Events;
 public record AmortizationApplied(
     PortfolioId PortfolioId,
     BondId BondId,
-    Money Income);
+    Money Income) : DomainEvent;
