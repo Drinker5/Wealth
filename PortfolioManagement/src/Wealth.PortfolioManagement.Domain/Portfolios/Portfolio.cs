@@ -9,7 +9,8 @@ public class Portfolio : AggregateRoot
 {
     public PortfolioId Id { get; private set; }
     public string Name { get; private set; }
-    public ICollection<PortfolioAsset> Assets { get; } = [];
+    public ICollection<Bond> Bonds { get; } = [];
+    public ICollection<Stock> Stocks { get; } = [];
     public ICollection<PortfolioCurrency> Currencies { get; } = [];
 
     private Portfolio()
@@ -49,7 +50,7 @@ public class Portfolio : AggregateRoot
         if (quantity == 0)
             return;
 
-        Apply(new AssetBought(Id, instrumentId, totalPrice, quantity));
+        Apply(new StockBought(Id, instrumentId, totalPrice, quantity));
     }
 
     public void Sell(StockId instrumentId, Money price, int quantity)
@@ -57,36 +58,42 @@ public class Portfolio : AggregateRoot
         if (quantity == 0)
             return;
 
-        Apply(new AssetSold(Id, instrumentId, price, quantity));
+        Apply(new StockSold(Id, instrumentId, price, quantity));
     }
 
-    public void Income(InstrumentId instrumentId, Money income, IncomeType incomeType)
+    public void Amortization(BondId instrumentId, Money income)
     {
-        switch (incomeType)
-        {
-            case IncomeType.Amortization:
-                Apply(new AmortizationApplied(Id, instrumentId, income));
-                break;
-            case IncomeType.Coupon:
-                Apply(new CouponPaymentReceived(Id, instrumentId, income));
-                break;
-            case IncomeType.Dividend:
-                Apply(new DividendReceived(Id, instrumentId, income));
-                break;
-        }
+        if (Bonds.All(i => i.BondId != instrumentId))
+            return;
+
+        Apply(new AmortizationApplied(Id, instrumentId, income));
     }
 
-    public void Expense(InstrumentId instrumentId, Money expense, ExpenseType expenseType)
+    public void Coupon(BondId instrumentId, Money income)
     {
-        switch (expenseType)
-        {
-            case ExpenseType.Tax:
-                Apply(new TaxPaid(Id, instrumentId, expense));
-                break;
-        }
+        if (Bonds.All(i => i.BondId != instrumentId))
+            return;
+
+        Apply(new CouponPaymentReceived(Id, instrumentId, income));
     }
 
-    public void Split(InstrumentId instrumentId, SplitRatio ratio)
+    public void Dividend(StockId instrumentId, Money income)
+    {
+        if (Stocks.All(i => i.StockId != instrumentId))
+            return;
+
+        Apply(new DividendReceived(Id, instrumentId, income));
+    }
+
+    public void Expense(StockId instrumentId, Money expense, ExpenseType expenseType)
+    {
+        if (Stocks.All(i => i.StockId != instrumentId))
+            return;
+
+        Apply(new StockOperationTaxPaid(Id, instrumentId, expense));
+    }
+
+    public void Split(StockId instrumentId, SplitRatio ratio)
     {
         if (ratio.Old == ratio.New)
             return;
@@ -94,9 +101,9 @@ public class Portfolio : AggregateRoot
         Apply(new StockSplit(Id, instrumentId, ratio));
     }
 
-    public void Delist(InstrumentId instrumentId)
+    public void Delist(StockId instrumentId)
     {
-        if (Assets.All(i => i.InstrumentId != instrumentId))
+        if (Stocks.All(i => i.StockId != instrumentId))
             return;
 
         Apply(new StockDelisted(Id, instrumentId));

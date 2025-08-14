@@ -1,12 +1,19 @@
+using Wealth.BuildingBlocks.Domain.Common;
+
 namespace Wealth.PortfolioManagement.Domain.Portfolios;
 
-public class PortfolioAsset
+public abstract class PortfolioAsset
 {
-    public InstrumentId InstrumentId { get; init; }
+    public ISIN ISIN { get; init; }
     public int Quantity { get; set; }
+}
 
-    public override int GetHashCode()
-    {
-        return InstrumentId.GetHashCode();
-    }
+public class Bond : PortfolioAsset
+{
+    public BondId BondId { get; set; }
+}
+
+public class Stock : PortfolioAsset
+{
+    public StockId StockId { get; set; }
 }
