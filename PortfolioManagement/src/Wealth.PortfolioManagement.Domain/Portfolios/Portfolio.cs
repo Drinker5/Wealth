@@ -9,8 +9,8 @@ public class Portfolio : AggregateRoot
 {
     public PortfolioId Id { get; private set; }
     public string Name { get; private set; }
-    public ICollection<Bond> Bonds { get; } = [];
-    public ICollection<Stock> Stocks { get; } = [];
+    public ICollection<BondAsset> Bonds { get; } = [];
+    public ICollection<StockAsset> Stocks { get; } = [];
     public ICollection<PortfolioCurrency> Currencies { get; } = [];
 
     private Portfolio()
@@ -149,12 +149,22 @@ public class Portfolio : AggregateRoot
         ChangeCurrencyAmount(@event.Price.CurrencyId, @event.Price.Amount);
     }
 
-    private void When(IncomeApplied @event)
+    private void When(DividendReceived @event)
+    {
+        ChangeCurrencyAmount(@event.Income.CurrencyId, @event.Income.Amount);
+    }
+    
+    private void When(CouponPaymentReceived @event)
     {
         ChangeCurrencyAmount(@event.Income.CurrencyId, @event.Income.Amount);
     }
 
-    private void When(TaxPaid @event)
+    private void When(AmortizationApplied @event)
+    {
+        ChangeCurrencyAmount(@event.Income.CurrencyId, @event.Income.Amount);
+    }
+
+    private void When(StockOperationTaxPaid @event)
     {
         ChangeCurrencyAmount(@event.Expense.CurrencyId, -@event.Expense.Amount);
     }
@@ -164,19 +174,27 @@ public class Portfolio : AggregateRoot
         var asset = GetOrCreate(@event.StockId);
         asset.Quantity = @event.Ratio.Apply(asset.Quantity);
     }
-
+    
     private void When(StockDelisted @event)
     {
         var asset = GetOrCreate(@event.StockId);
-        Assets.Remove(asset);
+        Stocks.Remove(asset);
     }
 
-    private void ChangeAssetQuantity(InstrumentId instrumentId, int quantity)
+    private void ChangeAssetQuantity(StockId instrumentId, int quantity)
     {
         var asset = GetOrCreate(instrumentId);
         asset.Quantity += quantity;
         if (asset.Quantity == 0)
-            Assets.Remove(asset);
+            Stocks.Remove(asset);
+    }
+    
+    private void ChangeAssetQuantity(BondId instrumentId, int quantity)
+    {
+        var asset = GetOrCreate(instrumentId);
+        asset.Quantity += quantity;
+        if (asset.Quantity == 0)
+            Bonds.Remove(asset);
     }
 
     private void ChangeCurrencyAmount(CurrencyId currencyId, decimal amount)
@@ -187,20 +205,36 @@ public class Portfolio : AggregateRoot
             Currencies.Remove(currency);
     }
 
-    private PortfolioAsset GetOrCreate(InstrumentId instrumentId)
+    private StockAsset GetOrCreate(StockId instrumentId)
     {
-        var existed = Assets.SingleOrDefault(i => i.InstrumentId == instrumentId);
+        var existed = Stocks.SingleOrDefault(i => i.StockId == instrumentId);
         if (existed != null)
             return existed;
 
-        var asset = new PortfolioAsset
+        var asset = new StockAsset
         {
-            InstrumentId = instrumentId,
+            StockId = instrumentId,
             Quantity = 0,
         };
-        Assets.Add(asset);
+        Stocks.Add(asset);
         return asset;
     }
+    
+    private BondAsset GetOrCreate(BondId instrumentId)
+    {
+        var existed = Bonds.SingleOrDefault(i => i.BondId == instrumentId);
+        if (existed != null)
+            return existed;
+
+        var asset = new BondAsset
+        {
+            BondId = instrumentId,
+            Quantity = 0,
+        };
+        Bonds.Add(asset);
+        return asset;
+    }
+
 
     private PortfolioCurrency GetOrCreate(CurrencyId currencyId)
     {
