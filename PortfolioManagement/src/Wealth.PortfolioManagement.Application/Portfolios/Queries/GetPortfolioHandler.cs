@@ -15,7 +15,8 @@ public class GetPortfolioHandler(IPortfolioRepository repository) : IQueryHandle
         {
             Id = portfolio.Id,
             Name = portfolio.Name,
-            Assets = portfolio.Assets.Select(AssetDTO.ToDTO),
+            Bonds = portfolio.Bonds.Select(BondDTO.ToDTO),
+            Stocks = portfolio.Stocks.Select(StockDTO.ToDTO),
             Currencies = portfolio.Currencies.Select(CurrencyDTO.ToDTO),
         };
     }

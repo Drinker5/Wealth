@@ -1,17 +1,18 @@
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Domain.Portfolios;
 
 namespace Wealth.PortfolioManagement.Application.Portfolios.Queries;
 
-public class AssetDTO
+public class BondDTO
 {
-    public Guid Id { get; set; }
+    public BondId Id { get; set; }
     public int Quantity { get; set; }
 
-    public static AssetDTO ToDTO(PortfolioAsset asset)
+    public static BondDTO ToDTO(BondAsset asset)
     {
-        return new AssetDTO
+        return new BondDTO
         {
-            Id = asset.InstrumentId,
+            Id = asset.BondId,
             Quantity = asset.Quantity,
         };
     }

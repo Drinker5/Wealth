@@ -1,7 +1,7 @@
 using Wealth.BuildingBlocks.Application;
 using Wealth.PortfolioManagement.Domain.Portfolios.Events;
 
-namespace Wealth.PortfolioManagement.Application.Portfolios.Events;
+namespace Wealth.PortfolioManagement.Application.Portfolios.EventsHandlers;
 
 public class PortfolioCreatedEventHandler : IDomainEventHandler<PortfolioCreated>
 {

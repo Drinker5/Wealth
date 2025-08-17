@@ -16,7 +16,8 @@ public static class PortfolioApi
         api.MapGet("{portfolioId:int}", GetPortfolio);
         api.MapPost("/", CreatePortfolio);
         api.MapPut("/deposit", DepositCurrency);
-        api.MapPut("{portfolioId:int}/asset", BuyAsset);
+        api.MapPut("{portfolioId:int}/bond", BuyBond);
+        api.MapPut("{portfolioId:int}/stock", BuyStock);
 
         return api;
     }
@@ -62,17 +63,27 @@ public static class PortfolioApi
         return TypedResults.Ok();
     }
 
-    private static async Task<Ok> BuyAsset(
+    private static async Task<Ok> BuyStock(
         int portfolioId,
         [FromBody] BuyStockRequest request,
         [AsParameters] PortfolioServices services)
     {
-        await services.Mediator.Command(new BuyAsset(portfolioId, request.InstrumentId, request.TotalPrice, request.Quantity));
+        await services.Mediator.Command(new BuyStock(portfolioId, request.InstrumentId, request.TotalPrice, request.Quantity));
+        return TypedResults.Ok();
+    }
+    
+    private static async Task<Ok> BuyBond(
+        int portfolioId,
+        [FromBody] BuyBondRequest request,
+        [AsParameters] PortfolioServices services)
+    {
+        await services.Mediator.Command(new BuyBond(portfolioId, request.InstrumentId, request.TotalPrice, request.Quantity));
         return TypedResults.Ok();
     }
 }
 
-public record BuyStockRequest(InstrumentId InstrumentId, Money TotalPrice, int Quantity);
+public record BuyStockRequest(StockId InstrumentId, Money TotalPrice, int Quantity);
+public record BuyBondRequest(BondId InstrumentId, Money TotalPrice, int Quantity);
 
 public record CreatePortfolioRequest(string Name);
 
