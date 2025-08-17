@@ -1,3 +1,4 @@
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement;
 using Wealth.PortfolioManagement.Application.Services;
 
@@ -5,33 +6,27 @@ namespace Wealth.PortfolioManagement.API.Services;
 
 public class GrpcInstrumentService(InstrumentsService.InstrumentsServiceClient client) : IInstrumentService
 {
-    public async Task<InstrumentInfo> GetInstrumentInfo(InstrumentId instrumentId)
+    public async Task<StockInstrumentInfo> GetStockInfo(StockId instrumentId)
     {
-        var response = await client.GetInstrumentAsync(new GetInstrumentRequest { Id = instrumentId });
-        return response.FromProto();
-    }
-}
-
-internal static class ProtoConverters
-{
-    public static InstrumentInfo FromProto(this GetInstrumentResponse response)
-    {
-        InstrumentInfo info = response.InstrumentCase switch
+        var response = await client.GetStockAsync(new GetStockRequest { StockId = instrumentId });
+        return new StockInstrumentInfo
         {
-            GetInstrumentResponse.InstrumentOneofCase.StockInfo => new StockInstrumentInfo
-            {
-                DividendPerYear = response.StockInfo.DividendPerYear,
-                LotSize = response.StockInfo.LotSize,
-            },
-            GetInstrumentResponse.InstrumentOneofCase.BondInfo => new BondInstrumentInfo
-            {
-            },
-            _ => throw new ArgumentOutOfRangeException()
+            DividendPerYear = response.DividendPerYear,
+            Id = response.Id,
+            LotSize = response.LotSize,
+            Name = response.Name,
+            Price = response.Price,
         };
-        
-        info.Id = response.Id;
-        info.Name = response.Name;
-        info.Price = response.Price;
-        return info;
+    }
+
+    public async Task<BondInstrumentInfo> GetBondInfo(BondId instrumentId)
+    {
+        var response = await client.GetBondAsync(new GetBondRequest { BondId = instrumentId });
+        return new BondInstrumentInfo
+        {
+            Id = response.Id,
+            Name = response.Name,
+            Price = response.Price,
+        };
     }
 }
