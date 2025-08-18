@@ -2,7 +2,7 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.PortfolioManagement.Domain.Operations;
 
-public sealed class StockBoughtOperation : TradeOperation
+public sealed class BondTradeOperation : TradeOperation
 {
-    public StockId StockId { get; set; }
+    public BondId BondId { get; set; }
 }

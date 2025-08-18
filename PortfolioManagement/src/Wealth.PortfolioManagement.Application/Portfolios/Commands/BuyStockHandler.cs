@@ -7,7 +7,7 @@ public class BuyStockHandler(IPortfolioRepository repository) : ICommandHandler<
 {
     public Task Handle(BuyStock request, CancellationToken cancellationToken)
     {
-        return repository.BuyStock(
+        return repository.Buy(
             request.PortfolioId,
             request.StockId,
             request.TotalPrice,

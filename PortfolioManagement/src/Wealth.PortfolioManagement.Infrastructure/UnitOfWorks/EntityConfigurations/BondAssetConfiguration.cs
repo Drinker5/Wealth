@@ -6,23 +6,22 @@ using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations;
 
-internal class PortfolioCurrencyConfiguration : IEntityTypeConfiguration<PortfolioCurrency>
+internal class BondAssetConfiguration : IEntityTypeConfiguration<BondAsset>
 {
-    public void Configure(EntityTypeBuilder<PortfolioCurrency> builder)
+    public void Configure(EntityTypeBuilder<BondAsset> builder)
     {
         builder.Property<PortfolioId>("PortfolioId");
 
-        builder.HasKey("PortfolioId", nameof(PortfolioCurrency.CurrencyId));
+        builder.HasKey("PortfolioId", nameof(BondAsset.BondId));
 
-        builder.Property(x => x.CurrencyId)
-            .HasMaxLength(3)
+        builder.Property(x => x.BondId)
             .IsRequired();
 
-        builder.Property(x => x.Amount)
+        builder.Property(x => x.Quantity)
             .IsRequired();
 
         builder.HasOne<Portfolio>()
-            .WithMany(i => i.Currencies)
+            .WithMany(i => i.Bonds)
             .HasForeignKey("PortfolioId")
             .IsRequired();
 

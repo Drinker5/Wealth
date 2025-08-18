@@ -7,7 +7,7 @@ public class BuyBondHandler(IPortfolioRepository repository) : ICommandHandler<B
 {
     public Task Handle(BuyBond request, CancellationToken cancellationToken)
     {
-        return repository.BuyBond(
+        return repository.Buy(
             request.PortfolioId,
             request.BondId,
             request.TotalPrice,

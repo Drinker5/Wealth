@@ -2,10 +2,8 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.PortfolioManagement.Domain.Operations;
 
-public class CurrencyOperation
+public class CurrencyOperation : Operation
 {
-    public Guid Id { get; set; }
-    public DateTimeOffset Date { get; set; }
     public PortfolioId PortfolioId { get; set; }
     public Money Money { get; set; }
     public CurrencyOperationType Type { get; set; }

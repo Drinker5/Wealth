@@ -6,23 +6,23 @@ using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations;
 
-internal class PortfolioAssetConfiguration : IEntityTypeConfiguration<PortfolioAsset>
+internal class StockAssetConfiguration : IEntityTypeConfiguration<StockAsset>
 {
-    public void Configure(EntityTypeBuilder<PortfolioAsset> builder)
+    public void Configure(EntityTypeBuilder<StockAsset> builder)
     {
         builder.Property<PortfolioId>("PortfolioId")
             .HasConversion<PortfolioIdConverter>();
 
-        builder.HasKey("PortfolioId", nameof(PortfolioAsset.InstrumentId));
+        builder.HasKey("PortfolioId", nameof(StockAsset.StockId));
 
-        builder.Property(x => x.InstrumentId)
+        builder.Property(x => x.StockId)
             .IsRequired();
 
         builder.Property(x => x.Quantity)
             .IsRequired();
 
         builder.HasOne<Portfolio>()
-            .WithMany(i => i.Assets)
+            .WithMany(i => i.Stocks)
             .HasForeignKey("PortfolioId")
             .IsRequired();
 

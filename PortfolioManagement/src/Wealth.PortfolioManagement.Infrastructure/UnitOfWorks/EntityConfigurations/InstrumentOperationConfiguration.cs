@@ -5,17 +5,14 @@ using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations;
 
-internal class InstrumentOperationConfiguration : IEntityTypeConfiguration<InstrumentOperation>
+internal class InstrumentOperationConfiguration : IEntityTypeConfiguration<Operation>
 {
-    public void Configure(EntityTypeBuilder<InstrumentOperation> builder)
+    public void Configure(EntityTypeBuilder<Operation> builder)
     {
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();
-
-        builder.Property(x => x.InstrumentId)
-            .IsRequired();
 
         builder.Property(x => x.Date)
             .IsRequired();
