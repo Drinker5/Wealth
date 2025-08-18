@@ -6,7 +6,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Repositories;
 
 public class OperationRepository(WealthDbContext context) : IOperationRepository
 {
-    public async Task<Guid> CreateOperation(InstrumentOperation operation)
+    public async Task<Guid> CreateOperation(Operation operation)
     {
         await context.InstrumentOperations.AddAsync(operation);
         return operation.Id;

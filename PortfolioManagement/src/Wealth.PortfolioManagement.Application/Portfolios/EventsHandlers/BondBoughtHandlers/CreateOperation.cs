@@ -10,7 +10,7 @@ public class AssetBoughtEventHandler(IOperationRepository operationRepository) :
 {
     public Task Handle(BondBought notification, CancellationToken cancellationToken)
     {
-        return operationRepository.CreateOperation(new BondBoughtOperation
+        return operationRepository.CreateOperation(new BondTradeOperation
         {
             Quantity = notification.Quantity,
             Date = Clock.Now,

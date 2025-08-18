@@ -12,7 +12,7 @@ public class GrpcInstrumentService(InstrumentsService.InstrumentsServiceClient c
         return new StockInstrumentInfo
         {
             DividendPerYear = response.DividendPerYear,
-            Id = response.Id,
+            Id = response.StockId,
             LotSize = response.LotSize,
             Name = response.Name,
             Price = response.Price,
@@ -24,7 +24,7 @@ public class GrpcInstrumentService(InstrumentsService.InstrumentsServiceClient c
         var response = await client.GetBondAsync(new GetBondRequest { BondId = instrumentId });
         return new BondInstrumentInfo
         {
-            Id = response.Id,
+            Id = response.BondId,
             Name = response.Name,
             Price = response.Price,
         };

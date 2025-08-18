@@ -5,6 +5,5 @@ namespace Wealth.PortfolioManagement.Domain.Portfolios;
 public class StockAsset
 {
     public StockId StockId { get; set; }
-    public ISIN ISIN { get; init; }
     public int Quantity { get; set; }
 }

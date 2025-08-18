@@ -60,6 +60,22 @@ public class Portfolio : AggregateRoot
 
         Apply(new StockSold(Id, instrumentId, price, quantity));
     }
+    
+    public void Buy(BondId instrumentId, Money totalPrice, int quantity)
+    {
+        if (quantity == 0)
+            return;
+
+        Apply(new BondBought(Id, instrumentId, totalPrice, quantity));
+    }
+
+    public void Sell(BondId instrumentId, Money price, int quantity)
+    {
+        if (quantity == 0)
+            return;
+
+        Apply(new BondSold(Id, instrumentId, price, quantity));
+    }
 
     public void Amortization(BondId instrumentId, Money income)
     {

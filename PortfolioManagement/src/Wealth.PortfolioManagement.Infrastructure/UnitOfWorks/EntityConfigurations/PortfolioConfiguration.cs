@@ -13,7 +13,6 @@ internal class PortfolioConfiguration : IEntityTypeConfiguration<Portfolio>
 
         builder.Property(x => x.Id)
             .UseHiLo("PortfolioIdHiLo")
-            .HasConversion<PortfolioIdConverter>()
             .IsRequired();
 
         builder.Property(x => x.Name).HasMaxLength(255).IsRequired();
@@ -23,11 +22,16 @@ internal class PortfolioConfiguration : IEntityTypeConfiguration<Portfolio>
             .HasForeignKey("PortfolioId")
             .IsRequired();
 
-        builder.HasMany(x => x.Assets)
+        builder.HasMany(x => x.Stocks)
             .WithOne()
             .HasForeignKey("PortfolioId")
             .IsRequired();
 
+        builder.HasMany(x => x.Bonds)
+            .WithOne()
+            .HasForeignKey("PortfolioId")
+            .IsRequired();
+        
         builder.HasNoDiscriminator();
     }
 }

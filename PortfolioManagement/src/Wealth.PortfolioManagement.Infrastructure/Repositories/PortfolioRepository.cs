@@ -19,7 +19,8 @@ public class PortfolioRepository : IPortfolioRepository
     {
         return await context.Portfolios.AsNoTracking()
             .Include(i => i.Currencies)
-            .Include(i => i.Assets)
+            .Include(i => i.Bonds)
+            .Include(i => i.Stocks)
             .AsSplitQuery()
             .ToListAsync();
     }
@@ -28,7 +29,8 @@ public class PortfolioRepository : IPortfolioRepository
     {
         return context.Portfolios
             .Include(i => i.Currencies)
-            .Include(i => i.Assets)
+            .Include(i => i.Bonds)
+            .Include(i => i.Stocks)
             .SingleOrDefaultAsync(i => i.Id == id);
     }
 
@@ -41,7 +43,16 @@ public class PortfolioRepository : IPortfolioRepository
         portfolio.Rename(newName);
     }
 
-    public async Task Buy(PortfolioId id, InstrumentId instrumentId, Money totalPrice, int quantity)
+    public async Task Buy(PortfolioId id, StockId instrumentId, Money totalPrice, int quantity)
+    {
+        var portfolio = await GetPortfolio(id);
+        if (portfolio == null)
+            return;
+
+        portfolio.Buy(instrumentId, totalPrice, quantity);
+    }
+    
+    public async Task Buy(PortfolioId id, BondId instrumentId, Money totalPrice, int quantity)
     {
         var portfolio = await GetPortfolio(id);
         if (portfolio == null)

@@ -32,7 +32,7 @@ public abstract class WealthDbContextBase : DbContext, IDesignTimeDbContextFacto
 
         base.OnModelCreating(modelBuilder);
     }
-    
+
     protected virtual void OnInMemoryModelCreating(ModelBuilder modelBuilder)
     {
     }
@@ -42,6 +42,10 @@ public abstract class WealthDbContextBase : DbContext, IDesignTimeDbContextFacto
         configurationBuilder.Properties<CurrencyId>().HaveConversion<CurrencyIdConverter>();
         configurationBuilder.Properties<StockId>().HaveConversion<StockIdConverter>();
         configurationBuilder.Properties<BondId>().HaveConversion<BondIdConverter>();
+    }
+
+    protected virtual void AdditionalConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
     }
 
     public abstract WealthDbContextBase CreateDbContext(string[] args);
