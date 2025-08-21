@@ -56,7 +56,7 @@ public sealed class PortfolioManagementApiTests : IClassFixture<PortfolioManagem
         Assert.NotNull(result);
         Assert.Equal(newPortfolioId, result.Id);
         Assert.Equal(obj.name, result.Name);
-        Assert.Empty(result.Assets);
+        Assert.Empty(result.Stocks);
         Assert.Empty(result.Currencies);
 
         // deposit
@@ -73,12 +73,12 @@ public sealed class PortfolioManagementApiTests : IClassFixture<PortfolioManagem
         // buy asset
         var buyAsset = new
         {
-            InstrumentId = new InstrumentId(new Guid("00000000-0000-0000-0000-000000000001")),
+            InstrumentId = new StockId(32),
             TotalPrice = new Money("RUB", 50),
             Quantity = 3,
         };
 
-        instrumentServiceMock.Setup(i => i.GetInstrumentInfo(buyAsset.InstrumentId)).ReturnsAsync(new StockInstrumentInfo
+        instrumentServiceMock.Setup(i => i.GetStockInfo(buyAsset.InstrumentId)).ReturnsAsync(new StockInstrumentInfo
         {
             Id = buyAsset.InstrumentId,
             DividendPerYear = Money.Empty,
@@ -102,8 +102,8 @@ public sealed class PortfolioManagementApiTests : IClassFixture<PortfolioManagem
         var currency = Assert.Single(changedPortfolio.Currencies);
         Assert.Equal(newDeposit.money.CurrencyId, currency.CurrencyId);
         Assert.Equal(150, currency.Amount);
-        var asset = Assert.Single(changedPortfolio.Assets);
-        Assert.Equal(new Guid("00000000-0000-0000-0000-000000000001"), asset.Id);
+        var asset = Assert.Single(changedPortfolio.Stocks);
+        Assert.Equal(buyAsset.InstrumentId, asset.Id);
         Assert.Equal(3, asset.Quantity);
     }
 

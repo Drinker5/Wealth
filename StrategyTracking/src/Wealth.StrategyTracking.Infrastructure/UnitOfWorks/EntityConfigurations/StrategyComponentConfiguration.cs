@@ -4,15 +4,15 @@ using Wealth.StrategyTracking.Domain.Strategies;
 
 namespace Wealth.StrategyTracking.Infrastructure.UnitOfWorks.EntityConfigurations;
 
-internal class StrategyComponentConfiguration : IEntityTypeConfiguration<StrategyComponent>
+internal class StrategyComponentConfiguration : IEntityTypeConfiguration<StockStrategyComponent>
 {
-    public void Configure(EntityTypeBuilder<StrategyComponent> builder)
+    public void Configure(EntityTypeBuilder<StockStrategyComponent> builder)
     {
         builder.Property<StrategyId>("StrategyId");
         
-        builder.HasKey("StrategyId", nameof(StrategyComponent.InstrumentId));
+        builder.HasKey("StrategyId", nameof(StockStrategyComponent.Id));
 
-        builder.Property(x => x.InstrumentId)
+        builder.Property(x => x.StockId)
             .IsRequired();
 
         builder.Property(x => x.Weight)
