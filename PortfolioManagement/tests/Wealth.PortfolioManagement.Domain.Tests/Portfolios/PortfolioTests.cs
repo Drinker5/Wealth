@@ -10,7 +10,8 @@ namespace Wealth.PortfolioManagement.Domain.Tests.Portfolios;
 public class PortfolioTests
 {
     private readonly Portfolio portfolio;
-    private readonly InstrumentId instrumentId = new(new Guid("00000000-0000-0000-0000-000000000001"));
+    private readonly StockId stockId = new(1);
+    private readonly BondId bondId = new(1);
     private readonly CurrencyId currencyId = "FOO";
     private readonly Money price = new Money("FOO", 123.23m);
     private readonly decimal amount = 32.32m;
@@ -28,7 +29,8 @@ public class PortfolioTests
 
         Assert.Equal("foo", portfolio.Name);
         Assert.Empty(portfolio.Currencies);
-        Assert.Empty(portfolio.Assets);
+        Assert.Empty(portfolio.Bonds);
+        Assert.Empty(portfolio.Stocks);
         Assert.Equal(0, portfolio.Id.Id);
         var ev = portfolio.HasEvent<PortfolioCreated>();
         Assert.Same(portfolio, ev.Portfolio);
@@ -72,17 +74,17 @@ public class PortfolioTests
     }
 
     [Fact]
-    public void WhenBuy()
+    public void WhenBuyStock()
     {
-        portfolio.Buy(instrumentId, price, quantity);
+        portfolio.Buy(stockId, price, quantity);
 
-        var ev = portfolio.HasEvent<AssetBought>();
+        var ev = portfolio.HasEvent<StockBought>();
         Assert.Equal(portfolio.Id, ev.PortfolioId);
-        Assert.Equal(instrumentId, ev.InstrumentId);
+        Assert.Equal(stockId, ev.StockId);
         Assert.Equal(quantity, ev.Quantity);
         Assert.Equal(price, ev.TotalPrice);
-        var asset = Assert.Single(portfolio.Assets);
-        Assert.Equal(instrumentId, asset.InstrumentId);
+        var asset = Assert.Single(portfolio.Stocks);
+        Assert.Equal(stockId, asset.StockId);
         Assert.Equal(quantity, asset.Quantity);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(price.CurrencyId, currency.CurrencyId);
@@ -90,17 +92,53 @@ public class PortfolioTests
     }
 
     [Fact]
-    public void WhenSell()
+    public void WhenBuyBond()
     {
-        portfolio.Sell(instrumentId, price, quantity);
+        portfolio.Buy(bondId, price, quantity);
 
-        var ev = portfolio.HasEvent<AssetSold>();
+        var ev = portfolio.HasEvent<BondBought>();
         Assert.Equal(portfolio.Id, ev.PortfolioId);
-        Assert.Equal(instrumentId, ev.InstrumentId);
+        Assert.Equal(bondId, ev.BondId);
+        Assert.Equal(quantity, ev.Quantity);
+        Assert.Equal(price, ev.TotalPrice);
+        var asset = Assert.Single(portfolio.Bonds);
+        Assert.Equal(bondId, asset.BondId);
+        Assert.Equal(quantity, asset.Quantity);
+        var currency = Assert.Single(portfolio.Currencies);
+        Assert.Equal(price.CurrencyId, currency.CurrencyId);
+        Assert.Equal(-price.Amount, currency.Amount);
+    }
+
+    [Fact]
+    public void WhenSellStock()
+    {
+        portfolio.Sell(stockId, price, quantity);
+
+        var ev = portfolio.HasEvent<StockSold>();
+        Assert.Equal(portfolio.Id, ev.PortfolioId);
+        Assert.Equal(stockId, ev.StockId);
         Assert.Equal(quantity, ev.Quantity);
         Assert.Equal(price, ev.Price);
-        var asset = Assert.Single(portfolio.Assets);
-        Assert.Equal(instrumentId, asset.InstrumentId);
+        var asset = Assert.Single(portfolio.Stocks);
+        Assert.Equal(stockId, asset.StockId);
+        Assert.Equal(-quantity, asset.Quantity);
+        var currency = Assert.Single(portfolio.Currencies);
+        Assert.Equal(price.CurrencyId, currency.CurrencyId);
+        Assert.Equal(price.Amount, currency.Amount);
+    }
+
+    [Fact]
+    public void WhenSellBond()
+    {
+        portfolio.Sell(bondId, price, quantity);
+
+        var ev = portfolio.HasEvent<BondSold>();
+        Assert.Equal(portfolio.Id, ev.PortfolioId);
+        Assert.Equal(bondId, ev.BondId);
+        Assert.Equal(quantity, ev.Quantity);
+        Assert.Equal(price, ev.Price);
+        var asset = Assert.Single(portfolio.Bonds);
+        Assert.Equal(bondId, asset.BondId);
         Assert.Equal(-quantity, asset.Quantity);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(price.CurrencyId, currency.CurrencyId);
@@ -110,21 +148,24 @@ public class PortfolioTests
     [Fact]
     public void WhenBuyAndSell()
     {
-        portfolio.Buy(instrumentId, price, quantity);
-        portfolio.Sell(instrumentId, price, quantity);
+        portfolio.Buy(stockId, price, quantity);
+        portfolio.Buy(bondId, price, quantity);
+        portfolio.Sell(stockId, price, quantity);
+        portfolio.Sell(bondId, price, quantity);
 
-        Assert.Empty(portfolio.Assets);
+        Assert.Empty(portfolio.Stocks);
+        Assert.Empty(portfolio.Bonds);
         Assert.Empty(portfolio.Currencies);
     }
 
     [Fact]
     public void WhenIncome()
     {
-        portfolio.Income(instrumentId, price, IncomeType.Dividend);
+        portfolio.Dividend(stockId, price);
 
         var ev = portfolio.HasEvent<DividendReceived>();
         Assert.Equal(portfolio.Id, ev.PortfolioId);
-        Assert.Equal(instrumentId, ev.InstrumentId);
+        Assert.Equal(stockId, ev.StockId);
         Assert.Equal(price, ev.Income);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(price.CurrencyId, currency.CurrencyId);
@@ -132,61 +173,77 @@ public class PortfolioTests
     }
 
     [Fact]
-    public void WhenExpense()
+    public void WhenStockTaxPaid()
     {
-        portfolio.Expense(instrumentId, price, ExpenseType.Tax);
+        portfolio.Tax(stockId, price);
 
-        var ev = portfolio.HasEvent<TaxPaid>();
+        var ev = portfolio.HasEvent<StockOperationTaxPaid>();
         Assert.Equal(portfolio.Id, ev.PortfolioId);
-        Assert.Equal(instrumentId, ev.InstrumentId);
+        Assert.Equal(stockId, ev.StockId);
         Assert.Equal(price, ev.Expense);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(price.CurrencyId, currency.CurrencyId);
         Assert.Equal(-price.Amount, currency.Amount);
     }
 
+
+    [Fact]
+    public void WhenBondTaxPaid()
+    {
+        portfolio.Tax(bondId, price);
+
+        var ev = portfolio.HasEvent<BondOperationTaxPaid>();
+        Assert.Equal(portfolio.Id, ev.PortfolioId);
+        Assert.Equal(bondId, ev.BondId);
+        Assert.Equal(price, ev.Expense);
+        var currency = Assert.Single(portfolio.Currencies);
+        Assert.Equal(price.CurrencyId, currency.CurrencyId);
+        Assert.Equal(-price.Amount, currency.Amount);
+    }
+
+
     [Fact]
     public void WhenSplit()
     {
-        portfolio.Buy(instrumentId, price, 100);
+        portfolio.Buy(stockId, price, 100);
         var splitRatio = new SplitRatio(100, 1);
 
-        portfolio.Split(instrumentId, splitRatio);
+        portfolio.Split(stockId, splitRatio);
 
-        var asset = Assert.Single(portfolio.Assets);
+        var asset = Assert.Single(portfolio.Stocks);
         Assert.Equal(1, asset.Quantity);
         var ev = portfolio.HasEvent<StockSplit>();
         Assert.Equal(portfolio.Id, ev.PortfolioId);
-        Assert.Equal(instrumentId, ev.InstrumentId);
+        Assert.Equal(stockId, ev.StockId);
         Assert.Equal(splitRatio, ev.Ratio);
     }
-    
+
     [Fact]
     public void WhenReverseSplit()
     {
-        portfolio.Buy(instrumentId, price, 100);
+        portfolio.Buy(stockId, price, 100);
         var splitRatio = new SplitRatio(1, 100);
 
-        portfolio.Split(instrumentId, splitRatio);
+        portfolio.Split(stockId, splitRatio);
 
-        var asset = Assert.Single(portfolio.Assets);
+        var asset = Assert.Single(portfolio.Stocks);
         Assert.Equal(10000, asset.Quantity);
         var ev = portfolio.HasEvent<StockSplit>();
         Assert.Equal(portfolio.Id, ev.PortfolioId);
-        Assert.Equal(instrumentId, ev.InstrumentId);
+        Assert.Equal(stockId, ev.StockId);
         Assert.Equal(splitRatio, ev.Ratio);
     }
 
     [Fact]
     public void WhenDelist()
     {
-        portfolio.Buy(instrumentId, price, 100);
-        
-        portfolio.Delist(instrumentId);
-        
+        portfolio.Buy(stockId, price, 100);
+
+        portfolio.Delist(stockId);
+
         var ev = portfolio.HasEvent<StockDelisted>();
         Assert.Equal(portfolio.Id, ev.PortfolioId);
-        Assert.Equal(instrumentId, ev.InstrumentId);
-        Assert.Empty(portfolio.Assets);
+        Assert.Equal(stockId, ev.StockId);
+        Assert.Empty(portfolio.Stocks);
     }
 }

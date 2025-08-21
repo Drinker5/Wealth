@@ -56,7 +56,7 @@ public class PortfolioRepositoryTests
     [Fact]
     public async Task WhenAddAsset()
     {
-        var instrumentId = new InstrumentId(Guid.NewGuid());
+        var instrumentId = new StockId(32);
         var quantity = 32;
         var money = new Money("FOO", 23.3m);
         var id = await CreatePortfolio("Foo");
@@ -65,8 +65,8 @@ public class PortfolioRepositoryTests
 
         var portfolio = await repository.GetPortfolio(id);
         Assert.NotNull(portfolio);
-        var asset = Assert.Single(portfolio.Assets);
-        Assert.Equal(instrumentId, asset.InstrumentId);
+        var asset = Assert.Single(portfolio.Stocks);
+        Assert.Equal(instrumentId, asset.StockId);
         Assert.Equal(quantity, asset.Quantity);
     }
 

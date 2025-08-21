@@ -98,13 +98,25 @@ public class Strategy : AggregateRoot
         }
     }
 
-    public void RemoveStrategyComponent(StrategyComponentId componentId)
+    public void RemoveStrategyComponent(StockId stockId)
     {
-        var component = Components.SingleOrDefault(s => s.Id == componentId);
+        var component = Components.OfType<StockStrategyComponent>().SingleOrDefault(s => s.StockId == stockId);
         if (component != null)
-        {
-            Apply(new StrategyComponentRemoved(Id, componentId));
-        }
+            Apply(new StrategyComponentRemoved(Id, component.Id));
+    }
+    
+    public void RemoveStrategyComponent(BondId bondId)
+    {
+        var component = Components.OfType<BondStrategyComponent>().SingleOrDefault(s => s.BondId == bondId);
+        if (component != null)
+            Apply(new StrategyComponentRemoved(Id, component.Id));
+    }
+
+    public void RemoveStrategyComponent(CurrencyId currencyId)
+    {
+        var component = Components.OfType<CurrencyStrategyComponent>().SingleOrDefault(s => s.CurrencyId == currencyId);
+        if (component != null)
+            Apply(new StrategyComponentRemoved(Id, component.Id));
     }
 
     private void When(StrategyCreated @event)

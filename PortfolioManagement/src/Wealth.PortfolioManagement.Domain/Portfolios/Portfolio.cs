@@ -60,7 +60,7 @@ public class Portfolio : AggregateRoot
 
         Apply(new StockSold(Id, instrumentId, price, quantity));
     }
-    
+
     public void Buy(BondId instrumentId, Money totalPrice, int quantity)
     {
         if (quantity == 0)
@@ -101,12 +101,20 @@ public class Portfolio : AggregateRoot
         Apply(new DividendReceived(Id, instrumentId, income));
     }
 
-    public void Expense(StockId instrumentId, Money expense, ExpenseType expenseType)
+    public void Tax(StockId instrumentId, Money expense)
     {
         if (Stocks.All(i => i.StockId != instrumentId))
             return;
 
         Apply(new StockOperationTaxPaid(Id, instrumentId, expense));
+    }
+
+    public void Tax(BondId instrumentId, Money expense)
+    {
+        if (Bonds.All(i => i.BondId != instrumentId))
+            return;
+
+        Apply(new BondOperationTaxPaid(Id, instrumentId, expense));
     }
 
     public void Split(StockId instrumentId, SplitRatio ratio)
@@ -169,7 +177,7 @@ public class Portfolio : AggregateRoot
     {
         ChangeCurrencyAmount(@event.Income.CurrencyId, @event.Income.Amount);
     }
-    
+
     private void When(CouponPaymentReceived @event)
     {
         ChangeCurrencyAmount(@event.Income.CurrencyId, @event.Income.Amount);
@@ -185,12 +193,17 @@ public class Portfolio : AggregateRoot
         ChangeCurrencyAmount(@event.Expense.CurrencyId, -@event.Expense.Amount);
     }
 
+    private void When(BondOperationTaxPaid @event)
+    {
+        ChangeCurrencyAmount(@event.Expense.CurrencyId, -@event.Expense.Amount);
+    }
+
     private void When(StockSplit @event)
     {
         var asset = GetOrCreate(@event.StockId);
         asset.Quantity = @event.Ratio.Apply(asset.Quantity);
     }
-    
+
     private void When(StockDelisted @event)
     {
         var asset = GetOrCreate(@event.StockId);
@@ -204,7 +217,7 @@ public class Portfolio : AggregateRoot
         if (asset.Quantity == 0)
             Stocks.Remove(asset);
     }
-    
+
     private void ChangeAssetQuantity(BondId instrumentId, int quantity)
     {
         var asset = GetOrCreate(instrumentId);
@@ -235,7 +248,7 @@ public class Portfolio : AggregateRoot
         Stocks.Add(asset);
         return asset;
     }
-    
+
     private BondAsset GetOrCreate(BondId instrumentId)
     {
         var existed = Bonds.SingleOrDefault(i => i.BondId == instrumentId);

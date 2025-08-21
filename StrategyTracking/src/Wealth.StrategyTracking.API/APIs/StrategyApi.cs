@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http.HttpResults;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.StrategyTracking.Application.Strategies.Commands;
 using Wealth.StrategyTracking.Application.Strategies.Queries;
 using Wealth.StrategyTracking.Domain.Strategies;
@@ -23,7 +24,7 @@ public static class StrategyApi
     {
         try
         {
-            await services.Mediator.Command(new AddStrategyComponent(request.StrategyId, request.InstrumentId, request.Weight));
+            await services.Mediator.Command(new AddStockStrategyComponent(request.StrategyId, request.StockId, request.Weight));
             return TypedResults.Ok();
         }
         catch (Exception ex)
@@ -59,6 +60,6 @@ public static class StrategyApi
     }
 }
 
-internal record AddStrategyComponentRequest(StrategyId StrategyId, InstrumentId InstrumentId, float Weight);
+internal record AddStrategyComponentRequest(StrategyId StrategyId, StockId StockId, float Weight);
 
 internal record struct CreateStrategyRequest(string Name);

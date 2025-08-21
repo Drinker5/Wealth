@@ -39,35 +39,54 @@ public class StrategyRepository(WealthDbContext context) : IStrategyRepository
     public async Task AddStrategyComponent(StrategyId strategyId, StockId stockId, float weight)
     {
         var strategy = await GetStrategy(strategyId);
-
-        strategy?.AddOrUpdateComponent(instrumentId, weight);
+        strategy?.AddOrUpdateComponent(stockId, weight);
     }
-    
+
     public async Task AddStrategyComponent(StrategyId strategyId, BondId bondId, float weight)
     {
         var strategy = await GetStrategy(strategyId);
-
-        strategy?.AddOrUpdateComponent(instrumentId, weight);
+        strategy?.AddOrUpdateComponent(bondId, weight);
     }
-    
+
     public async Task AddStrategyComponent(StrategyId strategyId, CurrencyId currencyId, float weight)
     {
         var strategy = await GetStrategy(strategyId);
-
-        strategy?.AddOrUpdateComponent(instrumentId, weight);
+        strategy?.AddOrUpdateComponent(currencyId, weight);
     }
 
-    public async Task RemoveStrategyComponent(StrategyId strategyId, InstrumentId instrumentId)
+    public async Task RemoveStrategyComponent(StrategyId strategyId, StockId instrumentId)
     {
         var strategy = await GetStrategy(strategyId);
-
         strategy?.RemoveStrategyComponent(instrumentId);
     }
 
-    public async Task ChangeStrategyComponentWeight(StrategyId strategyId, InstrumentId instrumentId, float weight)
+    public async Task RemoveStrategyComponent(StrategyId strategyId, BondId instrumentId)
     {
         var strategy = await GetStrategy(strategyId);
+        strategy?.RemoveStrategyComponent(instrumentId);
+    }
 
+    public async Task RemoveStrategyComponent(StrategyId strategyId, CurrencyId instrumentId)
+    {
+        var strategy = await GetStrategy(strategyId);
+        strategy?.RemoveStrategyComponent(instrumentId);
+    }
+
+    public async Task ChangeStrategyComponentWeight(StrategyId strategyId, StockId instrumentId, float weight)
+    {
+        var strategy = await GetStrategy(strategyId);
+        strategy?.AddOrUpdateComponent(instrumentId, weight);
+    }
+    
+    public async Task ChangeStrategyComponentWeight(StrategyId strategyId, BondId instrumentId, float weight)
+    {
+        var strategy = await GetStrategy(strategyId);
+        strategy?.AddOrUpdateComponent(instrumentId, weight);
+    }
+    
+    public async Task ChangeStrategyComponentWeight(StrategyId strategyId, CurrencyId instrumentId, float weight)
+    {
+        var strategy = await GetStrategy(strategyId);
         strategy?.AddOrUpdateComponent(instrumentId, weight);
     }
 }

@@ -12,6 +12,10 @@ public interface IStrategyRepository
     public Task AddStrategyComponent(StrategyId strategyId, StockId stockId, float weight);
     public Task AddStrategyComponent(StrategyId strategyId, BondId bondId, float weight);
     public Task AddStrategyComponent(StrategyId strategyId, CurrencyId currencyId, float weight);
-    public Task RemoveStrategyComponent(StrategyId strategyId, StrategyComponentId instrumentId);
-    public Task ChangeStrategyComponentWeight(StrategyId strategyId, StrategyComponentId instrumentId, float weight);
+    public Task RemoveStrategyComponent(StrategyId strategyId, StockId instrumentId);
+    public Task RemoveStrategyComponent(StrategyId strategyId, BondId instrumentId);
+    public Task RemoveStrategyComponent(StrategyId strategyId, CurrencyId instrumentId);
+    public Task ChangeStrategyComponentWeight(StrategyId strategyId, StockId instrumentId, float weight);
+    public Task ChangeStrategyComponentWeight(StrategyId strategyId, BondId instrumentId, float weight);
+    public Task ChangeStrategyComponentWeight(StrategyId strategyId, CurrencyId instrumentId, float weight);
 }
