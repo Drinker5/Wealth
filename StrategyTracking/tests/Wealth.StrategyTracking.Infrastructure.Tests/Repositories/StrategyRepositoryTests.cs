@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.StrategyTracking.Domain.Strategies;
 using Wealth.StrategyTracking.Infrastructure.Repositories;
 using Wealth.StrategyTracking.Infrastructure.UnitOfWorks;
@@ -10,8 +11,8 @@ public class StrategyRepositoryTests
 {
     private readonly StrategyRepository repository;
     private readonly WealthDbContext context;
-    private readonly InstrumentId instrumentId1 = new Guid("00000000-0000-0000-0000-000000000001");
-    private readonly InstrumentId instrumentId2 = new Guid("00000000-0000-0000-0000-000000000002");
+    private readonly StockId instrumentId1 = 3;
+    private readonly BondId instrumentId2 = 4;
 
     public StrategyRepositoryTests()
     {
@@ -64,8 +65,9 @@ public class StrategyRepositoryTests
 
         var strategy = await repository.GetStrategy(id);
         Assert.NotNull(strategy);
-        var component = Assert.Single(strategy.Components);
-        Assert.Equal(instrumentId1, component.InstrumentId);
+        var component = Assert.Single(strategy.Components.OfType<StockStrategyComponent>());
+        
+        Assert.Equal(instrumentId1, component.StockId);
         Assert.Equal(weight, component.Weight);
     }
 
@@ -93,8 +95,8 @@ public class StrategyRepositoryTests
 
         var strategy = await repository.GetStrategy(id);
         Assert.NotNull(strategy);
-        var component = Assert.Single(strategy.Components);
-        Assert.Equal(instrumentId1, component.InstrumentId);
+        var component = Assert.Single(strategy.Components.OfType<StockStrategyComponent>());
+        Assert.Equal(instrumentId1, component.StockId);
         Assert.Equal(weight, component.Weight);
     }
 

@@ -2,7 +2,9 @@
 using System.Text.Json;
 using AutoFixture;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.StrategyTracking.Application.Strategies.Queries;
+using Wealth.StrategyTracking.Domain.Strategies;
 
 namespace Wealth.StrategyTracking.API.Tests;
 
@@ -74,7 +76,7 @@ public sealed class StrategiesApiTests : IClassFixture<StrategyTrackingApiFixtur
         var addComponent = new
         {
             strategyId = strategyId,
-            instrumentId = InstrumentId.New(),
+            instrumentId = new StockId(3),
             weight = fixture.Create<float>(),
         };
 
@@ -92,8 +94,9 @@ public sealed class StrategiesApiTests : IClassFixture<StrategyTrackingApiFixtur
         Assert.Equal(strategyId, strategy.StrategyId.Id);
         Assert.Equal(obj.name, strategy.Name);
         var component = Assert.Single(strategy.Components);
-        Assert.Equal(addComponent.instrumentId, component.InstrumentId);
-        Assert.Equal(addComponent.weight, component.Weight);
+        var stockComponent = Assert.IsType<StockStrategyComponent>(component);
+        Assert.Equal(addComponent.instrumentId, stockComponent.StockId);
+        Assert.Equal(addComponent.weight, stockComponent.Weight);
     }
 
     [Fact]

@@ -4,15 +4,21 @@ using Wealth.StrategyTracking.Domain.Strategies;
 
 namespace Wealth.StrategyTracking.Infrastructure.UnitOfWorks.EntityConfigurations;
 
-internal class StrategyComponentConfiguration : IEntityTypeConfiguration<StockStrategyComponent>
+internal class StrategyComponentConfiguration : IEntityTypeConfiguration<StrategyComponent>
 {
-    public void Configure(EntityTypeBuilder<StockStrategyComponent> builder)
+    public void Configure(EntityTypeBuilder<StrategyComponent> builder)
     {
-        builder.Property<StrategyId>("StrategyId");
+        builder.ToTable("StrategyComponents");
         
-        builder.HasKey("StrategyId", nameof(StockStrategyComponent.Id));
+        builder.Property<StrategyId>("StrategyId");
+        builder.HasKey("StrategyId", nameof(StrategyComponent.Id));
 
-        builder.Property(x => x.StockId)
+        builder.HasDiscriminator(sc => sc.Type)
+            .HasValue<StockStrategyComponent>(StrategyComponentType.Stock)
+            .HasValue<BondStrategyComponent>(StrategyComponentType.Bond)
+            .HasValue<CurrencyStrategyComponent>(StrategyComponentType.Currency);
+
+        builder.Property(x => x.Id)
             .IsRequired();
 
         builder.Property(x => x.Weight)
@@ -22,7 +28,5 @@ internal class StrategyComponentConfiguration : IEntityTypeConfiguration<StockSt
             .WithMany(i => i.Components)
             .HasForeignKey("StrategyId")
             .IsRequired();
-
-        builder.HasNoDiscriminator();
     }
 }

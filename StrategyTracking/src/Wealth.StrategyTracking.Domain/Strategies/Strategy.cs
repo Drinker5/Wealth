@@ -38,7 +38,7 @@ public class Strategy : AggregateRoot
         Apply(new StrategyRenamed(Id, newName));
     }
 
-    public void AddOrUpdateComponent(StockId stockId, float weight)
+    public StrategyComponentId AddOrUpdateComponent(StockId stockId, float weight)
     {
         var c = Components.OfType<StockStrategyComponent>().FirstOrDefault(c => c.StockId == stockId);
         if (c != null)
@@ -47,15 +47,17 @@ public class Strategy : AggregateRoot
         }
         else
         {
-            Apply(new StrategyComponentAdded(
-                Id,
-                new StockStrategyComponent
-                {
-                    Id = StrategyComponentId.New(),
-                    StockId = stockId,
-                    Weight = weight,
-                }));
+            c = new StockStrategyComponent
+            {
+                Id = StrategyComponentId.New(),
+                StockId = stockId,
+                Weight = weight,
+            };
+
+            Apply(new StrategyComponentAdded(Id, c));
         }
+
+        return c.Id;
     }
 
     public void AddOrUpdateComponent(BondId bondId, float weight)
@@ -104,7 +106,7 @@ public class Strategy : AggregateRoot
         if (component != null)
             Apply(new StrategyComponentRemoved(Id, component.Id));
     }
-    
+
     public void RemoveStrategyComponent(BondId bondId)
     {
         var component = Components.OfType<BondStrategyComponent>().SingleOrDefault(s => s.BondId == bondId);

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Wealth.BuildingBlocks.Application;
+using Wealth.BuildingBlocks.Infrastructure.EFCore;
 using Wealth.BuildingBlocks.Infrastructure.EFCore.EntityConfigurations;
 using Wealth.StrategyTracking.Domain.Strategies;
 using Wealth.StrategyTracking.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
@@ -11,10 +12,9 @@ namespace Wealth.StrategyTracking.Infrastructure.UnitOfWorks;
 /// dotnet ef migrations add --project src\Wealth.StrategyTracking.Infrastructure --startup-project .\src\Wealth.StrategyTracking.API Name
 /// dotnet ef database update --project src\Wealth.StrategyTracking.Infrastructure --startup-project .\src\Wealth.StrategyTracking.API
 /// </summary>
-public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbContext>
+public class WealthDbContext : WealthDbContextBase
 {
     public virtual DbSet<Strategy> Strategies { get; internal init; }
-    public virtual DbSet<OutboxMessage> OutboxMessages { get; internal init; }
 
     public WealthDbContext()
     {
@@ -25,29 +25,21 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
     {
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnInMemoryModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-        modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
-        if (Database.IsInMemory())
-        {
-            modelBuilder.Entity<Strategy>().Property(i => i.Id)
-                .HasValueGenerator<StrategyIdInMemoryValueGenerator>();
-        }
-
-        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Strategy>().Property(i => i.Id)
+            .HasValueGenerator<StrategyIdInMemoryValueGenerator>();
     }
 
-    public WealthDbContext CreateDbContext(string[] args)
+    public override WealthDbContextBase CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<WealthDbContext>();
         optionsBuilder.UseNpgsql("Host=127.0.0.1;Username=postgres;Password=postgres;Database=Design");
         return new WealthDbContext(optionsBuilder.Options);
     }
 
-    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    protected override void AdditionalConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
-        configurationBuilder.Properties<InstrumentId>().HaveConversion<InstrumentIdConverter>();
         configurationBuilder.Properties<StrategyId>().HaveConversion<StrategyIdConverter>();
     }
 }

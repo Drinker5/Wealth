@@ -20,33 +20,33 @@ public class BondTests
     [Test]
     public void WhenCreate()
     {
-        var instrument = CreateBondInstrument(name, isin);
+        var bond = CreateBondInstrument(name, isin);
 
-        var @event = instrument.HasEvent<BondCreated>();
+        var @event = bond.HasEvent<BondCreated>();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(@event.BondId, Is.Not.Default);
+            Assert.That(@event.BondId, Is.Not.Zero);
             Assert.That(@event.Name, Is.EqualTo(name));
             Assert.That(@event.ISIN, Is.EqualTo(isin));
-            Assert.That(instrument.Id, Is.Not.Default);
-            Assert.That(instrument.Name, Is.EqualTo(name));
-            Assert.That(instrument.ISIN, Is.EqualTo(isin));
-            Assert.That(instrument.Coupon, Is.Null);
+            Assert.That(bond.Id, Is.Not.Zero);
+            Assert.That(bond.Name, Is.EqualTo(name));
+            Assert.That(bond.ISIN, Is.EqualTo(isin));
+            Assert.That(bond.Coupon, Is.Null);
         }
     }
 
     [Test]
     public void WhenPriceChanged()
     {
-        var instrument = CreateBondInstrument(name, isin);
+        var bond = CreateBondInstrument(name, isin);
         var money = new Money("BAR", 23.3m);
 
-        instrument.ChangePrice(money);
+        bond.ChangePrice(money);
 
-        var @event = instrument.HasEvent<BondPriceChanged>();
+        var @event = bond.HasEvent<BondPriceChanged>();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(@event.BondId, Is.Not.Default);
+            Assert.That(@event.BondId, Is.Not.Zero);
             Assert.That(@event.ISIN, Is.EqualTo(isin));
             Assert.That(@event.NewPrice, Is.EqualTo(money));
         }
@@ -55,14 +55,14 @@ public class BondTests
     [Test]
     public void CouponChanged()
     {
-        var instrument = CreateBondInstrument(name, isin);
+        var bond = CreateBondInstrument(name, isin);
 
-        instrument.ChangeCoupon(coupon);
+        bond.ChangeCoupon(coupon);
 
-        var @event = instrument.HasEvent<BondCouponChanged>();
+        var @event = bond.HasEvent<BondCouponChanged>();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(@event.BondId, Is.Not.Default);
+            Assert.That(@event.BondId, Is.Not.Zero);
             Assert.That(@event.ISIN, Is.EqualTo(isin));
             Assert.That(@event.NewCoupon, Is.EqualTo(coupon));
         }
