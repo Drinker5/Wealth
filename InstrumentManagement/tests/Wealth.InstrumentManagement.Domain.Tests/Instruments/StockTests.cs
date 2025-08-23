@@ -20,34 +20,34 @@ public class StockTests
     [Test]
     public void WhenCreate()
     {
-        var instrument = CreateStockInstrument(name, isin);
+        var stock = CreateStockInstrument(name, isin);
 
-        var @event = instrument.HasEvent<StockCreated>();
+        var @event = stock.HasEvent<StockCreated>();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(@event.StockId, Is.Not.Default);
+            Assert.That(@event.StockId, Is.Not.Zero);
             Assert.That(@event.Name, Is.EqualTo(name));
             Assert.That(@event.ISIN, Is.EqualTo(isin));
-            Assert.That(instrument.Id, Is.Not.Default);
-            Assert.That(instrument.Name, Is.EqualTo(name));
-            Assert.That(instrument.ISIN, Is.EqualTo(isin));
-            Assert.That(instrument.Dividend, Is.EqualTo(Dividend.Empty));
-            Assert.That(instrument.LotSize.Size, Is.EqualTo(1));
+            Assert.That(stock.Id, Is.Not.Zero);
+            Assert.That(stock.Name, Is.EqualTo(name));
+            Assert.That(stock.ISIN, Is.EqualTo(isin));
+            Assert.That(stock.Dividend, Is.EqualTo(Dividend.Empty));
+            Assert.That(stock.LotSize.Size, Is.EqualTo(1));
         }
     }
 
     [Test]
     public void WhenPriceChanged()
     {
-        var instrument = CreateStockInstrument(name, isin);
+        var stock = CreateStockInstrument(name, isin);
         var money = new Money("BAR", 23.3m);
 
-        instrument.ChangePrice(money);
+        stock.ChangePrice(money);
 
-        var @event = instrument.HasEvent<StockPriceChanged>();
+        var @event = stock.HasEvent<StockPriceChanged>();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(@event.StockId, Is.Not.Default);
+            Assert.That(@event.StockId, Is.Not.Zero);
             Assert.That(@event.ISIN, Is.EqualTo(isin));
             Assert.That(@event.NewPrice, Is.EqualTo(money));
         }
@@ -56,14 +56,14 @@ public class StockTests
     [Test]
     public void WhenDividendChanged()
     {
-        var instrument = CreateStockInstrument(name, isin);
+        var stock = CreateStockInstrument(name, isin);
 
-        instrument.ChangeDividend(dividend);
+        stock.ChangeDividend(dividend);
 
-        var @event = instrument.HasEvent<StockDividendChanged>();
+        var @event = stock.HasEvent<StockDividendChanged>();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(@event.StockId, Is.Not.Default);
+            Assert.That(@event.StockId, Is.Not.Zero);
             Assert.That(@event.ISIN, Is.EqualTo(isin));
             Assert.That(@event.NewDividend, Is.EqualTo(dividend));
         }
@@ -79,7 +79,7 @@ public class StockTests
         var @event = instrument.HasEvent<StockLotSizeChanged>();
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(@event.StockId, Is.Not.Default);
+            Assert.That(@event.StockId, Is.Not.Zero);
             Assert.That(@event.ISIN, Is.EqualTo(isin));
             Assert.That(@event.NewLotSize, Is.EqualTo(10));
         }
