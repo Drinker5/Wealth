@@ -6,8 +6,6 @@ namespace Wealth.BuildingBlocks.Domain.Common;
 [JsonConverter(typeof(BondIdJsonConverter))]
 public readonly record struct BondId(int Id) : IIdentity
 {
-    public static BondId New() => new(0);
-
     public override string ToString()
     {
         return Id.ToString();

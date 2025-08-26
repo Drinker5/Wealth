@@ -72,10 +72,16 @@ public class StocksRepository : IStocksRepository
         return instruments.FirstOrDefault();
     }
 
-    public Task<StockId> CreateStock(string name, ISIN isin)
+    public async Task<StockId> CreateStock(string name, ISIN isin, CancellationToken token = default)
     {
-        var stockInstrument = Stock.Create(name, isin);
-        return CreateStock(stockInstrument);
+        const string sql = """SELECT nextval('"StocksHiLo"')""";
+        var command = new CommandDefinition(
+            commandText: sql,
+            cancellationToken: token);
+
+        var nextId = await connection.ExecuteScalarAsync<int>(command);
+        var stockInstrument = Stock.Create(new StockId(nextId), name, isin);
+        return await CreateStock(stockInstrument);
     }
 
     private async Task<StockId> CreateStock(Stock stock)
@@ -138,9 +144,9 @@ public class StocksRepository : IStocksRepository
 
     private enum Columns
     {
-        Id = 1,
-        ISIN,
+        Id = 0,
         Name,
+        ISIN,
         Price_CurrencyId,
         Price_Amount,
         Dividend_CurrencyId,

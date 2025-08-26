@@ -23,11 +23,6 @@ public class Stock : AggregateRoot
 
     public LotSize LotSize { get; set; } = 1;
 
-    public static Stock Create(string name, ISIN isin)
-    {
-        return Create(StockId.New(), name, isin);
-    }
-
     public static Stock Create(StockId id, string name, ISIN isin)
     {
         var stock = new Stock(id);

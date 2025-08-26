@@ -11,6 +11,6 @@ public interface IStocksRepository
     Task DeleteStock(StockId id);
     Task ChangePrice(StockId id, Money price);
     Task ChangeDividend(StockId id, Dividend dividend);
-    Task<StockId> CreateStock(string name, ISIN isin);
+    Task<StockId> CreateStock(string name, ISIN isin, CancellationToken token);
     Task ChangeLotSize(StockId id, int lotSize);
 }

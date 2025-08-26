@@ -18,12 +18,12 @@ public class CreateBondCommandHandlerTests
             Name = "Foo",
         };
         BondId id = 1;
-        A.CallTo(() => bondsRepository.CreateBond(command.Name, command.ISIN)).Returns(id);
+        A.CallTo(() => bondsRepository.CreateBond(command.Name, command.ISIN, CancellationToken.None)).Returns(id);
         var handler = new CreateBondCommandHandler(bondsRepository);
 
         var result = await handler.Handle(command, CancellationToken.None);
 
-        A.CallTo(() => bondsRepository.CreateBond(command.Name, command.ISIN)).MustHaveHappened();
+        A.CallTo(() => bondsRepository.CreateBond(command.Name, command.ISIN, CancellationToken.None)).MustHaveHappened();
         Assert.That(result, Is.EqualTo(id));
     }
 }

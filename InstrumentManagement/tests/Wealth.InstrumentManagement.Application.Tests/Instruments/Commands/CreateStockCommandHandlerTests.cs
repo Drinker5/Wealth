@@ -18,12 +18,12 @@ public class CreateStockCommandHandlerTests
             Name = "Foo",
         };
         StockId id = 1;
-        A.CallTo(() => stocksRepository.CreateStock(command.Name, command.ISIN)).Returns(id);
+        A.CallTo(() => stocksRepository.CreateStock(command.Name, command.ISIN, CancellationToken.None)).Returns(id);
         var handler = new CreateStockCommandHandler(stocksRepository);
         
         var result = await handler.Handle(command, CancellationToken.None);
         
-        A.CallTo(() => stocksRepository.CreateStock(command.Name, command.ISIN)).MustHaveHappened();
+        A.CallTo(() => stocksRepository.CreateStock(command.Name, command.ISIN, CancellationToken.None)).MustHaveHappened();
         Assert.That(result, Is.EqualTo(id));
     }
 }

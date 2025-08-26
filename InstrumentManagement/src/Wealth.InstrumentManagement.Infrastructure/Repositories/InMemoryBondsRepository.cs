@@ -36,7 +36,7 @@ public class InMemoryBondsRepository : IBondsRepository
         if (bond != null) bond.Price = price;
     }
 
-    public Task<BondId> CreateBond(string name, ISIN isin)
+    public Task<BondId> CreateBond(string name, ISIN isin, CancellationToken token = default)
     {
         var bondId = Interlocked.Increment(ref currentId);
         var bond = Bond.Create(bondId, name, isin);

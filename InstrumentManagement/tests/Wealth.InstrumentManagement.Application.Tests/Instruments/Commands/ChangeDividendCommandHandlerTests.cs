@@ -18,7 +18,7 @@ public class ChangeDividendCommandHandlerTests
         A.CallTo(() => currencyService.IsCurrencyExists("FOO")).Returns(true);
         var command = new ChangeDividendCommand
         {
-            Id = StockId.New(),
+            Id = new StockId(3),
             Dividend = new Dividend("FOO", 3.42m),
         };
         var handler = new ChangeDividendCommandHandler(stocksRepository, currencyService);

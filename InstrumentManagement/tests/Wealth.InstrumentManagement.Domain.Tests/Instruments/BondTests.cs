@@ -14,7 +14,7 @@ public class BondTests
 
     private Bond CreateBondInstrument(string name, ISIN isin)
     {
-        return Bond.Create(name, isin);
+        return Bond.Create(3, name, isin);
     }
 
     [Test]

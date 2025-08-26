@@ -18,7 +18,7 @@ public class ChangeCouponCommandHandlerTests
         A.CallTo(() => currencyService.IsCurrencyExists("FOO")).Returns(true);
         var command = new ChangeCouponCommand
         {
-            Id = BondId.New(),
+            Id = new BondId(3),
             Coupon = new Coupon("FOO", 3.42m),
         };
         var handler = new ChangeCouponCommandHandler(bondsRepository, currencyService);

@@ -59,10 +59,17 @@ public class BondsRepository : IBondsRepository
         dbContext.AddEvents(bond);
     }
 
-    public Task<BondId> CreateBond(string name, ISIN isin)
+    public async Task<BondId> CreateBond(string name, ISIN isin, CancellationToken token = default)
     {
-        var bondInstrument = Bond.Create(name, isin);
-        return CreateBond(bondInstrument);
+        const string sql = """SELECT nextval('"BondsHiLo"')""";
+        var command = new CommandDefinition(
+            commandText: sql,
+            cancellationToken: token);
+
+        var nextId = await connection.ExecuteScalarAsync<int>(command);
+
+        var bondInstrument = Bond.Create(new BondId(nextId), name, isin);
+        return await CreateBond(bondInstrument);
     }
 
     public Task<IReadOnlyCollection<Bond>> GetBonds()
@@ -74,8 +81,8 @@ public class BondsRepository : IBondsRepository
     private async Task<BondId> CreateBond(Bond bond)
     {
         const string sql = """
-                           INSERT INTO "Bonds" ("Id", "Name", "ISIN", "Type") 
-                           VALUES (@Id, @Name, @ISIN, @Type)
+                           INSERT INTO "Bonds" ("Id", "Name", "ISIN") 
+                           VALUES (@Id, @Name, @ISIN)
                            """;
         await connection.ExecuteAsync(sql, new
         {
@@ -111,13 +118,13 @@ public class BondsRepository : IBondsRepository
 
     private enum Columns
     {
-        Id = 1,
-        Coupon_CurrencyId,
-        Coupon_Amount,
+        Id = 0,
         Name,
         ISIN,
         Price_CurrencyId,
-        Price_Amount
+        Price_Amount,
+        Coupon_CurrencyId,
+        Coupon_Amount,
     }
 
     private async Task<IReadOnlyCollection<Bond>> GetBonds(string sql, object? param = null)

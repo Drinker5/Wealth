@@ -6,8 +6,6 @@ namespace Wealth.BuildingBlocks.Domain.Common;
 [JsonConverter(typeof(StockIdJsonConverter))]
 public readonly record struct StockId(int Id) : IIdentity
 {
-    public static StockId New() => new(0);
-
     public override string ToString()
     {
         return Id.ToString();

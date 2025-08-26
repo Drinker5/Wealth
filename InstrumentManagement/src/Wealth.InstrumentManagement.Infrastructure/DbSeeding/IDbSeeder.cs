@@ -2,5 +2,5 @@ namespace Wealth.InstrumentManagement.Infrastructure.DbSeeding;
 
 public interface IDbSeeder
 {
-    Task SeedAsync();
+    Task SeedAsync(CancellationToken token = default);
 }

@@ -15,6 +15,6 @@ public class CreateStockCommandHandler : ICommandHandler<CreateStockCommand, Sto
 
     public Task<StockId> Handle(CreateStockCommand request, CancellationToken cancellationToken)
     {
-        return repository.CreateStock(request.Name, request.ISIN);
+        return repository.CreateStock(request.Name, request.ISIN, cancellationToken);
     }
 }

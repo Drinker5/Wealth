@@ -15,6 +15,6 @@ public class CreateBondCommandHandler : ICommandHandler<CreateBondCommand, BondI
 
     public Task<BondId> Handle(CreateBondCommand request, CancellationToken cancellationToken)
     {
-        return repository.CreateBond(request.Name, request.ISIN);
+        return repository.CreateBond(request.Name, request.ISIN, cancellationToken);
     }
 }

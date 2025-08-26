@@ -43,7 +43,7 @@ public class InMemoryStocksRepository : IStocksRepository
 
     private static int currentId;
 
-    public Task<StockId> CreateStock(string name, ISIN isin)
+    public Task<StockId> CreateStock(string name, ISIN isin, CancellationToken token = default)
     {
         var stockId = Interlocked.Increment(ref currentId);
         var stock = Stock.Create(stockId, name, isin);

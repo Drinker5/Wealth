@@ -17,7 +17,7 @@ public class ChangePriceCommandHandlerTests
         A.CallTo(() => currencyService.IsCurrencyExists("FOO")).Returns(true);
         var command = new ChangeStockPriceCommand
         {
-            StockId = StockId.New(),
+            StockId = new StockId(3),
             Price = new Money("FOO", 3.42m),
         };
         var handler = new ChangeStockPriceCommandHandler(instumentsRepository, currencyService);

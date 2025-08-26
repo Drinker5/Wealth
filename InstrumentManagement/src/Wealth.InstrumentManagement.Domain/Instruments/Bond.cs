@@ -21,11 +21,6 @@ public class Bond : AggregateRoot
 
     public Coupon Coupon { get; set; }
 
-    public static Bond Create(string name, ISIN isin)
-    {
-        return Create(BondId.New(), name, isin);
-    }
-    
     public static Bond Create(BondId bondId, string name, ISIN isin)
     {
         var bond = new Bond(bondId);

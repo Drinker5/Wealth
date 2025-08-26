@@ -14,7 +14,7 @@ public class StockTests
 
     private Stock CreateStockInstrument(string name, ISIN isin)
     {
-        return Stock.Create(name, isin);
+        return Stock.Create(3, name, isin);
     }
 
     [Test]
