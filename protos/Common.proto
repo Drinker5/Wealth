@@ -10,7 +10,7 @@ message GuidProto {
 
 message MoneyProto {
   CurrencyIdProto currency_id = 1;
-  DecimalProto price = 2;
+  DecimalProto amount = 2;
 }
 
 message CurrencyIdProto {

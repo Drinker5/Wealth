@@ -4,20 +4,15 @@ using Wealth.InstrumentManagement.Domain.Instruments.Events;
 
 namespace Wealth.InstrumentManagement.Domain.Instruments;
 
-public class Bond : AggregateRoot
+public class Bond(BondId id) : AggregateRoot
 {
-    public BondId Id { get; protected set; }
-    
+    public BondId Id { get; private set; } = id;
+
     public string Name { get; set; }
 
     public ISIN ISIN { get; set; }
 
     public Money Price { get; set; } = Money.Empty;
-    
-    public Bond(BondId Id)
-    {
-        Id = Id;
-    }
 
     public Coupon Coupon { get; set; }
 

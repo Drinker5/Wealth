@@ -35,7 +35,7 @@ public class StocksRepository : IStocksRepository
     public async Task DeleteStock(StockId id)
     {
         const string sql = """DELETE FROM "Stocks" WHERE "Id" = @Id""";
-        await connection.ExecuteAsync(sql, new { Id = id.Id });
+        await connection.ExecuteAsync(sql, new { Id = id.Value });
     }
 
     public async Task ChangePrice(StockId id, Money price)
@@ -52,7 +52,7 @@ public class StocksRepository : IStocksRepository
                            """;
         await connection.ExecuteAsync(sql, new
         {
-            Id = id.Id,
+            Id = id.Value,
             CurrencyId = instrument.Price.CurrencyId.Code,
             Amount = instrument.Price.Amount,
         });
@@ -68,7 +68,7 @@ public class StocksRepository : IStocksRepository
     public async Task<Stock?> GetStock(StockId id)
     {
         const string sql = """SELECT * FROM "Stocks" WHERE "Id" = @Id""";
-        var instruments = await GetStocks(sql, new { Id = id.Id });
+        var instruments = await GetStocks(sql, new { Id = id.Value });
         return instruments.FirstOrDefault();
     }
 
@@ -92,7 +92,7 @@ public class StocksRepository : IStocksRepository
                            """;
         await connection.ExecuteAsync(sql, new
         {
-            Id = stock.Id.Id,
+            Id = stock.Id.Value,
             Name = stock.Name,
             ISIN = stock.ISIN.Value,
         });
@@ -115,7 +115,7 @@ public class StocksRepository : IStocksRepository
                            """;
         await connection.ExecuteAsync(sql, new
         {
-            Id = id.Id,
+            Id = id.Value,
             CurrencyId = dividend.ValuePerYear.CurrencyId.Code,
             Amount = dividend.ValuePerYear.Amount,
         });
@@ -136,7 +136,7 @@ public class StocksRepository : IStocksRepository
                            """;
         await connection.ExecuteAsync(sql, new
         {
-            Id = id.Id,
+            Id = id.Value,
             LotSize = lotSize,
         });
         dbContext.AddEvents(instrument);

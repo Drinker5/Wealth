@@ -21,7 +21,7 @@ public class BondsRepository : IBondsRepository
     public async Task<Bond?> GetBond(BondId id)
     {
         const string sql = """SELECT * FROM "Bonds" WHERE "Id" = @Id""";
-        var instruments = await GetBonds(sql, new { Id = id.Id });
+        var instruments = await GetBonds(sql, new { Id = id.Value });
         return instruments.FirstOrDefault();
     }
 
@@ -35,7 +35,7 @@ public class BondsRepository : IBondsRepository
     public async Task DeleteBond(BondId instrumentId)
     {
         const string sql = """DELETE FROM "Bonds" WHERE "Id" = @Id""";
-        await connection.ExecuteAsync(sql, new { Id = instrumentId.Id });
+        await connection.ExecuteAsync(sql, new { Id = instrumentId.Value });
     }
 
     public async Task ChangePrice(BondId id, Money price)
@@ -52,7 +52,7 @@ public class BondsRepository : IBondsRepository
                            """;
         await connection.ExecuteAsync(sql, new
         {
-            Id = id.Id,
+            Id = id.Value,
             CurrencyId = bond.Price.CurrencyId.Code,
             Amount = bond.Price.Amount,
         });
@@ -86,7 +86,7 @@ public class BondsRepository : IBondsRepository
                            """;
         await connection.ExecuteAsync(sql, new
         {
-            Id = bond.Id.Id,
+            Id = bond.Id.Value,
             Name = bond.Name,
             ISIN = bond.ISIN.Value,
         });
@@ -109,7 +109,7 @@ public class BondsRepository : IBondsRepository
                            """;
         await connection.ExecuteAsync(sql, new
         {
-            Id = id.Id,
+            Id = id.Value,
             CurrencyId = coupon.ValuePerYear.CurrencyId.Code,
             Amount = coupon.ValuePerYear.Amount,
         });

@@ -16,6 +16,6 @@ public partial class BondIdProto
 
     public static implicit operator BondIdProto(BondId value)
     {
-        return new BondIdProto(value.Id);
+        return new BondIdProto(value.Value);
     }
 }

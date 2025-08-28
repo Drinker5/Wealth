@@ -33,7 +33,7 @@ public class StockIdHandler : SqlMapper.TypeHandler<StockId>
 {
     public override void SetValue(IDbDataParameter parameter, StockId value)
     {
-        parameter.Value = value.Id;
+        parameter.Value = value.Value;
     }
 
     public override StockId Parse(object value)

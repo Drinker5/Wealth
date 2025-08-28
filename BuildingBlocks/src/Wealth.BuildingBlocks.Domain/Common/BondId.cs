@@ -4,21 +4,21 @@ using System.Text.Json.Serialization;
 namespace Wealth.BuildingBlocks.Domain.Common;
 
 [JsonConverter(typeof(BondIdJsonConverter))]
-public readonly record struct BondId(int Id) : IIdentity
+public readonly record struct BondId(int Value) : IIdentity
 {
     public override string ToString()
     {
-        return Id.ToString();
+        return Value.ToString();
     }
 
     public override int GetHashCode()
     {
-        return Id.GetHashCode();
+        return Value.GetHashCode();
     }
     
-    public static implicit operator int(BondId value)
+    public static implicit operator int(BondId id)
     {
-        return value.Id;
+        return id.Value;
     }
     
     public static implicit operator BondId(int value)
@@ -36,6 +36,6 @@ public class BondIdJsonConverter : JsonConverter<BondId>
 
     public override void Write(Utf8JsonWriter writer, BondId value, JsonSerializerOptions options)
     {
-        writer.WriteNumberValue(value.Id);
+        writer.WriteNumberValue(value.Value);
     }
 }

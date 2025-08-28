@@ -4,20 +4,15 @@ using Wealth.InstrumentManagement.Domain.Instruments.Events;
 
 namespace Wealth.InstrumentManagement.Domain.Instruments;
 
-public class Stock : AggregateRoot
+public class Stock(StockId id) : AggregateRoot
 {
-    public StockId Id { get; protected set; }
-    
+    public StockId Id { get; private set; } = id;
+
     public string Name { get; set; }
 
     public ISIN ISIN { get; set; }
 
     public Money Price { get; set; } = Money.Empty;
-    
-    public Stock(StockId Id)
-    {
-        this.Id = Id;
-    }
 
     public Dividend Dividend { get; set; } = Dividend.Empty;
 

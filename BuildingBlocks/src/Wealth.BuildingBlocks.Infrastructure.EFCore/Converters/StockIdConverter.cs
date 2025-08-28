@@ -3,4 +3,4 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.BuildingBlocks.Infrastructure.EFCore.Converters;
 
-public class StockIdConverter() : ValueConverter<StockId, int>(v => v.Id, v => new StockId(v));
+public class StockIdConverter() : ValueConverter<StockId, int>(v => v.Value, v => new StockId(v));

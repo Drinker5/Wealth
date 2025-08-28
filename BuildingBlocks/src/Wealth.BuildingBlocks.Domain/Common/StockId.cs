@@ -4,21 +4,21 @@ using System.Text.Json.Serialization;
 namespace Wealth.BuildingBlocks.Domain.Common;
 
 [JsonConverter(typeof(StockIdJsonConverter))]
-public readonly record struct StockId(int Id) : IIdentity
+public readonly record struct StockId(int Value) : IIdentity
 {
     public override string ToString()
     {
-        return Id.ToString();
+        return Value.ToString();
     }
 
     public override int GetHashCode()
     {
-        return Id.GetHashCode();
+        return Value.GetHashCode();
     }
     
-    public static implicit operator int(StockId value)
+    public static implicit operator int(StockId id)
     {
-        return value.Id;
+        return id.Value;
     }
     
     public static implicit operator StockId(int value)
@@ -36,6 +36,6 @@ public class StockIdJsonConverter : JsonConverter<StockId>
 
     public override void Write(Utf8JsonWriter writer, StockId value, JsonSerializerOptions options)
     {
-        writer.WriteNumberValue(value.Id);
+        writer.WriteNumberValue(value.Value);
     }
 }
