@@ -161,6 +161,8 @@ public class PortfolioTests
     [Fact]
     public void WhenIncome()
     {
+        portfolio.Buy(stockId, Money.Empty, 1);
+
         portfolio.Dividend(stockId, price);
 
         var ev = portfolio.HasEvent<DividendReceived>();
