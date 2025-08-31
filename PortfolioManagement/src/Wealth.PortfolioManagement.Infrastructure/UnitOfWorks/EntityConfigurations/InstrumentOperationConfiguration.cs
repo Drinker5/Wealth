@@ -9,23 +9,10 @@ internal class InstrumentOperationConfiguration : IEntityTypeConfiguration<Opera
 {
     public void Configure(EntityTypeBuilder<Operation> builder)
     {
-        builder.HasKey(x => x.Id);
-
-        builder.Property(x => x.Id)
-            .ValueGeneratedOnAdd();
-
         builder.Property(x => x.Date)
             .IsRequired();
 
         builder.UseTpcMappingStrategy();
-    }
-}
-
-internal class DelistOperationConfiguration : IEntityTypeConfiguration<DelistOperation>
-{
-    public void Configure(EntityTypeBuilder<DelistOperation> builder)
-    {
-        builder.ToTable("DelistOperations");
     }
 }
 

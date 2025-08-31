@@ -177,6 +177,8 @@ public class PortfolioTests
     [Fact]
     public void WhenStockTaxPaid()
     {
+        portfolio.Buy(stockId, Money.Empty, 1);
+        
         portfolio.Tax(stockId, price);
 
         var ev = portfolio.HasEvent<StockOperationTaxPaid>();
@@ -192,6 +194,8 @@ public class PortfolioTests
     [Fact]
     public void WhenBondTaxPaid()
     {
+        portfolio.Buy(bondId, Money.Empty, 1);
+
         portfolio.Tax(bondId, price);
 
         var ev = portfolio.HasEvent<BondOperationTaxPaid>();

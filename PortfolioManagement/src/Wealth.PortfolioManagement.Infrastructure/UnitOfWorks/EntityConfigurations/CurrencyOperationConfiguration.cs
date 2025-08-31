@@ -9,10 +9,6 @@ internal class CurrencyOperationConfiguration : IEntityTypeConfiguration<Currenc
 {
     public void Configure(EntityTypeBuilder<CurrencyOperation> builder)
     {
-        builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id)
-            .ValueGeneratedOnAdd();
-
         builder.Property(x => x.PortfolioId)
             .HasConversion<PortfolioIdConverter>()
             .IsRequired();
