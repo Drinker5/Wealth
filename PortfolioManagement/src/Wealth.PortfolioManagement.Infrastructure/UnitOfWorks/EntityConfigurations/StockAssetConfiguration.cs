@@ -10,8 +10,7 @@ internal class StockAssetConfiguration : IEntityTypeConfiguration<StockAsset>
 {
     public void Configure(EntityTypeBuilder<StockAsset> builder)
     {
-        builder.Property<PortfolioId>("PortfolioId")
-            .HasConversion<PortfolioIdConverter>();
+        builder.Property<PortfolioId>("PortfolioId");
 
         builder.HasKey("PortfolioId", nameof(StockAsset.StockId));
 

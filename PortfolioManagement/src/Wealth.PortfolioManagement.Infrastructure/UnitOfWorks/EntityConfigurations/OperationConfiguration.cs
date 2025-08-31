@@ -18,7 +18,7 @@ internal class OperationConfiguration : IEntityTypeConfiguration<Operation>
             .HasValue<CashOperation>(OperationType.Cash)
             .HasValue<BondTradeOperation>(OperationType.BondTrade)
             .HasValue<StockTradeOperation>(OperationType.StockTrade)
-            .HasValue<DelistOperation>(OperationType.Delist)
+            .HasValue<StockDelistOperation>(OperationType.Delist)
             .HasValue<SplitOperation>(OperationType.Split);
     }
 

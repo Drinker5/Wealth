@@ -86,8 +86,10 @@ public sealed class PortfolioManagementApiTests : IClassFixture<PortfolioManagem
             Name = "Yes",
             Price = Money.Empty,
         });
-        
-        var buyAssetResponse = await httpClient.PutAsync($"/api/portfolio/{newPortfolioId}/asset", JsonContent.Create(buyAsset, options: jsonSerializerOptions));
+
+        var buyAssetResponse = await httpClient.PutAsync(
+            $"/api/portfolio/{newPortfolioId}/stock",
+            JsonContent.Create(buyAsset, options: jsonSerializerOptions));
 
         buyAssetResponse.EnsureSuccessStatusCode();
 

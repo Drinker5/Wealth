@@ -2,7 +2,7 @@ using Wealth.BuildingBlocks.Domain;
 
 namespace Wealth.PortfolioManagement.Domain.ValueObjects;
 
-public record SplitRatio : IValueObject
+public readonly record struct SplitRatio : IValueObject
 {
     public SplitRatio(int old, int @new)
     {

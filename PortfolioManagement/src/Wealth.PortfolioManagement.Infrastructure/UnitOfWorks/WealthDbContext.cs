@@ -1,15 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Infrastructure.EFCore;
-using Wealth.BuildingBlocks.Infrastructure.EFCore.Converters;
-using Wealth.BuildingBlocks.Infrastructure.EFCore.EntityConfigurations;
 using Wealth.PortfolioManagement.Domain.Operations;
 using Wealth.PortfolioManagement.Domain.Portfolios;
 using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
-using BondIdConverter = Wealth.BuildingBlocks.Infrastructure.EFCore.Converters.BondIdConverter;
-using StockIdConverter = Wealth.BuildingBlocks.Infrastructure.EFCore.Converters.StockIdConverter;
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 

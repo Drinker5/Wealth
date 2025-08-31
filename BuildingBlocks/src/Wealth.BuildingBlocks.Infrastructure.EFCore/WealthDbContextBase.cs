@@ -42,6 +42,7 @@ public abstract class WealthDbContextBase : DbContext, IDesignTimeDbContextFacto
         configurationBuilder.Properties<CurrencyId>().HaveConversion<CurrencyIdConverter>();
         configurationBuilder.Properties<StockId>().HaveConversion<StockIdConverter>();
         configurationBuilder.Properties<BondId>().HaveConversion<BondIdConverter>();
+        AdditionalConfigureConventions(configurationBuilder);
     }
 
     protected virtual void AdditionalConfigureConventions(ModelConfigurationBuilder configurationBuilder)

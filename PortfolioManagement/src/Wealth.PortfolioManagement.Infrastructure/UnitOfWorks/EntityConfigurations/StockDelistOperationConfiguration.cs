@@ -4,10 +4,11 @@ using Wealth.PortfolioManagement.Domain.Operations;
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations;
 
-internal class DelistOperationConfiguration : IEntityTypeConfiguration<DelistOperation>
+internal class StockDelistOperationConfiguration : IEntityTypeConfiguration<StockDelistOperation>
 {
-    public void Configure(EntityTypeBuilder<DelistOperation> builder)
+    public void Configure(EntityTypeBuilder<StockDelistOperation> builder)
     {
-        builder.ToTable("DelistOperations");
+        builder.Property(x => x.StockId)
+            .IsRequired();
     }
 }

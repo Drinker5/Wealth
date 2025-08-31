@@ -26,7 +26,7 @@ public class OperationRepositoryTests
     [Fact]
     public async Task WhenOperationCreated()
     {
-        var id = await repository.CreateOperation(new DelistOperation());
+        var id = await repository.CreateOperation(new StockDelistOperation());
         
         Assert.NotEqual(Guid.Empty, id);
     }
