@@ -51,7 +51,7 @@ public static class StrategyApi
         try
         {
             var strategyId = await services.Mediator.Command(new CreateStrategy(request.Name));
-            return TypedResults.Ok(strategyId.Id);
+            return TypedResults.Ok(strategyId.Value);
         }
         catch (Exception ex)
         {

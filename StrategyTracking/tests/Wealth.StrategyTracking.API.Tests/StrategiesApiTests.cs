@@ -46,7 +46,7 @@ public sealed class StrategiesApiTests : IClassFixture<StrategyTrackingApiFixtur
         var strategy = JsonSerializer.Deserialize<StrategyDTO>(currenciesJson, jsonSerializerOptions);
 
         Assert.NotNull(strategy);
-        Assert.Equal(1, strategy.StrategyId.Id);
+        Assert.Equal(1, strategy.StrategyId.Value);
         Assert.NotEmpty(strategy.Components);
     }
 
@@ -91,7 +91,7 @@ public sealed class StrategiesApiTests : IClassFixture<StrategyTrackingApiFixtur
         var currenciesJson = await responseGet.Content.ReadAsStringAsync();
         var strategy = JsonSerializer.Deserialize<StrategyDTO>(currenciesJson, jsonSerializerOptions);
         Assert.NotNull(strategy);
-        Assert.Equal(strategyId, strategy.StrategyId.Id);
+        Assert.Equal(strategyId, strategy.StrategyId.Value);
         Assert.Equal(obj.name, strategy.Name);
         var component = Assert.Single(strategy.Components);
         var stockComponent = Assert.IsType<StockStrategyComponent>(component);

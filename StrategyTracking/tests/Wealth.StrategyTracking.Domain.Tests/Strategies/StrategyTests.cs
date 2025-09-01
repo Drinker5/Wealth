@@ -20,7 +20,7 @@ public class StrategyTests
     [Fact]
     public void Create_AsExpected()
     {
-        Assert.Equal(0, strategy.Id.Id);
+        Assert.Equal(0, strategy.Id.Value);
         Assert.Equal(name, strategy.Name);
         Assert.Empty(strategy.Components);
         var ev = strategy.HasEvent<StrategyCreated>();

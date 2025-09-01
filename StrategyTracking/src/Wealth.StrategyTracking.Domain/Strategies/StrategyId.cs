@@ -5,23 +5,23 @@ using Wealth.BuildingBlocks.Domain;
 namespace Wealth.StrategyTracking.Domain.Strategies;
 
 [JsonConverter(typeof(StrategyIdJsonConverter))]
-public readonly record struct StrategyId(int Id) : IIdentity
+public readonly record struct StrategyId(int Value) : IIdentity
 {
     public static StrategyId New() => new StrategyId(0);
 
     public override int GetHashCode()
     {
-        return Id.GetHashCode();
+        return Value.GetHashCode();
     }
 
     public override string ToString()
     {
-        return Id.ToString();
+        return Value.ToString();
     }
     
     public static implicit operator int(StrategyId id)
     {
-        return id.Id;
+        return id.Value;
     }
     
     public static implicit operator StrategyId(int id)
@@ -39,6 +39,6 @@ public class StrategyIdJsonConverter : JsonConverter<StrategyId>
 
     public override void Write(Utf8JsonWriter writer, StrategyId value, JsonSerializerOptions options)
     {
-        writer.WriteNumberValue(value.Id);
+        writer.WriteNumberValue(value.Value);
     }
 }

@@ -7,10 +7,9 @@ public abstract class StrategyComponent : IEntity
 {
     public StrategyComponentId Id { get; set; }
     public float Weight { get; set; }
-    public abstract StrategyComponentType Type { get; }
 }
 
-public enum StrategyComponentType
+public enum StrategyComponentType : byte
 {
     Stock,
     Bond,
@@ -20,7 +19,6 @@ public enum StrategyComponentType
 public class StockStrategyComponent : StrategyComponent, IEquatable<StockStrategyComponent>
 {
     public required StockId StockId { get; init; }
-    public override StrategyComponentType Type => StrategyComponentType.Stock;
 
     public override int GetHashCode()
     {
@@ -37,7 +35,6 @@ public class StockStrategyComponent : StrategyComponent, IEquatable<StockStrateg
 public class BondStrategyComponent : StrategyComponent
 {
     public required BondId BondId { get; init; }
-    public override StrategyComponentType Type => StrategyComponentType.Bond;
 
     public override int GetHashCode()
     {
@@ -48,7 +45,6 @@ public class BondStrategyComponent : StrategyComponent
 public class CurrencyStrategyComponent : StrategyComponent
 {
     public required CurrencyId CurrencyId { get; init; }
-    public override StrategyComponentType Type => StrategyComponentType.Currency;
 
     public override int GetHashCode()
     {

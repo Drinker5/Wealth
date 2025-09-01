@@ -11,8 +11,8 @@ public class StrategyRepositoryTests
 {
     private readonly StrategyRepository repository;
     private readonly WealthDbContext context;
-    private readonly StockId instrumentId1 = 3;
-    private readonly BondId instrumentId2 = 4;
+    private readonly StockId stockId = 3;
+    private readonly BondId bondId = 4;
 
     public StrategyRepositoryTests()
     {
@@ -41,7 +41,7 @@ public class StrategyRepositoryTests
 
         await context.Strategies.AddAsync(strategy);
 
-        Assert.NotEqual(0, strategy.Id.Id);
+        Assert.NotEqual(0, strategy.Id.Value);
     }
 
     [Fact]
@@ -49,7 +49,7 @@ public class StrategyRepositoryTests
     {
         var id = await CreateStrategy("Foo");
         
-        Assert.NotEqual(0, id.Id);
+        Assert.NotEqual(0, id.Value);
         var portfolio = await repository.GetStrategy(id);
         Assert.NotNull(portfolio);
         Assert.Equal("Foo", portfolio.Name);
@@ -61,13 +61,13 @@ public class StrategyRepositoryTests
         var weight = 23.23f;
         var id = await CreateStrategy("Foo");
 
-        await repository.AddStrategyComponent(id, instrumentId1, weight);
+        await repository.AddStrategyComponent(id, stockId, weight);
 
         var strategy = await repository.GetStrategy(id);
         Assert.NotNull(strategy);
         var component = Assert.Single(strategy.Components.OfType<StockStrategyComponent>());
         
-        Assert.Equal(instrumentId1, component.StockId);
+        Assert.Equal(stockId, component.StockId);
         Assert.Equal(weight, component.Weight);
     }
 
@@ -75,9 +75,9 @@ public class StrategyRepositoryTests
     public async Task Repository_RemoveStrategyComponent()
     {
         var id = await CreateStrategy("Foo");
-        await repository.AddStrategyComponent(id, instrumentId1, 23.23f);
+        await repository.AddStrategyComponent(id, stockId, 23.23f);
 
-        await repository.RemoveStrategyComponent(id, instrumentId1);
+        await repository.RemoveStrategyComponent(id, stockId);
 
         var strategy = await repository.GetStrategy(id);
         Assert.NotNull(strategy);
@@ -89,14 +89,14 @@ public class StrategyRepositoryTests
     {
         var weight = 13.13f;
         var id = await CreateStrategy("Foo");
-        await repository.AddStrategyComponent(id, instrumentId1, 23.23f);
+        await repository.AddStrategyComponent(id, stockId, 23.23f);
 
-        await repository.ChangeStrategyComponentWeight(id, instrumentId1, weight);
+        await repository.ChangeStrategyComponentWeight(id, stockId, weight);
 
         var strategy = await repository.GetStrategy(id);
         Assert.NotNull(strategy);
         var component = Assert.Single(strategy.Components.OfType<StockStrategyComponent>());
-        Assert.Equal(instrumentId1, component.StockId);
+        Assert.Equal(stockId, component.StockId);
         Assert.Equal(weight, component.Weight);
     }
 

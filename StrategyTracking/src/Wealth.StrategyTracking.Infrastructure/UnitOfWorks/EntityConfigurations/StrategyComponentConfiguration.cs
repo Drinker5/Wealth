@@ -13,7 +13,7 @@ internal class StrategyComponentConfiguration : IEntityTypeConfiguration<Strateg
         builder.Property<StrategyId>("StrategyId");
         builder.HasKey("StrategyId", nameof(StrategyComponent.Id));
 
-        builder.HasDiscriminator(sc => sc.Type)
+        builder.HasDiscriminator<StrategyComponentType>("type")
             .HasValue<StockStrategyComponent>(StrategyComponentType.Stock)
             .HasValue<BondStrategyComponent>(StrategyComponentType.Bond)
             .HasValue<CurrencyStrategyComponent>(StrategyComponentType.Currency);

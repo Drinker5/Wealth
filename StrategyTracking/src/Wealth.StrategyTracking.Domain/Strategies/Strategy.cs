@@ -43,7 +43,7 @@ public class Strategy : AggregateRoot
         var c = Components.OfType<StockStrategyComponent>().FirstOrDefault(c => c.StockId == stockId);
         if (c != null)
         {
-            Apply(new StrategyComponentWeightChanged(Id, c.Id, c.Weight));
+            Apply(new StrategyComponentWeightChanged(Id, c.Id, weight));
         }
         else
         {

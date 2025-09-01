@@ -1,16 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Infrastructure.EFCore;
-using Wealth.BuildingBlocks.Infrastructure.EFCore.EntityConfigurations;
 using Wealth.StrategyTracking.Domain.Strategies;
 using Wealth.StrategyTracking.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
 
 namespace Wealth.StrategyTracking.Infrastructure.UnitOfWorks;
 
 /// <summary>
-/// dotnet ef migrations add --project src\Wealth.StrategyTracking.Infrastructure --startup-project .\src\Wealth.StrategyTracking.API Name
-/// dotnet ef database update --project src\Wealth.StrategyTracking.Infrastructure --startup-project .\src\Wealth.StrategyTracking.API
+/// dotnet ef migrations add --project .\StrategyTracking\src\Wealth.StrategyTracking.Infrastructure --startup-project .\StrategyTracking\src\Wealth.StrategyTracking.API Name
+/// dotnet ef database update --project .\StrategyTracking\src\Wealth.StrategyTracking.Infrastructure --startup-project .\StrategyTracking\src\Wealth.StrategyTracking.API
 /// </summary>
 public class WealthDbContext : WealthDbContextBase
 {
@@ -41,5 +38,6 @@ public class WealthDbContext : WealthDbContextBase
     protected override void AdditionalConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<StrategyId>().HaveConversion<StrategyIdConverter>();
+        configurationBuilder.Properties<StrategyComponentId>().HaveConversion<StrategyComponentIdConverter>();
     }
 }
