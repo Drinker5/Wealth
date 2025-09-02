@@ -47,7 +47,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
 
         Assert.Equal(1, instrument.BondId.Id);
         Assert.Equal<decimal>(12.34m, instrument.Price.Amount);
-        Assert.Equal("RUB", instrument.Price.CurrencyId);
+        Assert.Equal(CurrencyCode.RUB, instrument.Price.CurrencyId);
         Assert.Equal("test-bond-1", instrument.Name);
     }
 
@@ -67,10 +67,10 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
         Assert.Equal(1, instrument.StockId.Id);
         Assert.Equal(10, instrument.LotSize);
         Assert.Equal<decimal>(111m, instrument.Price.Amount);
-        Assert.Equal("RUB", instrument.Price.CurrencyId);
+        Assert.Equal(CurrencyCode.RUB, instrument.Price.CurrencyId);
         Assert.Equal("test-stock-1", instrument.Name);
         Assert.Equal<decimal>(222m, instrument.DividendPerYear.Amount);
-        Assert.Equal("USD", instrument.DividendPerYear.CurrencyId);
+        Assert.Equal(CurrencyCode.USD, instrument.DividendPerYear.CurrencyId);
     }
 
     [Fact]

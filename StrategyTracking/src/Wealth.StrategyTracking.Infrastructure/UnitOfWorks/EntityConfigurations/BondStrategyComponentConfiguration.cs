@@ -9,6 +9,7 @@ internal class BondStrategyComponentConfiguration : IEntityTypeConfiguration<Bon
     public void Configure(EntityTypeBuilder<BondStrategyComponent> builder)
     {
         builder.Property(b => b.BondId)
+            .HasField("id")
             .IsRequired();
     }
 }

@@ -9,6 +9,7 @@ internal class CurrencyStrategyComponentConfiguration : IEntityTypeConfiguration
     public void Configure(EntityTypeBuilder<CurrencyStrategyComponent> builder)
     {
         builder.Property(c => c.CurrencyId)
+            .HasField("id")
             .IsRequired();
     }
 }

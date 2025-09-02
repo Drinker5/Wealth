@@ -53,7 +53,7 @@ public class BondsRepository : IBondsRepository
         await connection.ExecuteAsync(sql, new
         {
             Id = id.Value,
-            CurrencyId = bond.Price.CurrencyId.Code,
+            CurrencyId = bond.Price.CurrencyId.Value,
             Amount = bond.Price.Amount,
         });
         dbContext.AddEvents(bond);
@@ -110,7 +110,7 @@ public class BondsRepository : IBondsRepository
         await connection.ExecuteAsync(sql, new
         {
             Id = id.Value,
-            CurrencyId = coupon.ValuePerYear.CurrencyId.Code,
+            CurrencyId = coupon.ValuePerYear.CurrencyId.Value,
             Amount = coupon.ValuePerYear.Amount,
         });
         dbContext.AddEvents(instrument);

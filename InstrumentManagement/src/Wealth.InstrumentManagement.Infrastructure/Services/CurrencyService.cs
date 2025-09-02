@@ -24,7 +24,7 @@ public class CurrencyService(ILogger<CurrencyService> logger, HttpClient httpCli
 
     private async Task<CurrencyItem?> GetCurrency(CurrencyId id)
     {
-        var uri = $"{remoteServiceBaseUrl}/{id.Code}";
+        var uri = $"{remoteServiceBaseUrl}/{id.Value}";
         var response = await httpClient.GetAsync(uri);
 
         if (response.IsSuccessStatusCode)
@@ -34,7 +34,7 @@ public class CurrencyService(ILogger<CurrencyService> logger, HttpClient httpCli
         }
 
         var errorContent = await response.Content.ReadAsStringAsync();
-        logger.LogError($"Error fetching currency {id.Code}. Status: {response.StatusCode}. Content: {errorContent}");
+        logger.LogError($"Error fetching currency {id.Value}. Status: {response.StatusCode}. Content: {errorContent}");
         return null;
     }
 }

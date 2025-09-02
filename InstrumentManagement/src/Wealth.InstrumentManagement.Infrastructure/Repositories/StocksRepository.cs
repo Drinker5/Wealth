@@ -53,7 +53,7 @@ public class StocksRepository : IStocksRepository
         await connection.ExecuteAsync(sql, new
         {
             Id = id.Value,
-            CurrencyId = instrument.Price.CurrencyId.Code,
+            CurrencyId = instrument.Price.CurrencyId.Value,
             Amount = instrument.Price.Amount,
         });
         dbContext.AddEvents(instrument);
@@ -116,7 +116,7 @@ public class StocksRepository : IStocksRepository
         await connection.ExecuteAsync(sql, new
         {
             Id = id.Value,
-            CurrencyId = dividend.ValuePerYear.CurrencyId.Code,
+            CurrencyId = dividend.ValuePerYear.CurrencyId.Value,
             Amount = dividend.ValuePerYear.Amount,
         });
         dbContext.AddEvents(instrument);

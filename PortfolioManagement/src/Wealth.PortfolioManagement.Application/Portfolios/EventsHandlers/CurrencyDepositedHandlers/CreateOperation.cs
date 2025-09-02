@@ -15,7 +15,7 @@ public class CreateOperation(IOperationRepository operationRepository) : IDomain
         {
             Date = Clock.Now,
             Type = CurrencyOperationType.Deposit,
-            Money = new Money(notification.CurrencyId, notification.Amount),
+            Money = notification.Money,
             PortfolioId = notification.PortfolioId,
         });
     }

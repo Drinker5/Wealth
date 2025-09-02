@@ -29,20 +29,20 @@ public class Portfolio : AggregateRoot
         return portfolio;
     }
 
-    public void Deposit(CurrencyId currencyId, decimal amount)
+    public void Deposit(Money money)
     {
-        if (amount == 0)
+        if (money.Amount == 0)
             return;
 
-        Apply(new CurrencyDeposited(Id, currencyId, amount));
+        Apply(new CurrencyDeposited(Id, money));
     }
 
-    public void Withdraw(CurrencyId currencyId, decimal amount)
+    public void Withdraw(Money money)
     {
-        if (amount == 0)
+        if (money.Amount == 0)
             return;
 
-        Apply(new CurrencyWithdrew(Id, currencyId, amount));
+        Apply(new CurrencyWithdrew(Id, money));
     }
 
     public void Buy(StockId instrumentId, Money totalPrice, int quantity)
@@ -141,12 +141,12 @@ public class Portfolio : AggregateRoot
 
     private void When(CurrencyDeposited @event)
     {
-        ChangeCurrencyAmount(@event.CurrencyId, @event.Amount);
+        ChangeCurrencyAmount(@event.Money.CurrencyId, @event.Money.Amount);
     }
 
     private void When(CurrencyWithdrew @event)
     {
-        ChangeCurrencyAmount(@event.CurrencyId, -@event.Amount);
+        ChangeCurrencyAmount(@event.Money.CurrencyId, -@event.Money.Amount);
     }
 
     private void When(StockBought @event)

@@ -41,7 +41,7 @@ public sealed class DepositManagementApiTests : IClassFixture<DepositManagementA
     {
         var createDepositRequest = new CreateDepositRequest
         {
-            Currency = "RUB",
+            CurrencyId = CurrencyCodeProto.Rub,
             Name = "Test",
             Yield = new YieldProto
             {
@@ -56,7 +56,7 @@ public sealed class DepositManagementApiTests : IClassFixture<DepositManagementA
         var createdDeposit = await GetDeposit(createResponse.DepositId);
         Assert.Equal(createDepositRequest.Name, createdDeposit.Name);
         Assert.Equal(createDepositRequest.Yield, createdDeposit.Yield);
-        Assert.Equal(createDepositRequest.Currency, createdDeposit.InterestPerYear.CurrencyId);
+        Assert.Equal(createDepositRequest.CurrencyId, createdDeposit.InterestPerYear.CurrencyId);
 
         var investment = new Money("RUB", 32.32m);
         await client.InvestAsync(new InvestRequest { DepositId = createResponse.DepositId, Investment = investment });

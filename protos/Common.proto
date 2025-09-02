@@ -14,7 +14,15 @@ message MoneyProto {
 }
 
 message CurrencyIdProto {
-  string code = 1;
+  CurrencyCodeProto code = 1;
+}
+
+enum CurrencyCodeProto {
+  NONE = 0;
+  RUB = 1;
+  USD = 2;
+  EUR = 3;
+  CNY = 4;
 }
 
 message DecimalProto {

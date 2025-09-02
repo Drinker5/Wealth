@@ -36,7 +36,7 @@ public class CbrExchangeRateDataProvider : IExchangeRateDataProvider
 
     public async Task<decimal> GetRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, DateOnly? validOnDate)
     {
-        if (targetCurrencyId != "RUB")
+        if (targetCurrencyId != CurrencyCode.RUB)
             throw new ArgumentException("Only RUB targetCurrencyId is supported");
 
         if (baseCurrencyId == targetCurrencyId)
@@ -44,7 +44,7 @@ public class CbrExchangeRateDataProvider : IExchangeRateDataProvider
 
         validOnDate ??= Clock.Today;
 
-        var currencyCode = baseCurrencyId.Code;
+        var currencyCode = baseCurrencyId.Value;
         var cacheKey = $"{currencyCode}_{validOnDate:dd.MM.yyyy}";
         if (cache.TryGetValue(cacheKey, out decimal cachedRate))
             return cachedRate;
@@ -74,7 +74,7 @@ public class CbrExchangeRateDataProvider : IExchangeRateDataProvider
     //  <Value>50,9632</Value>
     //  <VunitRate>50,9632</VunitRate>
     //</Valute>
-    private async Task<string?> RequestValute(DateOnly validOnDate, string currencyCode, CancellationToken token)
+    private async Task<string?> RequestValute(DateOnly validOnDate, CurrencyId currencyId, CancellationToken token)
     {
         var url = $"{BaseUrl}?date_req={validOnDate:dd.MM.yyyy}";
         try
@@ -85,8 +85,13 @@ public class CbrExchangeRateDataProvider : IExchangeRateDataProvider
 
             var content = await response.Content.ReadAsStringAsync(token);
             var xdoc = XDocument.Parse(content);
-            var valute = xdoc.Descendants("Valute")
-                .FirstOrDefault(v => v.Element("CharCode")?.Value == currencyCode);
+            var valute = xdoc
+                .Descendants("Valute")
+                .Select(v => v.Element("CharCode"))
+                .FirstOrDefault(v => string.Equals(
+                    v?.Element("CharCode")?.Value,
+                    currencyId.ToString(),
+                    StringComparison.InvariantCultureIgnoreCase));
 
             return valute?.Element("VunitRate")?.Value;
         }

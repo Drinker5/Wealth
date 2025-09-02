@@ -1,3 +1,4 @@
+using Wealth.BuildingBlocks;
 using Wealth.BuildingBlocks.Application;
 using Wealth.PortfolioManagement.Domain.Portfolios.Events;
 
@@ -11,9 +12,8 @@ public class AddToOutbox(IOutboxRepository outboxRepository) : IDomainEventHandl
             notification,
             new CurrencyDepositedIntegrationEvent
             {
-                Amount = notification.Amount,
-                CurrencyId = notification.CurrencyId,
-                PortfolioId = notification.PortfolioId
+                PortfolioId = notification.PortfolioId,
+                Amount = notification.Money,
             },
             notification.PortfolioId.ToString(),
             cancellationToken);

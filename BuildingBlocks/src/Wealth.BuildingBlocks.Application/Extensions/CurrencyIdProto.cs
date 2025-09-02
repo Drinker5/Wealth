@@ -4,23 +4,33 @@ namespace Wealth.BuildingBlocks;
 
 public partial class CurrencyIdProto
 {
-    public CurrencyIdProto(string code)
+    public CurrencyIdProto(CurrencyCode code)
+    {
+        Code = (CurrencyCodeProto)code;
+    }
+
+    public CurrencyIdProto(CurrencyCodeProto code)
     {
         Code = code;
     }
-
+    
     public static implicit operator CurrencyId(CurrencyIdProto grpcMoney)
     {
-        return new CurrencyId(grpcMoney.Code);
+        return new CurrencyId((byte)grpcMoney.Code);
     }
 
-    public static implicit operator CurrencyIdProto(CurrencyId value)
+    public static implicit operator CurrencyIdProto(CurrencyId id)
     {
-        return new CurrencyIdProto(value.Code);
+        return new CurrencyIdProto(id.Value);
     }
 
-    public static implicit operator CurrencyIdProto(string value)
+    public static implicit operator CurrencyIdProto(CurrencyCode code)
     {
-        return new CurrencyIdProto(value);
+        return new CurrencyIdProto(code);
+    }
+    
+    public static implicit operator CurrencyIdProto(CurrencyCodeProto code)
+    {
+        return new CurrencyIdProto(code);
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Design;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Application.CommandScheduler;
+using Wealth.BuildingBlocks.Infrastructure.EFCore;
 using Wealth.BuildingBlocks.Infrastructure.EFCore.EntityConfigurations;
 using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Domain.ExchangeRates;
@@ -12,12 +13,11 @@ namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 /// dotnet ef migrations add --project src\Wealth.CurrencyManagement.Infrastructure --startup-project .\src\Wealth.CurrencyManagement.API Name
 /// dotnet ef database update --project src\Wealth.CurrencyManagement.Infrastructure --startup-project .\src\Wealth.CurrencyManagement.API
 /// </summary>
-public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbContext>
+public class WealthDbContext : WealthDbContextBase
 {
     public virtual DbSet<Currency> Currencies { get; internal init; }
     public virtual DbSet<ExchangeRate> ExchangeRates { get; internal init; }
     public virtual DbSet<DefferedCommand> DefferedCommands { get; internal init; }
-    public virtual DbSet<OutboxMessage> OutboxMessages { get; internal init; }
 
 
     private bool commited;
@@ -30,14 +30,6 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
     {
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-        modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
-
-        base.OnModelCreating(modelBuilder);
-    }
-
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         if (commited)
@@ -47,7 +39,7 @@ public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbCo
         return base.SaveChangesAsync(cancellationToken);
     }
 
-    public WealthDbContext CreateDbContext(string[] args)
+    public override WealthDbContextBase CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<WealthDbContext>();
         optionsBuilder.UseNpgsql("Host=127.0.0.1;Username=postgres;Password=postgres;Database=Design");

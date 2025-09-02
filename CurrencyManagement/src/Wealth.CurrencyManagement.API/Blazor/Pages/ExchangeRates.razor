@@ -133,7 +133,7 @@ else
     private async Task LoadCurrencies()
     {
         var currencyDtos = await cqrsInvoker.Query(new GetCurrenciesQuery());
-        currencies = currencyDtos.Select(i => i.CurrencyId.Code);
+        currencies = currencyDtos.Select(i => i.CurrencyId.Value.ToString());
     }
 
     private async Task LoadData()

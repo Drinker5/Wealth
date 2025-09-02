@@ -2,10 +2,17 @@ namespace Wealth.BuildingBlocks.Domain.Common;
 
 public readonly record struct CurrencyId : IIdentity
 {
-    /// <summary>
-    /// ISO 4217
-    /// </summary>
-    public string Code { get; init; /* init for serialization */ } = string.Empty;
+    public CurrencyCode Value { get; }
+
+    public CurrencyId(CurrencyCode value)
+    {
+        Value = value;
+    }
+    
+    public CurrencyId(byte value)
+    {
+        Value = (CurrencyCode)value;
+    }
 
     /// <summary>
     /// </summary>
@@ -17,30 +24,39 @@ public readonly record struct CurrencyId : IIdentity
         if (string.IsNullOrEmpty(code))
             throw new ArgumentNullException(nameof(code));
 
-        if (code.Length != 3)
-            throw new ArgumentException("Code must contain exactly 3 characters, ISO 4217");
+        if (!Enum.TryParse(code, true, out CurrencyCode value))
+            throw new ArgumentException($"Can't parse currency id {code}");
 
-        for (var i = 0; i < 3; i++)
-        {
-            if (!Char.IsUpper(code, i))
-                throw new ArgumentException("Code must be in upper case letters");
-        }
-
-        Code = code;
+        Value = value;
     }
 
-    public static implicit operator string(CurrencyId id)
+    public static implicit operator byte(CurrencyId id)
     {
-        return id.Code;
+        return (byte)id.Value;
+    }
+
+    public static implicit operator CurrencyId(byte code)
+    {
+        return new CurrencyId((CurrencyCode)code);
+    }
+
+    public static implicit operator CurrencyCode(CurrencyId id)
+    {
+        return id.Value;
+    }
+
+    public static implicit operator CurrencyId(CurrencyCode code)
+    {
+        return new CurrencyId(code);
     }
     
     public static implicit operator CurrencyId(string code)
     {
         return new CurrencyId(code);
     }
-    
+
     public override string ToString()
     {
-        return Code;
+        return Value.ToString();
     }
 }

@@ -67,7 +67,7 @@ public class PortfolioRepository : IPortfolioRepository
         if (portfolio == null)
             return;
 
-        portfolio.Deposit(currencyId, amount);
+        portfolio.Deposit(new Money(currencyId, amount));
     }
 
     public Task<PortfolioId> CreatePortfolio(string requestName)

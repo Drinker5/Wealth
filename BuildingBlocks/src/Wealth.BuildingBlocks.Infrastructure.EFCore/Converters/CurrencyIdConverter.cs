@@ -3,4 +3,4 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.BuildingBlocks.Infrastructure.EFCore.Converters;
 
-public class CurrencyIdConverter() : ValueConverter<CurrencyId, string>(v => v.Code, v => new CurrencyId(v));
+public class CurrencyIdConverter() : ValueConverter<CurrencyId, byte>(v => (byte)v.Value, v => new CurrencyId(v));

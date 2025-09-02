@@ -9,6 +9,7 @@ internal class StockStrategyComponentConfiguration : IEntityTypeConfiguration<St
     public void Configure(EntityTypeBuilder<StockStrategyComponent> builder)
     {
         builder.Property(x => x.StockId)
+            .HasField("id")
             .IsRequired();
     }
 }

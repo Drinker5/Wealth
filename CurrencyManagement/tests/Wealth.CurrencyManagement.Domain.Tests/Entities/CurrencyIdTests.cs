@@ -8,12 +8,12 @@ public class CurrencyIdTests
     [Fact]
     public void WhenCurrencyIdCreated()
     {
-        var expectedCode = "FOO";
+        var expectedCode = CurrencyCode.RUB;
         
         var currencyId = new CurrencyId(expectedCode);
 
-        Assert.Equal(expectedCode, currencyId.Code);
-        Assert.Equal(expectedCode, currencyId.ToString());
+        Assert.Equal(expectedCode, currencyId.Value);
+        Assert.Equal("RUB", currencyId.ToString());
     }
 
     [Theory]

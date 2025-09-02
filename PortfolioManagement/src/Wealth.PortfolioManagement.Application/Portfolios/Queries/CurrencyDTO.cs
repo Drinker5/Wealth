@@ -12,7 +12,7 @@ public class CurrencyDTO
     {
         return new CurrencyDTO
         {
-            CurrencyId = currency.CurrencyId,
+            CurrencyId = currency.CurrencyId.ToString(),
             Amount = currency.Amount,
         };
     }

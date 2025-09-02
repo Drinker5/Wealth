@@ -5,7 +5,6 @@ namespace Wealth.StrategyTracking.Domain.Strategies;
 
 public abstract class StrategyComponent : IEntity
 {
-    public StrategyComponentId Id { get; set; }
     public float Weight { get; set; }
 }
 
@@ -16,19 +15,13 @@ public enum StrategyComponentType : byte
     Currency
 }
 
-public class StockStrategyComponent : StrategyComponent, IEquatable<StockStrategyComponent>
+public class StockStrategyComponent : StrategyComponent
 {
     public required StockId StockId { get; init; }
 
     public override int GetHashCode()
     {
         return StockId.GetHashCode();
-    }
-
-    public bool Equals(StockStrategyComponent? other)
-    {
-        if (other is null) return false;
-        return StockId.Equals(other.StockId);
     }
 }
 

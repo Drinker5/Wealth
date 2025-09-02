@@ -38,6 +38,5 @@ public class WealthDbContext : WealthDbContextBase
     protected override void AdditionalConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<StrategyId>().HaveConversion<StrategyIdConverter>();
-        configurationBuilder.Properties<StrategyComponentId>().HaveConversion<StrategyComponentIdConverter>();
     }
 }

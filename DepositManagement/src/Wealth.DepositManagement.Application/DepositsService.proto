@@ -29,7 +29,7 @@ message GetDepositResponse {
 message CreateDepositRequest {
   string name = 1;
   YieldProto yield = 2;
-  CurrencyIdProto currency = 3;
+  CurrencyIdProto currency_id = 3;
 }
 
 message CreateDepositResponse {

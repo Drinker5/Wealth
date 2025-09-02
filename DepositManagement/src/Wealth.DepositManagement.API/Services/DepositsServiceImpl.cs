@@ -39,7 +39,7 @@ public class DepositsServiceImpl : DepositsService.DepositsServiceBase
 
     public override async Task<CreateDepositResponse> CreateDeposit(CreateDepositRequest request, ServerCallContext context)
     {
-        var result = await cqrsInvoker.Command(new CreateDeposit(request.Name, request.Yield, request.Currency));
+        var result = await cqrsInvoker.Command(new CreateDeposit(request.Name, request.Yield, request.CurrencyId));
         return new CreateDepositResponse { DepositId = result };
     }
 

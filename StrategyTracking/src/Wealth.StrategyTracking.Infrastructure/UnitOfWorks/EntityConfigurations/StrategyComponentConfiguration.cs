@@ -8,18 +8,16 @@ internal class StrategyComponentConfiguration : IEntityTypeConfiguration<Strateg
 {
     public void Configure(EntityTypeBuilder<StrategyComponent> builder)
     {
-        builder.ToTable("StrategyComponents");
-        
         builder.Property<StrategyId>("StrategyId");
-        builder.HasKey("StrategyId", nameof(StrategyComponent.Id));
+        builder.HasKey("StrategyId", "type", "id");
 
+        builder.Property<string>("id")
+            .IsRequired();
+        
         builder.HasDiscriminator<StrategyComponentType>("type")
             .HasValue<StockStrategyComponent>(StrategyComponentType.Stock)
             .HasValue<BondStrategyComponent>(StrategyComponentType.Bond)
             .HasValue<CurrencyStrategyComponent>(StrategyComponentType.Currency);
-
-        builder.Property(x => x.Id)
-            .IsRequired();
 
         builder.Property(x => x.Weight)
             .IsRequired();

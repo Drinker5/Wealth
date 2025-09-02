@@ -38,26 +38,23 @@ public class Strategy : AggregateRoot
         Apply(new StrategyRenamed(Id, newName));
     }
 
-    public StrategyComponentId AddOrUpdateComponent(StockId stockId, float weight)
+    public void AddOrUpdateComponent(StockId stockId, float weight)
     {
         var c = Components.OfType<StockStrategyComponent>().FirstOrDefault(c => c.StockId == stockId);
         if (c != null)
         {
-            Apply(new StrategyComponentWeightChanged(Id, c.Id, weight));
+            Apply(new StockStrategyComponentWeightChanged(Id, stockId, weight));
         }
         else
         {
             c = new StockStrategyComponent
             {
-                Id = StrategyComponentId.New(),
                 StockId = stockId,
                 Weight = weight,
             };
 
             Apply(new StrategyComponentAdded(Id, c));
         }
-
-        return c.Id;
     }
 
     public void AddOrUpdateComponent(BondId bondId, float weight)
@@ -65,7 +62,7 @@ public class Strategy : AggregateRoot
         var c = Components.OfType<BondStrategyComponent>().FirstOrDefault(c => c.BondId == bondId);
         if (c != null)
         {
-            Apply(new StrategyComponentWeightChanged(Id, c.Id, c.Weight));
+            Apply(new BondStrategyComponentWeightChanged(Id, bondId, weight));
         }
         else
         {
@@ -73,7 +70,6 @@ public class Strategy : AggregateRoot
                 Id,
                 new BondStrategyComponent
                 {
-                    Id = StrategyComponentId.New(),
                     BondId = bondId,
                     Weight = weight,
                 }));
@@ -85,7 +81,7 @@ public class Strategy : AggregateRoot
         var c = Components.OfType<CurrencyStrategyComponent>().FirstOrDefault(c => c.CurrencyId == currencyId);
         if (c != null)
         {
-            Apply(new StrategyComponentWeightChanged(Id, c.Id, c.Weight));
+            Apply(new CurrencyStrategyComponentWeightChanged(Id, currencyId, weight));
         }
         else
         {
@@ -93,7 +89,6 @@ public class Strategy : AggregateRoot
                 Id,
                 new CurrencyStrategyComponent
                 {
-                    Id = StrategyComponentId.New(),
                     CurrencyId = currencyId,
                     Weight = weight,
                 }));
@@ -104,21 +99,21 @@ public class Strategy : AggregateRoot
     {
         var component = Components.OfType<StockStrategyComponent>().SingleOrDefault(s => s.StockId == stockId);
         if (component != null)
-            Apply(new StrategyComponentRemoved(Id, component.Id));
+            Apply(new StockStrategyComponentRemoved(Id, stockId));
     }
 
     public void RemoveStrategyComponent(BondId bondId)
     {
         var component = Components.OfType<BondStrategyComponent>().SingleOrDefault(s => s.BondId == bondId);
         if (component != null)
-            Apply(new StrategyComponentRemoved(Id, component.Id));
+            Apply(new BondStrategyComponentRemoved(Id, bondId));
     }
 
     public void RemoveStrategyComponent(CurrencyId currencyId)
     {
         var component = Components.OfType<CurrencyStrategyComponent>().SingleOrDefault(s => s.CurrencyId == currencyId);
         if (component != null)
-            Apply(new StrategyComponentRemoved(Id, component.Id));
+            Apply(new CurrencyStrategyComponentRemoved(Id, currencyId));
     }
 
     private void When(StrategyCreated @event)
@@ -132,9 +127,22 @@ public class Strategy : AggregateRoot
         Name = @event.NewName;
     }
 
-    private void When(StrategyComponentWeightChanged @event)
+    private void When(StockStrategyComponentWeightChanged @event)
     {
-        var component = Components.Single(c => c.Id == @event.ComponentId);
+        var component = Components.OfType<StockStrategyComponent>().Single(c => c.StockId == @event.StockId);
+        component.Weight = @event.Weight;
+    }
+
+    private void When(BondStrategyComponentWeightChanged @event)
+    {
+        var component = Components.OfType<BondStrategyComponent>().Single(c => c.BondId == @event.BondId);
+        component.Weight = @event.Weight;
+    }
+
+
+    private void When(CurrencyStrategyComponentWeightChanged @event)
+    {
+        var component = Components.OfType<CurrencyStrategyComponent>().Single(c => c.CurrencyId == @event.CurrencyId);
         component.Weight = @event.Weight;
     }
 
@@ -143,9 +151,21 @@ public class Strategy : AggregateRoot
         Components.Add(@event.Component);
     }
 
-    private void When(StrategyComponentRemoved @event)
+    private void When(StockStrategyComponentRemoved @event)
     {
-        var component = Components.Single(s => s.Id == @event.ComponentId);
+        var component = Components.OfType<StockStrategyComponent>().Single(s => s.StockId == @event.StockId);
+        Components.Remove(component);
+    }
+
+    private void When(BondStrategyComponentRemoved @event)
+    {
+        var component = Components.OfType<BondStrategyComponent>().Single(s => s.BondId == @event.BondId);
+        Components.Remove(component);
+    }
+
+    private void When(CurrencyStrategyComponentRemoved @event)
+    {
+        var component = Components.OfType<CurrencyStrategyComponent>().Single(s => s.CurrencyId == @event.CurrencyId);
         Components.Remove(component);
     }
 }

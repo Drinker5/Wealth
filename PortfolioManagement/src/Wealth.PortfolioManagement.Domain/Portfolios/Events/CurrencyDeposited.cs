@@ -3,4 +3,4 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.PortfolioManagement.Domain.Portfolios.Events;
 
-public record CurrencyDeposited(PortfolioId PortfolioId, CurrencyId CurrencyId, decimal Amount) : DomainEvent;
+public record CurrencyDeposited(PortfolioId PortfolioId, Money Money) : DomainEvent;

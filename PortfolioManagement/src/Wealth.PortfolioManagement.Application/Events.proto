@@ -22,6 +22,5 @@ message BondBoughtIntegrationEvent {
 
 message CurrencyDepositedIntegrationEvent {
   PortfolioIdProto portfolio_id = 1;
-  CurrencyIdProto currency_id = 2;
-  DecimalProto Amount = 3;
+  MoneyProto amount = 2;
 }

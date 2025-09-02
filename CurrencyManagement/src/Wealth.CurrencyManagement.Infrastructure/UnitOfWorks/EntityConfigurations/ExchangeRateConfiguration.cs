@@ -20,11 +20,9 @@ internal class ExchangeRateConfiguration : IEntityTypeConfiguration<ExchangeRate
             .HasForeignKey(i => i.TargetCurrencyId);
 
         builder.Property(x => x.BaseCurrencyId)
-            .HasConversion(new CurrencyIdConverter())
             .IsRequired();
 
         builder.Property(x => x.TargetCurrencyId)
-            .HasConversion(new CurrencyIdConverter())
             .IsRequired();
 
         builder.Property(x => x.ValidOnDate).HasColumnType("date").IsRequired();

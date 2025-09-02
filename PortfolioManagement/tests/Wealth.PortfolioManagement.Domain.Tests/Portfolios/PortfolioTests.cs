@@ -39,12 +39,12 @@ public class PortfolioTests
     [Fact]
     public void WhenCurrencyDeposit()
     {
-        portfolio.Deposit(currencyId, amount);
+        portfolio.Deposit(new Money(currencyId, amount));
 
         var ev = portfolio.HasEvent<CurrencyDeposited>();
         Assert.Equal(portfolio.Id, ev.PortfolioId);
-        Assert.Equal(currencyId, ev.CurrencyId);
-        Assert.Equal(amount, ev.Amount);
+        Assert.Equal(currencyId, ev.Money.CurrencyId);
+        Assert.Equal(amount, ev.Money.Amount);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(currencyId, currency.CurrencyId);
         Assert.Equal(amount, currency.Amount);
@@ -53,12 +53,12 @@ public class PortfolioTests
     [Fact]
     public void WhenCurrencyWithdraw()
     {
-        portfolio.Withdraw(currencyId, amount);
+        portfolio.Withdraw(new Money(currencyId, amount));
 
         var ev = portfolio.HasEvent<CurrencyWithdrew>();
         Assert.Equal(portfolio.Id, ev.PortfolioId);
-        Assert.Equal(currencyId, ev.CurrencyId);
-        Assert.Equal(amount, ev.Amount);
+        Assert.Equal(currencyId, ev.Money.CurrencyId);
+        Assert.Equal(amount, ev.Money.Amount);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(currencyId, currency.CurrencyId);
         Assert.Equal(-amount, currency.Amount);
@@ -67,8 +67,10 @@ public class PortfolioTests
     [Fact]
     public void WhenDepositAndWithdraw()
     {
-        portfolio.Deposit(currencyId, amount);
-        portfolio.Withdraw(currencyId, amount);
+        var money = new Money(currencyId, amount);
+
+        portfolio.Deposit(money);
+        portfolio.Withdraw(money);
 
         Assert.Empty(portfolio.Currencies);
     }
@@ -178,7 +180,7 @@ public class PortfolioTests
     public void WhenStockTaxPaid()
     {
         portfolio.Buy(stockId, Money.Empty, 1);
-        
+
         portfolio.Tax(stockId, price);
 
         var ev = portfolio.HasEvent<StockOperationTaxPaid>();

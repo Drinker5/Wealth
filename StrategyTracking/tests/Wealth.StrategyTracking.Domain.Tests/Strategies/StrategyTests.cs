@@ -65,15 +65,14 @@ public class StrategyTests
     [Fact]
     public void RemoveComponent_AsExpected()
     {
-        var componentId = strategy.AddOrUpdateComponent(stockId1, 0.42f);
+        strategy.AddOrUpdateComponent(stockId1, 0.42f);
 
         strategy.RemoveStrategyComponent(stockId1);
 
         Assert.Empty(strategy.Components);
-        var ev = strategy.HasEvent<StrategyComponentRemoved>();
+        var ev = strategy.HasEvent<StockStrategyComponentRemoved>();
         Assert.Equal(strategy.Id, ev.StrategyId);
-        
-        Assert.Equal(componentId, ev.ComponentId);
+        Assert.Equal(stockId1, ev.StockId);
     }
 
     [Fact]
@@ -81,6 +80,6 @@ public class StrategyTests
     {
         strategy.RemoveStrategyComponent(stockId1);
 
-        strategy.HasNoEvents<StrategyComponentRemoved>();
+        strategy.HasNoEvents<StockStrategyComponentRemoved>();
     }
 }
