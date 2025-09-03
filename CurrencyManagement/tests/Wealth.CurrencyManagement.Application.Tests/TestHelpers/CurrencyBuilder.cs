@@ -5,7 +5,7 @@ namespace Wealth.CurrencyManagement.Application.Tests.TestHelpers;
 
 public class CurrencyBuilder
 {
-    private CurrencyId currencyId = "FOO";
+    private CurrencyId currencyId = "RUB";
     private string name = "Foo";
     private string symbol = "F";
 

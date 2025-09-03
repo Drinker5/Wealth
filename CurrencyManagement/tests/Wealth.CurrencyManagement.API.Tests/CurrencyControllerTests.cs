@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.CurrencyManagement.Application.Currencies.Queries;
 
 namespace Wealth.CurrencyManagement.API.Tests;
@@ -30,13 +31,19 @@ public sealed class CurrencyControllersTests : IClassFixture<CurrencyManagementA
         Assert.NotNull(currencies);
         Assert.Equal(2, currencies.Count());
 
+        // cannot parse
+        var response00 = await httpClient.GetAsync($"/api/currency/FOO");
+
+        Assert.Equal(HttpStatusCode.NotFound, response00.StatusCode);
+        
         // get not existed currency
-        var currencyId = "FOO";
-        var response0 = await httpClient.GetAsync($"/api/currency/{currencyId}");
+        var currencyCode = CurrencyCode.CNY;
+        var response0 = await httpClient.GetAsync($"/api/currency/{currencyCode}");
 
         Assert.Equal(HttpStatusCode.NotFound, response0.StatusCode);
 
         // create new currency
+        var currencyId = new CurrencyId(currencyCode);
         var obj = new
         {
             id = currencyId,

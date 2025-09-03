@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.CurrencyManagement.Application.Currencies.Queries;
 
 namespace Wealth.CurrencyManagement.Application.Tests;
@@ -6,29 +7,22 @@ namespace Wealth.CurrencyManagement.Application.Tests;
 public class CurrencyDTOSerializationTests
 {
     private readonly JsonSerializerOptions jsonSerializerOptions = new(JsonSerializerDefaults.Web);
-    
-    public CurrencyDTOSerializationTests()
-    {
-        
-    }
 
     [Fact]
     public void DeserializeTest()
     {
         var json = """
                    {
-                     "currencyId" : {
-                       "code" : "FOO"
-                     },
+                     "currencyId" : 3,
                      "name" : "Foo",
                      "symbol" : "F"
                    }
                    """;
-        
+
         var obj = JsonSerializer.Deserialize<CurrencyDTO>(json, jsonSerializerOptions);
-        
+
         Assert.NotNull(obj);
-        Assert.Equal("FOO", obj.CurrencyId);
+        Assert.Equal(CurrencyCode.EUR, obj.CurrencyId.Value);
         Assert.Equal("Foo", obj.Name);
         Assert.Equal("F", obj.Symbol);
     }

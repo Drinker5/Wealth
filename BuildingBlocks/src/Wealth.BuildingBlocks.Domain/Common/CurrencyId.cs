@@ -1,5 +1,9 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 namespace Wealth.BuildingBlocks.Domain.Common;
 
+[JsonConverter(typeof(CurrencyIdConverter))]
 public readonly record struct CurrencyId : IIdentity
 {
     public CurrencyCode Value { get; }
@@ -8,7 +12,7 @@ public readonly record struct CurrencyId : IIdentity
     {
         Value = value;
     }
-    
+
     public CurrencyId(byte value)
     {
         Value = (CurrencyCode)value;
@@ -24,39 +28,36 @@ public readonly record struct CurrencyId : IIdentity
         if (string.IsNullOrEmpty(code))
             throw new ArgumentNullException(nameof(code));
 
-        if (!Enum.TryParse(code, true, out CurrencyCode value))
+        if (!TryParse(code, out var value))
             throw new ArgumentException($"Can't parse currency id {code}");
 
         Value = value;
     }
 
-    public static implicit operator byte(CurrencyId id)
-    {
-        return (byte)id.Value;
-    }
+    public static bool TryParse(string value, out CurrencyCode result) => Enum.TryParse(value, true, out result);
 
-    public static implicit operator CurrencyId(byte code)
-    {
-        return new CurrencyId((CurrencyCode)code);
-    }
+    public static implicit operator byte(CurrencyId id) => (byte)id.Value;
 
-    public static implicit operator CurrencyCode(CurrencyId id)
-    {
-        return id.Value;
-    }
+    public static implicit operator CurrencyId(byte code) => new((CurrencyCode)code);
 
-    public static implicit operator CurrencyId(CurrencyCode code)
-    {
-        return new CurrencyId(code);
-    }
-    
-    public static implicit operator CurrencyId(string code)
-    {
-        return new CurrencyId(code);
-    }
+    public static implicit operator CurrencyCode(CurrencyId id) => id.Value;
 
-    public override string ToString()
+    public static implicit operator CurrencyId(CurrencyCode code) => new(code);
+
+    public static implicit operator CurrencyId(string code) => new(code);
+
+    public override string ToString() => Value.ToString();
+
+    internal sealed class CurrencyIdConverter : JsonConverter<CurrencyId>
     {
-        return Value.ToString();
+        public override CurrencyId Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            return new CurrencyId(reader.GetByte());
+        }
+
+        public override void Write(Utf8JsonWriter writer, CurrencyId currencyId, JsonSerializerOptions options)
+        {
+            writer.WriteNumberValue((byte)currencyId.Value);
+        }
     }
 }

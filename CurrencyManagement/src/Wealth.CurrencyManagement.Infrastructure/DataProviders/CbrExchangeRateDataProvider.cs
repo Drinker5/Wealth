@@ -87,7 +87,6 @@ public class CbrExchangeRateDataProvider : IExchangeRateDataProvider
             var xdoc = XDocument.Parse(content);
             var valute = xdoc
                 .Descendants("Valute")
-                .Select(v => v.Element("CharCode"))
                 .FirstOrDefault(v => string.Equals(
                     v?.Element("CharCode")?.Value,
                     currencyId.ToString(),

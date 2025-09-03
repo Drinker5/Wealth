@@ -11,7 +11,7 @@ public class CurrencyTests
     [Fact]
     public async Task WhenCreateCurrency()
     {
-        var command = new CreateCurrencyCommand("FOO", "Bar", "Z");
+        var command = new CreateCurrencyCommand("EUR", "Bar", "Z");
         var repo = Substitute.For<ICurrencyRepository>();
         var currency = new CurrencyBuilder().Build();
         repo.CreateCurrency(command.CurrencyId, command.Name, command.Symbol).Returns(currency);

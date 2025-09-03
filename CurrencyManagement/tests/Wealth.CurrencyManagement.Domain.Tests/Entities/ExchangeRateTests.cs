@@ -6,9 +6,9 @@ namespace Wealth.CurrencyManagement.Domain.Tests.Entities;
 [TestSubject(typeof(ExchangeRate))]
 public class ExchangeRateTests
 {
-    private readonly CurrencyId c1 = new CurrencyId("FOO");
-    private readonly CurrencyId c2 = new CurrencyId("BAR");
-    private readonly CurrencyId c3 = new CurrencyId("BAZ");
+    private readonly CurrencyId c1 = "Rub";
+    private readonly CurrencyId c2 = "EUR";
+    private readonly CurrencyId c3 = "CNY";
     private readonly DateOnly d = new DateOnly(2020, 01, 01);
     private readonly decimal r = 4.72m;
 

@@ -10,7 +10,7 @@ namespace Wealth.CurrencyManagement.Application.Tests.DataProviders;
 public class CbrExchangeRateDataProviderTests
 {
     private readonly CbrExchangeRateDataProvider provider;
-    private readonly CurrencyId FOO = "FOO";
+    private readonly CurrencyId USD = "USD";
     private readonly CurrencyId RUB = "RUB";
     private readonly DateOnly date = new DateOnly(2020, 1, 1);
     private readonly MockHttpMessageHandler handler;
@@ -34,7 +34,7 @@ public class CbrExchangeRateDataProviderTests
     public async Task WhenGetRate_OnlyRUBAsTarget()
     {
         await Assert.ThrowsAnyAsync<ArgumentException>(() =>
-            provider.GetRate(RUB, FOO, date)
+            provider.GetRate(RUB, USD, date)
         );
     }
 
@@ -48,12 +48,12 @@ public class CbrExchangeRateDataProviderTests
         httpResponse.Content = new StringContent(xml);
         httpResponse.StatusCode = HttpStatusCode.OK;
 
-        var result = await provider.GetRate(FOO, RUB, date);
+        var result = await provider.GetRate(USD, RUB, date);
 
         handler.Received(1).MockSend(Arg.Any<HttpRequestMessage>(), Arg.Any<CancellationToken>());
-        Assert.Equal(123.456m, result);
+        Assert.Equal(96.4706m, result);
     }
-    
+
     public class MockHttpMessageHandler : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)

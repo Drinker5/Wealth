@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Wealth.BuildingBlocks.Application;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.CurrencyManagement.API.Controllers.Requests;
 using Wealth.CurrencyManagement.Application.Currencies.Commands;
 using Wealth.CurrencyManagement.Application.Currencies.Queries;
@@ -7,15 +8,8 @@ using Wealth.CurrencyManagement.Application.Currencies.Queries;
 namespace Wealth.CurrencyManagement.API.Controllers;
 
 [Route("api/[controller]")]
-public class CurrencyController : Controller
+public class CurrencyController(ICqrsInvoker invoker) : Controller
 {
-    private readonly ICqrsInvoker invoker;
-
-    public CurrencyController(ICqrsInvoker invoker)
-    {
-        this.invoker = invoker;
-    }
-
     [HttpGet]
     public async Task<IActionResult> Get()
     {
@@ -29,7 +23,10 @@ public class CurrencyController : Controller
     {
         try
         {
-            var result = await invoker.Query(new GetCurrencyQuery(id));
+            if (!CurrencyId.TryParse(id, out var currencyId))
+                return NotFound("Cannot parse currency");
+                
+            var result = await invoker.Query(new GetCurrencyQuery(currencyId));
             if (result is null)
                 return NotFound("Currency not found");
 

@@ -65,13 +65,13 @@ public sealed class ExchangeRateControllerTests : IClassFixture<CurrencyManageme
         // create new currency
         var cur1 = new
         {
-            id = "AAA",
+            id = new CurrencyId(CurrencyCode.EUR),
             name = "A",
             symbol = "A"
         };
         var cur2 = new
         {
-            id = "RUB" // only rub is supported
+            id = new CurrencyId(CurrencyCode.RUB) // only rub is supported
         };
         (await httpClient.PostAsync("/api/currency/", JsonContent.Create(cur1, options: jsonSerializerOptions))).EnsureSuccessStatusCode();
         Clock.SetCustomDate(new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.Zero));

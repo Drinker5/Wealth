@@ -12,9 +12,9 @@ public class ExchangeRateRepositoryTests
 {
     private readonly WealthDbContext context;
     private readonly ExchangeRateRepository repo;
-    private readonly CurrencyId c1 = "FOO";
-    private readonly CurrencyId c2 = "BAR";
-    private readonly CurrencyId c3 = "BAZ";
+    private readonly CurrencyId c1 = 1;
+    private readonly CurrencyId c2 = 2;
+    private readonly CurrencyId c3 = 3;
     private readonly DateOnly defaultDate = new DateOnly(2018, 12, 31);
 
     public ExchangeRateRepositoryTests()

@@ -8,6 +8,8 @@ namespace Wealth.CurrencyManagement.Application.Tests;
 
 public class ExhcangeRateTests
 {
+    private static readonly CurrencyId rub = CurrencyCode.RUB;
+    private static readonly CurrencyId usd = CurrencyCode.USD;
     private readonly ICurrencyRepository currencyRepo;
     private readonly IExchangeRateRepository exchangeRateRepo;
 
@@ -20,8 +22,8 @@ public class ExhcangeRateTests
     [Fact]
     public async Task WhenCreateCurrency()
     {
-        var baseId = new CurrencyId("FOO");
-        var toId = new CurrencyId("BAR");
+        var baseId = rub;
+        var toId = usd;
         var date = new DateOnly(2000, 1, 1);
         var command = new CreateExchangeRateCommand(baseId, toId, 1.1m, date);
         currencyRepo.GetCurrency(baseId).Returns(new CurrencyBuilder().Build());
@@ -43,8 +45,8 @@ public class ExhcangeRateTests
     [Fact]
     public async Task WhenExchange()
     {
-        var money = new Money(new CurrencyId("FOO"), 100);
-        var query = new ExchangeQuery(money, new CurrencyId("BAR"), new DateOnly(2000, 1, 1));
+        var money = new Money(rub, 100);
+        var query = new ExchangeQuery(money, usd, new DateOnly(2000, 1, 1));
         var rate = new ExchangeRateBuilder().Build();
         exchangeRateRepo.GetExchangeRate(money.CurrencyId, query.TargetCurrencyId, query.Date).Returns(rate);
 
@@ -58,8 +60,8 @@ public class ExhcangeRateTests
     [Fact]
     public async Task WhenExchangeIsNotFound()
     {
-        var money = new Money(new CurrencyId("FOO"), 100);
-        var query = new ExchangeQuery(money, new CurrencyId("BAR"), new DateOnly(2000, 1, 1));
+        var money = new Money(rub, 100);
+        var query = new ExchangeQuery(money, usd, new DateOnly(2000, 1, 1));
 
         var handler = new ExchangeQueryHandler(exchangeRateRepo);
         var result = await handler.Handle(query, CancellationToken.None);

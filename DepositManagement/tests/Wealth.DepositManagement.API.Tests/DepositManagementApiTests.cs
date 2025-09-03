@@ -35,7 +35,6 @@ public sealed class DepositManagementApiTests : IClassFixture<DepositManagementA
         Assert.Equal(2, seededDeposits.Deposits.Count);
     }
 
-
     [Fact]
     public async Task WhenCreate()
     {

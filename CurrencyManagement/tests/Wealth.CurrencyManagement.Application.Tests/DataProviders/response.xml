@@ -6,11 +6,11 @@
     <Nominal>1</Nominal>
     <Name>ִמככאנ ׁ״ְ</Name>
     <Value>69,4706</Value>
-    <VunitRate>69,4706</VunitRate>
+    <VunitRate>96,4706</VunitRate>
   </Valute>
   <Valute ID="R011">
     <NumCode>1337</NumCode>
-    <CharCode>FOO</CharCode>
+    <CharCode>RUB</CharCode>
     <Nominal>1</Nominal>
     <Name>װף</Name>
     <Value>79,4605</Value>

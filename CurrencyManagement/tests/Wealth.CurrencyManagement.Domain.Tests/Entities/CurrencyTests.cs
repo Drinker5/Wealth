@@ -6,7 +6,7 @@ namespace Wealth.CurrencyManagement.Domain.Tests.Entities;
 [TestSubject(typeof(Currency))]
 public class CurrencyTests
 {
-    private readonly CurrencyId currencyId = new CurrencyId("FOO");
+    private readonly CurrencyId currencyId = "RUB";
 
     [Fact]
     public void CreateCurrency_NameIsNotSet()

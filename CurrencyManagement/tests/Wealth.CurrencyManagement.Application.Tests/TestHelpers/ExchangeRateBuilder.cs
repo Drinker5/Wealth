@@ -5,8 +5,8 @@ namespace Wealth.CurrencyManagement.Application.Tests.TestHelpers;
 
 public class ExchangeRateBuilder
 {
-    private CurrencyId baseCurrencyId = "FOO";
-    private CurrencyId targetCurrencyId = "BAR";
+    private CurrencyId baseCurrencyId = CurrencyCode.RUB;
+    private CurrencyId targetCurrencyId = CurrencyCode.USD;
     private decimal rate = 1.42m;
     private DateOnly date = new DateOnly(2010, 10, 10);
 
