@@ -18,7 +18,7 @@ public class CreateDepositOperationHandlerTests
     [Fact]
     public async Task WhenHandle()
     {
-        var command = new CreateDeposit("foo", 0.3m, "FOO");
+        var command = new CreateDeposit("foo", 0.3m, "RUB");
 
         await handler.Handle(command, CancellationToken.None);
 

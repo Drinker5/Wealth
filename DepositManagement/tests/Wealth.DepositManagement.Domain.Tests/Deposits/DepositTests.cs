@@ -10,7 +10,7 @@ public class DepositTests
 {
     private readonly string name = "foo";
     private Yield yield = new Yield(23.42m);
-    private CurrencyId currencyId = "FOO";
+    private CurrencyId currencyId = "RUB";
     private readonly Deposit deposit;
 
     public DepositTests()
@@ -80,7 +80,7 @@ public class DepositTests
     [Fact]
     public void WhenInvestDifferentCurrency()
     {
-        var investment = new Money("BAR", 10);
+        var investment = new Money("USD", 10);
 
         Assert.Throws<InvalidOperationException>(() => deposit.Invest(investment));
     }
@@ -102,9 +102,9 @@ public class DepositTests
     [Fact]
     public void WhenWithdrawDifferentCurrency()
     {
-        var investment = new Money("FOO", 10);
+        var investment = new Money("RUB", 10);
         deposit.Invest(investment);
-        var withdraw = new Money("BAR", 10);
+        var withdraw = new Money("USD", 10);
 
         Assert.Throws<InvalidOperationException>(() => deposit.Withdraw(withdraw));
     }

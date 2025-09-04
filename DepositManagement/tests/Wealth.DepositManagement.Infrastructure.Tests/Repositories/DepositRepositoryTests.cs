@@ -13,7 +13,7 @@ public class DepositRepositoryTests
     private readonly WealthDbContext context;
     private readonly string name = "Foo";
     private readonly Yield yield = 1m;
-    private readonly CurrencyId currencyId = "FOO";
+    private readonly CurrencyId currencyId = "RUB";
 
     public DepositRepositoryTests()
     {

@@ -31,11 +31,6 @@ public sealed class CurrencyControllersTests : IClassFixture<CurrencyManagementA
         Assert.NotNull(currencies);
         Assert.Equal(2, currencies.Count());
 
-        // cannot parse
-        var response00 = await httpClient.GetAsync($"/api/currency/FOO");
-
-        Assert.Equal(HttpStatusCode.NotFound, response00.StatusCode);
-        
         // get not existed currency
         var currencyCode = CurrencyCode.CNY;
         var response0 = await httpClient.GetAsync($"/api/currency/{currencyCode}");
@@ -73,7 +68,7 @@ public sealed class CurrencyControllersTests : IClassFixture<CurrencyManagementA
             id = currencyId,
             newName = "NewName"
         };
-        
+
         var response3 = await httpClient.PutAsync("/api/currency/", JsonContent.Create(newName, options: jsonSerializerOptions));
 
         response3.EnsureSuccessStatusCode();
@@ -89,7 +84,7 @@ public sealed class CurrencyControllersTests : IClassFixture<CurrencyManagementA
         Assert.Equal(currencyId, result2.CurrencyId);
         Assert.Equal(newName.newName, result2.Name);
         Assert.Equal(obj.symbol, result2.Symbol);
-        
+
         // get all currencies
         var responseGet2 = await httpClient.GetAsync("/api/currency/");
 

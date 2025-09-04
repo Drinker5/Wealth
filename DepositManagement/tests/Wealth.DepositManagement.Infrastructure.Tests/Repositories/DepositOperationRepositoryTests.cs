@@ -28,7 +28,7 @@ public class DepositOperationRepositoryTests
     [Fact]
     public async Task WhenOperationCreated()
     {
-        var id = await repository.CreateOperation(2, DepositOperationType.Investment, Clock.Now, new Money("FOO", 2));
+        var id = await repository.CreateOperation(2, DepositOperationType.Investment, Clock.Now, new Money("RUB", 2));
 
         Assert.NotEqual(Guid.Empty, id);
     }

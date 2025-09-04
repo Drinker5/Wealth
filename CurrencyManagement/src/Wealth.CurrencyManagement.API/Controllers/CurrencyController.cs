@@ -24,7 +24,7 @@ public class CurrencyController(ICqrsInvoker invoker) : Controller
         try
         {
             if (!CurrencyId.TryParse(id, out var currencyId))
-                return NotFound("Cannot parse currency");
+                return BadRequest("Cannot parse currency");
                 
             var result = await invoker.Query(new GetCurrencyQuery(currencyId));
             if (result is null)
