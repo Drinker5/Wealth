@@ -76,11 +76,11 @@ public sealed class StrategiesApiTests : IClassFixture<StrategyTrackingApiFixtur
         var addComponent = new
         {
             strategyId = strategyId,
-            instrumentId = new StockId(3),
+            stockId = 3,
             weight = fixture.Create<float>(),
         };
 
-        var insertResponse = await httpClient.PutAsync("/api/strategy/add-component", JsonContent.Create(addComponent, options: jsonSerializerOptions));
+        var insertResponse = await httpClient.PutAsync("/api/strategy/add-stock-component", JsonContent.Create(addComponent, options: jsonSerializerOptions));
 
         insertResponse.EnsureSuccessStatusCode();
         
@@ -95,7 +95,7 @@ public sealed class StrategiesApiTests : IClassFixture<StrategyTrackingApiFixtur
         Assert.Equal(obj.name, strategy.Name);
         var component = Assert.Single(strategy.Components);
         var stockComponent = Assert.IsType<StockStrategyComponent>(component);
-        Assert.Equal(addComponent.instrumentId, stockComponent.StockId);
+        Assert.Equal(addComponent.stockId, stockComponent.StockId.Value);
         Assert.Equal(addComponent.weight, stockComponent.Weight);
     }
 

@@ -9,10 +9,14 @@ internal class StrategyComponentConfiguration : IEntityTypeConfiguration<Strateg
     public void Configure(EntityTypeBuilder<StrategyComponent> builder)
     {
         builder.Property<StrategyId>("StrategyId");
-        builder.HasKey("StrategyId", "type", "id");
 
-        builder.Property<string>("id")
+        builder.Property<StrategyComponentType>("type")
             .IsRequired();
+
+        builder.Property(i => i.Id)
+            .IsRequired();
+        
+        builder.HasKey("StrategyId", "type", "Id");
         
         builder.HasDiscriminator<StrategyComponentType>("type")
             .HasValue<StockStrategyComponent>(StrategyComponentType.Stock)

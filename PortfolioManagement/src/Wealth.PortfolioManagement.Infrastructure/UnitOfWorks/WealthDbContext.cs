@@ -8,8 +8,8 @@ using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 
 /// <summary>
-/// dotnet ef migrations add --project src\Wealth.PortfolioManagement.Infrastructure --startup-project .\src\Wealth.PortfolioManagement.API Name
-/// dotnet ef database update --project src\Wealth.PortfolioManagement.Infrastructure --startup-project .\src\Wealth.PortfolioManagement.API
+/// dotnet ef migrations add --project .\PortfolioManagement\src\Wealth.PortfolioManagement.Infrastructure --startup-project .\PortfolioManagement\src\Wealth.PortfolioManagement.API Name
+/// dotnet ef database update --project .\PortfolioManagement\src\Wealth.PortfolioManagement.Infrastructure --startup-project .\PortfolioManagement\src\Wealth.PortfolioManagement.API
 /// </summary>
 public class WealthDbContext : WealthDbContextBase
 {

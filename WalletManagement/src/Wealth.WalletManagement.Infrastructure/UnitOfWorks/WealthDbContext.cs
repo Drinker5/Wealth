@@ -11,8 +11,8 @@ using Wealth.WalletManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Co
 namespace Wealth.WalletManagement.Infrastructure.UnitOfWorks;
 
 /// <summary>
-/// dotnet ef migrations add --project src\Wealth.WalletManagement.Infrastructure --startup-project .\src\Wealth.WalletManagement.API Name
-/// dotnet ef database update --project src\Wealth.WalletManagement.Infrastructure --startup-project .\src\Wealth.WalletManagement.API
+/// dotnet ef migrations add --project .\WalletManagement\src\Wealth.WalletManagement.Infrastructure --startup-project .\WalletManagement\src\Wealth.WalletManagement.API Name
+/// dotnet ef database update --project .\WalletManagement\src\Wealth.WalletManagement.Infrastructure --startup-project .\WalletManagement\src\Wealth.WalletManagement.API
 /// </summary>
 public class WealthDbContext : DbContext, IDesignTimeDbContextFactory<WealthDbContext>
 {

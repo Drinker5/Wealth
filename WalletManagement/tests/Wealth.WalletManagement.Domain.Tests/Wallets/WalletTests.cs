@@ -28,7 +28,7 @@ public class WalletTests
     [Fact]
     public void WhenInsert()
     {
-        var money = new Money("FOO", 10);
+        var money = new Money(CurrencyCode.RUB, 10);
 
         wallet.Insert(money);
 
@@ -44,8 +44,8 @@ public class WalletTests
     [Fact]
     public void WhenEject()
     {
-        var money = new Money("FOO", 10);
-        var eject = new Money("FOO", 3);
+        var money = new Money(CurrencyCode.RUB, 10);
+        var eject = new Money(CurrencyCode.RUB, 3);
         wallet.Insert(money);
         
         wallet.Eject(eject);
@@ -61,7 +61,7 @@ public class WalletTests
     [Fact]
     public void WhenEjectSameMoney()
     {
-        var money = new Money("FOO", 10);
+        var money = new Money(CurrencyCode.RUB, 10);
         wallet.Insert(money);
         
         wallet.Eject(money);
@@ -72,7 +72,7 @@ public class WalletTests
     [Fact]
     public void WhenEjectNotExistedMoney()
     {
-        var money = new Money("FOO", 10);
+        var money = new Money(CurrencyCode.RUB, 10);
         
         wallet.Eject(money);
 

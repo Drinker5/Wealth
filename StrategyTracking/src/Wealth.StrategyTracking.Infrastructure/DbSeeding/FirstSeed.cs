@@ -1,4 +1,5 @@
-﻿using Wealth.BuildingBlocks.Infrastructure.EFCore.DbSeeding;
+﻿using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.BuildingBlocks.Infrastructure.EFCore.DbSeeding;
 using Wealth.StrategyTracking.Domain.Strategies;
 using Wealth.StrategyTracking.Infrastructure.UnitOfWorks;
 
@@ -24,9 +25,9 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
         yield return foo;
 
         var bar = Strategy.Create("Seed-strategy-2");
-        foo.AddOrUpdateComponent(stockId: 2, weight: 30f);
-        foo.AddOrUpdateComponent(bondId: 2, weight: 30f);
-        foo.AddOrUpdateComponent(currencyId: "RUB", weight: 40f);
+        bar.AddOrUpdateComponent(stockId: 2, weight: 30f);
+        bar.AddOrUpdateComponent(bondId: 2, weight: 30f);
+        bar.AddOrUpdateComponent(currencyId: CurrencyCode.RUB, weight: 40f);
         yield return bar;
     }
 }

@@ -19,7 +19,7 @@ public class WalletMoneyEjectedHandler1Tests
     [Fact]
     public async Task WhenHandle()
     {
-        var notification = new WalletMoneyEjected(3, new Money("FOO", 23.23m));
+        var notification = new WalletMoneyEjected(3, new Money(CurrencyCode.RUB, 23.23m));
 
         await handler.Handle(notification, CancellationToken.None);
 

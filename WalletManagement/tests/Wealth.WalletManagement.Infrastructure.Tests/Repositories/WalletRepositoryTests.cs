@@ -56,7 +56,7 @@ public class WalletRepositoryTests
     [Fact]
     public async Task WhenInsertMoney()
     {
-        var money = new Money("FOO", 23m);
+        var money = new Money(CurrencyCode.RUB, 23m);
         var id = await CreateWallet("Foo");
 
         await repository.InsertMoney(id, money);
@@ -71,7 +71,7 @@ public class WalletRepositoryTests
     [Fact]
     public async Task WhenEjectMoney()
     {
-        var money = new Money("FOO", 23m);
+        var money = new Money(CurrencyCode.RUB, 23m);
         var id = await CreateWallet("Foo");
 
         await repository.EjectMoney(id, money);

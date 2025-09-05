@@ -1,11 +1,17 @@
+using System.Text.Json.Serialization;
 using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.StrategyTracking.Domain.Strategies;
 
+[JsonDerivedType(typeof(StockStrategyComponent), typeDiscriminator: (byte)StrategyComponentType.Stock)]
+[JsonDerivedType(typeof(BondStrategyComponent), typeDiscriminator: (byte)StrategyComponentType.Bond)]
+[JsonDerivedType(typeof(CurrencyStrategyComponent), typeDiscriminator: (byte)StrategyComponentType.Currency)]
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 public abstract class StrategyComponent : IEntity
 {
     public float Weight { get; set; }
+    public string Id { get; protected init; }
 }
 
 public enum StrategyComponentType : byte
@@ -17,7 +23,17 @@ public enum StrategyComponentType : byte
 
 public class StockStrategyComponent : StrategyComponent
 {
-    public required StockId StockId { get; init; }
+    private readonly StockId _stockId;
+
+    public StockId StockId
+    {
+        get => _stockId;
+        init
+        {
+            Id = value.ToString();
+            _stockId = value;
+        }
+    }
 
     public override int GetHashCode()
     {
@@ -27,7 +43,13 @@ public class StockStrategyComponent : StrategyComponent
 
 public class BondStrategyComponent : StrategyComponent
 {
-    public required BondId BondId { get; init; }
+    private BondId? _bondId;
+
+    public BondId BondId
+    {
+        get => _bondId ??= new BondId(int.Parse(Id));
+        init => Id = value.ToString();
+    }
 
     public override int GetHashCode()
     {
@@ -37,7 +59,13 @@ public class BondStrategyComponent : StrategyComponent
 
 public class CurrencyStrategyComponent : StrategyComponent
 {
-    public required CurrencyId CurrencyId { get; init; }
+    private CurrencyId? _currencyId;
+
+    public CurrencyId CurrencyId
+    {
+        get => _currencyId ??= new CurrencyId(Id);
+        init => Id = value.ToString();
+    }
 
     public override int GetHashCode()
     {

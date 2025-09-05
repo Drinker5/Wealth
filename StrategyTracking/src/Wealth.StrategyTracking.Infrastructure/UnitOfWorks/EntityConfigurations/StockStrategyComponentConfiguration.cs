@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.StrategyTracking.Domain.Strategies;
 
 namespace Wealth.StrategyTracking.Infrastructure.UnitOfWorks.EntityConfigurations;
@@ -8,8 +10,5 @@ internal class StockStrategyComponentConfiguration : IEntityTypeConfiguration<St
 {
     public void Configure(EntityTypeBuilder<StockStrategyComponent> builder)
     {
-        builder.Property(x => x.StockId)
-            .HasField("id")
-            .IsRequired();
     }
 }

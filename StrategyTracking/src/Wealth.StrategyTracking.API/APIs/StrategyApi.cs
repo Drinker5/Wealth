@@ -14,12 +14,12 @@ public static class StrategyApi
 
         api.MapGet("{strategyId:int}", GetStrategy);
         api.MapPost("/", CreateStrategy);
-        api.MapPut("/add-component", AddStrategyComponent);
+        api.MapPut("/add-stock-component", AddStockStrategyComponent);
         return api;
     }
 
-    private static async Task<Results<Ok, BadRequest<string>>> AddStrategyComponent(
-        AddStrategyComponentRequest request,
+    private static async Task<Results<Ok, BadRequest<string>>> AddStockStrategyComponent(
+        AddStockStrategyComponentRequest request,
         [AsParameters] StrategyTrackingServices services)
     {
         try
@@ -60,6 +60,6 @@ public static class StrategyApi
     }
 }
 
-internal record AddStrategyComponentRequest(StrategyId StrategyId, StockId StockId, float Weight);
+internal record AddStockStrategyComponentRequest(StrategyId StrategyId, StockId StockId, float Weight);
 
 internal record struct CreateStrategyRequest(string Name);

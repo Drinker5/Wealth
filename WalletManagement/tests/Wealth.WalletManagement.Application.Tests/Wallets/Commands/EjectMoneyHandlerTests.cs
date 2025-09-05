@@ -18,7 +18,7 @@ public class EjectMoneyHandlerTests
     [Fact]
     public async Task WhenHandle()
     {
-        var command = new EjectMoney(3, new Money("FOO", 23.23m));
+        var command = new EjectMoney(3, new Money(CurrencyCode.RUB, 23.23m));
 
         await handler.Handle(command, CancellationToken.None);
 

@@ -7,10 +7,10 @@ namespace Wealth.Aggregation.Domain.Tests;
 public class StockAggregationTests
 {
     private StockId id = new StockId(3);
-    private Money price = new Money("FOO", 12.34m);
-    private Money p1 = new Money("FOO", 1m);
+    private Money price = new Money(CurrencyCode.RUB, 12.34m);
+    private Money p1 = new Money(CurrencyCode.RUB, 1m);
 
-    private Money dividendPerYear = new Money("FOO", 3.22m);
+    private Money dividendPerYear = new Money(CurrencyCode.RUB, 3.22m);
     private readonly StockAggregation aggregation;
     private string name = "name";
     private int lotSize = 1;

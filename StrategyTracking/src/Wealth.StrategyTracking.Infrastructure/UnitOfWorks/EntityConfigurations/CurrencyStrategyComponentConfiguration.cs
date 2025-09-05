@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.StrategyTracking.Domain.Strategies;
 
 namespace Wealth.StrategyTracking.Infrastructure.UnitOfWorks.EntityConfigurations;
@@ -8,8 +10,5 @@ internal class CurrencyStrategyComponentConfiguration : IEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<CurrencyStrategyComponent> builder)
     {
-        builder.Property(c => c.CurrencyId)
-            .HasField("id")
-            .IsRequired();
     }
 }

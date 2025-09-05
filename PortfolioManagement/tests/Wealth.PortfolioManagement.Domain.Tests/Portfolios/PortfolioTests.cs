@@ -13,7 +13,7 @@ public class PortfolioTests
     private readonly StockId stockId = new(1);
     private readonly BondId bondId = new(1);
     private readonly CurrencyId currencyId = "RUB";
-    private readonly Money price = new Money("FOO", 123.23m);
+    private readonly Money price = new Money(CurrencyCode.RUB, 123.23m);
     private readonly decimal amount = 32.32m;
     private readonly int quantity = 32;
 
