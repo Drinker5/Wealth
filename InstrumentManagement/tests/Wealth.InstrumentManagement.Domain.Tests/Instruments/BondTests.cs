@@ -10,7 +10,7 @@ public class BondTests
 {
     readonly string name = "foo";
     readonly ISIN isin = "barbarbarbar";
-    readonly Coupon coupon = new Coupon("FOO", Decimal.One);
+    readonly Coupon coupon = new Coupon(CurrencyCode.RUB, Decimal.One);
 
     private Bond CreateBondInstrument(string name, ISIN isin)
     {
@@ -39,7 +39,7 @@ public class BondTests
     public void WhenPriceChanged()
     {
         var bond = CreateBondInstrument(name, isin);
-        var money = new Money("BAR", 23.3m);
+        var money = new Money(CurrencyCode.EUR, 23.3m);
 
         bond.ChangePrice(money);
 

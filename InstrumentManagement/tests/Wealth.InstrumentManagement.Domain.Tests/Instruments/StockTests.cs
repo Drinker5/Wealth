@@ -10,7 +10,7 @@ public class StockTests
 {
     readonly string name = "foo";
     readonly ISIN isin = "barbarbarbar";
-    readonly Dividend dividend = new Dividend("FOO", Decimal.One);
+    readonly Dividend dividend = new Dividend(CurrencyCode.RUB, Decimal.One);
 
     private Stock CreateStockInstrument(string name, ISIN isin)
     {
@@ -40,7 +40,7 @@ public class StockTests
     public void WhenPriceChanged()
     {
         var stock = CreateStockInstrument(name, isin);
-        var money = new Money("BAR", 23.3m);
+        var money = new Money(CurrencyCode.EUR, 23.3m);
 
         stock.ChangePrice(money);
 

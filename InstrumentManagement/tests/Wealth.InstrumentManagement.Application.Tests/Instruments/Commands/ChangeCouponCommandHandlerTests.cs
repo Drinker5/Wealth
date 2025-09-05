@@ -15,11 +15,11 @@ public class ChangeCouponCommandHandlerTests
     {
         var bondsRepository = A.Fake<IBondsRepository>();
         var currencyService = A.Fake<ICurrencyService>();
-        A.CallTo(() => currencyService.IsCurrencyExists("FOO")).Returns(true);
+        A.CallTo(() => currencyService.IsCurrencyExists(CurrencyCode.RUB)).Returns(true);
         var command = new ChangeCouponCommand
         {
             Id = new BondId(3),
-            Coupon = new Coupon("FOO", 3.42m),
+            Coupon = new Coupon(CurrencyCode.RUB, 3.42m),
         };
         var handler = new ChangeCouponCommandHandler(bondsRepository, currencyService);
         

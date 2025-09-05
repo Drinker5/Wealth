@@ -14,11 +14,11 @@ public class ChangePriceCommandHandlerTests
     {
         var instumentsRepository = A.Fake<IStocksRepository>();
         var currencyService = A.Fake<ICurrencyService>();
-        A.CallTo(() => currencyService.IsCurrencyExists("FOO")).Returns(true);
+        A.CallTo(() => currencyService.IsCurrencyExists(CurrencyCode.RUB)).Returns(true);
         var command = new ChangeStockPriceCommand
         {
             StockId = new StockId(3),
-            Price = new Money("FOO", 3.42m),
+            Price = new Money(CurrencyCode.RUB, 3.42m),
         };
         var handler = new ChangeStockPriceCommandHandler(instumentsRepository, currencyService);
         
