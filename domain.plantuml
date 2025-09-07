@@ -86,12 +86,18 @@ package PortfolioManagement {
         Type : Coupon, Dividend, Amortization, Tax
     }
 
-
     object Split {
         Rate
     }
 
     object Delist {
+    }
+    
+    package OperationProvider {
+        object TBankApi {
+            Token
+            LastOperationDate
+        }
     }
     
     InstrumentOperation --> Trade
