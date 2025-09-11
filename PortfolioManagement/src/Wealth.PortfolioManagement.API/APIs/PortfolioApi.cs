@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Application.Portfolios.Commands;
 using Wealth.PortfolioManagement.Application.Portfolios.Queries;
+using Wealth.PortfolioManagement.Application.Providers;
 
 namespace Wealth.PortfolioManagement.API.APIs;
 
@@ -19,6 +20,8 @@ public static class PortfolioApi
         api.MapPut("{portfolioId:int}/bond", BuyBond);
         api.MapPut("{portfolioId:int}/stock", BuyStock);
 
+        api.MapGet("/test", (IOperationProvider provider, [FromQuery] DateTimeOffset date) => provider.GetOperations(date));
+        
         return api;
     }
 
