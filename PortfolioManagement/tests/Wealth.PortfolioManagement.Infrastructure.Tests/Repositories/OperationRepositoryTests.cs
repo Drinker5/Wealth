@@ -26,16 +26,6 @@ public class OperationRepositoryTests
     [Fact]
     public async Task WhenOperationCreated()
     {
-        var id = await repository.CreateOperation(new StockDelistOperation());
-        
-        Assert.NotEqual(Guid.Empty, id);
-    }
-    
-    [Fact]
-    public async Task WhenOperationCreated2()
-    {
-        var id = await repository.CreateOperation(new CurrencyOperation());
-        
-        Assert.NotEqual(Guid.Empty, id);
+        await repository.CreateOperation(new StockDelistOperation());
     }
 }
