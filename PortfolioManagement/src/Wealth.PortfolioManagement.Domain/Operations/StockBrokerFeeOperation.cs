@@ -2,16 +2,9 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.PortfolioManagement.Domain.Operations;
 
-public abstract class TradeOperation : Operation
+public class StockBrokerFeeOperation : Operation
 {
     public PortfolioId PortfolioId { get; set; }
+    public StockId StockId { get; set; }
     public Money Amount { get; set; }
-    public int Quantity { get; set; }
-    public TradeOperationType Type { get; set; }
-}
-
-public enum TradeOperationType
-{
-    Buy,
-    Sell
 }

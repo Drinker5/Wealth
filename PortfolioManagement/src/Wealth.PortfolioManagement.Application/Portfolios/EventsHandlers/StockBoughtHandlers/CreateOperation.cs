@@ -15,7 +15,7 @@ public class AssetBoughtEventHandler(IOperationRepository operationRepository) :
             Quantity = notification.Quantity,
             Date = Clock.Now,
             StockId = notification.StockId,
-            Money = notification.TotalPrice,
+            Amount = notification.TotalPrice,
             PortfolioId = notification.PortfolioId,
             Type = TradeOperationType.Buy,
         });

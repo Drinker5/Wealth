@@ -17,7 +17,7 @@ internal class StockTradeOperationConfiguration : IEntityTypeConfiguration<Stock
         builder.Property(x => x.Quantity);
         builder.Property(x => x.Type);
 
-        builder.ComplexProperty(y => y.Money, z =>
+        builder.ComplexProperty(y => y.Amount, z =>
         {
             z.Property(i => i.CurrencyId);
             z.Property(i => i.Amount);
