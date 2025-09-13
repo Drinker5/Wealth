@@ -6,7 +6,7 @@ public abstract class TradeOperation : Operation
 {
     public PortfolioId PortfolioId { get; set; }
     public Money Amount { get; set; }
-    public int Quantity { get; set; }
+    public long Quantity { get; set; }
     public TradeOperationType Type { get; set; }
 }
 
