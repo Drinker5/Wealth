@@ -14,7 +14,21 @@ public class UnitOfWorkModule : IServiceModule
 {
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<WealthDbContext>(options =>
+        services.AddDbContext<WealthDbContext>(OptionsAction(configuration), optionsLifetime: ServiceLifetime.Singleton);
+        services.AddDbContextFactory<WealthDbContext>(OptionsAction(configuration));
+        services.AddMigration<WealthDbContext, FirstSeed>();
+        // services.AddMigration<WealthDbContext, PortfolioMapSeed>();
+
+        services.AddScoped<IPortfolioRepository, PortfolioRepository>();
+        services.AddScoped<IOutboxRepository, OutboxRepository>();
+        services.AddScoped<IOperationRepository, OperationRepository>();
+
+        services.AddScoped<DbContext>(sp => sp.GetRequiredService<WealthDbContext>());
+    }
+
+    private static Action<DbContextOptionsBuilder> OptionsAction(IConfiguration configuration)
+    {
+        return options =>
         {
             var inMemory = configuration.GetSection("InMemoryRepository").Get<bool>();
             if (inMemory)
@@ -26,13 +40,6 @@ public class UnitOfWorkModule : IServiceModule
                 options.UseNpgsql(configuration.GetConnectionString("PortfolioManagement"));
                 options.EnableSensitiveDataLogging();
             }
-        });
-        services.AddMigration<WealthDbContext, FirstSeed>();
-
-        services.AddScoped<IPortfolioRepository, PortfolioRepository>();
-        services.AddScoped<IOutboxRepository, OutboxRepository>();
-        services.AddScoped<IOperationRepository, OperationRepository>();
-
-        services.AddScoped<DbContext>(sp => sp.GetRequiredService<WealthDbContext>());
+        };
     }
 }

@@ -13,7 +13,11 @@ public class ProvidersModule : IServiceModule
             .BindConfiguration(TBankOperationProviderOptions.Section)
             .ValidateDataAnnotations()
             .ValidateOnStart();
-        
+
+        services.AddOptions<PortfolioMapOptions>()
+            .BindConfiguration(PortfolioMapOptions.Section);
+
         services.AddSingleton<IOperationProvider, TBankOperationProvider>();
+        services.AddSingleton<IPortfolioIdProvider, PortfolioIdProvider>();
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Wealth.BuildingBlocks.Infrastructure.EFCore.Converters;
 using Wealth.CurrencyManagement.Domain.Currencies;
 
 namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks.EntityConfigurations;

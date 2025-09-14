@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Infrastructure.EFCore;
+using Wealth.PortfolioManagement.Application.Providers;
 using Wealth.PortfolioManagement.Domain.Operations;
 using Wealth.PortfolioManagement.Domain.Portfolios;
 using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
@@ -17,6 +18,7 @@ public class WealthDbContext : WealthDbContextBase
 
     public virtual DbSet<Operation> InstrumentOperations { get; internal init; }
     public virtual DbSet<CurrencyOperation> CurrencyOperations { get; internal init; }
+    public virtual DbSet<PortfolioIdMap> PortfolioIdMaps { get; internal init; }
 
     public WealthDbContext(DbContextOptions<WealthDbContext> options)
         : base(options)
@@ -33,6 +35,7 @@ public class WealthDbContext : WealthDbContextBase
     {
         var optionsBuilder = new DbContextOptionsBuilder<WealthDbContext>();
         optionsBuilder.UseNpgsql("Host=127.0.0.1;Username=postgres;Password=postgres;Database=Design");
+        optionsBuilder.EnableSensitiveDataLogging();
         return new WealthDbContext(optionsBuilder.Options);
     }
 

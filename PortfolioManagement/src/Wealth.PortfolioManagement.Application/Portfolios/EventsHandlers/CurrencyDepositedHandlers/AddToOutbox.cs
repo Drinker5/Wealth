@@ -1,4 +1,3 @@
-using Wealth.BuildingBlocks;
 using Wealth.BuildingBlocks.Application;
 using Wealth.PortfolioManagement.Domain.Portfolios.Events;
 

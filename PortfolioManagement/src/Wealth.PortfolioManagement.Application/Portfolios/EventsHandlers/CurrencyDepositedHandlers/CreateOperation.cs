@@ -1,5 +1,4 @@
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.PortfolioManagement.Domain.Operations;
 using Wealth.PortfolioManagement.Domain.Portfolios.Events;

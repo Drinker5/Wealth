@@ -1,12 +1,9 @@
 using System.Collections.Frozen;
-using System.Security.Cryptography;
-using System.Text;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Options;
 using Tinkoff.InvestApi;
 using Tinkoff.InvestApi.V1;
 using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.PortfolioManagement.Application.Portfolios.Commands;
 using Wealth.PortfolioManagement.Application.Providers;
 using Wealth.PortfolioManagement.Domain.Operations;
 using Operation = Wealth.PortfolioManagement.Domain.Operations.Operation;
@@ -14,6 +11,7 @@ using Operation = Wealth.PortfolioManagement.Domain.Operations.Operation;
 namespace Wealth.PortfolioManagement.Infrastructure.Providers;
 
 public sealed class TBankOperationProvider(
+    IPortfolioIdProvider portfolioIdProvider,
     IOptions<TBankOperationProviderOptions> options) : IOperationProvider
 {
     private readonly InvestApiClient client = InvestApiClientFactory.Create(options.Value.Token);
@@ -35,15 +33,10 @@ public sealed class TBankOperationProvider(
             To = Timestamp.FromDateTime(DateTime.UtcNow)
         });
 
-        var portfolioId = GetPortfolioIdByAccountId(options.Value.AccountId);
+        var portfolioId = await portfolioIdProvider.GetPortfolioIdByAccountId(options.Value.AccountId);
         return operations.Operations
             .Where(i => i.State == OperationState.Executed)
             .SelectMany(i => FromProto(i, portfolioId));
-    }
-
-    private static PortfolioId GetPortfolioIdByAccountId(string valueAccountId)
-    {
-        throw new NotImplementedException();
     }
 
     private static IEnumerable<Operation> FromProto(Tinkoff.InvestApi.V1.Operation operation, PortfolioId portfolioId)
