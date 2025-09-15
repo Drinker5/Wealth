@@ -17,7 +17,7 @@ public class UnitOfWorkModule : IServiceModule
         services.AddDbContext<WealthDbContext>(OptionsAction(configuration), optionsLifetime: ServiceLifetime.Singleton);
         services.AddDbContextFactory<WealthDbContext>(OptionsAction(configuration));
         services.AddMigration<WealthDbContext, FirstSeed>();
-        // services.AddMigration<WealthDbContext, PortfolioMapSeed>();
+        services.AddMigration<WealthDbContext, PortfolioMapSeed>();
 
         services.AddScoped<IPortfolioRepository, PortfolioRepository>();
         services.AddScoped<IOutboxRepository, OutboxRepository>();

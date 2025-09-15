@@ -22,8 +22,9 @@ public static class MigrateDbContextExtensions
         where TContext : DbContext
         where TDbSeeder : class, IDbSeeder<TContext>
     {
-        services.AddScoped<IDbSeeder<TContext>, TDbSeeder>();
-        return services.AddMigration<TContext>((context, sp) => sp.GetRequiredService<IDbSeeder<TContext>>().SeedAsync(context));
+        return services
+            .AddScoped<TDbSeeder>()
+            .AddMigration<TContext>((context, sp) => sp.GetRequiredService<TDbSeeder>().SeedAsync(context));
     }
 
     private static async Task MigrateDbContextAsync<TContext>(this IServiceProvider services, Func<TContext, IServiceProvider, Task> seeder) where TContext : DbContext
@@ -56,14 +57,14 @@ public static class MigrateDbContextExtensions
     }
 
     private class MigrationHostedService<TContext>(IServiceProvider serviceProvider, Func<TContext, IServiceProvider, Task> seeder)
-        : BackgroundService where TContext : DbContext
+        : IHostedService where TContext : DbContext
     {
-        public override Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             return serviceProvider.MigrateDbContextAsync(seeder);
         }
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        public Task StopAsync(CancellationToken cancellationToken)
         {
             return Task.CompletedTask;
         }
