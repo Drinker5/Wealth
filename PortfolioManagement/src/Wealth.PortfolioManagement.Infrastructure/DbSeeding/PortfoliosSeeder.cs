@@ -1,18 +1,15 @@
-﻿using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.BuildingBlocks.Infrastructure.EFCore.DbSeeding;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Domain.Portfolios;
 using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.PortfolioManagement.Infrastructure.DbSeeding;
 
-public class FirstSeed : IDbSeeder<WealthDbContext>
+public class PortfoliosSeeder : IDbSeeder
 {
     public async Task SeedAsync(WealthDbContext context)
     {
         if (!context.Portfolios.Any())
             await context.Portfolios.AddRangeAsync(GetPredefinedPortfolios());
-
-        await context.SaveChangesAsync();
     }
 
     private static IEnumerable<Portfolio> GetPredefinedPortfolios()

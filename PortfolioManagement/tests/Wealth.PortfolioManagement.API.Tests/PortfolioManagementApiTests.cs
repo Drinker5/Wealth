@@ -2,27 +2,43 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Application.Portfolios.Queries;
 using Wealth.PortfolioManagement.Application.Services;
+using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 using Assert = Xunit.Assert;
 
 namespace Wealth.PortfolioManagement.API.Tests;
 
 public sealed class PortfolioManagementApiTests : IClassFixture<PortfolioManagementApiFixture>
 {
+    private readonly PortfolioManagementApiFixture fixture;
     private readonly JsonSerializerOptions jsonSerializerOptions = new(JsonSerializerDefaults.Web);
     private readonly HttpClient httpClient;
     private readonly Mock<IInstrumentService> instrumentServiceMock;
 
     public PortfolioManagementApiTests(PortfolioManagementApiFixture fixture)
     {
+        this.fixture = fixture;
         WebApplicationFactory<Program> webApplicationFactory = fixture;
         httpClient = webApplicationFactory.CreateDefaultClient();
 
         instrumentServiceMock = fixture.InstrumentServiceMock;
     }
 
+    [Fact]
+    public async Task CheckPortfolioIdMaps()
+    {
+        var scope = fixture.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<WealthDbContext>();
+        
+        var maps = await db.PortfolioIdMaps.ToListAsync();
+        
+        Assert.NotEmpty(maps);
+    }
+    
     [Fact]
     public async Task GetInstruments()
     {
