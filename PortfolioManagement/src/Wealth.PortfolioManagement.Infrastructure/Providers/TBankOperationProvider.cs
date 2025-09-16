@@ -12,6 +12,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Providers;
 
 public sealed class TBankOperationProvider(
     IPortfolioIdProvider portfolioIdProvider,
+    IInstrumentIdProvider instrumentIdProvider,
     IOptions<TBankOperationProviderOptions> options) : IOperationProvider
 {
     private readonly InvestApiClient client = InvestApiClientFactory.Create(options.Value.Token);
@@ -24,7 +25,7 @@ public sealed class TBankOperationProvider(
             { "currency", InstrumentType.Currency },
         }.ToFrozenDictionary();
 
-    public async Task<IEnumerable<Operation>> GetOperations(DateTimeOffset from)
+    public async IAsyncEnumerable<Operation> GetOperations(DateTimeOffset from)
     {
         var operations = await client.Operations.GetOperationsAsync(new OperationsRequest
         {
@@ -34,12 +35,14 @@ public sealed class TBankOperationProvider(
         });
 
         var portfolioId = await portfolioIdProvider.GetPortfolioIdByAccountId(options.Value.AccountId);
-        return operations.Operations
-            .Where(i => i.State == OperationState.Executed)
-            .SelectMany(i => FromProto(i, portfolioId));
+        foreach (var operation in operations.Operations.Where(i => i.State == OperationState.Executed))
+        {
+            await foreach (var converted in FromProto(operation, portfolioId))
+                yield return converted;
+        }
     }
 
-    private static IEnumerable<Operation> FromProto(Tinkoff.InvestApi.V1.Operation operation, PortfolioId portfolioId)
+    private IAsyncEnumerable<Operation> FromProto(Tinkoff.InvestApi.V1.Operation operation, PortfolioId portfolioId)
     {
         var instrumentType = InstrumentTypeMap[operation.InstrumentType];
         switch (operation.OperationType)
@@ -56,7 +59,7 @@ public sealed class TBankOperationProvider(
                 throw new ArgumentOutOfRangeException();
         }
 
-        IEnumerable<Operation> BrokerFeeOperation()
+        async IAsyncEnumerable<Operation> BrokerFeeOperation()
         {
             yield return instrumentType switch
             {
@@ -65,7 +68,7 @@ public sealed class TBankOperationProvider(
                     Id = operation.Id,
                     Date = operation.Date.ToDateTimeOffset(),
                     Amount = new Money(operation.Currency, operation.Payment),
-                    BondId = GetBondIdByFigi(operation.Figi),
+                    BondId = await instrumentIdProvider.GetBondIdByFigi(operation.Figi),
                     PortfolioId = portfolioId,
                 },
                 InstrumentType.Share => new StockBrokerFeeOperation
@@ -73,14 +76,14 @@ public sealed class TBankOperationProvider(
                     Id = operation.Id,
                     Date = operation.Date.ToDateTimeOffset(),
                     Amount = new Money(operation.Currency, operation.Payment),
-                    StockId = GetStockIdByFigi(operation.Figi),
+                    StockId = await instrumentIdProvider.GetStockIdByFigi(operation.Figi),
                     PortfolioId = portfolioId,
                 },
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
 
-        IEnumerable<Operation> BuyOperation()
+        async IAsyncEnumerable<Operation> BuyOperation()
         {
             foreach (var trade in operation.Trades)
             {
@@ -91,7 +94,7 @@ public sealed class TBankOperationProvider(
                         Id = trade.TradeId,
                         Date = trade.DateTime.ToDateTimeOffset(),
                         Amount = new Money(operation.Currency, trade.Price),
-                        BondId = GetBondIdByFigi(operation.Figi),
+                        BondId = await instrumentIdProvider.GetBondIdByFigi(operation.Figi),
                         PortfolioId = portfolioId,
                         Quantity = trade.Quantity,
                         Type = TradeOperationType.Buy,
@@ -101,7 +104,7 @@ public sealed class TBankOperationProvider(
                         Id = trade.TradeId,
                         Date = trade.DateTime.ToDateTimeOffset(),
                         Amount = new Money(operation.Currency, trade.Price),
-                        StockId = GetStockIdByFigi(operation.Figi),
+                        StockId = await instrumentIdProvider.GetStockIdByFigi(operation.Figi),
                         PortfolioId = portfolioId,
                         Quantity = trade.Quantity,
                         Type = TradeOperationType.Buy,
@@ -111,7 +114,7 @@ public sealed class TBankOperationProvider(
             }
         }
 
-        IEnumerable<Operation> SellOperation()
+        async IAsyncEnumerable<Operation> SellOperation()
         {
             foreach (var trade in operation.Trades)
             {
@@ -122,7 +125,7 @@ public sealed class TBankOperationProvider(
                         Id = trade.TradeId,
                         Date = trade.DateTime.ToDateTimeOffset(),
                         Amount = new Money(operation.Currency, trade.Price),
-                        BondId = GetBondIdByFigi(operation.Figi),
+                        BondId = await instrumentIdProvider.GetBondIdByFigi(operation.Figi),
                         PortfolioId = portfolioId,
                         Quantity = trade.Quantity,
                         Type = TradeOperationType.Sell,
@@ -132,7 +135,7 @@ public sealed class TBankOperationProvider(
                         Id = trade.TradeId,
                         Date = trade.DateTime.ToDateTimeOffset(),
                         Amount = new Money(operation.Currency, trade.Price),
-                        StockId = GetStockIdByFigi(operation.Figi),
+                        StockId = await instrumentIdProvider.GetStockIdByFigi(operation.Figi),
                         PortfolioId = portfolioId,
                         Quantity = trade.Quantity,
                         Type = TradeOperationType.Sell,
@@ -141,15 +144,5 @@ public sealed class TBankOperationProvider(
                 };
             }
         }
-    }
-
-    private static StockId GetStockIdByFigi(string figi)
-    {
-        throw new NotImplementedException();
-    }
-
-    private static BondId GetBondIdByFigi(string figi)
-    {
-        throw new NotImplementedException();
     }
 }
