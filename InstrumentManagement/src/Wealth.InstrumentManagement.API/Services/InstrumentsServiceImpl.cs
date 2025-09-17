@@ -2,20 +2,12 @@ using Grpc.Core;
 using Wealth.BuildingBlocks.Application;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Instruments.Queries;
+using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.API.Services;
 
-public class InstrumentsServiceImpl : InstrumentsService.InstrumentsServiceBase
+public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.InstrumentsServiceBase
 {
-    private readonly ILogger<InstrumentsServiceImpl> _logger;
-    private readonly ICqrsInvoker mediator;
-
-    public InstrumentsServiceImpl(ILogger<InstrumentsServiceImpl> logger, ICqrsInvoker mediator)
-    {
-        _logger = logger;
-        this.mediator = mediator;
-    }
-
     public override async Task<CreateStockResponse> CreateStock(CreateStockRequest request, ServerCallContext context)
     {
         try
@@ -53,8 +45,13 @@ public class InstrumentsServiceImpl : InstrumentsService.InstrumentsServiceBase
 
     public override async Task<GetBondResponse> GetBond(GetBondRequest request, ServerCallContext context)
     {
-        var id = request.BondId;
-        var instrument = await mediator.Query(new GetBond(id));
+        var instrument = request.VariantCase switch
+        {
+            GetBondRequest.VariantOneofCase.BondId => await mediator.Query(new GetBond(request.BondId)),
+            GetBondRequest.VariantOneofCase.Isin => await mediator.Query(new GetBondByIsin(request.Isin)),
+            _ => null
+        };
+
         if (instrument == null)
             throw new RpcException(new Status(StatusCode.NotFound, "Instrument not found"));
 
@@ -71,7 +68,13 @@ public class InstrumentsServiceImpl : InstrumentsService.InstrumentsServiceBase
 
     public override async Task<GetStockResponse> GetStock(GetStockRequest request, ServerCallContext context)
     {
-        var instrument = await mediator.Query(new GetStock(request.StockId));
+        var instrument = request.VariantCase switch
+        {
+            GetStockRequest.VariantOneofCase.StockId => await mediator.Query(new GetStock(request.StockId)),
+            GetStockRequest.VariantOneofCase.Isin => await mediator.Query(new GetStockByIsin(request.Isin)),
+            _ => null
+        };
+
         if (instrument == null)
             throw new RpcException(new Status(StatusCode.NotFound, "Instrument not found"));
 
@@ -102,7 +105,7 @@ public class InstrumentsServiceImpl : InstrumentsService.InstrumentsServiceBase
 
         return new ChangePriceResponse();
     }
-    
+
     public override async Task<ChangePriceResponse> ChangeBondPrice(ChangeBondPriceRequest request, ServerCallContext context)
     {
         var instrument = await mediator.Query(new GetBond(request.BondId));

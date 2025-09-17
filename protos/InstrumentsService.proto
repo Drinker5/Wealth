@@ -15,12 +15,20 @@ service InstrumentsService {
   rpc ChangeBondPrice (ChangeBondPriceRequest) returns (ChangePriceResponse);
 }
 
+// get by bondId or isin
 message GetBondRequest {
-  BondIdProto bond_id = 1;
+  oneof variant {
+    BondIdProto bond_id = 1;
+    ISINProto isin = 2;
+  }
 }
 
+// get by stockId or isin
 message GetStockRequest {
-  StockIdProto stock_id = 1;
+  oneof variant {
+    StockIdProto stock_id = 1;
+    ISINProto isin = 2;
+  }
 }
 
 message GetBondResponse {
