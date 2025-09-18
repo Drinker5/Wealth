@@ -16,7 +16,8 @@ public class PortfolioIdProvider(IDbContextFactory<WealthDbContext> contextFacto
             return cachedId;
 
         var context = await contextFactory.CreateDbContextAsync(token);
-        var portfolioIdMap = await context.PortfolioIdMaps.SingleAsync(i => i.AccountId == accountId, cancellationToken: token);
+        var portfolioIdMap = await context.PortfolioIdMaps
+            .SingleAsync(i => i.AccountId == accountId, cancellationToken: token);
         cache.AddOrUpdate(accountId, portfolioIdMap.PortfolioId, (k, v) => v);
         return portfolioIdMap.PortfolioId;
     }
