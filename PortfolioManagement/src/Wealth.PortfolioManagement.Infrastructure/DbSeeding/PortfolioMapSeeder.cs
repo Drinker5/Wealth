@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Application.Providers;
@@ -13,10 +14,16 @@ public class PortfolioMapSeeder(IOptions<PortfolioMapOptions> options) : IDbSeed
         if (options.Value.PortfolioIdMap.Count == 0)
             return;
 
-        await context.PortfolioIdMaps.AddRangeAsync(options.Value.PortfolioIdMap.Select(i => new PortfolioIdMap
+        foreach (var portfolioIdMap in options.Value.PortfolioIdMap)
         {
-            PortfolioId = new PortfolioId(i.Value),
-            AccountId = i.Key
-        }));
+            await context.Database.ExecuteSqlRawAsync(
+                """
+                INSERT INTO "PortfolioIdMaps" ("AccountId", "PortfolioId")
+                VALUES ({0}, {1})
+                ON CONFLICT ("AccountId") 
+                DO UPDATE SET "PortfolioId" = EXCLUDED."PortfolioId"
+                """,
+                [portfolioIdMap.Key, portfolioIdMap.Value]);
+        }
     }
 }

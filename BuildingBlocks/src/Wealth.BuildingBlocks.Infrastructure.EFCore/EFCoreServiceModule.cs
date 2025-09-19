@@ -5,7 +5,7 @@ using Wealth.BuildingBlocks.Infrastructure.Mediation;
 
 namespace Wealth.BuildingBlocks.Infrastructure.EFCore;
 
-public class EFCoreServiceModule : IServiceModule
+internal class EFCoreServiceModule : IServiceModule
 {
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {

@@ -19,5 +19,6 @@ public class ProvidersModule : IServiceModule
 
         services.AddSingleton<IOperationProvider, TBankOperationProvider>();
         services.AddSingleton<IPortfolioIdProvider, PortfolioIdProvider>();
+        services.AddSingleton<IInstrumentIdProvider, InstrumentIdProvider>();
     }
 }

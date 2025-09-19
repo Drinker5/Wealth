@@ -55,8 +55,13 @@ public sealed class TBankOperationProvider(
                 return BuyOperation();
             case OperationType.Sell:
                 return SellOperation();
+            case OperationType.Coupon:
+                return CouponOperation();
+            case OperationType.BondRepaymentFull:
+            case OperationType.BondRepayment:
+                return AmortizationOperation();
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException($"Unknown operation type: {operation.OperationType}");
         }
 
         async IAsyncEnumerable<Operation> BrokerFeeOperation()
@@ -144,5 +149,34 @@ public sealed class TBankOperationProvider(
                 };
             }
         }
+
+        async IAsyncEnumerable<Operation> CouponOperation()
+        {
+            yield return new CashOperation
+            {
+                Id = operation.Id,
+                Date = operation.Date.ToDateTimeOffset(),
+                Money = operation.Payment.ToMoney(),
+                PortfolioId = portfolioId,
+                Type = CashOperationType.Coupon,
+            };
+        }
+        
+        async IAsyncEnumerable<Operation> AmortizationOperation()
+        {
+            yield return new CashOperation
+            {
+                Id = operation.Id,
+                Date = operation.Date.ToDateTimeOffset(),
+                Money = operation.Payment.ToMoney(),
+                PortfolioId = portfolioId,
+                Type = CashOperationType.Amortization,
+            };
+        }
     }
+}
+
+internal static class OperationConverters
+{
+    public static Money ToMoney(this MoneyValue moneyValue) => new(moneyValue.Currency, moneyValue);
 }

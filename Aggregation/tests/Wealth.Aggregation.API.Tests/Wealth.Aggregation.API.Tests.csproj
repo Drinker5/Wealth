@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Wealth.PortfolioManagement.API\Wealth.PortfolioManagement.API.csproj" />
+    <ProjectReference Include="..\..\src\Wealth.Aggregation.API\Wealth.Aggregation.API.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.7" />

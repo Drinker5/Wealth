@@ -4,7 +4,7 @@ using Wealth.BuildingBlocks.Application;
 
 namespace Wealth.BuildingBlocks.Infrastructure.EFCore;
 
-public class EFCoreUnitOfWork(DbContext context) : IUnitOfWork
+internal class EFCoreUnitOfWork(DbContext context) : IUnitOfWork
 {
     public Task<TResponse> Transaction<TResponse>(RequestHandlerDelegate<TResponse> next, CancellationToken token)
     {

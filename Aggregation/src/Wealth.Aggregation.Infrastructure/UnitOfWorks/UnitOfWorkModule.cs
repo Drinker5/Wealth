@@ -30,6 +30,6 @@ public class UnitOfWorkModule : IServiceModule
 
         services.AddScoped<IStockAggregationRepository, StockAggregationRepository>();
 
-        // services.AddScoped<DbContext>(sp => sp.GetRequiredService<WealthDbContext>());
+        services.AddScoped<DbContext>(sp => sp.GetRequiredService<WealthDbContext>());
     }
 }

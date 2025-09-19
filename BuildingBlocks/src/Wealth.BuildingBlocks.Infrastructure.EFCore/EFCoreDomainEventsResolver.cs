@@ -4,7 +4,7 @@ using Wealth.BuildingBlocks.Infrastructure.Mediation;
 
 namespace Wealth.BuildingBlocks.Infrastructure.EFCore;
 
-public class EFCoreDomainEventsResolver(DbContext ctx) : IDomainEventsResolver
+internal class EFCoreDomainEventsResolver(DbContext ctx) : IDomainEventsResolver
 {
     public IReadOnlyCollection<DomainEvent> Resolve()
     {
