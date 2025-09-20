@@ -4,6 +4,7 @@ using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Application.Portfolios.Commands;
 using Wealth.PortfolioManagement.Application.Portfolios.Queries;
 using Wealth.PortfolioManagement.Application.Providers;
+using Wealth.PortfolioManagement.Domain.Operations;
 
 namespace Wealth.PortfolioManagement.API.APIs;
 
@@ -20,9 +21,15 @@ public static class PortfolioApi
         api.MapPut("{portfolioId:int}/bond", BuyBond);
         api.MapPut("{portfolioId:int}/stock", BuyStock);
 
-        api.MapGet("/test", (IOperationProvider provider, [FromQuery] DateTimeOffset date) => provider.GetOperations(date));
+        api.MapGet("/test", Test);
         
         return api;
+    }
+
+    private static async Task<Ok<IEnumerable<Operation>>> Test(IOperationProvider provider, [FromQuery] DateTimeOffset date)
+    {
+        var ops = await provider.GetOperations(date).ToListAsync();
+        return TypedResults.Ok(ops.AsEnumerable());
     }
 
     public static async Task<Results<Ok<IEnumerable<PortfolioDTO>>, ProblemHttpResult>> GetPortfolios(

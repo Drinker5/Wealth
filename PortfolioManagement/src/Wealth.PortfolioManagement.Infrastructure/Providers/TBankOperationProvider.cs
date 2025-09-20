@@ -20,6 +20,7 @@ public sealed class TBankOperationProvider(
     private static readonly FrozenDictionary<string, InstrumentType> InstrumentTypeMap =
         new Dictionary<string, InstrumentType>
         {
+            { "", InstrumentType.Unspecified },
             { "bond", InstrumentType.Bond },
             { "share", InstrumentType.Share },
             { "currency", InstrumentType.Currency },
@@ -60,6 +61,9 @@ public sealed class TBankOperationProvider(
             case OperationType.BondRepaymentFull:
             case OperationType.BondRepayment:
                 return AmortizationOperation();
+            case OperationType.Input:
+                return InputOperation();
+
             default:
                 throw new ArgumentOutOfRangeException($"Unknown operation type: {operation.OperationType}");
         }
@@ -161,7 +165,7 @@ public sealed class TBankOperationProvider(
                 Type = CashOperationType.Coupon,
             };
         }
-        
+
         async IAsyncEnumerable<Operation> AmortizationOperation()
         {
             yield return new CashOperation
@@ -171,6 +175,18 @@ public sealed class TBankOperationProvider(
                 Money = operation.Payment.ToMoney(),
                 PortfolioId = portfolioId,
                 Type = CashOperationType.Amortization,
+            };
+        }
+
+        async IAsyncEnumerable<Operation> InputOperation()
+        {
+            yield return new CurrencyOperation
+            {
+                Id = operation.Id,
+                Date = operation.Date.ToDateTimeOffset(),
+                Money = new Money(operation.Currency, operation.Payment),
+                Type = CurrencyOperationType.Deposit,
+                PortfolioId = portfolioId
             };
         }
     }
