@@ -4,5 +4,5 @@ namespace Wealth.PortfolioManagement.Application.Providers;
 
 public interface IOperationProvider
 {
-    IAsyncEnumerable<Operation> GetOperations(DateTimeOffset from);
+    IAsyncEnumerable<Operation> GetOperations(DateTimeOffset from, CancellationToken token);
 }

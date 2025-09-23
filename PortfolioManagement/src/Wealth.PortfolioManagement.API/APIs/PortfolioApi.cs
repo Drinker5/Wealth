@@ -26,9 +26,12 @@ public static class PortfolioApi
         return api;
     }
 
-    private static async Task<Ok<IEnumerable<Operation>>> Test(IOperationProvider provider, [FromQuery] DateTimeOffset date)
+    private static async Task<Ok<IEnumerable<Operation>>> Test(
+        IOperationProvider provider, 
+        [FromQuery] DateTimeOffset date,
+        CancellationToken token)
     {
-        var ops = await provider.GetOperations(date).ToListAsync();
+        var ops = await provider.GetOperations(date, token).ToListAsync(cancellationToken: token);
         return TypedResults.Ok(ops.AsEnumerable());
     }
 

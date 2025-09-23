@@ -1,25 +1,22 @@
 using System.Collections.Frozen;
-using System.Runtime.CompilerServices;
-using Google.Protobuf.WellKnownTypes;
+using Confluent.Kafka;
 using Microsoft.Extensions.Options;
 using Tinkoff.InvestApi;
 using Tinkoff.InvestApi.V1;
+using Wealth.BuildingBlocks.Infrastructure.Kafka;
 using Wealth.PortfolioManagement.Application.Providers;
-using Wealth.PortfolioManagement.Infrastructure.Providers.Handling;
-using Operation = Wealth.PortfolioManagement.Domain.Operations.Operation;
+using Timestamp = Google.Protobuf.WellKnownTypes.Timestamp;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Providers;
 
-internal sealed class TBankOperationProvider(
+internal sealed class TBankOperationProducer(
     IPortfolioIdProvider portfolioIdProvider,
-    OperationConverter converter,
-    IOptions<TBankOperationProviderOptions> options) : IOperationProvider
+    IKafkaProducer producer,
+    IOptions<TBankOperationProviderOptions> options) : IOperationProducer
 {
     private readonly InvestApiClient client = InvestApiClientFactory.Create(options.Value.Token);
 
-    public async IAsyncEnumerable<Operation> GetOperations(
-        DateTimeOffset from,
-        [EnumeratorCancellation] CancellationToken token)
+    public async Task ProduceOperations(DateTimeOffset from, CancellationToken token)
     {
         var operations = await client.Operations.GetOperationsAsync(new OperationsRequest
         {
@@ -29,13 +26,17 @@ internal sealed class TBankOperationProvider(
         }, cancellationToken: token);
 
         if (operations.Operations.Count <= 0)
-            yield break;
+            return;
 
         var portfolioId = await portfolioIdProvider.GetPortfolioIdByAccountId(options.Value.AccountId, token);
-        foreach (var operation in operations.Operations.Where(i => i.State == OperationState.Executed))
-        {
-            await foreach (var converted in converter.ConvertOperation(operation, portfolioId).WithCancellation(token))
-                yield return converted;
-        }
+        var enumerable = operations.Operations
+            .Where(i => i.State == OperationState.Executed)
+            .Select(i => new Message<string, Tinkoff.InvestApi.V1.Operation>
+            {
+                Key = portfolioId.ToString(),
+                Value = i
+            });
+
+        await producer.ProduceAsync("operations", enumerable, token);
     }
 }
