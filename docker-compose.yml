@@ -41,7 +41,7 @@ services:
       - "outbox"
       - "-connectionString=postgres://postgres:postgres@postgres/InstrumentManagement?sslmode=disable"
       - "-kafka-brokers=kafka"
-      - "-kafka-topic=wealth.instrument-management"
+      - "-kafka-topic=wealth-instrument-management"
       - "-period=2000"
     restart: on-failure
     labels:
@@ -73,7 +73,7 @@ services:
       - "outbox"
       - "-connectionString=postgres://postgres:postgres@postgres/PortfolioManagement?sslmode=disable"
       - "-kafka-brokers=kafka"
-      - "-kafka-topic=wealth.portfolio-management"
+      - "-kafka-topic=wealth-portfolio-management"
       - "-period=2000"
     restart: on-failure
     labels:
@@ -173,9 +173,25 @@ services:
         condition: service_healthy
     command:
       - -c 
-      - ./kafka-topics.sh --create --if-not-exists --topic "wealth.currency-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&  
-        ./kafka-topics.sh --create --if-not-exists --topic "wealth.instrument-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
-        ./kafka-topics.sh --create --if-not-exists --topic "wealth.portfolio-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
+      - ./kafka-topics.sh --create --if-not-exists --topic "wealth-currency-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&  
+        ./kafka-topics.sh --create --if-not-exists --topic "wealth-instrument-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
+        ./kafka-topics.sh --create --if-not-exists --topic "wealth-portfolio-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
+        ./kafka-topics.sh --create --if-not-exists --topic "wealth-operations" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
+
+  akhq: 
+    image: tchiotludo/akhq:0.26.0
+    environment:
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connections:
+            docker-kafka-server:
+              properties:
+                bootstrap.servers: "kafka:9092"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    ports:
+      - 5049:8080
 
   postgres:
     image: postgres

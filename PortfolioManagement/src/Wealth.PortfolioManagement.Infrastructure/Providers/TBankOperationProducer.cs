@@ -1,4 +1,3 @@
-using System.Collections.Frozen;
 using Confluent.Kafka;
 using Microsoft.Extensions.Options;
 using Tinkoff.InvestApi;
@@ -29,7 +28,7 @@ internal sealed class TBankOperationProducer(
             return;
 
         var portfolioId = await portfolioIdProvider.GetPortfolioIdByAccountId(options.Value.AccountId, token);
-        var enumerable = operations.Operations
+        var messages = operations.Operations
             .Where(i => i.State == OperationState.Executed)
             .Select(i => new Message<string, Tinkoff.InvestApi.V1.Operation>
             {
@@ -37,6 +36,6 @@ internal sealed class TBankOperationProducer(
                 Value = i
             });
 
-        await producer.ProduceAsync("operations", enumerable, token);
+        await producer.ProduceAsync("wealth-operations", messages, token);
     }
 }

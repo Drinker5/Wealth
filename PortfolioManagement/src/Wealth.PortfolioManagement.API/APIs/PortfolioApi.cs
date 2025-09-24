@@ -26,13 +26,13 @@ public static class PortfolioApi
         return api;
     }
 
-    private static async Task<Ok<IEnumerable<Operation>>> Test(
-        IOperationProvider provider, 
+    private static async Task<Ok> Test(
+        IOperationProducer provider, 
         [FromQuery] DateTimeOffset date,
         CancellationToken token)
     {
-        var ops = await provider.GetOperations(date, token).ToListAsync(cancellationToken: token);
-        return TypedResults.Ok(ops.AsEnumerable());
+        await provider.ProduceOperations(date, token);
+        return TypedResults.Ok();
     }
 
     public static async Task<Results<Ok<IEnumerable<PortfolioDTO>>, ProblemHttpResult>> GetPortfolios(
