@@ -27,7 +27,7 @@
   </Folder>
   <Folder Name="/BuildingBlocks/tests/">
     <Project Path="BuildingBlocks/tests/Wealth.BuildingBlocks.Infrastructure.Tests/Wealth.BuildingBlocks.Infrastructure.Tests.csproj" />
-    <File Path="BuildingBlocks\Directory.Build.props" />
+    <File Path="BuildingBlocks\tests\Directory.Build.props" />
   </Folder>
   <Folder Name="/CurrencyManagement/">
     <File Path="CurrencyManagement/Dockerfile" />
