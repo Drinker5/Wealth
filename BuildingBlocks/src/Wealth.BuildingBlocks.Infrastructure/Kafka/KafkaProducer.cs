@@ -16,11 +16,24 @@ public class KafkaProducer : IKafkaProducer
     }
 
     public async Task ProduceAsync<T>(string topic, IEnumerable<Message<string, T>> messages, CancellationToken token)
+        where T : Google.Protobuf.IMessage
     {
-        using var producer = new ProducerBuilder<string, T>(config)
-            .Build();
+        var builder = new ProducerBuilder<string, T>(config)
+            .SetKeySerializer(Serializers.Utf8);
+
+        var serializer = new ProtobufMessageSerializer<T>();
+        builder = builder.SetValueSerializer(serializer);
+
+        using var producer = builder.Build();
 
         foreach (var message in messages)
             await producer.ProduceAsync(topic, message, token);
+    }
+    
+    private sealed class ProtobufMessageSerializer<T> : ISerializer<T>
+        where T : Google.Protobuf.IMessage
+    {
+        public byte[] Serialize(T data, SerializationContext context) 
+            => Google.Protobuf.MessageExtensions.ToByteArray(data);
     }
 }

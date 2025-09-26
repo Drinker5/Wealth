@@ -8,5 +8,6 @@ internal class KafkaModule : IServiceModule
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton<IKafkaProducer, KafkaProducer>();
+        services.AddSingleton<IKafkaConsumer, KafkaConsumer>();
     }
 }

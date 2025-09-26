@@ -4,5 +4,6 @@ namespace Wealth.BuildingBlocks.Infrastructure.Kafka;
 
 public interface IKafkaProducer
 {
-    Task ProduceAsync<T>(string topic, IEnumerable<Message<string, T>> message, CancellationToken token);
+    Task ProduceAsync<T>(string topic, IEnumerable<Message<string, T>> message, CancellationToken token)
+        where T : Google.Protobuf.IMessage;
 }
