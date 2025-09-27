@@ -57,6 +57,8 @@ services:
       - Services__currency__http=currency-management
       - Services__instrument__http=instrument-management
       - ConnectionStrings__PortfolioManagement=Host=postgres;Username=postgres;Password=postgres;Persist Security Info=True;Database=PortfolioManagement;
+      - KafkaProducer__BootstrapServers=kafka:9092
+      - KafkaConsumer__BootstrapServers=kafka:9092
     ports:
       - 5002:80
     restart: on-failure
@@ -175,7 +177,7 @@ services:
       - -c 
       - ./kafka-topics.sh --create --if-not-exists --topic "wealth-currency-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&  
         ./kafka-topics.sh --create --if-not-exists --topic "wealth-instrument-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
-        ./kafka-topics.sh --create --if-not-exists --topic "wealth-portfolio-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
+        ./kafka-topics.sh --create --if-not-exists --topic "wealth-portfolio-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
         ./kafka-topics.sh --create --if-not-exists --topic "wealth-operations" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
 
   akhq: 

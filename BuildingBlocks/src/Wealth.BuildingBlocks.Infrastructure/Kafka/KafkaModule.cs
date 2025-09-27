@@ -9,5 +9,8 @@ internal class KafkaModule : IServiceModule
     {
         services.AddSingleton<IKafkaProducer, KafkaProducer>();
         services.AddSingleton<IKafkaConsumer, KafkaConsumer>();
+
+        services.AddOptions<KafkaConsumerOptions>().BindConfiguration(KafkaConsumerOptions.Section);
+        services.AddOptions<KafkaProducerOptions>().BindConfiguration(KafkaProducerOptions.Section);
     }
 }
