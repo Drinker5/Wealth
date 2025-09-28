@@ -29,10 +29,13 @@ public sealed class ConsumerHostedService<T> : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        consumer.ConsumeAsync<T>(
-            topicOptions.Topic,
-            i => Handle(i, cancellationToken),
-            cancellationToken);
+        _ = Task.Run(async () =>
+        {
+            await consumer.ConsumeAsync<T>(
+                topicOptions.Topic,
+                i => Handle(i, cancellationToken),
+                cancellationToken);
+        }, cancellationToken);
         return Task.CompletedTask;
     }
 
@@ -62,7 +65,7 @@ public sealed class ConsumerHostedService<T> : IHostedService
                     args.AttemptNumber + 1,
                     delay,
                     args.Outcome.Exception?.Message);
-                
+
                 return ValueTask.CompletedTask;
             }
         };
