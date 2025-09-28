@@ -17,6 +17,8 @@
   </Folder>
   <Folder Name="/BuildingBlocks/" />
   <Folder Name="/BuildingBlocks/src/">
+    <Project Path="BuildingBlocks/src/Wealth.BuildingBlocks.Infrastructure.KafkaConsumer/Wealth.BuildingBlocks.Infrastructure.KafkaConsumer.csproj" />
+    <Project Path="BuildingBlocks/src/Wealth.BuildingBlocks.Infrastructure.KafkaProducer/Wealth.BuildingBlocks.Infrastructure.KafkaProducer.csproj" />
     <Project Path="BuildingBlocks/src/Wealth.BuildingBlocks.Tests/Wealth.BuildingBlocks.Tests.csproj" />
     <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.API\Wealth.BuildingBlocks.API.csproj" />
     <Project Path="BuildingBlocks\src\Wealth.BuildingBlocks.Application\Wealth.BuildingBlocks.Application.csproj" />

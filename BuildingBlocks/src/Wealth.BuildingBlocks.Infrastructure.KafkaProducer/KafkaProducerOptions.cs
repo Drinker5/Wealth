@@ -1,4 +1,4 @@
-namespace Wealth.BuildingBlocks.Infrastructure.Kafka;
+namespace Wealth.BuildingBlocks.Infrastructure.KafkaProducer;
 
 public class KafkaProducerOptions
 {
