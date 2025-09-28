@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Wealth.BuildingBlocks.Infrastructure.KafkaConsumer\Wealth.BuildingBlocks.Infrastructure.KafkaConsumer.csproj" />
+    <ProjectReference Include="..\..\src\Wealth.BuildingBlocks.Infrastructure.KafkaProducer\Wealth.BuildingBlocks.Infrastructure.KafkaProducer.csproj" />
     <ProjectReference Include="..\..\src\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" />
   </ItemGroup>
 

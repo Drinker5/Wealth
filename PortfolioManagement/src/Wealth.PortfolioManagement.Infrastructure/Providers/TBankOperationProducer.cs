@@ -2,7 +2,7 @@ using Confluent.Kafka;
 using Microsoft.Extensions.Options;
 using Tinkoff.InvestApi;
 using Tinkoff.InvestApi.V1;
-using Wealth.BuildingBlocks.Infrastructure.Kafka;
+using Wealth.BuildingBlocks.Infrastructure.KafkaProducer;
 using Wealth.PortfolioManagement.Application.Providers;
 using Timestamp = Google.Protobuf.WellKnownTypes.Timestamp;
 

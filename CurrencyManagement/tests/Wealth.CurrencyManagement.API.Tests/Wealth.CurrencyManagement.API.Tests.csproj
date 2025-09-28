@@ -3,8 +3,8 @@
     <ProjectReference Include="..\..\src\Wealth.CurrencyManagement.API\Wealth.CurrencyManagement.API.csproj" IsAspireProjectResource="false" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.7" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="9.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="9.0.9" />
     <PackageReference Include="Testcontainers" Version="4.6.0" />
     <PackageReference Include="Testcontainers.PostgreSql" Version="4.6.0" />
   </ItemGroup>
