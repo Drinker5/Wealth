@@ -17,4 +17,7 @@
               GrpcServices="Client"
               Link="InstrumentsService.proto" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Handlers\" />
+  </ItemGroup>
 </Project>

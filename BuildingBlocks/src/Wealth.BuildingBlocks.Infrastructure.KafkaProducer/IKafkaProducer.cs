@@ -1,6 +1,6 @@
 using Confluent.Kafka;
 
-namespace Wealth.BuildingBlocks.Infrastructure.Kafka;
+namespace Wealth.BuildingBlocks.Infrastructure.KafkaProducer;
 
 public interface IKafkaProducer
 {

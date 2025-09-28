@@ -9,6 +9,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.EFCore\Wealth.BuildingBlocks.Infrastructure.EFCore.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.KafkaConsumer\Wealth.BuildingBlocks.Infrastructure.KafkaConsumer.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.KafkaProducer\Wealth.BuildingBlocks.Infrastructure.KafkaProducer.csproj" />
     <ProjectReference Include="..\Wealth.PortfolioManagement.Application\Wealth.PortfolioManagement.Application.csproj" />
   </ItemGroup>
 </Project>

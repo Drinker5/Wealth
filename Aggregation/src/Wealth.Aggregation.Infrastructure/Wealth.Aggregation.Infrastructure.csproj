@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.ServiceDiscovery" Version="9.4.0" />
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.EFCore\Wealth.BuildingBlocks.Infrastructure.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.KafkaConsumer\Wealth.BuildingBlocks.Infrastructure.KafkaConsumer.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" />
     <ProjectReference Include="..\Wealth.Aggregation.Application\Wealth.Aggregation.Application.csproj" />
   </ItemGroup>

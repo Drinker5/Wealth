@@ -1,13 +1,12 @@
 using Confluent.Kafka;
-using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.BuildingBlocks.Infrastructure.Kafka;
-using Xunit;
+using Wealth.BuildingBlocks.Infrastructure.KafkaConsumer;
+using Wealth.BuildingBlocks.Infrastructure.KafkaProducer;
 
 namespace Wealth.BuildingBlocks.Infrastructure.Tests.Kafka;
 
-[TestSubject(typeof(Infrastructure.Kafka.KafkaConsumer))]
+[TestSubject(typeof(Infrastructure.KafkaConsumer.KafkaConsumer))]
 public class KafkaTests : IClassFixture<KafkaTestFixture>
 {
     private readonly KafkaTestFixture fixture;
@@ -24,9 +23,9 @@ public class KafkaTests : IClassFixture<KafkaTestFixture>
         var groupId = $"test-group-{Guid.NewGuid():N}";
 
         var producerOptions = Options.Create(new KafkaProducerOptions { BootstrapServers = fixture.BootstrapServers });
-        var producer = new KafkaProducer(producerOptions);
+        var producer = new KafkaProducer.KafkaProducer(producerOptions);
         var consumerOptions = Options.Create(new KafkaConsumerOptions { BootstrapServers = fixture.BootstrapServers, GroupId = groupId });
-        var consumer = new Infrastructure.Kafka.KafkaConsumer(consumerOptions);
+        var consumer = new Infrastructure.KafkaConsumer.KafkaConsumer(consumerOptions);
         var expected = new MoneyProto { Amount = 99.50m, CurrencyId = CurrencyCode.USD };
 
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
