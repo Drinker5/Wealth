@@ -16,6 +16,6 @@ public class CreateOperation(IOperationRepository operationRepository) : IDomain
             Type = CurrencyOperationType.Deposit,
             Money = notification.Money,
             PortfolioId = notification.PortfolioId,
-        });
+        }, CancellationToken.None);
     }
 }

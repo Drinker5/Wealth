@@ -18,6 +18,6 @@ public class AssetBoughtEventHandler(IOperationRepository operationRepository) :
             Amount = notification.TotalPrice,
             PortfolioId = notification.PortfolioId,
             Type = TradeOperationType.Buy,
-        });
+        }, CancellationToken.None);
     }
 }

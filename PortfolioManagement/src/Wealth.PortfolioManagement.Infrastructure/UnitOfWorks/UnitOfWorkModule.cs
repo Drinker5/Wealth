@@ -22,7 +22,7 @@ public class UnitOfWorkModule : IServiceModule
 
         services.AddScoped<IPortfolioRepository, PortfolioRepository>();
         services.AddScoped<IOutboxRepository, OutboxRepository>();
-        services.AddScoped<IOperationRepository, OperationRepository>();
+        services.AddSingleton<IOperationRepository, OperationRepository>();
 
         services.AddScoped<DbContext>(sp => sp.GetRequiredService<WealthDbContext>());
     }

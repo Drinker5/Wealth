@@ -9,23 +9,25 @@ namespace Wealth.PortfolioManagement.Infrastructure.Tests.Repositories;
 public class OperationRepositoryTests
 {
     private readonly OperationRepository repository;
-    private readonly WealthDbContext context;
 
     public OperationRepositoryTests()
     {
         var options = new DbContextOptionsBuilder<WealthDbContext>()
             .UseInMemoryDatabase("fakeDb")
             .Options;
-        context = new WealthDbContext(options);
+        var context = new WealthDbContext(options);
         context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
 
-        repository = new OperationRepository(context);
+        var contextFactoryMock = new Mock<IDbContextFactory<WealthDbContext>>();
+        contextFactoryMock.Setup(i => i.CreateDbContext()).Returns(context);
+
+        repository = new OperationRepository(contextFactoryMock.Object);
     }
 
     [Fact]
     public async Task WhenOperationCreated()
     {
-        await repository.CreateOperation(new StockDelistOperation());
+        await repository.CreateOperation(new StockDelistOperation(), CancellationToken.None);
     }
 }

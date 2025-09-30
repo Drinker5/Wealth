@@ -6,7 +6,7 @@ using Operation = Wealth.PortfolioManagement.Domain.Operations.Operation;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Providers.Handling;
 
-internal class OperationConverter(IInstrumentIdProvider instrumentIdProvider)
+public sealed class OperationConverter(IInstrumentIdProvider instrumentIdProvider)
 {
     private static AmortizationHandler _amortizationHandler => new();
 

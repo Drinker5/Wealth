@@ -15,9 +15,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 public class WealthDbContext : WealthDbContextBase
 {
     public virtual DbSet<Portfolio> Portfolios { get; internal init; }
-
     public virtual DbSet<Operation> InstrumentOperations { get; internal init; }
-    public virtual DbSet<CurrencyOperation> CurrencyOperations { get; internal init; }
     public virtual DbSet<PortfolioIdMap> PortfolioIdMaps { get; internal init; }
 
     public WealthDbContext(DbContextOptions<WealthDbContext> options)

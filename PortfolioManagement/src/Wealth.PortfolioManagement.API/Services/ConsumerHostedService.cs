@@ -61,7 +61,8 @@ public sealed class ConsumerHostedService<T> : IHostedService
             {
                 var delay = GenerateDelay(args.AttemptNumber) ?? TimeSpan.Zero;
                 logger.LogWarning(
-                    "Retry attempt {AttemptNumber}. Next retry in {RetryDelay}. Exception: {ExceptionMessage}",
+                    "{Topic}: Retry attempt {AttemptNumber}. Next retry in {RetryDelay}. Exception: {ExceptionMessage}",
+                    topicOptions.Topic,
                     args.AttemptNumber + 1,
                     delay,
                     args.Outcome.Exception?.Message);
