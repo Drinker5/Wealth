@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.BuildingBlocks.Infrastructure.EFCore.Converters;
 using Wealth.PortfolioManagement.Domain.Portfolios;
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations;
@@ -14,7 +15,6 @@ internal class PortfolioCurrencyConfiguration : IEntityTypeConfiguration<Portfol
         builder.HasKey("PortfolioId", nameof(PortfolioCurrency.CurrencyId));
 
         builder.Property(x => x.CurrencyId)
-            .HasMaxLength(3)
             .IsRequired();
 
         builder.Property(x => x.Amount)

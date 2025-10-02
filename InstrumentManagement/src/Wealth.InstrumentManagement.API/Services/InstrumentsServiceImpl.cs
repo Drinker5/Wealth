@@ -15,7 +15,9 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
             var stockId = await mediator.Command(new CreateStockCommand
             {
                 Name = request.Name,
-                ISIN = request.Isin,
+                Isin = request.Isin,
+                Figi = request.Figi,
+                LotSize = request.LotSize,
             });
 
             return new CreateStockResponse
@@ -34,7 +36,8 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
         var bondId = await mediator.Command(new CreateBondCommand
         {
             Name = request.Name,
-            ISIN = request.Isin,
+            Isin = request.Isin,
+            Figi = request.Figi,
         });
 
         return new CreateBondResponse
@@ -49,6 +52,7 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
         {
             GetBondRequest.VariantOneofCase.BondId => await mediator.Query(new GetBond(request.BondId)),
             GetBondRequest.VariantOneofCase.Isin => await mediator.Query(new GetBondByIsin(request.Isin)),
+            GetBondRequest.VariantOneofCase.Figi => await mediator.Query(new GetBondByFigi(request.Figi)),
             _ => null
         };
 
@@ -60,7 +64,8 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
             BondId = instrument.Id,
             Name = instrument.Name,
             Price = instrument.Price,
-            Isin = instrument.ISIN,
+            Isin = instrument.Isin,
+            Figi = instrument.Figi,
         };
 
         return response;
@@ -72,6 +77,7 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
         {
             GetStockRequest.VariantOneofCase.StockId => await mediator.Query(new GetStock(request.StockId)),
             GetStockRequest.VariantOneofCase.Isin => await mediator.Query(new GetStockByIsin(request.Isin)),
+            GetStockRequest.VariantOneofCase.Figi => await mediator.Query(new GetStockByFigi(request.Figi)),
             _ => null
         };
 
@@ -83,7 +89,8 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
             StockId = instrument.Id,
             Name = instrument.Name,
             Price = instrument.Price,
-            Isin = instrument.ISIN,
+            Isin = instrument.Isin,
+            Figi = instrument.Figi,
             DividendPerYear = instrument.Dividend.ValuePerYear,
             LotSize = instrument.LotSize,
         };

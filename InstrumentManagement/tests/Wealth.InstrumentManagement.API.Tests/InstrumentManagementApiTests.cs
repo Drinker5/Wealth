@@ -80,6 +80,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
         {
             Name = "Test",
             Isin = "100000000001",
+            Figi = "F00000000001",
         };
 
         var createStockResponse = await client.CreateStockAsync(createStockRequest);
@@ -91,6 +92,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
 
         Assert.Equal(createStockRequest.Name, instrument.Name);
         Assert.Equal(createStockRequest.Isin, instrument.Isin);
+        Assert.Equal(createStockRequest.Figi, instrument.Figi);
         Assert.Equal(0, instrument.Price.Amount);
         var newPrice = new Money("RUB", 123);
 
@@ -108,6 +110,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
         {
             Name = "Test",
             Isin = "100000000002",
+            Figi = "F00000000002",
         };
 
         var createBondResponse = await client.CreateBondAsync(createStockRequest);
@@ -122,6 +125,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
 
         Assert.Equal(createStockRequest.Name, instrument.Name);
         Assert.Equal(createStockRequest.Isin, instrument.Isin);
+        Assert.Equal(createStockRequest.Figi, instrument.Figi);
         Assert.Equal(0, instrument.Price.Amount);
         var newPrice = new Money("RUB", 123);
 

@@ -21,7 +21,12 @@ public class InMemoryBondsRepository : IBondsRepository
 
     public Task<Bond?> GetBond(ISIN isin)
     {
-        return Task.FromResult(bonds.FirstOrDefault(b => b.ISIN == isin));
+        return Task.FromResult(bonds.FirstOrDefault(b => b.Isin == isin));
+    }
+
+    public Task<Bond?> GetBond(FIGI figi)
+    {
+        return Task.FromResult(bonds.FirstOrDefault(b => b.Figi == figi));
     }
 
     public Task DeleteBond(BondId id)
@@ -36,10 +41,10 @@ public class InMemoryBondsRepository : IBondsRepository
         if (bond != null) bond.Price = price;
     }
 
-    public Task<BondId> CreateBond(string name, ISIN isin, CancellationToken token = default)
+    public Task<BondId> CreateBond(string name, ISIN isin, FIGI figi, CancellationToken token = default)
     {
         var bondId = Interlocked.Increment(ref currentId);
-        var bond = Bond.Create(bondId, name, isin);
+        var bond = Bond.Create(bondId, name, isin, figi);
         return Task.FromResult(bond.Id);
     }
 

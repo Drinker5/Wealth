@@ -8,19 +8,7 @@ internal class BondTradeOperationConfiguration : IEntityTypeConfiguration<BondTr
 {
     public void Configure(EntityTypeBuilder<BondTradeOperation> builder)
     {
-        builder.Property(x => x.PortfolioId)
-            .IsRequired();
-
         builder.Property(x => x.BondId)
             .IsRequired();
-
-        builder.Property(x => x.Quantity);
-        builder.Property(x => x.Type);
-
-        builder.ComplexProperty(y => y.Amount, z =>
-        {
-            z.Property(i => i.CurrencyId);
-            z.Property(i => i.Amount);
-        });
     }
 }

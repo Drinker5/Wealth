@@ -13,7 +13,8 @@ public class KafkaConsumer(IOptions<KafkaConsumerOptions> options, ILogger<Kafka
         BootstrapServers = options.Value.BootstrapServers,
         AutoOffsetReset = AutoOffsetReset.Earliest,
         EnableAutoCommit = false,
-        GroupId = options.Value.GroupId
+        GroupId = options.Value.GroupId,
+        MaxPollIntervalMs = 300000,
     };
 
     public async Task ConsumeAsync<T>(string topic, Func<ConsumeResult<string, T>, Task> handler, CancellationToken token)

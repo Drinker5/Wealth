@@ -14,16 +14,19 @@ public class CreateBondCommandHandlerTests
         var bondsRepository = A.Fake<IBondsRepository>();
         var command = new CreateBondCommand
         {
-            ISIN = ISIN.Empty,
+            Isin = ISIN.Empty,
+            Figi = FIGI.Empty,
             Name = "Foo",
         };
         BondId id = 1;
-        A.CallTo(() => bondsRepository.CreateBond(command.Name, command.ISIN, CancellationToken.None)).Returns(id);
+        A.CallTo(() => bondsRepository.CreateBond(command.Name, command.Isin, command.Figi, CancellationToken.None))
+            .Returns(id);
         var handler = new CreateBondCommandHandler(bondsRepository);
 
         var result = await handler.Handle(command, CancellationToken.None);
 
-        A.CallTo(() => bondsRepository.CreateBond(command.Name, command.ISIN, CancellationToken.None)).MustHaveHappened();
+        A.CallTo(() => bondsRepository.CreateBond(command.Name, command.Isin, command.Figi, CancellationToken.None))
+            .MustHaveHappened();
         Assert.That(result, Is.EqualTo(id));
     }
 }

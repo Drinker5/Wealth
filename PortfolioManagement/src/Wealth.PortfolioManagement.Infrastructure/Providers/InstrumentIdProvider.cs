@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using Grpc.Core;
 using Microsoft.Extensions.Options;
 using Tinkoff.InvestApi;
 using Tinkoff.InvestApi.V1;
@@ -16,24 +17,26 @@ public class InstrumentIdProvider(
     private readonly ConcurrentDictionary<string, StockId> stockIdCache = new();
     private readonly ConcurrentDictionary<string, BondId> bondIdCache = new();
 
+    //TODO metrics, count of existed/from cache, count of created
+
     public async ValueTask<StockId> GetStockIdByFigi(string figi)
     {
         if (stockIdCache.TryGetValue(figi, out var stockId))
             return stockId;
-        
-        var share = await client.Instruments.ShareByAsync(new InstrumentRequest
-        {
-            IdType = InstrumentIdType.Figi,
-            Id = figi
-        });
 
-        var stock = await instrumentsServiceClient.GetStockAsync(new GetStockRequest
+        var stock = await GetStock(figi);
+        if (stock == null)
         {
-            Isin = share.Instrument.Isin
-        });
+            var response = await CreateStock(figi);
+            stockId = response.StockId;
+        }
+        else
+        {
+            stockId = stock.Value;
+        }
 
         stockIdCache.AddOrUpdate(figi, stockId, (_, _) => stockId);
-        return stock.StockId;
+        return stockId;
     }
 
     public async ValueTask<BondId> GetBondIdByFigi(string figi)
@@ -41,18 +44,88 @@ public class InstrumentIdProvider(
         if (bondIdCache.TryGetValue(figi, out var bondId))
             return bondId;
 
+        var bond = await GetBondAsync(figi);
+        if (bond == null)
+        {
+            var response = await CreateBond(figi);
+            bondId = response.BondId;
+        }
+        else
+        {
+            bondId = bond.Value;
+        }
+
+        bondIdCache.AddOrUpdate(figi, bondId, (_, _) => bondId);
+        return bondId;
+    }
+
+    private async Task<StockId?> GetStock(string figi)
+    {
+        try
+        {
+            var getStockResponse = await instrumentsServiceClient.GetStockAsync(new GetStockRequest
+            {
+                Figi = figi
+            });
+
+            return getStockResponse.StockId;
+        }
+        catch (RpcException ex) when (ex.StatusCode == StatusCode.NotFound)
+        {
+            return null;
+        }
+    }
+
+    private async Task<BondId?> GetBondAsync(string figi)
+    {
+        try
+        {
+            var getBondResponse = await instrumentsServiceClient.GetBondAsync(new GetBondRequest
+            {
+                Figi = figi
+            });
+            return getBondResponse.BondId;
+        }
+        catch (RpcException ex) when (ex.StatusCode == StatusCode.NotFound)
+        {
+            return null;
+        }
+    }
+
+    private async Task<CreateStockResponse> CreateStock(string figi)
+    {
         var share = await client.Instruments.ShareByAsync(new InstrumentRequest
         {
             IdType = InstrumentIdType.Figi,
             Id = figi
         });
 
-        var bond = await instrumentsServiceClient.GetBondAsync(new GetBondRequest
+        var response = await instrumentsServiceClient.CreateStockAsync(new CreateStockRequest
         {
-            Isin = share.Instrument.Isin
+            Figi = figi,
+            Isin = share.Instrument.Isin,
+            LotSize = share.Instrument.Lot,
+            Name = share.Instrument.Name,
         });
 
-        bondIdCache.AddOrUpdate(figi, bondId, (_, _) => bondId);
-        return bond.BondId;
+        return response;
+    }
+
+    private async Task<CreateBondResponse> CreateBond(string figi)
+    {
+        var share = await client.Instruments.BondByAsync(new InstrumentRequest
+        {
+            IdType = InstrumentIdType.Figi,
+            Id = figi
+        });
+
+        var response = await instrumentsServiceClient.CreateBondAsync(new CreateBondRequest
+        {
+            Figi = figi,
+            Isin = share.Instrument.Isin,
+            Name = share.Instrument.Name,
+        });
+
+        return response;
     }
 }

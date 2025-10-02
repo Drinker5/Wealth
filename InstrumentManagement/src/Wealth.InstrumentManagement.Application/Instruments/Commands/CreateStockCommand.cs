@@ -1,10 +1,13 @@
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Commands;
 
-public class CreateStockCommand : ICommand<StockId>
+public sealed record CreateStockCommand : ICommand<StockId>
 {
-    public string Name { get; set; }
-    public ISIN ISIN { get; set; }
+    public required string Name { get; init; }
+    public required ISIN Isin { get; init; }
+    public required FIGI Figi { get; init; }
+    public required LotSize LotSize { get; init; }
 }

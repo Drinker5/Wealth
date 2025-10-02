@@ -10,36 +10,37 @@ public class StockTests
 {
     readonly string name = "foo";
     readonly ISIN isin = "barbarbarbar";
+    readonly FIGI figi = "arbarbarbarb";
     readonly Dividend dividend = new Dividend(CurrencyCode.RUB, Decimal.One);
 
-    private Stock CreateStockInstrument(string name, ISIN isin)
+    private Stock CreateStockInstrument(string name, ISIN isin, FIGI figi)
     {
-        return Stock.Create(3, name, isin);
+        return Stock.Create(3, name, isin, figi);
     }
 
     [Test]
     public void WhenCreate()
     {
-        var stock = CreateStockInstrument(name, isin);
+        var stock = CreateStockInstrument(name, isin, figi);
 
         var @event = stock.HasEvent<StockCreated>();
         using (Assert.EnterMultipleScope())
         {
             Assert.That(@event.StockId, Is.Not.Zero);
             Assert.That(@event.Name, Is.EqualTo(name));
-            Assert.That(@event.ISIN, Is.EqualTo(isin));
+            Assert.That(@event.Isin, Is.EqualTo(isin));
             Assert.That(stock.Id, Is.Not.Zero);
             Assert.That(stock.Name, Is.EqualTo(name));
-            Assert.That(stock.ISIN, Is.EqualTo(isin));
+            Assert.That(stock.Isin, Is.EqualTo(isin));
             Assert.That(stock.Dividend, Is.EqualTo(Dividend.Empty));
-            Assert.That(stock.LotSize.Size, Is.EqualTo(1));
+            Assert.That(stock.LotSize.Value, Is.EqualTo(1));
         }
     }
 
     [Test]
     public void WhenPriceChanged()
     {
-        var stock = CreateStockInstrument(name, isin);
+        var stock = CreateStockInstrument(name, isin, figi);
         var money = new Money(CurrencyCode.EUR, 23.3m);
 
         stock.ChangePrice(money);
@@ -56,7 +57,7 @@ public class StockTests
     [Test]
     public void WhenDividendChanged()
     {
-        var stock = CreateStockInstrument(name, isin);
+        var stock = CreateStockInstrument(name, isin, figi);
 
         stock.ChangeDividend(dividend);
 
@@ -72,7 +73,7 @@ public class StockTests
     [Test]
     public void WhenLotSizeChanged()
     {
-        var instrument = CreateStockInstrument(name, isin);
+        var instrument = CreateStockInstrument(name, isin, figi);
 
         instrument.ChangeLotSize(10);
 

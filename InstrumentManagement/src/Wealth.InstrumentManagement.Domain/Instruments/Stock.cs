@@ -10,7 +10,8 @@ public class Stock(StockId id) : AggregateRoot
 
     public string Name { get; set; }
 
-    public ISIN ISIN { get; set; }
+    public ISIN Isin { get; set; }
+    public FIGI Figi { get; set; }
 
     public Money Price { get; set; } = Money.Empty;
 
@@ -18,14 +19,15 @@ public class Stock(StockId id) : AggregateRoot
 
     public LotSize LotSize { get; set; } = 1;
 
-    public static Stock Create(StockId id, string name, ISIN isin)
+    public static Stock Create(StockId id, string name, ISIN isin, FIGI figi)
     {
         var stock = new Stock(id);
         stock.Apply(new StockCreated
         {
             StockId = id,
             Name = name,
-            ISIN = isin,
+            Isin = isin,
+            Figi = figi,
         });
         return stock;
     }
@@ -38,7 +40,7 @@ public class Stock(StockId id) : AggregateRoot
         Apply(new StockDividendChanged
         {
             StockId = Id,
-            ISIN = ISIN,
+            ISIN = Isin,
             NewDividend = dividend
         });
     }
@@ -48,7 +50,7 @@ public class Stock(StockId id) : AggregateRoot
         Apply(new StockLotSizeChanged
         {
             StockId = Id,
-            ISIN = ISIN,
+            ISIN = Isin,
             NewLotSize = lotSize,
         });
     }
@@ -57,7 +59,8 @@ public class Stock(StockId id) : AggregateRoot
     {
         Id = @event.StockId;
         Name = @event.Name;
-        ISIN = @event.ISIN;
+        Isin = @event.Isin;
+        Figi = @event.Figi;
     }
 
     private void When(StockDividendChanged @event)
@@ -78,7 +81,7 @@ public class Stock(StockId id) : AggregateRoot
         Apply(new StockPriceChanged
         {
             StockId = Id,
-            ISIN = ISIN,
+            ISIN = Isin,
             NewPrice = newPrice,
         });
     }

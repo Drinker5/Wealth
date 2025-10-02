@@ -15,19 +15,21 @@ service InstrumentsService {
   rpc ChangeBondPrice (ChangeBondPriceRequest) returns (ChangePriceResponse);
 }
 
-// get by bondId or isin
+// get by bondId, isin or figi
 message GetBondRequest {
   oneof variant {
     BondIdProto bond_id = 1;
     ISINProto isin = 2;
+    string figi = 3;
   }
 }
 
-// get by stockId or isin
+// get by stockId, isin or figi
 message GetStockRequest {
   oneof variant {
     StockIdProto stock_id = 1;
     ISINProto isin = 2;
+    string figi = 3;
   }
 }
 
@@ -36,6 +38,7 @@ message GetBondResponse {
   string name = 2;
   MoneyProto price = 3;
   ISINProto isin = 4;
+  string figi = 5;
 }
 
 message GetStockResponse {
@@ -43,14 +46,16 @@ message GetStockResponse {
   string name = 2;
   MoneyProto price = 3;
   ISINProto isin = 4;
-  int32 lot_size = 5;
-  MoneyProto dividend_per_year = 6;
+  string figi = 5;
+  int32 lot_size = 6;
+  MoneyProto dividend_per_year = 7;
 }
-
 
 message CreateStockRequest {
   string name = 1;
   ISINProto isin = 2;
+  string figi = 3;
+  int32 lot_size = 4;
 }
 
 message CreateStockResponse {
@@ -60,6 +65,7 @@ message CreateStockResponse {
 message CreateBondRequest {
   string name = 1;
   ISINProto isin = 2;
+  string figi = 3;
 }
 
 message CreateBondResponse {

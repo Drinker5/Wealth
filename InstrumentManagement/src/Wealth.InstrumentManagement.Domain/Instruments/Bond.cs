@@ -10,20 +10,22 @@ public class Bond(BondId id) : AggregateRoot
 
     public string Name { get; set; }
 
-    public ISIN ISIN { get; set; }
+    public ISIN Isin { get; set; }
+    public FIGI Figi { get; set; }
 
     public Money Price { get; set; } = Money.Empty;
 
     public Coupon Coupon { get; set; }
 
-    public static Bond Create(BondId bondId, string name, ISIN isin)
+    public static Bond Create(BondId bondId, string name, ISIN isin, FIGI figi)
     {
         var bond = new Bond(bondId);
         bond.Apply(new BondCreated
         {
             BondId = bondId,
             Name = name,
-            ISIN = isin,
+            Isin = isin,
+            Figi = figi,
         });
         return bond;
     }
@@ -36,7 +38,7 @@ public class Bond(BondId id) : AggregateRoot
         Apply(new BondPriceChanged
         {
             BondId = Id,
-            ISIN = ISIN,
+            ISIN = Isin,
             NewPrice = newPrice,
         });
     }
@@ -45,7 +47,8 @@ public class Bond(BondId id) : AggregateRoot
     {
         Id = @event.BondId;
         Name = @event.Name;
-        ISIN = @event.ISIN;
+        Isin = @event.Isin;
+        Figi = @event.Figi;
     }
 
     public void ChangeCoupon(Coupon coupon)
@@ -56,7 +59,7 @@ public class Bond(BondId id) : AggregateRoot
         Apply(new BondCouponChanged
         {
             BondId = Id,
-            ISIN = ISIN,
+            ISIN = Isin,
             NewCoupon = coupon
         });
     }

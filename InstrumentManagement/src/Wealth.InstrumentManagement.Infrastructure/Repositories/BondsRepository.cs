@@ -32,6 +32,13 @@ public class BondsRepository : IBondsRepository
         return instruments.FirstOrDefault();
     }
 
+    public async Task<Bond?> GetBond(FIGI figi)
+    {
+        const string sql = """SELECT * FROM "Bonds" WHERE "FIGI" = @figi""";
+        var instruments = await GetBonds(sql, new { figi = figi.Value });
+        return instruments.FirstOrDefault();
+    }
+
     public async Task DeleteBond(BondId instrumentId)
     {
         const string sql = """DELETE FROM "Bonds" WHERE "Id" = @Id""";
@@ -59,7 +66,7 @@ public class BondsRepository : IBondsRepository
         dbContext.AddEvents(bond);
     }
 
-    public async Task<BondId> CreateBond(string name, ISIN isin, CancellationToken token = default)
+    public async Task<BondId> CreateBond(string name, ISIN isin, FIGI figi, CancellationToken token = default)
     {
         const string sql = """SELECT nextval('"BondsHiLo"')""";
         var command = new CommandDefinition(
@@ -68,7 +75,7 @@ public class BondsRepository : IBondsRepository
 
         var nextId = await connection.ExecuteScalarAsync<int>(command);
 
-        var bondInstrument = Bond.Create(new BondId(nextId), name, isin);
+        var bondInstrument = Bond.Create(new BondId(nextId), name, isin, figi);
         return await CreateBond(bondInstrument);
     }
 
@@ -81,14 +88,15 @@ public class BondsRepository : IBondsRepository
     private async Task<BondId> CreateBond(Bond bond)
     {
         const string sql = """
-                           INSERT INTO "Bonds" ("Id", "Name", "ISIN") 
-                           VALUES (@Id, @Name, @ISIN)
+                           INSERT INTO "Bonds" ("Id", "Name", "ISIN", "FIGI") 
+                           VALUES (@Id, @Name, @ISIN, @FIGI)
                            """;
         await connection.ExecuteAsync(sql, new
         {
             Id = bond.Id.Value,
             Name = bond.Name,
-            ISIN = bond.ISIN.Value,
+            ISIN = bond.Isin.Value,
+            FIGI = bond.Figi.Value,
         });
         dbContext.AddEvents(bond);
 
@@ -125,6 +133,7 @@ public class BondsRepository : IBondsRepository
         Price_Amount,
         Coupon_CurrencyId,
         Coupon_Amount,
+        FIGI
     }
 
     private async Task<IReadOnlyCollection<Bond>> GetBonds(string sql, object? param = null)
@@ -143,7 +152,8 @@ public class BondsRepository : IBondsRepository
             }
 
             bond.Name = reader.GetString((int)Columns.Name);
-            bond.ISIN = reader.GetString((int)Columns.ISIN);
+            bond.Isin = reader.GetString((int)Columns.ISIN);
+            bond.Figi = reader.GetString((int)Columns.FIGI);
             if (!reader.IsDBNull((int)Columns.Price_CurrencyId))
             {
                 bond.Price = new Money(

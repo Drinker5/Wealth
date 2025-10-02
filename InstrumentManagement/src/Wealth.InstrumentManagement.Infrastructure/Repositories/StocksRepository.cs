@@ -31,6 +31,13 @@ public class StocksRepository : IStocksRepository
         var instruments = await GetStocks(sql, new { isin = isin.Value });
         return instruments.FirstOrDefault();
     }
+    
+    public async Task<Stock?> GetStock(FIGI figi)
+    {
+        const string sql = """SELECT * FROM "Stocks" WHERE "FIGI" = @figi""";
+        var instruments = await GetStocks(sql, new { figi = figi.Value });
+        return instruments.FirstOrDefault();
+    }
 
     public async Task DeleteStock(StockId id)
     {
@@ -59,12 +66,6 @@ public class StocksRepository : IStocksRepository
         dbContext.AddEvents(instrument);
     }
 
-    public Task<StockId> CreateStock(StockId id, string name, ISIN isin)
-    {
-        var stockInstrument = Stock.Create(id, name, isin);
-        return CreateStock(stockInstrument);
-    }
-
     public async Task<Stock?> GetStock(StockId id)
     {
         const string sql = """SELECT * FROM "Stocks" WHERE "Id" = @Id""";
@@ -72,7 +73,7 @@ public class StocksRepository : IStocksRepository
         return instruments.FirstOrDefault();
     }
 
-    public async Task<StockId> CreateStock(string name, ISIN isin, CancellationToken token = default)
+    public async Task<StockId> CreateStock(string name, ISIN isin, FIGI figi, LotSize lotSize, CancellationToken token = default)
     {
         const string sql = """SELECT nextval('"StocksHiLo"')""";
         var command = new CommandDefinition(
@@ -80,21 +81,24 @@ public class StocksRepository : IStocksRepository
             cancellationToken: token);
 
         var nextId = await connection.ExecuteScalarAsync<int>(command);
-        var stockInstrument = Stock.Create(new StockId(nextId), name, isin);
-        return await CreateStock(stockInstrument);
+        var stock = Stock.Create(new StockId(nextId), name, isin, figi);
+        stock.ChangeLotSize(lotSize);
+        return await CreateStock(stock);
     }
 
     private async Task<StockId> CreateStock(Stock stock)
     {
         const string sql = """
-                           INSERT INTO "Stocks" ("Id", "Name", "ISIN") 
-                           VALUES (@Id, @Name, @ISIN)
+                           INSERT INTO "Stocks" ("Id", "Name", "ISIN", "FIGI", "LotSize") 
+                           VALUES (@Id, @Name, @ISIN, @FIGI, @LotSize)
                            """;
         await connection.ExecuteAsync(sql, new
         {
             Id = stock.Id.Value,
             Name = stock.Name,
-            ISIN = stock.ISIN.Value,
+            ISIN = stock.Isin.Value,
+            FIGI = stock.Figi.Value,
+            LotSize = stock.LotSize.Value,
         });
         dbContext.AddEvents(stock);
 
@@ -151,7 +155,8 @@ public class StocksRepository : IStocksRepository
         Price_Amount,
         Dividend_CurrencyId,
         Dividend_Amount,
-        LotSize
+        LotSize,
+        FIGI
     }
 
     private async Task<IReadOnlyCollection<Stock>> GetStocks(string sql, object? param = null)
@@ -171,7 +176,8 @@ public class StocksRepository : IStocksRepository
 
             stock.LotSize = reader.GetInt32((int)Columns.LotSize);
             stock.Name = reader.GetString((int)Columns.Name);
-            stock.ISIN = reader.GetString((int)Columns.ISIN);
+            stock.Isin = reader.GetString((int)Columns.ISIN);
+            stock.Figi = reader.GetString((int)Columns.FIGI);
             if (!reader.IsDBNull((int)Columns.Price_CurrencyId))
             {
                 stock.Price = new Money(

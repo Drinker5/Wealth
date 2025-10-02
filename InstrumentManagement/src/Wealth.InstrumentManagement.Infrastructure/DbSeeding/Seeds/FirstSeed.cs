@@ -30,23 +30,22 @@ public class FirstSeed(
 
     private async Task CreateBonds(CancellationToken token)
     {
-        var bond1 = await bondsRepository.CreateBond("test-bond-1", new ISIN("000000000001"), token);
+        var bond1 = await bondsRepository.CreateBond("test-bond-1", new ISIN("000000000001"), new FIGI("000000000001"), token);
         await bondsRepository.ChangePrice(bond1, new Money("RUB", 12.34m));
         await bondsRepository.ChangeCoupon(bond1, new Coupon("RUB", 33m));
 
-        var bond2 = await bondsRepository.CreateBond("test-bond-2", new ISIN("000000000002"), token);
+        var bond2 = await bondsRepository.CreateBond("test-bond-2", new ISIN("000000000002"), new FIGI("000000000002"), token);
         await bondsRepository.ChangePrice(bond2, new Money("USD", 2.12m));
         await bondsRepository.ChangeCoupon(bond2, new Coupon("RUB", 44m));
     }
 
     private async Task CreateStocks(CancellationToken token)
     {
-        var stock1 = await stocksRepository.CreateStock("test-stock-1", new ISIN("000000000003"), token);
+        var stock1 = await stocksRepository.CreateStock("test-stock-1", new ISIN("000000000003"), new FIGI("000000000003"), 10, token);
         await stocksRepository.ChangePrice(stock1, new Money("RUB", 111m));
         await stocksRepository.ChangeDividend(stock1, new Dividend("USD", 222m));
-        await stocksRepository.ChangeLotSize(stock1, 10);
 
-        var stock2 = await stocksRepository.CreateStock("test-stock-2", new ISIN("000000000004"), token);
+        var stock2 = await stocksRepository.CreateStock("test-stock-2", new ISIN("000000000004"), new FIGI("000000000004"), LotSize.One, token);
         await stocksRepository.ChangePrice(stock2, new Money("USD", 222m));
         await stocksRepository.ChangeDividend(stock2, new Dividend("USD", 333m));
     }

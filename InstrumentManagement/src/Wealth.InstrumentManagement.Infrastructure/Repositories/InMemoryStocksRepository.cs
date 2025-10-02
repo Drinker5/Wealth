@@ -20,7 +20,12 @@ public class InMemoryStocksRepository : IStocksRepository
 
     public Task<Stock?> GetStock(ISIN isin)
     {
-        return Task.FromResult(stocks.FirstOrDefault(x => x.ISIN == isin));
+        return Task.FromResult(stocks.FirstOrDefault(x => x.Isin == isin));
+    }
+
+    public Task<Stock?> GetStock(FIGI figi)
+    {
+        return Task.FromResult(stocks.FirstOrDefault(x => x.Figi == figi));
     }
 
     public Task DeleteStock(StockId id)
@@ -43,10 +48,11 @@ public class InMemoryStocksRepository : IStocksRepository
 
     private static int currentId;
 
-    public Task<StockId> CreateStock(string name, ISIN isin, CancellationToken token = default)
+    public Task<StockId> CreateStock(string name, ISIN isin, FIGI figi, LotSize lotSize, CancellationToken token = default)
     {
         var stockId = Interlocked.Increment(ref currentId);
-        var stock = Stock.Create(stockId, name, isin);
+        var stock = Stock.Create(stockId, name, isin, figi);
+        stock.ChangeLotSize(lotSize);
         stocks.Add(stock);
         return Task.FromResult(stock.Id);
     }
@@ -54,6 +60,6 @@ public class InMemoryStocksRepository : IStocksRepository
     public async Task ChangeLotSize(StockId id, int lotSize)
     {
         var stock = await GetStock(id);
-        if (stock != null) stock.LotSize = lotSize;
+        stock?.ChangeLotSize(lotSize);
     }
 }

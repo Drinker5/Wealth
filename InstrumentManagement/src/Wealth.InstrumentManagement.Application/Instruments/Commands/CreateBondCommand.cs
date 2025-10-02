@@ -3,8 +3,9 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Commands;
 
-public class CreateBondCommand : ICommand<BondId>
+public sealed record CreateBondCommand : ICommand<BondId>
 {
-    public string Name { get; set; }
-    public ISIN ISIN { get; set; }
+    public required string Name { get; init; }
+    public required ISIN Isin { get; init; }
+    public required FIGI Figi { get; init; }
 }
