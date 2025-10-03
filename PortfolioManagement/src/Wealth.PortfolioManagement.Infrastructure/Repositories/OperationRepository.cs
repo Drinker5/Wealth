@@ -5,19 +5,17 @@ using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Repositories;
 
-public class OperationRepository(
-    IDbContextFactory<WealthDbContext> contextFactory) : IOperationRepository
+public class OperationRepository(WealthDbContext dbContext) : IOperationRepository
 {
     public async Task CreateOperation(Operation operation, CancellationToken token)
     {
-        var context = await contextFactory.CreateDbContextAsync(token);
-        var existingOperation = await context.InstrumentOperations
+        var existingOperation = await dbContext.InstrumentOperations
             .AsNoTracking()
             .FirstOrDefaultAsync(o => o.Id == operation.Id, token);
 
         if (existingOperation != null)
             return;
 
-        await context.InstrumentOperations.AddAsync(operation, token);
+        await dbContext.InstrumentOperations.AddAsync(operation, token);
     }
 }

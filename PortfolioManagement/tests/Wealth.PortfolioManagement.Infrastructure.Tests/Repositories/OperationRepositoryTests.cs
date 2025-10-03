@@ -19,11 +19,7 @@ public class OperationRepositoryTests
         context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
 
-        var contextFactoryMock = new Mock<IDbContextFactory<WealthDbContext>>();
-        contextFactoryMock.Setup(i => i.CreateDbContextAsync(CancellationToken.None))
-            .ReturnsAsync(context);
-
-        repository = new OperationRepository(contextFactoryMock.Object);
+        repository = new OperationRepository(context);
     }
 
     [Fact(Skip = "not working in memory")]
