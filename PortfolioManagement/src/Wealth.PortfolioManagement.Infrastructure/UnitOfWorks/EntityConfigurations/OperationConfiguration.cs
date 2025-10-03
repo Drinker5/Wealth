@@ -18,7 +18,9 @@ internal class OperationConfiguration : IEntityTypeConfiguration<Operation>
             .HasValue<BondTradeOperation>(OperationType.BondTrade)
             .HasValue<StockTradeOperation>(OperationType.StockTrade)
             .HasValue<StockDelistOperation>(OperationType.Delist)
-            .HasValue<SplitOperation>(OperationType.Split);
+            .HasValue<StockSplitOperation>(OperationType.Split)
+            .HasValue<BondCouponOperation>(OperationType.BondCoupon)
+            .HasValue<StockDividendOperation>(OperationType.StockDividend);
     }
 
     private enum OperationType : byte
@@ -29,5 +31,7 @@ internal class OperationConfiguration : IEntityTypeConfiguration<Operation>
         StockTrade = 3,
         Delist = 4,
         Split = 5,
+        BondCoupon = 6,
+        StockDividend = 7,
     }
 }

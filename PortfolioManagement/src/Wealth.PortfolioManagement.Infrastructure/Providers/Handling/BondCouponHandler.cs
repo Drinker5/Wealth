@@ -5,20 +5,23 @@ using Operation = Wealth.PortfolioManagement.Domain.Operations.Operation;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Providers.Handling;
 
-public class CouponHandler : IOperationHandler
+public class BondCouponHandler(IInstrumentIdProvider instrumentIdProvider) : IOperationHandler
 {
-    public IAsyncEnumerable<Operation> Handle(
+    public async IAsyncEnumerable<Operation> Handle(
         Tinkoff.InvestApi.V1.Operation operation,
         InstrumentType instrumentType,
-        PortfolioId portfolioId) => new[]
+        PortfolioId portfolioId)
     {
-        new CashOperation
+        if (instrumentType != InstrumentType.Bond)
+            throw new ArgumentOutOfRangeException(nameof(instrumentType));
+
+        yield return new BondCouponOperation
         {
             Id = operation.Id,
             Date = operation.Date.ToDateTimeOffset(),
-            Money = operation.Payment.ToMoney(),
+            Amount = operation.Payment.ToMoney(),
             PortfolioId = portfolioId,
-            Type = CashOperationType.Coupon,
-        }
-    }.ToAsyncEnumerable();
+            BondId = await instrumentIdProvider.GetBondIdByFigi(operation.Figi),
+        };
+    }
 }

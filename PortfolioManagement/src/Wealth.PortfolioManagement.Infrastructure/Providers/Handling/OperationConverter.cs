@@ -16,10 +16,11 @@ public sealed class OperationConverter(IInstrumentIdProvider instrumentIdProvide
         { OperationType.Buy, new BuyHandler(instrumentIdProvider) },
         { OperationType.BuyCard, new BuyHandler(instrumentIdProvider) },
         { OperationType.Sell, new SellHandler(instrumentIdProvider) },
-        { OperationType.Coupon, new CouponHandler() },
+        { OperationType.Coupon, new BondCouponHandler(instrumentIdProvider) },
         { OperationType.BondRepaymentFull, _amortizationHandler },
         { OperationType.BondRepayment, _amortizationHandler },
-        { OperationType.Input, new InputHandler() }
+        { OperationType.Input, new InputHandler() },
+        { OperationType.Dividend, new StockDividendHandler(instrumentIdProvider) }
     }.ToFrozenDictionary();
 
     private static readonly FrozenDictionary<string, InstrumentType> _instrumentTypeMap =

@@ -5,14 +5,15 @@ using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations;
 
-internal class CurrencyOperationConfiguration : IEntityTypeConfiguration<CurrencyOperation>
+internal class StockDividendOperationConfiguration : IEntityTypeConfiguration<StockDividendOperation>
 {
-    public void Configure(EntityTypeBuilder<CurrencyOperation> builder)
+    public void Configure(EntityTypeBuilder<StockDividendOperation> builder)
     {
         builder.Property(x => x.PortfolioId)
             .IsRequired();
 
-        builder.Property(x => x.Type);
+        builder.Property(x => x.StockId)
+            .IsRequired();
 
         builder.ComplexProperty(y => y.Amount, z =>
         {

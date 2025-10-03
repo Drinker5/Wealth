@@ -16,7 +16,7 @@ public class InputHandler : IOperationHandler
         {
             Id = operation.Id,
             Date = operation.Date.ToDateTimeOffset(),
-            Money = new Money(operation.Currency, operation.Payment),
+            Amount = new Money(operation.Currency, operation.Payment),
             Type = CurrencyOperationType.Deposit,
             PortfolioId = portfolioId
         }

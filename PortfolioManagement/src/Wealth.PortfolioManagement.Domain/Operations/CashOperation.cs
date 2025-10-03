@@ -9,10 +9,8 @@ public class CashOperation : Operation
     public CashOperationType Type { get; set; }
 }
 
-public enum CashOperationType
+public enum CashOperationType : byte
 {
-    Coupon,
-    Dividend,
     Amortization,
     Tax
 }

@@ -4,14 +4,17 @@ using Wealth.PortfolioManagement.Domain.Operations;
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations;
 
-internal class SplitOperationConfiguration : IEntityTypeConfiguration<SplitOperation>
+internal class StockSplitOperationConfiguration : IEntityTypeConfiguration<StockSplitOperation>
 {
-    public void Configure(EntityTypeBuilder<SplitOperation> builder)
+    public void Configure(EntityTypeBuilder<StockSplitOperation> builder)
     {
         builder.ComplexProperty(x => x.Ratio, y =>
         {
             y.Property(z => z.Old);
             y.Property(z => z.New);
         });
+
+        builder.Property(x => x.StockId)
+            .IsRequired();
     }
 }
