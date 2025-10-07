@@ -14,24 +14,26 @@ internal class OperationConfiguration : IEntityTypeConfiguration<Operation>
 
         builder.HasDiscriminator<OperationType>("operation_type")
             .HasValue<CurrencyOperation>(OperationType.Currency)
-            .HasValue<CashOperation>(OperationType.Cash)
+            .HasValue<BondAmortizationOperation>(OperationType.BondAmortization)
             .HasValue<BondTradeOperation>(OperationType.BondTrade)
             .HasValue<StockTradeOperation>(OperationType.StockTrade)
             .HasValue<StockDelistOperation>(OperationType.Delist)
             .HasValue<StockSplitOperation>(OperationType.Split)
             .HasValue<BondCouponOperation>(OperationType.BondCoupon)
-            .HasValue<StockDividendOperation>(OperationType.StockDividend);
+            .HasValue<StockDividendOperation>(OperationType.StockDividend)
+            .HasValue<StockDividendTaxOperation>(OperationType.StockDividendTax);
     }
 
     private enum OperationType : byte
     {
         Currency = 0,
-        Cash = 1,
+        BondAmortization = 1,
         BondTrade = 2,
         StockTrade = 3,
         Delist = 4,
         Split = 5,
         BondCoupon = 6,
         StockDividend = 7,
+        StockDividendTax = 8,
     }
 }

@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Reflection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.BuildingBlocks.Infrastructure;
 using Wealth.PortfolioManagement.Application.Providers;
 using Wealth.PortfolioManagement.Infrastructure.Providers.Handling;
+using Wealth.PortfolioManagement.Infrastructure.Providers.Handling.Handlers;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Providers;
 
@@ -23,5 +25,19 @@ public class ProvidersModule : IServiceModule
         services.AddSingleton<IPortfolioIdProvider, PortfolioIdProvider>();
         services.AddSingleton<IInstrumentIdProvider, InstrumentIdProvider>();
         services.AddSingleton<OperationConverter>();
+        RegisterOperationHandlers(services);
+    }
+
+    private static void RegisterOperationHandlers(IServiceCollection services)
+    {
+        var handlerTypes = Assembly.GetExecutingAssembly()
+            .GetTypes()
+            .Where(t => t is { IsClass: true, IsAbstract: false } && 
+                        t.GetInterfaces().Contains(typeof(IOperationHandler)) &&
+                        t.Namespace == typeof(SellHandler).Namespace)
+            .ToList();
+
+        foreach (var handlerType in handlerTypes)
+            services.AddSingleton(handlerType);
     }
 }

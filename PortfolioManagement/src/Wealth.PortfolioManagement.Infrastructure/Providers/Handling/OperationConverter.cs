@@ -1,27 +1,29 @@
 using System.Collections.Frozen;
+using Microsoft.Extensions.DependencyInjection;
 using Tinkoff.InvestApi.V1;
 using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.PortfolioManagement.Application.Providers;
+using Wealth.PortfolioManagement.Infrastructure.Providers.Handling.Handlers;
 using Operation = Wealth.PortfolioManagement.Domain.Operations.Operation;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Providers.Handling;
 
-public sealed class OperationConverter(IInstrumentIdProvider instrumentIdProvider)
+public sealed class OperationConverter(IServiceProvider sp)
 {
-    private static AmortizationHandler _amortizationHandler => new();
-
-    private readonly FrozenDictionary<OperationType, IOperationHandler> _handlers = new Dictionary<OperationType, IOperationHandler>
+    private readonly FrozenDictionary<OperationType, Type> _handlerTypes = new Dictionary<OperationType, Type>
     {
-        { OperationType.BrokerFee, new BrokerFeeHandler(instrumentIdProvider) },
-        { OperationType.Buy, new BuyHandler(instrumentIdProvider) },
-        { OperationType.BuyCard, new BuyHandler(instrumentIdProvider) },
-        { OperationType.Sell, new SellHandler(instrumentIdProvider) },
-        { OperationType.Coupon, new BondCouponHandler(instrumentIdProvider) },
-        { OperationType.BondRepaymentFull, _amortizationHandler },
-        { OperationType.BondRepayment, _amortizationHandler },
-        { OperationType.Input, new InputHandler() },
-        { OperationType.Dividend, new StockDividendHandler(instrumentIdProvider) }
+        { OperationType.BrokerFee, typeof(BrokerFeeHandler) },
+        { OperationType.Buy, typeof(BuyHandler) },
+        { OperationType.BuyCard, typeof(BuyHandler) },
+        { OperationType.Sell, typeof(SellHandler) },
+        { OperationType.Coupon, typeof(BondCouponHandler) },
+        { OperationType.BondRepaymentFull, typeof(BondAmortizationHandler) },
+        { OperationType.BondRepayment, typeof(BondAmortizationHandler) },
+        { OperationType.Input, typeof(InputHandler) },
+        { OperationType.Dividend, typeof(StockDividendHandler) },
+        { OperationType.DividendTax, typeof(StockDividendTaxHandler) },
     }.ToFrozenDictionary();
+
+    private readonly Dictionary<OperationType, IOperationHandler> _handlers = new();
 
     private static readonly FrozenDictionary<string, InstrumentType> _instrumentTypeMap =
         new Dictionary<string, InstrumentType>
@@ -37,14 +39,27 @@ public sealed class OperationConverter(IInstrumentIdProvider instrumentIdProvide
         PortfolioId portfolioId)
     {
         var instrumentType = _instrumentTypeMap[operation.InstrumentType];
-        if (_handlers.TryGetValue(operation.OperationType, out var handler))
+
+        var handler = GetOrCreateHandler(operation.OperationType);
+        await foreach (var result in handler.Handle(operation, instrumentType, portfolioId))
+            yield return result;
+    }
+    
+    private IOperationHandler GetOrCreateHandler(OperationType operationType)
+    {
+        if (_handlers.TryGetValue(operationType, out var handler))
+            return handler;
+
+        if (_handlerTypes.TryGetValue(operationType, out var handlerType))
         {
-            await foreach (var result in handler.Handle(operation, instrumentType, portfolioId))
-                yield return result;
+            var obj = sp.GetRequiredService(handlerType);
+            if (obj is not IOperationHandler operationHandler)
+                throw new ApplicationException($"Invalid handler for type {handlerType.Name}");
+                    
+            _handlers.Add(operationType, operationHandler);
+            return operationHandler;
         }
-        else
-        {
-            throw new ArgumentOutOfRangeException($"Unknown operation type: {operation.OperationType}");
-        }
+
+        throw new ArgumentOutOfRangeException($"Unknown operation type: {operationType}");
     }
 }

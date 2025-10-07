@@ -4,9 +4,9 @@ using Wealth.PortfolioManagement.Domain.Operations;
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations;
 
-internal class BondCouponOperationConfiguration : IEntityTypeConfiguration<BondCouponOperation>
+internal class BondAmortizationOperationConfiguration : IEntityTypeConfiguration<BondAmortizationOperation>
 {
-    public void Configure(EntityTypeBuilder<BondCouponOperation> builder)
+    public void Configure(EntityTypeBuilder<BondAmortizationOperation> builder)
     {
         builder.Property(x => x.PortfolioId)
             .IsRequired();

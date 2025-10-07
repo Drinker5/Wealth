@@ -3,7 +3,7 @@ using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Domain.Operations;
 using Operation = Wealth.PortfolioManagement.Domain.Operations.Operation;
 
-namespace Wealth.PortfolioManagement.Infrastructure.Providers.Handling;
+namespace Wealth.PortfolioManagement.Infrastructure.Providers.Handling.Handlers;
 
 public class BuyHandler(IInstrumentIdProvider instrumentIdProvider) : IOperationHandler
 {

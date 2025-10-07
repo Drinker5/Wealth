@@ -4,16 +4,17 @@ using Wealth.PortfolioManagement.Domain.Operations;
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations;
 
-internal class CashOperationConfiguration : IEntityTypeConfiguration<CashOperation>
+internal class StockDividendTaxOperationConfiguration : IEntityTypeConfiguration<StockDividendTaxOperation>
 {
-    public void Configure(EntityTypeBuilder<CashOperation> builder)
+    public void Configure(EntityTypeBuilder<StockDividendTaxOperation> builder)
     {
         builder.Property(x => x.PortfolioId)
             .IsRequired();
 
-        builder.Property(x => x.Type);
+        builder.Property(x => x.StockId)
+            .IsRequired();
 
-        builder.ComplexProperty(y => y.Money, z =>
+        builder.ComplexProperty(y => y.Amount, z =>
         {
             z.Property(i => i.CurrencyId);
             z.Property(i => i.Amount);
