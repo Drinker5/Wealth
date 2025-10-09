@@ -13,8 +13,8 @@ namespace Wealth.PortfolioManagement.Domain.Operations;
 [JsonDerivedType(typeof(BondTradeOperation), typeDiscriminator: nameof(BondTradeOperation))]
 [JsonDerivedType(typeof(StockTradeOperation), typeDiscriminator: nameof(StockTradeOperation))]
 [JsonDerivedType(typeof(StockDividendTaxOperation), typeDiscriminator: nameof(StockDividendTaxOperation))]
-public abstract class Operation
+public abstract record Operation
 {
-    public string Id { get; init; }
-    public DateTimeOffset Date { get; init; }
+    public required OperationId Id { get; init; }
+    public required DateTimeOffset Date { get; init; }
 }

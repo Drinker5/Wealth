@@ -2,7 +2,7 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.PortfolioManagement.Domain.Operations;
 
-public abstract class TradeOperation : Operation
+public abstract record TradeOperation : Operation
 {
     public PortfolioId PortfolioId { get; set; }
     public Money Amount { get; set; }

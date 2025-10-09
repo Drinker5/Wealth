@@ -9,8 +9,7 @@ internal class OperationConfiguration : IEntityTypeConfiguration<Operation>
     public void Configure(EntityTypeBuilder<Operation> builder)
     {
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id)
-            .ValueGeneratedOnAdd();
+        builder.Property(x => x.Id);
 
         builder.HasDiscriminator<OperationType>("operation_type")
             .HasValue<CurrencyOperation>(OperationType.Currency)

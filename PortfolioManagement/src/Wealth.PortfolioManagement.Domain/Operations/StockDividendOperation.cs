@@ -2,7 +2,7 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.PortfolioManagement.Domain.Operations;
 
-public class StockDividendOperation : Operation
+public sealed record StockDividendOperation : Operation
 {
     public PortfolioId PortfolioId { get; set; }
     public StockId StockId { get; set; }

@@ -12,6 +12,7 @@ public class AssetBoughtEventHandler(IOperationRepository operationRepository) :
     {
         return operationRepository.CreateOperation(new StockTradeOperation
         {
+            Id = OperationId.NewId(),
             Quantity = notification.Quantity,
             Date = Clock.Now,
             StockId = notification.StockId,

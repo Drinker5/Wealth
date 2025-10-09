@@ -33,12 +33,12 @@ public sealed class PortfolioManagementApiTests : IClassFixture<PortfolioManagem
     {
         var scope = fixture.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<WealthDbContext>();
-        
+
         var maps = await db.PortfolioIdMaps.ToListAsync();
-        
+
         Assert.NotEmpty(maps);
     }
-    
+
     [Fact]
     public async Task GetInstruments()
     {
@@ -82,7 +82,9 @@ public sealed class PortfolioManagementApiTests : IClassFixture<PortfolioManagem
             money = new Money("RUB", 200)
         };
 
-        var depositResponse = await httpClient.PutAsync("/api/portfolio/deposit", JsonContent.Create(newDeposit, options: jsonSerializerOptions));
+        var depositResponse = await httpClient.PutAsync(
+            "/api/portfolio/deposit",
+            JsonContent.Create(newDeposit, options: jsonSerializerOptions));
 
         depositResponse.EnsureSuccessStatusCode();
 

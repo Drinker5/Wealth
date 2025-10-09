@@ -9,13 +9,8 @@ public class OperationRepository(WealthDbContext dbContext) : IOperationReposito
 {
     public async Task CreateOperation(Operation operation, CancellationToken token)
     {
-        var existingOperation = await dbContext.InstrumentOperations
-            .AsNoTracking()
-            .FirstOrDefaultAsync(o => o.Id == operation.Id, token);
-
-        if (existingOperation != null)
-            return;
-
-        await dbContext.InstrumentOperations.AddAsync(operation, token);
+        await dbContext.InstrumentOperations.Upsert(operation)
+            .On(i => i.Id)
+            .RunAsync(token);
     }
 }

@@ -2,7 +2,7 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.PortfolioManagement.Domain.Operations;
 
-public class CurrencyOperation : Operation
+public sealed record CurrencyOperation : Operation
 {
     public PortfolioId PortfolioId { get; set; }
     public Money Amount { get; set; }
