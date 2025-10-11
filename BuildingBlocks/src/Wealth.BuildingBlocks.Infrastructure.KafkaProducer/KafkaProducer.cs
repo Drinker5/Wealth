@@ -1,5 +1,6 @@
 using Confluent.Kafka;
 using Microsoft.Extensions.Options;
+using Wealth.BuildingBlocks.Application;
 
 namespace Wealth.BuildingBlocks.Infrastructure.KafkaProducer;
 
@@ -15,7 +16,7 @@ public class KafkaProducer : IKafkaProducer
         };
     }
 
-    public async Task ProduceAsync<T>(string topic, IEnumerable<Message<string, T>> messages, CancellationToken token)
+    public async Task ProduceAsync<T>(string topic, IEnumerable<BusMessage<string, T>> messages, CancellationToken token)
         where T : Google.Protobuf.IMessage
     {
         var builder = new ProducerBuilder<string, T>(config)
@@ -26,14 +27,14 @@ public class KafkaProducer : IKafkaProducer
 
         using var producer = builder.Build();
 
-        foreach (var message in messages)
+        foreach (var message in messages.Select(i => new Message<string, T> { Key = i.Key, Value = i.Value }))
             await producer.ProduceAsync(topic, message, token);
     }
-    
+
     private sealed class ProtobufMessageSerializer<T> : ISerializer<T>
         where T : Google.Protobuf.IMessage
     {
-        public byte[] Serialize(T data, SerializationContext context) 
+        public byte[] Serialize(T data, SerializationContext context)
             => Google.Protobuf.MessageExtensions.ToByteArray(data);
     }
 }

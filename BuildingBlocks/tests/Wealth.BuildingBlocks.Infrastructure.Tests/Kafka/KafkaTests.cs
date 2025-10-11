@@ -1,6 +1,7 @@
 using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Infrastructure.KafkaConsumer;
 using Wealth.BuildingBlocks.Infrastructure.KafkaProducer;
@@ -44,7 +45,7 @@ public class KafkaTests : IClassFixture<KafkaTestFixture>
             cts.Token);
 
         await producer.ProduceAsync(topic, [
-            new Message<string, MoneyProto>
+            new BusMessage<string, MoneyProto>
             {
                 Key = Guid.NewGuid().ToString(),
                 Value = expected,

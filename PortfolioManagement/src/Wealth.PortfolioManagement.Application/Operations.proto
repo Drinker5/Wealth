@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+import "Common.proto";
+import "google/protobuf/timestamp.proto";
+
+package wealth;
+
+option csharp_namespace = "Wealth.PortfolioManagement";
+
+message OperationProto {
+  string id = 1;
+  google.protobuf.Timestamp date = 2;
+  oneof variant {
+    BondAmortizationOperationProto bond_amortization_operation = 3;
+  }
+}
+
+message BondAmortizationOperationProto {
+  PortfolioIdProto portfolio_id = 1;
+  BondIdProto bond_id = 2;
+  MoneyProto amount = 3;
+}

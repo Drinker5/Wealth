@@ -52,10 +52,9 @@ public sealed class ConsumerHostedService<T> : IHostedService
 
     private ResiliencePipeline CreateResiliencePipeline()
     {
-        // See https://www.pollydocs.org/strategies/retry.html
         var retryOptions = new RetryStrategyOptions
         {
-            MaxRetryAttempts = 5,
+            MaxRetryAttempts = 10,
             DelayGenerator = (context) => ValueTask.FromResult(GenerateDelay(context.AttemptNumber)),
             OnRetry = (args) =>
             {

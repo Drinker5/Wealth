@@ -24,3 +24,7 @@ message CurrencyDepositedIntegrationEvent {
   PortfolioIdProto portfolio_id = 1;
   MoneyProto amount = 2;
 }
+
+
+
+

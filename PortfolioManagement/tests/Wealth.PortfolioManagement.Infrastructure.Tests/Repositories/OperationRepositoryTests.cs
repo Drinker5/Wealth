@@ -25,7 +25,7 @@ public class OperationRepositoryTests
     [Fact(Skip = "not working in memory")]
     public async Task WhenOperationCreated()
     {
-        await repository.CreateOperation(new StockDelistOperation
+        await repository.UpsertOperation(new StockDelistOperation
         {
             Id = "foo",
             Date = DateTimeOffset.Now,

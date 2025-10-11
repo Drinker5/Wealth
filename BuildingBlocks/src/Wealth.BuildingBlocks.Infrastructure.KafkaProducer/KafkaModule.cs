@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Wealth.BuildingBlocks.Application;
 
 namespace Wealth.BuildingBlocks.Infrastructure.KafkaProducer;
 

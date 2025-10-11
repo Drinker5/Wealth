@@ -21,17 +21,18 @@ public static class PortfolioApi
         api.MapPut("{portfolioId:int}/bond", BuyBond);
         api.MapPut("{portfolioId:int}/stock", BuyStock);
 
-        api.MapGet("/test", Test);
+        api.MapGet("/produce-operations", ProduceOperations);
         
         return api;
     }
 
-    private static async Task<Ok> Test(
+    private static async Task<Ok> ProduceOperations(
         IOperationProducer provider, 
-        [FromQuery] DateTimeOffset date,
+        [FromQuery] DateTimeOffset from,
+        [FromQuery] DateTimeOffset to,
         CancellationToken token)
     {
-        await provider.ProduceOperations(date, token);
+        await provider.ProduceOperations(from, to, token);
         return TypedResults.Ok();
     }
 

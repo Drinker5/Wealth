@@ -3,4 +3,4 @@ using Wealth.PortfolioManagement.Domain.Operations;
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
 
-public class OperationIdConverter() : ValueConverter<OperationId, string>(v => v.Id, v => new OperationId(v));
+public class OperationIdConverter() : ValueConverter<OperationId, string>(v => v.Value, v => new OperationId(v));

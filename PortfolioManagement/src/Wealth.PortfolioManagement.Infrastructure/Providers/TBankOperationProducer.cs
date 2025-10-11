@@ -2,6 +2,7 @@ using Confluent.Kafka;
 using Microsoft.Extensions.Options;
 using Tinkoff.InvestApi;
 using Tinkoff.InvestApi.V1;
+using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Infrastructure.KafkaProducer;
 using Wealth.PortfolioManagement.Application.Providers;
 using Timestamp = Google.Protobuf.WellKnownTypes.Timestamp;
@@ -15,13 +16,13 @@ internal sealed class TBankOperationProducer(
 {
     private readonly InvestApiClient client = InvestApiClientFactory.Create(options.Value.Token);
 
-    public async Task ProduceOperations(DateTimeOffset from, CancellationToken token)
+    public async Task ProduceOperations(DateTimeOffset from, DateTimeOffset to, CancellationToken token)
     {
         var operations = await client.Operations.GetOperationsAsync(new OperationsRequest
         {
             AccountId = options.Value.AccountId,
             From = Timestamp.FromDateTimeOffset(from.ToUniversalTime()),
-            To = Timestamp.FromDateTime(DateTime.UtcNow)
+            To = Timestamp.FromDateTimeOffset(to.ToUniversalTime())
         }, cancellationToken: token);
 
         if (operations.Operations.Count <= 0)
@@ -30,7 +31,7 @@ internal sealed class TBankOperationProducer(
         var portfolioId = await portfolioIdProvider.GetPortfolioIdByAccountId(options.Value.AccountId, token);
         var messages = operations.Operations
             .Where(i => i.State == OperationState.Executed)
-            .Select(i => new Message<string, Tinkoff.InvestApi.V1.Operation>
+            .Select(i => new BusMessage<string, Tinkoff.InvestApi.V1.Operation>
             {
                 Key = portfolioId.ToString(),
                 Value = i

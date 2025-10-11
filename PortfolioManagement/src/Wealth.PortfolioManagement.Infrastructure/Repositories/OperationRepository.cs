@@ -7,7 +7,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Repositories;
 
 public class OperationRepository(WealthDbContext dbContext) : IOperationRepository
 {
-    public async Task CreateOperation(Operation operation, CancellationToken token)
+    public async Task UpsertOperation(Operation operation, CancellationToken token)
     {
         await dbContext.InstrumentOperations.Upsert(operation)
             .On(i => i.Id)

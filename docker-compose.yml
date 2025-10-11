@@ -179,6 +179,7 @@ services:
         ./kafka-topics.sh --create --if-not-exists --topic "wealth-instrument-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
         ./kafka-topics.sh --create --if-not-exists --topic "wealth-portfolio-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
         ./kafka-topics.sh --create --if-not-exists --topic "wealth-operations" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
+        ./kafka-topics.sh --create --if-not-exists --topic "wealth-operations-converted" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
 
   akhq: 
     image: tchiotludo/akhq:0.26.0
