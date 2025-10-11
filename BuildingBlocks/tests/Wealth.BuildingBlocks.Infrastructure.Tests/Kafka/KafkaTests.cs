@@ -1,4 +1,3 @@
-using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Wealth.BuildingBlocks.Application;
