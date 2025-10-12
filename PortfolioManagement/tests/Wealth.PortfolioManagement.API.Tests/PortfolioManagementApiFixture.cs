@@ -10,8 +10,6 @@ namespace Wealth.PortfolioManagement.API.Tests;
 
 public sealed class PortfolioManagementApiFixture : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly IHost app;
-
     public Mock<IInstrumentService> InstrumentServiceMock { get; } = new();
 
     private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder()
@@ -27,15 +25,9 @@ public sealed class PortfolioManagementApiFixture : WebApplicationFactory<Progra
     private string postgresConnectionString;
     private string kafkaBootstrapServers;
 
-    public PortfolioManagementApiFixture()
-    {
-        var appBuilder = new HostApplicationBuilder();
-
-        app = appBuilder.Build();
-    }
-
     protected override IHost CreateHost(IHostBuilder builder)
     {
+        builder.UseEnvironment("Testing");
         builder.ConfigureHostConfiguration(config =>
         {
             var data = new Dictionary<string, string>
@@ -55,8 +47,6 @@ public sealed class PortfolioManagementApiFixture : WebApplicationFactory<Progra
     public new async Task DisposeAsync()
     {
         await base.DisposeAsync();
-        await app.StopAsync();
-        app.Dispose();
         await postgresContainer.StopAsync();
     }
 
@@ -64,8 +54,6 @@ public sealed class PortfolioManagementApiFixture : WebApplicationFactory<Progra
     {
         await postgresContainer.StartAsync();
         await kafkaContainer.StartAsync();
-
-        await app.StartAsync();
 
         postgresConnectionString = postgresContainer.GetConnectionString();
         kafkaBootstrapServers = kafkaContainer.GetBootstrapAddress();
