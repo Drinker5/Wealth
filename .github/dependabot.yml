@@ -3,4 +3,6 @@ updates:
   - package-ecosystem: "nuget"
     directory: "/" # Location of package manifests
     schedule:
-      interval: "daily"
+      interval: "cron"
+      cronjob: "0 0 * * *"
+    open-pull-requests-limit: 0
