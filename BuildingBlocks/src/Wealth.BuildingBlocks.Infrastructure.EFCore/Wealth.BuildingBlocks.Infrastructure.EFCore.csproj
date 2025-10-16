@@ -3,9 +3,9 @@
     <ProjectReference Include="..\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.10" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.10" />
     <PackageReference Include="FlexLabs.EntityFrameworkCore.Upsert" Version="9.100.1" />
   </ItemGroup>
