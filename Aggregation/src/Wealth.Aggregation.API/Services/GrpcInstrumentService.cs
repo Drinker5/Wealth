@@ -1,3 +1,4 @@
+using Grpc.Core;
 using Wealth.Aggregation.Application.Services;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement;
@@ -8,7 +9,10 @@ public class GrpcInstrumentService(InstrumentsService.InstrumentsServiceClient c
 {
     public async Task<StockInfo?> GetStockInfo(StockId stockId)
     {
-        var response = await client.GetStockAsync(new GetStockRequest { StockId = stockId });
+        var response = await client.GetStockAsync(new GetStockRequest { StockId = stockId }, new CallOptions
+        {
+            Headers = {  }
+        });
         return response.FromProto();
     }
 
