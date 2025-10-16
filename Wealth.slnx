@@ -108,6 +108,7 @@
     <File Path="docker-compose.yml" />
     <File Path="domain.plantuml" />
     <File Path="nuget.config" />
+    <File Path=".github\workflows\dotnet.yml" />
   </Folder>
   <Folder Name="/StrategyTracking/">
     <File Path="StrategyTracking\.dockerignore" />

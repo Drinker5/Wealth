@@ -31,7 +31,13 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal
-        env:
-          TESTCONTAINERS_HOST_OVERRIDE: 127.0.0.1
-          TESTCONTAINERS_RYUK_DISABLED: true
+        run: dotnet test --no-build --logger trx --collect:"XPlat Code Coverage"
+
+      - uses: bibipkins/dotnet-test-reporter@v1.5.4
+        if: always()
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-title: "Test Results"
+          results-path: '**/TestResults/**/*.trx'
+          coverage-path: '**/TestResults/**/coverage.cobertura.xml'
+          coverage-type: cobertura
