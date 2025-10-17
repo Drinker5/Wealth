@@ -16,7 +16,7 @@ public class DepositOperationRepositoryTests
     public DepositOperationRepositoryTests()
     {
         var options = new DbContextOptionsBuilder<WealthDbContext>()
-            .UseInMemoryDatabase("fakeDb")
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
         context = new WealthDbContext(options);
         context.Database.EnsureDeleted();

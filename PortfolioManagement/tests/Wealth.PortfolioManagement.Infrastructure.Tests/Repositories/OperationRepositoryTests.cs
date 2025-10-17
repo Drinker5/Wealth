@@ -13,7 +13,7 @@ public class OperationRepositoryTests
     public OperationRepositoryTests()
     {
         var options = new DbContextOptionsBuilder<WealthDbContext>()
-            .UseInMemoryDatabase("fakeDb")
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
         var context = new WealthDbContext(options);
         context.Database.EnsureDeleted();
