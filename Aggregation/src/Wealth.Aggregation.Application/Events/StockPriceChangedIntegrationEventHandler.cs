@@ -3,7 +3,8 @@ using Wealth.BuildingBlocks.Application;
 
 namespace Wealth.Aggregation.Application.Events;
 
-public class StockPriceChangedIntegrationEventHandler(ICqrsInvoker cqrsInvoker) : IIntegrationEventHandler<StockPriceChangedIntegrationEvent>
+public sealed class StockPriceChangedIntegrationEventHandler(ICqrsInvoker cqrsInvoker)
+    : IMessageHandler<StockPriceChangedIntegrationEvent>
 {
     public Task Handle(StockPriceChangedIntegrationEvent @event, CancellationToken token = default)
     {
@@ -11,6 +12,6 @@ public class StockPriceChangedIntegrationEventHandler(ICqrsInvoker cqrsInvoker) 
         {
             StockId = @event.StockId,
             NewPrice = @event.NewPrice,
-        });
+        }, token);
     }
 }

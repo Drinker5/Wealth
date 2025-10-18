@@ -14,18 +14,6 @@ public class ServicesModule : IServiceModule
         services.AddGrpcClient<InstrumentsService.InstrumentsServiceClient>(o => { o.Address = new Uri("http://instrument"); })
             .AddServiceDiscovery();
 
-        services.AddSingleton<OperationHandler>();
-        services.AddHostedService(sp =>
-        {
-            var kafkaConsumer = sp.GetRequiredService<IKafkaConsumer>();
-            var topicOptions = new TopicOptions();
-            configuration.GetRequiredSection("OperationsTopic").Bind(topicOptions);
-            var handler = sp.GetRequiredService<OperationHandler>();
-            return new ConsumerHostedService<Tinkoff.InvestApi.V1.Operation>(
-                kafkaConsumer,
-                topicOptions,
-                handler,
-                sp.GetRequiredService<ILogger<ConsumerHostedService<Tinkoff.InvestApi.V1.Operation>>>());
-        });
+        services.AddTopicHandler<Tinkoff.InvestApi.V1.Operation, OperationHandler>(configuration, "OperationsTopic");
     }
-}
+}   

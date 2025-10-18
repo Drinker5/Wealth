@@ -1,12 +1,13 @@
 using Confluent.Kafka;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Infrastructure.KafkaConsumer;
 
-namespace Wealth.PortfolioManagement.API.Services;
+namespace Wealth.BuildingBlocks.Infrastructure.KafkaConsumer;
 
-public sealed class ConsumerHostedService<T> : IHostedService
+internal sealed class ConsumerHostedService<T> : IHostedService
     where T : Google.Protobuf.IMessage
 {
     private readonly IKafkaConsumer consumer;

@@ -85,7 +85,7 @@ public static class PortfolioApi
         await services.Mediator.Command(new BuyStock(portfolioId, request.InstrumentId, request.TotalPrice, request.Quantity));
         return TypedResults.Ok();
     }
-    
+
     private static async Task<Ok> BuyBond(
         int portfolioId,
         [FromBody] BuyBondRequest request,
@@ -97,6 +97,7 @@ public static class PortfolioApi
 }
 
 public record BuyStockRequest(StockId InstrumentId, Money TotalPrice, int Quantity);
+
 public record BuyBondRequest(BondId InstrumentId, Money TotalPrice, int Quantity);
 
 public record CreatePortfolioRequest(string Name);
