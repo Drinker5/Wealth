@@ -5,7 +5,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="9.0.10" />
-    <PackageReference Include="Testcontainers" Version="4.7.0" />
-    <PackageReference Include="Testcontainers.PostgreSql" Version="4.7.0" />
+    <PackageReference Include="Testcontainers" Version="4.8.0" />
+    <PackageReference Include="Testcontainers.PostgreSql" Version="4.8.0" />
   </ItemGroup>
 </Project>
