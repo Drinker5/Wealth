@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Wealth.BuildingBlocks.Application;
 
@@ -14,7 +15,7 @@ public static class ServiceCollectionExtensions
         where T : Google.Protobuf.IMessage
         where H : IMessageHandler<T>
     {
-        services.AddSingleton(typeof(H));
+        services.TryAddSingleton(typeof(H));
         return services.AddHostedService(sp =>
         {
             var topicOptions = new TopicOptions();
