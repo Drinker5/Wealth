@@ -15,6 +15,6 @@ public class EventBusModule : IServiceModule
         services.AddTopicHandler<StockPriceChangedIntegrationEvent, StockPriceChangedIntegrationEventHandler>(
             configuration, "WealthInstrumentManagement");
         services.AddTopicHandler<OperationProto, OperationEventHandler>(
-            configuration, "WealthInstrumentManagement");
+            configuration, "WealthOperationsConverted");
     }
 }

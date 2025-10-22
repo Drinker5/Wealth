@@ -165,6 +165,8 @@ services:
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+    ports:
+      - 9092:9092
 
   init-kafka:
     image: apache/kafka:latest
@@ -178,7 +180,7 @@ services:
       - ./kafka-topics.sh --create --if-not-exists --topic "wealth-currency-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&  
         ./kafka-topics.sh --create --if-not-exists --topic "wealth-instrument-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
         ./kafka-topics.sh --create --if-not-exists --topic "wealth-portfolio-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
-        ./kafka-topics.sh --create --if-not-exists --topic "wealth-operations" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
+        ./kafka-topics.sh --create --if-not-exists --topic "wealth-operations" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
         ./kafka-topics.sh --create --if-not-exists --topic "wealth-operations-converted" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
 
   akhq: 
