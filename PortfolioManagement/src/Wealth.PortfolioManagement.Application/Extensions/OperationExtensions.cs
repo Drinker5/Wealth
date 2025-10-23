@@ -25,7 +25,11 @@ public static class OperationExtensions
                 operationProto.StockTrade = stockTradeOperation.ToProto();
                 break;
             case BondBrokerFeeOperation bondBrokerFeeOperation:
+                operationProto.BondBrokerFee = bondBrokerFeeOperation.ToProto();
+                break;
             case BondCouponOperation bondCouponOperation:
+                operationProto.BondCoupon = bondCouponOperation.ToProto();
+                break;
             case BondTradeOperation bondTradeOperation:
             case StockBrokerFeeOperation stockBrokerFeeOperation:
             case StockDelistOperation stockDelistOperation:
@@ -41,45 +45,50 @@ public static class OperationExtensions
         return operationProto;
     }
 
-    private static BondAmortizationOperationProto ToProto(this BondAmortizationOperation operation)
+    private static BondAmortizationOperationProto ToProto(this BondAmortizationOperation operation) => new()
     {
-        return new BondAmortizationOperationProto
+        PortfolioId = operation.PortfolioId,
+        BondId = operation.BondId,
+        Amount = operation.Amount
+    };
+
+    private static CurrencyOperationProto ToProto(this CurrencyOperation operation) => new()
+    {
+        PortfolioId = operation.PortfolioId,
+        Amount = operation.Amount,
+        Type = operation.Type switch
         {
-            PortfolioId = operation.PortfolioId,
-            BondId = operation.BondId,
-            Amount = operation.Amount
-        };
-    }
+            CurrencyOperationType.Deposit => CurrencyOperationProto.Types.CurrencyOperationTypeProto.Deposit,
+            CurrencyOperationType.Withdraw => CurrencyOperationProto.Types.CurrencyOperationTypeProto.Withdraw,
+            _ => throw new ArgumentOutOfRangeException(nameof(operation))
+        }
+    };
+
+    private static StockTradeOperationProto ToProto(this StockTradeOperation operation) => new()
+    {
+        PortfolioId = operation.PortfolioId,
+        StockId = operation.StockId,
+        Amount = operation.Amount,
+        Quantity = operation.Quantity,
+        Type = operation.Type switch
+        {
+            TradeOperationType.Buy => StockTradeOperationProto.Types.TradeOperationTypeProto.Buy,
+            TradeOperationType.Sell => StockTradeOperationProto.Types.TradeOperationTypeProto.Sell,
+            _ => throw new ArgumentOutOfRangeException(nameof(operation))
+        }
+    };
+
+    private static BondBrokerFeeOperationProto ToProto(this BondBrokerFeeOperation operation) => new()
+    {
+        PortfolioId = operation.PortfolioId,
+        BondId = operation.BondId,
+        Amount = operation.Amount
+    };
     
-    private static CurrencyOperationProto ToProto(this CurrencyOperation operation)
+    private static BondCouponOperationProto ToProto(this BondCouponOperation operation) => new()
     {
-        return new CurrencyOperationProto
-        {
-            PortfolioId = operation.PortfolioId,
-            Amount = operation.Amount,
-            Type = operation.Type switch
-            {
-                CurrencyOperationType.Deposit => CurrencyOperationProto.Types.CurrencyOperationTypeProto.Deposit,
-                CurrencyOperationType.Withdraw => CurrencyOperationProto.Types.CurrencyOperationTypeProto.Withdraw,
-                _ => throw new ArgumentOutOfRangeException(nameof(operation))
-            }
-        };
-    }
-    
-    private static StockTradeOperationProto ToProto(this StockTradeOperation operation)
-    {
-        return new StockTradeOperationProto
-        {
-            PortfolioId = operation.PortfolioId,
-            StockId = operation.StockId,
-            Amount = operation.Amount,
-            Quantity = operation.Quantity,
-            Type = operation.Type switch
-            {
-                TradeOperationType.Buy => StockTradeOperationProto.Types.TradeOperationTypeProto.Buy,
-                TradeOperationType.Sell => StockTradeOperationProto.Types.TradeOperationTypeProto.Sell,
-                _ => throw new ArgumentOutOfRangeException(nameof(operation))
-            }
-        };
-    }
+        PortfolioId = operation.PortfolioId,
+        BondId = operation.BondId,
+        Amount = operation.Amount
+    };
 }

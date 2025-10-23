@@ -14,6 +14,8 @@ message OperationProto {
     BondAmortizationOperationProto bond_amortization_operation = 3;
     CurrencyOperationProto currency_operation = 4;
     StockTradeOperationProto stock_trade = 5;
+    BondBrokerFeeOperationProto bond_broker_fee = 6;
+    BondCouponOperationProto bond_coupon = 7;
   }
 }
 
@@ -47,4 +49,16 @@ message StockTradeOperationProto {
     BUY = 1;
     SELL = 2;
   }
+}
+
+message BondBrokerFeeOperationProto {
+  PortfolioIdProto portfolio_id = 1;
+  BondIdProto bond_id = 2;
+  MoneyProto amount = 3;
+}
+
+message BondCouponOperationProto {
+  PortfolioIdProto portfolio_id = 1;
+  BondIdProto bond_id = 2;
+  MoneyProto amount = 3;
 }
