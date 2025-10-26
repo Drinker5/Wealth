@@ -31,13 +31,23 @@ public static class OperationExtensions
                 operationProto.BondCoupon = bondCouponOperation.ToProto();
                 break;
             case BondTradeOperation bondTradeOperation:
+                operationProto.BondTrade = bondTradeOperation.ToProto();
+                break;
             case StockBrokerFeeOperation stockBrokerFeeOperation:
+                operationProto.StockBrokerFee = stockBrokerFeeOperation.ToProto();
+                break;
             case StockDelistOperation stockDelistOperation:
+                operationProto.StockDelist = stockDelistOperation.ToProto();
+                break;
             case StockDividendOperation stockDividendOperation:
+                operationProto.StockDividend = stockDividendOperation.ToProto();
+                break;
             case StockDividendTaxOperation stockDividendTaxOperation:
+                operationProto.StockDividendTax = stockDividendTaxOperation.ToProto();
+                break;
             case StockSplitOperation stockSplitOperation:
-            case TradeOperation tradeOperation:
-                throw new NotImplementedException();
+                operationProto.StockSplit = stockSplitOperation.ToProto();
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(operation));
         }
@@ -58,8 +68,8 @@ public static class OperationExtensions
         Amount = operation.Amount,
         Type = operation.Type switch
         {
-            CurrencyOperationType.Deposit => CurrencyOperationProto.Types.CurrencyOperationTypeProto.Deposit,
-            CurrencyOperationType.Withdraw => CurrencyOperationProto.Types.CurrencyOperationTypeProto.Withdraw,
+            CurrencyOperationType.Deposit => CurrencyOperationTypeProto.Deposit,
+            CurrencyOperationType.Withdraw => CurrencyOperationTypeProto.Withdraw,
             _ => throw new ArgumentOutOfRangeException(nameof(operation))
         }
     };
@@ -72,8 +82,8 @@ public static class OperationExtensions
         Quantity = operation.Quantity,
         Type = operation.Type switch
         {
-            TradeOperationType.Buy => StockTradeOperationProto.Types.TradeOperationTypeProto.Buy,
-            TradeOperationType.Sell => StockTradeOperationProto.Types.TradeOperationTypeProto.Sell,
+            TradeOperationType.Buy => TradeOperationTypeProto.Buy,
+            TradeOperationType.Sell => TradeOperationTypeProto.Sell,
             _ => throw new ArgumentOutOfRangeException(nameof(operation))
         }
     };
@@ -84,11 +94,58 @@ public static class OperationExtensions
         BondId = operation.BondId,
         Amount = operation.Amount
     };
-    
+
     private static BondCouponOperationProto ToProto(this BondCouponOperation operation) => new()
     {
         PortfolioId = operation.PortfolioId,
         BondId = operation.BondId,
         Amount = operation.Amount
+    };
+
+    private static BondTradeOperationProto ToProto(this BondTradeOperation operation) => new()
+    {
+        PortfolioId = operation.PortfolioId,
+        BondId = operation.BondId,
+        Amount = operation.Amount,
+        Quantity = operation.Quantity,
+        Type = operation.Type switch
+        {
+            TradeOperationType.Buy => TradeOperationTypeProto.Buy,
+            TradeOperationType.Sell => TradeOperationTypeProto.Sell,
+            _ => throw new ArgumentOutOfRangeException(nameof(operation))
+        }
+    };
+    
+    private static StockBrokerFeeOperationProto ToProto(this StockBrokerFeeOperation operation) => new()
+    {
+        PortfolioId = operation.PortfolioId,
+        StockId = operation.StockId,
+        Amount = operation.Amount
+    };
+    
+    private static StockDelistOperationProto ToProto(this StockDelistOperation operation) => new()
+    {
+        StockId = operation.StockId,
+    };
+    
+    private static StockDividendOperationProto ToProto(this StockDividendOperation operation) => new()
+    {
+        PortfolioId = operation.PortfolioId,
+        StockId = operation.StockId,
+        Amount = operation.Amount
+    };
+    
+    private static StockDividendTaxOperationProto ToProto(this StockDividendTaxOperation operation) => new()
+    {
+        PortfolioId = operation.PortfolioId,
+        StockId = operation.StockId,
+        Amount = operation.Amount
+    };
+
+    private static StockSplitOperationProto ToProto(this StockSplitOperation operation) => new()
+    {
+        StockId = operation.StockId,
+        RationOld = operation.Ratio.Old,
+        RationNew = operation.Ratio.New,
     };
 }
