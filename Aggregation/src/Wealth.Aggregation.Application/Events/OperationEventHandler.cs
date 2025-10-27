@@ -14,6 +14,14 @@ public sealed class OperationEventHandler : IMessageHandler<OperationProto>
             case OperationProto.VariantOneofCase.CurrencyOperation:
             case OperationProto.VariantOneofCase.StockTrade:
                 throw new NotImplementedException();
+            case OperationProto.VariantOneofCase.BondBrokerFee:
+            case OperationProto.VariantOneofCase.BondCoupon:
+            case OperationProto.VariantOneofCase.BondTrade:
+            case OperationProto.VariantOneofCase.StockBrokerFee:
+            case OperationProto.VariantOneofCase.StockDelist:
+            case OperationProto.VariantOneofCase.StockDividend:
+            case OperationProto.VariantOneofCase.StockDividendTax:
+            case OperationProto.VariantOneofCase.StockSplit:
             case OperationProto.VariantOneofCase.None:
             default:
                 throw new ArgumentOutOfRangeException($"Unknown variant case {message.VariantCase}");
