@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using SharpJuice.Clickhouse;
 using Wealth.Aggregation.Domain;
 using Wealth.Aggregation.Infrastructure.UnitOfWorks;
 using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.Aggregation.Infrastructure.Repositories;
 
-public class StockAggregationRepository(WealthDbContext context) : IStockAggregationRepository
+public class StockAggregationRepository(IClickHouseConnectionFactory connectionFactory) : IStockAggregationRepository
 {
     public async Task<StockAggregation?> GetStock(StockId id)
     {
@@ -64,9 +65,9 @@ public class StockAggregationRepository(WealthDbContext context) : IStockAggrega
         }
     }
 
-    public async Task Buy(StockId id, int quantity, Money investment)
+    public async Task Buy(PortfolioId portfolioId, StockId stockId, int quantity, Money investment, CancellationToken cancellationToken)
     {
-        var stockAggregation = await GetStock(id);
+        var stockAggregation = await GetStock(stockId);
         if (stockAggregation != null)
         {
             stockAggregation.Buy(quantity, investment);
@@ -74,9 +75,9 @@ public class StockAggregationRepository(WealthDbContext context) : IStockAggrega
         }
     }
 
-    public async Task Sell(StockId id, int quantity, Money profit)
+    public async Task Sell(PortfolioId portfolioId, StockId stockId, int quantity, Money profit, CancellationToken cancellationToken)
     {
-        var stockAggregation = await GetStock(id);
+        var stockAggregation = await GetStock(stockId);
         if (stockAggregation != null)
         {
             stockAggregation.Sell(quantity, profit);
