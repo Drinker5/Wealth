@@ -1,19 +1,21 @@
+using Wealth.Aggregation.Application.Commands;
 using Wealth.Aggregation.Domain;
 using Wealth.BuildingBlocks.Application;
 using Wealth.PortfolioManagement;
 
 namespace Wealth.Aggregation.Application.Events;
 
-public sealed class OperationEventHandler : IMessageHandler<OperationProto>
+public sealed class OperationEventHandler(ICqrsInvoker mediator) : IMessageHandler<OperationProto>
 {
-    public Task Handle(OperationProto message, CancellationToken token)
+    public async Task Handle(OperationProto message, CancellationToken token)
     {
         switch (message.VariantCase)
         {
             case OperationProto.VariantOneofCase.BondAmortizationOperation:
             case OperationProto.VariantOneofCase.CurrencyOperation:
             case OperationProto.VariantOneofCase.StockTrade:
-                throw new NotImplementedException();
+                await mediator.Command(new StockTrade(message.StockTrade), token);
+                return;
             case OperationProto.VariantOneofCase.BondBrokerFee:
             case OperationProto.VariantOneofCase.BondCoupon:
             case OperationProto.VariantOneofCase.BondTrade:

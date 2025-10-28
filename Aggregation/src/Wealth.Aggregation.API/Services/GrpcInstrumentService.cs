@@ -9,10 +9,7 @@ public class GrpcInstrumentService(InstrumentsService.InstrumentsServiceClient c
 {
     public async Task<StockInfo?> GetStockInfo(StockId stockId)
     {
-        var response = await client.GetStockAsync(new GetStockRequest { StockId = stockId }, new CallOptions
-        {
-            Headers = {  }
-        });
+        var response = await client.GetStockAsync(new GetStockRequest { StockId = stockId });
         return response.FromProto();
     }
 
