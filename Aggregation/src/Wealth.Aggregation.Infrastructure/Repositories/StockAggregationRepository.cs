@@ -1,4 +1,5 @@
 using SharpJuice.Clickhouse;
+using Wealth.Aggregation.Application.Commands;
 using Wealth.Aggregation.Domain;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement;
@@ -9,14 +10,16 @@ public class StockAggregationRepository(
     IClickHouseConnectionFactory connectionFactory,
     ITableWriterBuilder tableWriterBuilder) : IStockAggregationRepository
 {
-    private readonly ITableWriter<StockTradeOperationProto> _tableWriter = tableWriterBuilder
-        .For<StockTradeOperationProto>("stock_aggregation")
-        .AddColumn("op_id", i => i.StockId.Id)
-        .AddColumn("stock_id", i => i.StockId.Id)
+    private readonly ITableWriter<StockBuy> _tableWriter = tableWriterBuilder
+        .For<StockBuy>("stock_aggregation")
+        .AddColumn("op_id", i => i.Id)
+        .AddColumn("stock_id", i => i.Operation.StockId.Id)
+        .AddColumn("portfolio_id", i => i.Operation.PortfolioId.Id)
+        .AddColumn("amount", i => i.Operation.Amount.Amount)
         .Build();
 
-    
-    public Task Buy(string OpId, PortfolioId portfolioId, StockId stockId, long quantity, Money investment, CancellationToken token)
+
+    public Task Buy(StockTrade operation, CancellationToken token)
     {
         await using var connection = connectionFactory.Create();
         var command = connection.CreateCommand();
@@ -24,12 +27,7 @@ public class StockAggregationRepository(
         connection.CreateColumnWriter()
     }
 
-    public Task Buy(string OpId, StockTradeOperationProto operation, CancellationToken token)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task Sell(string OpId, StockTradeOperationProto operation, CancellationToken token)
+    public Task Sell(StockTrade operation, CancellationToken token)
     {
         throw new NotImplementedException();
     }

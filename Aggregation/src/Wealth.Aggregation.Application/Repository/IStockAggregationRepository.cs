@@ -1,3 +1,4 @@
+using Wealth.Aggregation.Application.Commands;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement;
 
@@ -24,9 +25,9 @@ public interface IStockAggregationRepository
     //
     // Task ChangeLotSize(StockId id, int lotSize);
 
-    Task Buy(string OpId, StockTradeOperationProto operation, CancellationToken token);
+    Task Buy(StockTrade operation, CancellationToken token);
 
-    Task Sell(string OpId, StockTradeOperationProto operation, CancellationToken token);
+    Task Sell(StockTrade operation, CancellationToken token);
 
     // Task AddDividend(StockId id, Money dividend);
 }
