@@ -14,13 +14,13 @@ internal class StockAggregationConfiguration : IEntityTypeConfiguration<StockAgg
         builder.ComplexProperty(y => y.StockPrice, z =>
         {
             z.Property(i => i.CurrencyId);
-            z.Property(i => i.Amount);
+            z.Property(i => i.Value);
         });
         
         builder.ComplexProperty(y => y.DividendPerYear, z =>
         {
             z.Property(i => i.CurrencyId);
-            z.Property(i => i.Amount);
+            z.Property(i => i.Value);
         });
 
         builder.Property(x => x.LotSize);
@@ -28,13 +28,13 @@ internal class StockAggregationConfiguration : IEntityTypeConfiguration<StockAgg
         builder.ComplexProperty(y => y.TotalInvestments, z =>
         {
             z.Property(i => i.CurrencyId);
-            z.Property(i => i.Amount);
+            z.Property(i => i.Value);
         });
         
         builder.ComplexProperty(y => y.TotalDividends, z =>
         {
             z.Property(i => i.CurrencyId);
-            z.Property(i => i.Amount);
+            z.Property(i => i.Value);
         });
 
         builder.Ignore(x => x.CurrentDividendValue);

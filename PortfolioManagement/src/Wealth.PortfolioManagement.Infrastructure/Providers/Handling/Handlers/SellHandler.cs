@@ -23,7 +23,7 @@ public class SellHandler(IInstrumentIdProvider instrumentIdProvider) : IOperatio
                     Amount = new Money(operation.Currency, trade.Price),
                     BondId = await instrumentIdProvider.GetBondIdByFigi(operation.Figi),
                     PortfolioId = portfolioId,
-                    Quantity = trade.Quantity,
+                    Quantity = -trade.Quantity,
                     Type = TradeOperationType.Sell,
                 },
                 InstrumentType.Share => new StockTradeOperation
@@ -33,7 +33,7 @@ public class SellHandler(IInstrumentIdProvider instrumentIdProvider) : IOperatio
                     Amount = new Money(operation.Currency, trade.Price),
                     StockId = await instrumentIdProvider.GetStockIdByFigi(operation.Figi),
                     PortfolioId = portfolioId,
-                    Quantity = trade.Quantity,
+                    Quantity = -trade.Quantity,
                     Type = TradeOperationType.Sell,
                 },
                 _ => throw new ArgumentOutOfRangeException()

@@ -39,7 +39,7 @@ public class PortfolioRepositoryTests
 
         await context.Portfolios.AddAsync(portfolio);
 
-        Assert.NotEqual(0, portfolio.Id.Id);
+        Assert.NotEqual(0, portfolio.Id.Value);
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public class PortfolioRepositoryTests
     {
         var id = await CreatePortfolio("Foo");
         
-        Assert.NotEqual(0, id.Id);
+        Assert.NotEqual(0, id.Value);
         var portfolio = await repository.GetPortfolio(id);
         Assert.NotNull(portfolio);
         Assert.Equal("Foo", portfolio.Name);

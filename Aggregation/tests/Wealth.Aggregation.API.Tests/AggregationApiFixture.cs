@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Testcontainers.PostgreSql;
+using Testcontainers.ClickHouse;
 
 namespace Wealth.Aggregation.API.Tests;
 
@@ -10,11 +9,7 @@ public sealed class AggregationApiFixture : WebApplicationFactory<Program>, IAsy
 {
     private readonly IHost app;
 
-    private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder()
-        .WithImage("postgres")
-        .WithDatabase("PortfolioManagement")
-        .WithUsername("postgres")
-        .WithPassword("postgres")
+    private readonly ClickHouseContainer clickHouseContainer = new ClickHouseBuilder()
         .Build();
 
     private string postgresConnectionString;

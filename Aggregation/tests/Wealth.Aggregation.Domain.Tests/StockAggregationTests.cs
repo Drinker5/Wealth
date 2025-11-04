@@ -35,13 +35,13 @@ public class StockAggregationTests
         Assert.Equal(1, aggregation.LotSize);
         Assert.Equal(dividendPerYear, aggregation.DividendPerYear);
         Assert.Equal(price.CurrencyId, aggregation.CurrentValue.CurrencyId);
-        Assert.Equal(0, aggregation.CurrentValue.Amount);
+        Assert.Equal(0, aggregation.CurrentValue.Value);
         Assert.Equal(price.CurrencyId, aggregation.CurrentDividendValue.CurrencyId);
-        Assert.Equal(0, aggregation.CurrentDividendValue.Amount);
+        Assert.Equal(0, aggregation.CurrentDividendValue.Value);
         Assert.Equal(price.CurrencyId, aggregation.TotalDividends.CurrencyId);
-        Assert.Equal(0, aggregation.TotalDividends.Amount);
+        Assert.Equal(0, aggregation.TotalDividends.Value);
         Assert.Equal(price.CurrencyId, aggregation.TotalInvestments.CurrencyId);
-        Assert.Equal(0, aggregation.TotalInvestments.Amount);
+        Assert.Equal(0, aggregation.TotalInvestments.Value);
     }
 
     [Fact]

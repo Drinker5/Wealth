@@ -101,6 +101,13 @@ services:
         condition: service_healthy
       clickhouse:
         condition: service_healthy
+      aggregation-migration:
+        condition: service_completed_successfully
+
+  aggregation-migration:
+    image: gomicro/goose:3.26.0
+    volumes:
+      - ./migrations:/migrations
 
   deposit-management:
     build:
