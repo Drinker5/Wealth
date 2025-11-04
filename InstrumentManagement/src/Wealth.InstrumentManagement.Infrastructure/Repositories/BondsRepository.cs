@@ -61,7 +61,7 @@ public class BondsRepository : IBondsRepository
         {
             Id = id.Value,
             CurrencyId = bond.Price.CurrencyId.Value,
-            Amount = bond.Price.Amount,
+            Amount = bond.Price.Value,
         });
         dbContext.AddEvents(bond);
     }
@@ -119,7 +119,7 @@ public class BondsRepository : IBondsRepository
         {
             Id = id.Value,
             CurrencyId = coupon.ValuePerYear.CurrencyId.Value,
-            Amount = coupon.ValuePerYear.Amount,
+            Amount = coupon.ValuePerYear.Value,
         });
         dbContext.AddEvents(instrument);
     }

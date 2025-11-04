@@ -26,7 +26,7 @@ internal class DepositOperationConfiguration : IEntityTypeConfiguration<DepositO
         builder.ComplexProperty(y => y.Money, z =>
         {
             z.Property(i => i.CurrencyId).IsRequired();
-            z.Property(i => i.Amount).IsRequired();
+            z.Property(i => i.Value).IsRequired();
         });
 
         builder.Property(x => x.Type).IsRequired();

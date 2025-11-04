@@ -61,7 +61,7 @@ public static class PortfolioApi
         try
         {
             var portfolioId = await services.Mediator.Command(new CreatePortfolio(request.Name));
-            return TypedResults.Ok(portfolioId.Id);
+            return TypedResults.Ok(portfolioId.Value);
         }
         catch (Exception ex)
         {

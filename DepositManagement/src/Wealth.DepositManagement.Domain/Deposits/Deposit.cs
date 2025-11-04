@@ -59,7 +59,7 @@ public class Deposit : AggregateRoot
         if (Investment.CurrencyId != withdraw.CurrencyId)
             throw new InvalidOperationException("Cannot withdraw in different currencies");
 
-        if (Investment.Amount < withdraw.Amount)
+        if (Investment.Value < withdraw.Value)
             throw new InvalidOperationException("Not enough to withdraw");
 
         Apply(new DepositWithdrew(Id, withdraw));
@@ -84,11 +84,11 @@ public class Deposit : AggregateRoot
 
     private void When(DepositInvested @event)
     {
-        Investment = Investment with { Amount = Investment.Amount + @event.Investment.Amount };
+        Investment = Investment with { Value = Investment.Value + @event.Investment.Value };
     }
 
     private void When(DepositWithdrew @event)
     {
-        Investment = Investment with { Amount = Investment.Amount - @event.Withdraw.Amount };
+        Investment = Investment with { Value = Investment.Value - @event.Withdraw.Value };
     }
 }
