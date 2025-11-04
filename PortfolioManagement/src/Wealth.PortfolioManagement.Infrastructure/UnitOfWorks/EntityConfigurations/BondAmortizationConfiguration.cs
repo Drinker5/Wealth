@@ -17,7 +17,7 @@ internal class BondAmortizationOperationConfiguration : IEntityTypeConfiguration
         builder.ComplexProperty(y => y.Amount, z =>
         {
             z.Property(i => i.CurrencyId);
-            z.Property(i => i.Amount);
+            z.Property(i => i.Value);
         });
     }
 }

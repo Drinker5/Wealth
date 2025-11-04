@@ -25,6 +25,6 @@ public class CreatePortfolioHandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         repoMock.Verify(i => i.CreatePortfolio(command.Name), Times.Once);
-        Assert.Equal(3, result.Id);
+        Assert.Equal(3, result.Value);
     }
 }

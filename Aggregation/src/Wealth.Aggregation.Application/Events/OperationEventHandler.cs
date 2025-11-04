@@ -16,6 +16,7 @@ public sealed class OperationEventHandler(ICqrsInvoker mediator) : IMessageHandl
             case OperationProto.VariantOneofCase.StockTrade:
                 await mediator.Command(new StockTrade(
                         message.Id,
+                        message.Date.ToDateTime(),
                         message.StockTrade.PortfolioId,
                         message.StockTrade.StockId,
                         message.StockTrade.Quantity,

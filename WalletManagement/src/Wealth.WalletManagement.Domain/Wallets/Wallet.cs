@@ -27,7 +27,7 @@ public class Wallet : AggregateRoot
 
     public void Insert(Money money)
     {
-        if (money.Amount == 0)
+        if (money.Value == 0)
             return;
 
         Apply(new WalletMoneyInserted(Id, money));
@@ -35,7 +35,7 @@ public class Wallet : AggregateRoot
 
     public void Eject(Money money)
     {
-        if (money.Amount == 0)
+        if (money.Value == 0)
             return;
 
         Apply(new WalletMoneyEjected(Id, money));
@@ -73,7 +73,7 @@ public class Wallet : AggregateRoot
     private void ChangeCurrencyAmount(Money money)
     {
         var currency = GetOrCreate(money.CurrencyId);
-        currency.Amount += money.Amount;
+        currency.Amount += money.Value;
         if (currency.Amount == 0)
             Currencies.Remove(currency);
     }
