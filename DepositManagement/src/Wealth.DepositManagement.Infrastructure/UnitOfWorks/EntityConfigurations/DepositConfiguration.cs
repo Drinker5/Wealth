@@ -26,7 +26,7 @@ internal class DepositConfiguration : IEntityTypeConfiguration<Deposit>
         builder.ComplexProperty(x => x.Investment, y =>
         {
             y.Property(i => i.CurrencyId).IsRequired();
-            y.Property(i => i.Amount).IsRequired();
+            y.Property(i => i.Value).IsRequired();
         });
 
         builder.Ignore(x => x.InterestPerYear);

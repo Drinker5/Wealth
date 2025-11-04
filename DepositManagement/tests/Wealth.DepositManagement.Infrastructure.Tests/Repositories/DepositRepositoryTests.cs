@@ -69,7 +69,7 @@ public class DepositRepositoryTests
 
         var deposit = await repository.GetDeposit(id);
         Assert.NotNull(deposit);
-        Assert.Equal(100m, deposit.Investment.Amount);
+        Assert.Equal(100m, deposit.Investment.Value);
     }
 
     [Fact]
@@ -84,6 +84,6 @@ public class DepositRepositoryTests
 
         var deposit = await repository.GetDeposit(id);
         Assert.NotNull(deposit);
-        Assert.Equal(10m, deposit.Investment.Amount);
+        Assert.Equal(10m, deposit.Investment.Value);
     }
 }

@@ -24,9 +24,9 @@ public class DepositTests
         Assert.Equal(0, deposit.Id.Id);
         Assert.Equal(name, deposit.Name);
         Assert.Equal(yield, deposit.Yield);
-        Assert.Equal(0, deposit.Investment.Amount);
+        Assert.Equal(0, deposit.Investment.Value);
         Assert.Equal(currencyId, deposit.Investment.CurrencyId);
-        Assert.Equal(0, deposit.InterestPerYear.Amount);
+        Assert.Equal(0, deposit.InterestPerYear.Value);
         Assert.Equal(currencyId, deposit.InterestPerYear.CurrencyId);
     }
 
@@ -94,7 +94,7 @@ public class DepositTests
         
         deposit.Withdraw(withdraw);
         
-        Assert.Equal(1, deposit.Investment.Amount);
+        Assert.Equal(1, deposit.Investment.Value);
         var ev = deposit.HasEvent<DepositWithdrew>();
         Assert.Equal(withdraw, ev.Withdraw);
     }

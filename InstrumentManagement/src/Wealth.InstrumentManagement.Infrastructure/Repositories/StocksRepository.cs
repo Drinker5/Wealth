@@ -61,7 +61,7 @@ public class StocksRepository : IStocksRepository
         {
             Id = id.Value,
             CurrencyId = instrument.Price.CurrencyId.Value,
-            Amount = instrument.Price.Amount,
+            Amount = instrument.Price.Value,
         });
         dbContext.AddEvents(instrument);
     }
@@ -121,7 +121,7 @@ public class StocksRepository : IStocksRepository
         {
             Id = id.Value,
             CurrencyId = dividend.ValuePerYear.CurrencyId.Value,
-            Amount = dividend.ValuePerYear.Amount,
+            Amount = dividend.ValuePerYear.Value,
         });
         dbContext.AddEvents(instrument);
     }
