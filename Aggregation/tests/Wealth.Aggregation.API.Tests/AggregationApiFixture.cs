@@ -12,7 +12,7 @@ public sealed class AggregationApiFixture : WebApplicationFactory<Program>, IAsy
     private readonly ClickHouseContainer clickHouseContainer = new ClickHouseBuilder()
         .Build();
 
-    private string postgresConnectionString;
+    private string clickHouseConnectionString;
 
     public AggregationApiFixture()
     {
@@ -27,7 +27,7 @@ public sealed class AggregationApiFixture : WebApplicationFactory<Program>, IAsy
         {
             var data = new Dictionary<string, string>
             {
-                { "ConnectionStrings:Aggregation", postgresConnectionString },
+                { "ConnectionStrings:Aggregation", clickHouseConnectionString },
             };
             config.AddInMemoryCollection(data!);
         });
@@ -44,13 +44,13 @@ public sealed class AggregationApiFixture : WebApplicationFactory<Program>, IAsy
         await base.DisposeAsync();
         await app.StopAsync();
         app.Dispose();
-        await postgresContainer.StopAsync();
+        await clickHouseContainer.StopAsync();
     }
 
     public async Task InitializeAsync()
     {
-        await postgresContainer.StartAsync();
+        await clickHouseContainer.StartAsync();
         await app.StartAsync();
-        postgresConnectionString = postgresContainer.GetConnectionString();
+        clickHouseConnectionString = clickHouseContainer.GetConnectionString();
     }
 }
