@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS stock_trade (
     amount Decimal(18, 2),
     currency UInt8,
     type UInt8
-) ENGINE = MergeTree(op_id)
-ORDER BY (portfolio_id, stock_id);
+) ENGINE = ReplacingMergeTree
+ORDER BY (op_id);
 
 
 -- +goose down
