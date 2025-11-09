@@ -1,25 +1,55 @@
+using System.Data.Common;
+using AutoFixture;
 using JetBrains.Annotations;
 using NSubstitute;
+using Octonica.ClickHouseClient;
 using SharpJuice.Clickhouse;
+using Wealth.Aggregation.Application.Commands;
 using Wealth.Aggregation.Infrastructure.Repositories;
 
 namespace Wealth.Aggregation.Infrastructure.Tests.Repositories;
 
 [TestSubject(typeof(StockTradeRepository))]
-public class StockTradeRepositoryTests : IClassFixture<Fixture>
+public class StockTradeRepositoryTests : IClassFixture<ClickHouseFixture>
 {
-    private readonly Fixture fixture;
+    private readonly ClickHouseFixture clickHouseFixture;
     private readonly StockTradeRepository repository;
+    private readonly Fixture fixture;
 
-    public StockTradeRepositoryTests(Fixture fixture)
+    public StockTradeRepositoryTests(ClickHouseFixture clickHouseFixture)
     {
-        this.fixture = fixture;
-        repository = new StockTradeRepository(Substitute.For<ITableWriterBuilder>());
+        fixture = new Fixture();
+        this.clickHouseFixture = clickHouseFixture;
+
+        var clickHouseConnectionStringBuilder = new ClickHouseConnectionStringBuilder(clickHouseFixture.ClickHouseConnectionString);
+        var clickHouseConnectionSettings = clickHouseConnectionStringBuilder.BuildSettings();
+        var connectionFactory = new ClickHouseConnectionFactory(clickHouseConnectionSettings);
+        repository = new StockTradeRepository(new TableWriterBuilder(connectionFactory));
     }
 
     [Fact]
-    public void METHOD()
+    public async Task WhenUpsert()
     {
-        throw new NotImplementedException();
+        var op = fixture.Create<StockTrade>();
+
+        await repository.Upsert(op, CancellationToken.None);
+
+        await CheckOp(op, CancellationToken.None);
     }
+
+    private async Task CheckOp(StockTrade op, CancellationToken token)
+    {
+        await using var connection = new ClickHouseConnection(clickHouseFixture.ClickHouseConnectionString);
+        await connection.OpenAsync(token);
+
+        var command = connection.CreateCommand("select * from stock_trade");
+        var reader = await command.ExecuteReaderAsync(token);
+
+        while (await reader.ReadAsync(token))
+        {
+            var id = reader.GetString(0);
+            
+            Assert.Equal(id, op.Id);
+        }
+    } 
 }

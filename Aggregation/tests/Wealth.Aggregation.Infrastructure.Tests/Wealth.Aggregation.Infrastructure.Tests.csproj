@@ -4,6 +4,7 @@
     <ProjectReference Include="..\..\src\Wealth.Aggregation.Infrastructure\Wealth.Aggregation.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AutoFixture" Version="4.18.1" />
     <PackageReference Include="Testcontainers" Version="4.8.1" />
     <PackageReference Include="Testcontainers.Clickhouse" Version="4.8.1" />
   </ItemGroup>
