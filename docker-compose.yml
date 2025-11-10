@@ -107,7 +107,11 @@ services:
   aggregation-migration:
     image: gomicro/goose:3.26.0
     volumes:
-      - ./migrations:/migrations
+      - ./Aggregation/src/Wealth.Aggregation.Infrastructure/Migrations:/migrations
+    command: >
+      goose -dir /migrations clickhouse "tcp://clickhouse:9000" status 
+    depends_on:
+      - clickhouse
 
   deposit-management:
     build:
