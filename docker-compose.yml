@@ -108,10 +108,15 @@ services:
     image: gomicro/goose:3.26.0
     volumes:
       - ./Aggregation/src/Wealth.Aggregation.Infrastructure/Migrations:/migrations
+    environment:
+      GOOSE_DRIVER: clickhouse
+      GOOSE_DBSTRING: "tcp://default:default@clickhouse:9000"
+      GOOSE_MIGRATION_DIR: .
     command: >
-      goose -dir /migrations clickhouse "tcp://clickhouse:9000" status 
+      goose up
     depends_on:
-      - clickhouse
+      clickhouse:
+        condition: service_healthy
 
   deposit-management:
     build:
@@ -227,6 +232,8 @@ services:
     image: clickhouse/clickhouse-server:25.9-alpine
     environment:
       CLICKHOUSE_DB: default
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: default
     healthcheck:
       test: ["CMD", "clickhouse-client", "--query", "SELECT 1"]
       interval: 10s
