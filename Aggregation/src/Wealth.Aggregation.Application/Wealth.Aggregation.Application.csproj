@@ -12,6 +12,7 @@
     <ProjectReference Include="..\Wealth.Aggregation.Domain\Wealth.Aggregation.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.0" />
     <Protobuf Include="Events.proto" 
               GrpcServices="Client"
               AdditionalImportDirs="..\..\..\protos\" />
