@@ -6,19 +6,22 @@ using Octonica.ClickHouseClient;
 using SharpJuice.Clickhouse;
 using Wealth.Aggregation.Application.Commands;
 using Wealth.Aggregation.Infrastructure.Repositories;
+using Xunit.Abstractions;
 
 namespace Wealth.Aggregation.Infrastructure.Tests.Repositories;
 
 [TestSubject(typeof(StockTradeRepository))]
 public class StockTradeRepositoryTests : IClassFixture<ClickHouseFixture>
 {
+    private readonly ITestOutputHelper output;
     private readonly ClickHouseFixture clickHouseFixture;
     private readonly StockTradeRepository repository;
     private readonly Fixture fixture;
 
-    public StockTradeRepositoryTests(ClickHouseFixture clickHouseFixture)
+    public StockTradeRepositoryTests(ITestOutputHelper output, ClickHouseFixture clickHouseFixture)
     {
         fixture = new Fixture();
+        this.output = output;
         this.clickHouseFixture = clickHouseFixture;
 
         var clickHouseConnectionStringBuilder = new ClickHouseConnectionStringBuilder(clickHouseFixture.ClickHouseConnectionString);
@@ -30,6 +33,11 @@ public class StockTradeRepositoryTests : IClassFixture<ClickHouseFixture>
     [Fact]
     public async Task WhenUpsert()
     {
+        var logs = await clickHouseFixture.migratorContainer.GetLogsAsync();
+        output.WriteLine(logs.Stdout);
+        output.WriteLine(logs.Stderr);
+        
+        
         var op = fixture.Create<StockTrade>();
 
         await repository.Upsert(op, CancellationToken.None);
