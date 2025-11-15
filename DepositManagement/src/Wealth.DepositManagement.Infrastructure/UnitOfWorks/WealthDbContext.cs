@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Infrastructure.EFCore;
 using Wealth.DepositManagement.Domain.DepositOperations;
 using Wealth.DepositManagement.Domain.Deposits;
@@ -25,6 +26,11 @@ public class WealthDbContext : WealthDbContextBase
             .HasValueGenerator<DepositIdInMemoryValueGenerator>();
 
         modelBuilder.Entity<Deposit>().Ignore(i => i.Investment);
+    }
+
+    protected override void AdditionalConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.Properties<DepositId>().HaveConversion<DepositIdConverter>();
     }
 
     public override WealthDbContextBase CreateDbContext(string[] args)

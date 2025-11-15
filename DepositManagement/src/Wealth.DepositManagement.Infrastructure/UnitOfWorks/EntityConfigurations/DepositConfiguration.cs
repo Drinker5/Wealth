@@ -14,7 +14,6 @@ internal class DepositConfiguration : IEntityTypeConfiguration<Deposit>
 
         builder.Property(x => x.Id)
             .UseHiLo("DepositIdHiLo")
-            .HasConversion<DepositIdConverter>()
             .IsRequired();
 
         builder.Property(x => x.Name).HasMaxLength(255).IsRequired();

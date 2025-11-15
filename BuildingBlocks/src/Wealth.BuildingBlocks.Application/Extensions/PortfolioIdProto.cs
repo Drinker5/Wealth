@@ -16,6 +16,6 @@ public partial class PortfolioIdProto
 
     public static implicit operator PortfolioIdProto(PortfolioId value)
     {
-        return new PortfolioIdProto(value.Id);
+        return new PortfolioIdProto(value.Value);
     }
 }

@@ -1,26 +1,26 @@
 namespace Wealth.BuildingBlocks.Domain.Common;
 
-public record struct PortfolioId(int Id) : IIdentity
+public readonly record struct PortfolioId(int Value) : IIdentity
 {
     public static PortfolioId New() => new(0);
 
     public static implicit operator int(PortfolioId id)
     {
-        return id.Id;
+        return id.Value;
     }
 
-    public static implicit operator PortfolioId(int id)
+    public static implicit operator PortfolioId(int value)
     {
-        return new PortfolioId(id);
+        return new PortfolioId(value);
     }
 
     public readonly override int GetHashCode()
     {
-        return Id;
+        return Value;
     }
 
     public override string ToString()
     {
-        return Id.ToString();
+        return Value.ToString();
     }
 }

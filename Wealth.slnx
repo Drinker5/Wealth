@@ -12,6 +12,7 @@
   </Folder>
   <Folder Name="/Aggregation/tests/">
     <Project Path="Aggregation/tests/Wealth.Aggregation.API.Tests/Wealth.Aggregation.API.Tests.csproj" />
+    <Project Path="Aggregation/tests/Wealth.Aggregation.Infrastructure.Tests/Wealth.Aggregation.Infrastructure.Tests.csproj" />
     <Project Path="Aggregation\tests\Wealth.Aggregation.Domain.Tests\Wealth.Aggregation.Domain.Tests.csproj" />
     <File Path="Aggregation\tests\Directory.Build.props" />
   </Folder>

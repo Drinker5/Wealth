@@ -31,7 +31,7 @@ public class PortfolioTests
         Assert.Empty(portfolio.Currencies);
         Assert.Empty(portfolio.Bonds);
         Assert.Empty(portfolio.Stocks);
-        Assert.Equal(0, portfolio.Id.Id);
+        Assert.Equal(0, portfolio.Id.Value);
         var ev = portfolio.HasEvent<PortfolioCreated>();
         Assert.Same(portfolio, ev.Portfolio);
     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.BuildingBlocks.Application;
+using Wealth.BuildingBlocks.Infrastructure.Mediation.RequestProcessing;
 using Wealth.BuildingBlocks.Infrastructure.Mediation.RequestProcessing.CommandBehaviors;
 using Wealth.BuildingBlocks.Infrastructure.Mediation.RequestProcessing.QueryPipelines;
 
@@ -20,5 +21,7 @@ internal class MediatorModule : IServiceModule
 
             cfg.AddOpenBehavior(typeof(QueryLoggingPipeline<,>));
         });
+        
+        services.AddScoped<IDomainEventsResolver, DummyDomainEventsResolver>();
     }
 }

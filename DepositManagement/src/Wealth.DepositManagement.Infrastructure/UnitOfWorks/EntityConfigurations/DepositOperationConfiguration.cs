@@ -20,7 +20,6 @@ internal class DepositOperationConfiguration : IEntityTypeConfiguration<DepositO
             .HasForeignKey(x => x.DepositId);
 
         builder.Property(x => x.DepositId)
-            .HasConversion<DepositIdConverter>()
             .IsRequired();
 
         builder.ComplexProperty(y => y.Money, z =>
