@@ -14,7 +14,6 @@ internal class DepositConfiguration : IEntityTypeConfiguration<Deposit>
 
         builder.Property(x => x.Id)
             .UseHiLo("DepositIdHiLo")
-            .HasConversion<DepositIdConverter>()
             .IsRequired();
 
         builder.Property(x => x.Name).HasMaxLength(255).IsRequired();
@@ -26,7 +25,7 @@ internal class DepositConfiguration : IEntityTypeConfiguration<Deposit>
         builder.ComplexProperty(x => x.Investment, y =>
         {
             y.Property(i => i.CurrencyId).IsRequired();
-            y.Property(i => i.Value).IsRequired();
+            y.Property(i => i.Amount).IsRequired();
         });
 
         builder.Ignore(x => x.InterestPerYear);

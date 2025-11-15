@@ -16,7 +16,7 @@ public class MigrationService(IServiceProvider serviceProvider) : IHostedService
         
         var seeders = scope.ServiceProvider.GetRequiredService<IEnumerable<IDbSeeder>>();
         foreach (var seeder in seeders)
-            await seeder.SeedAsync();
+            await seeder.SeedAsync(cancellationToken);
     }
 
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;

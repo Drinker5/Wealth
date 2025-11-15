@@ -2,12 +2,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.0" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageReference Include="Polly.RateLimiting" Version="8.6.5" />
     <PackageReference Include="SharpJuice.ClickHouse" Version="1.0.7" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.EFCore\Wealth.BuildingBlocks.Infrastructure.EFCore.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.KafkaConsumer\Wealth.BuildingBlocks.Infrastructure.KafkaConsumer.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" />
     <ProjectReference Include="..\Wealth.Aggregation.Application\Wealth.Aggregation.Application.csproj" />

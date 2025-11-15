@@ -25,11 +25,11 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
         var foo = Deposit.Create("Foo", 0.20m, "RUB");
         foo.Invest(new Money("RUB", 1000));
         yield return foo;
-        
+
         var bar = Deposit.Create("Bar", 0.05m, "USD");
         bar.Invest(new Money("USD", 500));
         bar.Withdraw(new Money("USD", 100));
-        
+
         yield return bar;
     }
 
@@ -43,7 +43,7 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
             Type = DepositOperationType.Investment,
             Money = new Money("RUB", 1000),
         };
-        
+
         yield return new DepositOperation
         {
             Id = Guid.NewGuid(),
@@ -52,7 +52,7 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
             Type = DepositOperationType.Investment,
             Money = new Money("USD", 500),
         };
-        
+
         yield return new DepositOperation
         {
             Id = Guid.NewGuid(),
