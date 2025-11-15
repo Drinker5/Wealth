@@ -65,7 +65,7 @@ public class ExchangeRateTests
         var result = exchangeRate.Convert(m);
         var backResult = exchangeRate.Convert(result);
 
-        Assert.Equal(expected, result.Value);
+        Assert.Equal(expected, result.Amount);
         Assert.Equal(c2, result.CurrencyId);
         Assert.Equal(backResult, m);
     }

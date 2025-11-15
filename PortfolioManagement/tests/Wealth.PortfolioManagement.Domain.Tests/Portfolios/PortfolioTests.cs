@@ -44,7 +44,7 @@ public class PortfolioTests
         var ev = portfolio.HasEvent<CurrencyDeposited>();
         Assert.Equal(portfolio.Id, ev.PortfolioId);
         Assert.Equal(currencyId, ev.Money.CurrencyId);
-        Assert.Equal(amount, ev.Money.Value);
+        Assert.Equal(amount, ev.Money.Amount);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(currencyId, currency.CurrencyId);
         Assert.Equal(amount, currency.Amount);
@@ -58,7 +58,7 @@ public class PortfolioTests
         var ev = portfolio.HasEvent<CurrencyWithdrew>();
         Assert.Equal(portfolio.Id, ev.PortfolioId);
         Assert.Equal(currencyId, ev.Money.CurrencyId);
-        Assert.Equal(amount, ev.Money.Value);
+        Assert.Equal(amount, ev.Money.Amount);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(currencyId, currency.CurrencyId);
         Assert.Equal(-amount, currency.Amount);
@@ -90,7 +90,7 @@ public class PortfolioTests
         Assert.Equal(quantity, asset.Quantity);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(price.CurrencyId, currency.CurrencyId);
-        Assert.Equal(-price.Value, currency.Amount);
+        Assert.Equal(-price.Amount, currency.Amount);
     }
 
     [Fact]
@@ -108,7 +108,7 @@ public class PortfolioTests
         Assert.Equal(quantity, asset.Quantity);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(price.CurrencyId, currency.CurrencyId);
-        Assert.Equal(-price.Value, currency.Amount);
+        Assert.Equal(-price.Amount, currency.Amount);
     }
 
     [Fact]
@@ -126,7 +126,7 @@ public class PortfolioTests
         Assert.Equal(-quantity, asset.Quantity);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(price.CurrencyId, currency.CurrencyId);
-        Assert.Equal(price.Value, currency.Amount);
+        Assert.Equal(price.Amount, currency.Amount);
     }
 
     [Fact]
@@ -144,7 +144,7 @@ public class PortfolioTests
         Assert.Equal(-quantity, asset.Quantity);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(price.CurrencyId, currency.CurrencyId);
-        Assert.Equal(price.Value, currency.Amount);
+        Assert.Equal(price.Amount, currency.Amount);
     }
 
     [Fact]
@@ -173,7 +173,7 @@ public class PortfolioTests
         Assert.Equal(price, ev.Income);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(price.CurrencyId, currency.CurrencyId);
-        Assert.Equal(price.Value, currency.Amount);
+        Assert.Equal(price.Amount, currency.Amount);
     }
 
     [Fact]
@@ -189,7 +189,7 @@ public class PortfolioTests
         Assert.Equal(price, ev.Expense);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(price.CurrencyId, currency.CurrencyId);
-        Assert.Equal(-price.Value, currency.Amount);
+        Assert.Equal(-price.Amount, currency.Amount);
     }
 
 
@@ -206,7 +206,7 @@ public class PortfolioTests
         Assert.Equal(price, ev.Expense);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(price.CurrencyId, currency.CurrencyId);
-        Assert.Equal(-price.Value, currency.Amount);
+        Assert.Equal(-price.Amount, currency.Amount);
     }
 
 

@@ -17,7 +17,7 @@ public record struct Yield(decimal PercentPerYear) : IValueObject
     
     public static Money operator *(Money a, Yield b)
     {
-        return a with { Value = a.Value * b.PercentPerYear };
+        return a with { Amount = a.Amount * b.PercentPerYear };
     }
     
     public static implicit operator Yield(decimal value)

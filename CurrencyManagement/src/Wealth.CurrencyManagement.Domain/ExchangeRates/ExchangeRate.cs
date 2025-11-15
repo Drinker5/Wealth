@@ -42,10 +42,10 @@ public class ExchangeRate : AggregateRoot
     public Money Convert(Money money)
     {
         if (money.CurrencyId == BaseCurrencyId)
-            return new Money(TargetCurrencyId, money.Value * Rate);
+            return new Money(TargetCurrencyId, money.Amount * Rate);
 
         if (money.CurrencyId == TargetCurrencyId)
-            return new Money(BaseCurrencyId, money.Value / Rate);
+            return new Money(BaseCurrencyId, money.Amount / Rate);
 
         throw new ArgumentException("Invalid currency");
     }

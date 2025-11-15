@@ -36,8 +36,8 @@ public class StockAggregation : AggregateRoot
         DividendPerYear = dividendPerYear;
         LotSize = lotSize;
         Quantity = 0;
-        TotalInvestments = stockPrice with { Value = 0 };
-        TotalDividends = stockPrice with { Value = 0 };
+        TotalInvestments = stockPrice with { Amount = 0 };
+        TotalDividends = stockPrice with { Amount = 0 };
     }
 
     public void ChangeName(string name)
@@ -77,7 +77,7 @@ public class StockAggregation : AggregateRoot
         if (dividend.CurrencyId != TotalDividends.CurrencyId)
             throw new ArgumentException("Different Currencies are not supported");
 
-        TotalDividends = dividend with { Value = TotalDividends.Value + dividend.Value };
+        TotalDividends = dividend with { Amount = TotalDividends.Amount + dividend.Amount };
     }
 
     private void AddInvestment(Money investment)
@@ -85,6 +85,6 @@ public class StockAggregation : AggregateRoot
         if (investment.CurrencyId != TotalInvestments.CurrencyId)
             throw new ArgumentException("Different Currencies are not supported");
 
-        TotalInvestments = investment with { Value = TotalInvestments.Value + investment.Value };
+        TotalInvestments = investment with { Amount = TotalInvestments.Amount + investment.Amount };
     }
 }
