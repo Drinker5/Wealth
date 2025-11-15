@@ -1,12 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Octonica.ClickHouseClient;
+using SharpJuice.Clickhouse;
 using Wealth.Aggregation.Application.Repository;
-using Wealth.Aggregation.Domain;
-using Wealth.Aggregation.Infrastructure.DbSeeding;
 using Wealth.Aggregation.Infrastructure.Repositories;
 using Wealth.BuildingBlocks.Infrastructure;
-using Wealth.BuildingBlocks.Infrastructure.EFCore.Extensions;
 
 namespace Wealth.Aggregation.Infrastructure.UnitOfWorks;
 
@@ -14,23 +12,15 @@ public class UnitOfWorkModule : IServiceModule
 {
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<WealthDbContext>(options =>
+        services.AddSingleton<IClickHouseConnectionFactory>(_ =>
         {
-            var inMemory = configuration.GetSection("InMemoryRepository").Get<bool>();
-            if (inMemory)
+            var builder = new ClickHouseConnectionStringBuilder
             {
-                options.UseInMemoryDatabase(Guid.NewGuid().ToString());
-            }
-            else
-            {
-                options.UseNpgsql(configuration.GetConnectionString("Aggregation"));
-                options.EnableSensitiveDataLogging();
-            }
+                ConnectionString = configuration.GetConnectionString("ClickHouse")
+            };
+            return new ClickHouseConnectionFactory(builder.BuildSettings());
         });
-        services.AddMigration<WealthDbContext, FirstSeed>();
-
-        services.AddScoped<IStockTradeRepository, StockTradeRepository>();
-
-        services.AddScoped<DbContext>(sp => sp.GetRequiredService<WealthDbContext>());
+        services.AddSingleton<ITableWriterBuilder, TableWriterBuilder>();
+        services.AddSingleton<IStockTradeRepository, StockTradeRepository>();
     }
 }

@@ -20,7 +20,7 @@ internal class StockTradeOperationConfiguration : IEntityTypeConfiguration<Stock
         builder.ComplexProperty(y => y.Amount, z =>
         {
             z.Property(i => i.CurrencyId);
-            z.Property(i => i.Value);
+            z.Property(i => i.Amount);
         });
     }
 }

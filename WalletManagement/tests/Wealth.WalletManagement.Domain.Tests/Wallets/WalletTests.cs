@@ -33,7 +33,7 @@ public class WalletTests
         wallet.Insert(money);
 
         var currency = Assert.Single(wallet.Currencies);
-        Assert.Equal(money.Value, currency.Amount);
+        Assert.Equal(money.Amount, currency.Amount);
         Assert.Equal(money.CurrencyId, currency.CurrencyId);
         var ev = wallet.HasEvent<WalletMoneyInserted>();
         Assert.Equal(wallet.Id, ev.WalletId);
@@ -51,7 +51,7 @@ public class WalletTests
         wallet.Eject(eject);
 
         var currency = Assert.Single(wallet.Currencies);
-        Assert.Equal(money.Value - eject.Value, currency.Amount);
+        Assert.Equal(money.Amount - eject.Amount, currency.Amount);
         Assert.Equal(money.CurrencyId, currency.CurrencyId);
         var ev = wallet.HasEvent<WalletMoneyEjected>();
         Assert.Equal(wallet.Id, ev.WalletId);
@@ -78,7 +78,7 @@ public class WalletTests
 
         var currency = Assert.Single(wallet.Currencies);
         Assert.Equal(money.CurrencyId, currency.CurrencyId);
-        Assert.Equal(-money.Value, currency.Amount);
+        Assert.Equal(-money.Amount, currency.Amount);
     }
 
     [Fact]

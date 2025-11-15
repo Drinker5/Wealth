@@ -28,7 +28,7 @@ internal class WalletOperationConfiguration : IEntityTypeConfiguration<WalletOpe
                 .HasMaxLength(3)
                 .IsRequired();
                 
-            z.Property(i => i.Value)
+            z.Property(i => i.Amount)
                 .IsRequired();
         });
 

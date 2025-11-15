@@ -56,7 +56,7 @@ public sealed class ExchangeRateControllerTests : IClassFixture<CurrencyManageme
         var money = JsonSerializer.Deserialize<Money>(body, jsonSerializerOptions);
 
         Assert.Equal(obj.toId, money.CurrencyId);
-        Assert.Equal(obj.rate * value, money.Value);
+        Assert.Equal(obj.rate * value, money.Amount);
     }
 
     [Fact]

@@ -31,7 +31,7 @@ public class Portfolio : AggregateRoot
 
     public void Deposit(Money money)
     {
-        if (money.Value == 0)
+        if (money.Amount == 0)
             return;
 
         Apply(new CurrencyDeposited(Id, money));
@@ -39,7 +39,7 @@ public class Portfolio : AggregateRoot
 
     public void Withdraw(Money money)
     {
-        if (money.Value == 0)
+        if (money.Amount == 0)
             return;
 
         Apply(new CurrencyWithdrew(Id, money));
@@ -141,61 +141,61 @@ public class Portfolio : AggregateRoot
 
     private void When(CurrencyDeposited @event)
     {
-        ChangeCurrencyAmount(@event.Money.CurrencyId, @event.Money.Value);
+        ChangeCurrencyAmount(@event.Money.CurrencyId, @event.Money.Amount);
     }
 
     private void When(CurrencyWithdrew @event)
     {
-        ChangeCurrencyAmount(@event.Money.CurrencyId, -@event.Money.Value);
+        ChangeCurrencyAmount(@event.Money.CurrencyId, -@event.Money.Amount);
     }
 
     private void When(StockBought @event)
     {
         ChangeAssetQuantity(@event.StockId, @event.Quantity);
-        ChangeCurrencyAmount(@event.TotalPrice.CurrencyId, -@event.TotalPrice.Value);
+        ChangeCurrencyAmount(@event.TotalPrice.CurrencyId, -@event.TotalPrice.Amount);
     }
 
     private void When(StockSold @event)
     {
         ChangeAssetQuantity(@event.StockId, -@event.Quantity);
-        ChangeCurrencyAmount(@event.Price.CurrencyId, @event.Price.Value);
+        ChangeCurrencyAmount(@event.Price.CurrencyId, @event.Price.Amount);
     }
 
     private void When(BondBought @event)
     {
         ChangeAssetQuantity(@event.BondId, @event.Quantity);
-        ChangeCurrencyAmount(@event.TotalPrice.CurrencyId, -@event.TotalPrice.Value);
+        ChangeCurrencyAmount(@event.TotalPrice.CurrencyId, -@event.TotalPrice.Amount);
     }
 
     private void When(BondSold @event)
     {
         ChangeAssetQuantity(@event.BondId, -@event.Quantity);
-        ChangeCurrencyAmount(@event.Price.CurrencyId, @event.Price.Value);
+        ChangeCurrencyAmount(@event.Price.CurrencyId, @event.Price.Amount);
     }
 
     private void When(DividendReceived @event)
     {
-        ChangeCurrencyAmount(@event.Income.CurrencyId, @event.Income.Value);
+        ChangeCurrencyAmount(@event.Income.CurrencyId, @event.Income.Amount);
     }
 
     private void When(CouponPaymentReceived @event)
     {
-        ChangeCurrencyAmount(@event.Income.CurrencyId, @event.Income.Value);
+        ChangeCurrencyAmount(@event.Income.CurrencyId, @event.Income.Amount);
     }
 
     private void When(AmortizationApplied @event)
     {
-        ChangeCurrencyAmount(@event.Income.CurrencyId, @event.Income.Value);
+        ChangeCurrencyAmount(@event.Income.CurrencyId, @event.Income.Amount);
     }
 
     private void When(StockOperationTaxPaid @event)
     {
-        ChangeCurrencyAmount(@event.Expense.CurrencyId, -@event.Expense.Value);
+        ChangeCurrencyAmount(@event.Expense.CurrencyId, -@event.Expense.Amount);
     }
 
     private void When(BondOperationTaxPaid @event)
     {
-        ChangeCurrencyAmount(@event.Expense.CurrencyId, -@event.Expense.Value);
+        ChangeCurrencyAmount(@event.Expense.CurrencyId, -@event.Expense.Amount);
     }
 
     private void When(StockSplit @event)
