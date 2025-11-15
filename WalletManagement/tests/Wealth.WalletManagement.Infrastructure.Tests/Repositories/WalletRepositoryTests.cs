@@ -65,7 +65,7 @@ public class WalletRepositoryTests
         Assert.NotNull(portfolio);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(money.CurrencyId, currency.CurrencyId);
-        Assert.Equal(money.Value, currency.Amount);
+        Assert.Equal(money.Amount, currency.Amount);
     }
 
     [Fact]
@@ -80,7 +80,7 @@ public class WalletRepositoryTests
         Assert.NotNull(portfolio);
         var currency = Assert.Single(portfolio.Currencies);
         Assert.Equal(money.CurrencyId, currency.CurrencyId);
-        Assert.Equal(-money.Value, currency.Amount);
+        Assert.Equal(-money.Amount, currency.Amount);
     }
 
     

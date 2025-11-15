@@ -17,6 +17,6 @@ public partial class MoneyProto
 
     public static implicit operator MoneyProto(Money money)
     {
-        return new MoneyProto(money.CurrencyId, money.Value);
+        return new MoneyProto(money.CurrencyId, money.Amount);
     }
 }
