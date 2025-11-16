@@ -1,14 +1,11 @@
-using System.Runtime.InteropServices;
 using Wealth.Aggregation.Application.Repository;
-using Wealth.Aggregation.Domain;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement;
 
 namespace Wealth.Aggregation.Application.Commands;
 
-[StructLayout(LayoutKind.Auto)]
-public record struct StockTrade(
+public sealed record StockTrade(
     string Id,
     DateTime Date,
     PortfolioId PortfolioId,
