@@ -60,12 +60,12 @@ internal sealed class ConsumerHostedService<T> : IHostedService
             OnRetry = (args) =>
             {
                 var delay = GenerateDelay(args.AttemptNumber) ?? TimeSpan.Zero;
-                logger.LogWarning(
-                    "{Topic}: Retry attempt {AttemptNumber}. Next retry in {RetryDelay}. Exception: {ExceptionMessage}",
+                logger.LogError(
+                    args.Outcome.Exception,
+                    "{Topic}: Retry attempt {AttemptNumber}. Next retry in {RetryDelay}",
                     topicOptions.Topic,
                     args.AttemptNumber + 1,
-                    delay,
-                    args.Outcome.Exception?.Message);
+                    delay);
 
                 return ValueTask.CompletedTask;
             }
