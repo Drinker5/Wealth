@@ -23,5 +23,6 @@ internal class MediatorModule : IServiceModule
         });
         
         services.AddScoped<IDomainEventsResolver, DummyDomainEventsResolver>();
+        services.AddScoped<IUnitOfWork, DummyUnitOfWork>();
     }
 }
