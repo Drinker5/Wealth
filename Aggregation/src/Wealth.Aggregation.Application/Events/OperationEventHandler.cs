@@ -31,8 +31,16 @@ public sealed class OperationEventHandler(ICqrsInvoker mediator) : IMessageHandl
                         message.BondCoupon.Amount),
                     token);
                 return;
-            case OperationProto.VariantOneofCase.BondAmortizationOperation:
             case OperationProto.VariantOneofCase.CurrencyOperation:
+                await mediator.Command(new CurrencyOperation(
+                        message.Id,
+                        message.Date.ToDateTime(),
+                        message.CurrencyOperation.PortfolioId,
+                        message.CurrencyOperation.Amount,
+                        message.CurrencyOperation.Type),
+                    token);
+                return;
+            case OperationProto.VariantOneofCase.BondAmortizationOperation:
             case OperationProto.VariantOneofCase.BondBrokerFee:
             case OperationProto.VariantOneofCase.BondTrade:
             case OperationProto.VariantOneofCase.StockBrokerFee:
