@@ -20,8 +20,10 @@ public class UnitOfWorkModule : IServiceModule
             };
             return new ClickHouseConnectionFactory(builder.BuildSettings());
         });
+
         services.AddSingleton<ITableWriterBuilder, TableWriterBuilder>();
         services.AddSingleton<IStockTradeRepository, StockTradeRepository>();
         services.AddSingleton<IBondCouponRepository, BondCouponRepository>();
+        services.AddSingleton<ICurrencyOperationRepository, CurrencyOperationRepository>();
     }
 }
