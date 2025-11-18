@@ -1,5 +1,4 @@
 using Wealth.Aggregation.Application.Commands;
-using Wealth.Aggregation.Domain;
 using Wealth.BuildingBlocks.Application;
 using Wealth.PortfolioManagement;
 
@@ -23,12 +22,43 @@ public sealed class OperationEventHandler(ICqrsInvoker mediator) : IMessageHandl
                     token);
                 return;
             case OperationProto.VariantOneofCase.BondCoupon:
-                await mediator.Command(new BondCoupon(
+                await mediator.Command(new BondCurrencyOperation(
                         message.Id,
                         message.Date.ToDateTime(),
                         message.BondCoupon.PortfolioId,
                         message.BondCoupon.BondId,
-                        message.BondCoupon.Amount),
+                        message.BondCoupon.Amount,
+                        BondCurrencyOperationType.Coupon),
+                    token);
+                return;
+            case OperationProto.VariantOneofCase.StockDividend:
+                await mediator.Command(new StockCurrencyOperation(
+                        message.Id,
+                        message.Date.ToDateTime(),
+                        message.StockDividend.PortfolioId,
+                        message.StockDividend.StockId,
+                        message.StockDividend.Amount,
+                        StockCurrencyOperationType.Dividend),
+                    token);
+                return;
+            case OperationProto.VariantOneofCase.StockDividendTax:
+                await mediator.Command(new StockCurrencyOperation(
+                        message.Id,
+                        message.Date.ToDateTime(),
+                        message.StockDividendTax.PortfolioId,
+                        message.StockDividendTax.StockId,
+                        message.StockDividendTax.Amount,
+                        StockCurrencyOperationType.DividendTax),
+                    token);
+                return;
+            case OperationProto.VariantOneofCase.StockBrokerFee:
+                await mediator.Command(new StockCurrencyOperation(
+                        message.Id,
+                        message.Date.ToDateTime(),
+                        message.StockBrokerFee.PortfolioId,
+                        message.StockBrokerFee.StockId,
+                        message.StockBrokerFee.Amount,
+                        StockCurrencyOperationType.BrokerFee),
                     token);
                 return;
             case OperationProto.VariantOneofCase.CurrencyOperation:
@@ -40,13 +70,19 @@ public sealed class OperationEventHandler(ICqrsInvoker mediator) : IMessageHandl
                         message.CurrencyOperation.Type),
                     token);
                 return;
-            case OperationProto.VariantOneofCase.BondAmortizationOperation:
             case OperationProto.VariantOneofCase.BondBrokerFee:
+                await mediator.Command(new BondCurrencyOperation(
+                        message.Id,
+                        message.Date.ToDateTime(),
+                        message.BondBrokerFee.PortfolioId,
+                        message.BondBrokerFee.BondId,
+                        message.BondBrokerFee.Amount,
+                        BondCurrencyOperationType.BrokerFee),
+                    token);
+                return;
+            case OperationProto.VariantOneofCase.BondAmortizationOperation:
             case OperationProto.VariantOneofCase.BondTrade:
-            case OperationProto.VariantOneofCase.StockBrokerFee:
             case OperationProto.VariantOneofCase.StockDelist:
-            case OperationProto.VariantOneofCase.StockDividend:
-            case OperationProto.VariantOneofCase.StockDividendTax:
             case OperationProto.VariantOneofCase.StockSplit:
             case OperationProto.VariantOneofCase.None:
             default:
