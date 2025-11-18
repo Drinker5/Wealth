@@ -12,14 +12,27 @@ CREATE TABLE IF NOT EXISTS stock_trade
 ) ENGINE = ReplacingMergeTree
       ORDER BY (op_id);
 
-CREATE TABLE IF NOT EXISTS bond_coupon
+CREATE TABLE IF NOT EXISTS bond_currency_operation
 (
     op_id        String,
     date         DateTime,
     portfolio_id Int32,
     bond_id      Int32,
     amount       Decimal(18, 2),
-    currency     UInt8
+    currency     UInt8,
+    type         UInt8
+) ENGINE = ReplacingMergeTree
+      ORDER BY (op_id);
+
+CREATE TABLE IF NOT EXISTS stock_currency_operation
+(
+    op_id        String,
+    date         DateTime,
+    portfolio_id Int32,
+    stock_id     Int32,
+    amount       Decimal(18, 2),
+    currency     UInt8,
+    type         UInt8
 ) ENGINE = ReplacingMergeTree
       ORDER BY (op_id);
 
@@ -31,11 +44,11 @@ CREATE TABLE IF NOT EXISTS currency_operation
     amount       Decimal(18, 2),
     currency     UInt8,
     type         UInt8
-
 ) ENGINE = ReplacingMergeTree
       ORDER BY (op_id);
 
 -- +goose down
 DROP TABLE IF EXISTS stock_trade;
-DROP TABLE IF EXISTS bond_coupon;
+DROP TABLE IF EXISTS bond_currency_operation;
+DROP TABLE IF EXISTS stock_currency_operation;
 DROP TABLE IF EXISTS currency_operation;

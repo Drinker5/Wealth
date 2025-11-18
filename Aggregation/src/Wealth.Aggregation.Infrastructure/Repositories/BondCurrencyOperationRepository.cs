@@ -4,19 +4,20 @@ using Wealth.Aggregation.Application.Repository;
 
 namespace Wealth.Aggregation.Infrastructure.Repositories;
 
-public class BondCouponRepository(ITableWriterBuilder tableWriterBuilder) : IBondCouponRepository
+public class BondCurrencyOperationRepository(ITableWriterBuilder tableWriterBuilder) : IBondCurrencyOperationRepository
 {
-    private readonly ITableWriter<BondCoupon> _tableWriter = tableWriterBuilder
-        .For<BondCoupon>("bond_coupon")
+    private readonly ITableWriter<BondCurrencyOperation> _tableWriter = tableWriterBuilder
+        .For<BondCurrencyOperation>("bond_currency_operation")
         .AddColumn("op_id", i => i.Id)
         .AddColumn("date", i => i.Date)
         .AddColumn("portfolio_id", i => i.PortfolioId.Value)
         .AddColumn("bond_id", i => i.BondId.Value)
         .AddColumn("amount", i => i.Amount.Amount)
         .AddColumn("currency", i => (byte)i.Amount.CurrencyId.Value)
+        .AddColumn("type", i => (byte)i.Type)
         .Build();
 
-    public async Task Upsert(BondCoupon operation, CancellationToken token)
+    public async Task Upsert(BondCurrencyOperation operation, CancellationToken token)
     {
         await _tableWriter.Insert([operation], token);
     }

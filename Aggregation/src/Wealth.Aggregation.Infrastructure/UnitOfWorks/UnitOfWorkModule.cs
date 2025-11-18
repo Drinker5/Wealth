@@ -23,7 +23,8 @@ public class UnitOfWorkModule : IServiceModule
 
         services.AddSingleton<ITableWriterBuilder, TableWriterBuilder>();
         services.AddSingleton<IStockTradeRepository, StockTradeRepository>();
-        services.AddSingleton<IBondCouponRepository, BondCouponRepository>();
+        services.AddSingleton<IStockCurrencyOperationRepository, StockCurrencyOperationRepository>();
+        services.AddSingleton<IBondCurrencyOperationRepository, BondCurrencyOperationRepository>();
         services.AddSingleton<ICurrencyOperationRepository, CurrencyOperationRepository>();
     }
 }
