@@ -14,8 +14,8 @@ public class CheckNewExchangeRatesCommandHandlerTests
     private readonly ICurrencyRepository curencyRepo;
     private readonly IExchangeRateRepository exchangeRateRepository;
     private readonly ICommandsScheduler scheduler;
-    private readonly CurrencyId c1 = CurrencyCode.RUB;
-    private readonly CurrencyId c2 = CurrencyCode.USD;
+    private readonly CurrencyId c1 = CurrencyCode.Rub;
+    private readonly CurrencyId c2 = CurrencyCode.Usd;
     private readonly CurrencyId notExisted = CurrencyCode.None;
     private readonly DateOnly d1 = new(2020, 1, 1);
 

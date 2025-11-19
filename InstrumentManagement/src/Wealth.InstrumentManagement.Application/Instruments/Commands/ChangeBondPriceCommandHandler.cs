@@ -8,7 +8,7 @@ public class ChangeBondPriceCommandHandler(IBondsRepository repository, ICurrenc
 {
     public async Task Handle(ChangeBondPriceCommand request, CancellationToken cancellationToken)
     {
-        if (!await currencyService.IsCurrencyExists(request.Price.CurrencyId))
+        if (!await currencyService.IsCurrencyExists(request.Price.Currency))
             return;
         
         await repository.ChangePrice(request.BondId, request.Price);

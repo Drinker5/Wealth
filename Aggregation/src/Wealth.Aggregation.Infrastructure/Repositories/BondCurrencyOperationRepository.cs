@@ -13,7 +13,7 @@ public class BondCurrencyOperationRepository(ITableWriterBuilder tableWriterBuil
         .AddColumn("portfolio_id", i => i.PortfolioId.Value)
         .AddColumn("bond_id", i => i.BondId.Value)
         .AddColumn("amount", i => i.Amount.Amount)
-        .AddColumn("currency", i => (byte)i.Amount.CurrencyId.Value)
+        .AddColumn("currency", i => (byte)i.Amount.Currency)
         .AddColumn("type", i => (byte)i.Type)
         .Build();
 

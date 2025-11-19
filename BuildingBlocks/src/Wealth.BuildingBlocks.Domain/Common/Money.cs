@@ -1,6 +1,6 @@
 namespace Wealth.BuildingBlocks.Domain.Common;
 
-public record struct Money(CurrencyId CurrencyId, decimal Amount) : IValueObject
+public record struct Money(CurrencyCode Currency, decimal Amount) : IValueObject
 {
     public static readonly Money Empty = new Money(0, 0);
     public static Money operator -(Money a)

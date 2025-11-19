@@ -1,45 +1,12 @@
 ﻿@page "/currencies"
 @rendermode InteractiveServer
 @using Wealth.BuildingBlocks.Application
-@using Wealth.BuildingBlocks.Domain.Common
-@using Wealth.CurrencyManagement.Application.Currencies.Commands
 @using Wealth.CurrencyManagement.Application.Currencies.Queries
 @inject ICqrsInvoker cqrsInvoker
 <PageTitle>Currencies</PageTitle>
 
 <h1>Currencies</h1>
 <ErrorModal @bind-Show="showErrorModal" @bind-Message="errorMessage" OnClose="() => showErrorModal = false"/>
-
-@if (showCreateForm)
-{
-    <div class="card mb-4">
-        <div class="card-header">
-            <h3>Create Currency</h3>
-        </div>
-        <div class="card-body">
-            <form>
-                <div class="form-group mb-3">
-                    <label for="id">Id</label>
-                    <input type="text" class="form-control" id="id" placeholder="XXX"
-                           @bind="createCurrency.CurrencyId"/>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="name">Name</label>
-                    <input type="text" class="form-control" id="name" @bind="createCurrency.Name"/>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="symbol">Symbol</label>
-                    <input type="text" class="form-control" id="symbol" @bind="createCurrency.Symbol"/>
-                </div>
-
-                <button type="button" class="btn btn-primary" @onclick="CreateCurrency">Save</button>
-                <button type="button" class="btn btn-secondary" @onclick="CancelEdit">Cancel</button>
-            </form>
-        </div>
-    </div>
-}
-
-<button class="btn btn-success mb-3" @onclick="AddNewCurrency">Add New Currency</button>
 
 @if (currencies == null)
 {
@@ -61,12 +28,8 @@ else
         @foreach (var currency in currencies)
         {
             <tr>
-                <td>@currency.CurrencyId</td>
-                <td>@currency.Symbol - @currency.Name</td>
-                <td>
-                    <button class="btn btn-sm btn-danger" @onclick="() => DeleteCurrency(currency.CurrencyId)">Delete
-                    </button>
-                </td>
+                <td>@currency.CurrencyCodeId</td>
+                <td>@currency.Name</td>
             </tr>
         }
         </tbody>
@@ -77,8 +40,6 @@ else
     private bool showErrorModal = false;
     private string errorMessage = string.Empty;
     private IEnumerable<CurrencyDTO>? currencies;
-    private bool showCreateForm = false;
-    private CurrencyModel createCurrency = new();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -93,60 +54,5 @@ else
         currencies = await cqrsInvoker.Query(new GetCurrenciesQuery());
         StateHasChanged();
     }
-
-    private void AddNewCurrency()
-    {
-        createCurrency = new CurrencyModel();
-        showCreateForm = true;
-    }
-
-    private async Task CreateCurrency()
-    {
-        try
-        {
-            // Create new
-            await cqrsInvoker.Command(new CreateCurrencyCommand(createCurrency.CurrencyId, createCurrency.Name, createCurrency.Symbol));
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"Operation failed: {ex.Message}";
-            showErrorModal = true;
-            StateHasChanged();
-            return;
-        }
-
-        showCreateForm = false;
-        await LoadCurrencies();
-    }
-
-    private void CancelEdit()
-    {
-        showCreateForm = false;
-    }
-
-    private async Task DeleteCurrency(CurrencyId currencyId)
-    {
-        try
-        {
-            await cqrsInvoker.Command(new DeleteCurrencyCommand(currencyId));
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"Operation failed: {ex.Message}";
-            showErrorModal = true;
-            StateHasChanged();
-            return;
-        }
-
-        await LoadCurrencies();
-    }
-
-    internal class CurrencyModel
-    {
-        public string CurrencyId { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
-        public string Symbol { get; set; } = string.Empty;
-    }
-
 }
 

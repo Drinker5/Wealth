@@ -56,7 +56,7 @@ public class DepositRepositoryTests
         Assert.Equal(id, result.Id);
         Assert.Equal(name, result.Name);
         Assert.Equal(yield, result.Yield);
-        Assert.Equal(currencyId, result.Investment.CurrencyId);
+        Assert.Equal(currencyId, result.Investment.Currency);
     }
 
     [Fact]

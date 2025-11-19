@@ -25,9 +25,9 @@ public class DepositTests
         Assert.Equal(name, deposit.Name);
         Assert.Equal(yield, deposit.Yield);
         Assert.Equal(0, deposit.Investment.Amount);
-        Assert.Equal(currencyId, deposit.Investment.CurrencyId);
+        Assert.Equal(currencyId, deposit.Investment.Currency);
         Assert.Equal(0, deposit.InterestPerYear.Amount);
-        Assert.Equal(currencyId, deposit.InterestPerYear.CurrencyId);
+        Assert.Equal(currencyId, deposit.InterestPerYear.Currency);
     }
 
     [Fact]
