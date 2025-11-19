@@ -11,7 +11,7 @@ public class BondTests
     readonly string name = "foo";
     readonly ISIN isin = "barbarbarbar";
     readonly FIGI figi = "arbarbarbarb";
-    readonly Coupon coupon = new Coupon(CurrencyCode.RUB, Decimal.One);
+    readonly Coupon coupon = new Coupon(CurrencyCode.Rub, Decimal.One);
 
     private Bond CreateBondInstrument(string name, ISIN isin, FIGI figi)
     {
@@ -32,7 +32,7 @@ public class BondTests
             Assert.That(bond.Id, Is.Not.Zero);
             Assert.That(bond.Name, Is.EqualTo(name));
             Assert.That(bond.Isin, Is.EqualTo(isin));
-            Assert.That(bond.Coupon, Is.Null);
+            Assert.That(bond.Coupon, Is.EqualTo(Coupon.Empty));
         }
     }
 
@@ -40,7 +40,7 @@ public class BondTests
     public void WhenPriceChanged()
     {
         var bond = CreateBondInstrument(name, isin, figi);
-        var money = new Money(CurrencyCode.EUR, 23.3m);
+        var money = new Money(CurrencyCode.Eur, 23.3m);
 
         bond.ChangePrice(money);
 

@@ -17,8 +17,8 @@ public class ExchangeRateTests
     {
         var exchangeRate = CreateExchangeRate(c1, c2, r, d);
 
-        Assert.Equal(c1, exchangeRate.BaseCurrencyId);
-        Assert.Equal(c2, exchangeRate.TargetCurrencyId);
+        Assert.Equal(c1, exchangeRate.BaseCurrency);
+        Assert.Equal(c2, exchangeRate.TargetCurrency);
         Assert.Equal(r, exchangeRate.Rate);
         Assert.Equal(d, exchangeRate.ValidOnDate);
     }
@@ -66,7 +66,7 @@ public class ExchangeRateTests
         var backResult = exchangeRate.Convert(result);
 
         Assert.Equal(expected, result.Amount);
-        Assert.Equal(c2, result.CurrencyId);
+        Assert.Equal(c2, result.Currency);
         Assert.Equal(backResult, m);
     }
 

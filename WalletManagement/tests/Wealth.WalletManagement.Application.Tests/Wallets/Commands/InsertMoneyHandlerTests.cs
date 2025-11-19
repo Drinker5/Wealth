@@ -18,7 +18,7 @@ public class InsertMoneyHandlerTests
     [Fact]
     public async Task WhenHandle()
     {
-        var command = new InsertMoney(3, new Money(CurrencyCode.RUB, 23.23m));
+        var command = new InsertMoney(3, new Money(CurrencyCode.Rub, 23.23m));
 
         await handler.Handle(command, CancellationToken.None);
 

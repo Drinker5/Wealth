@@ -3,17 +3,12 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.InstrumentManagement.Domain.Instruments;
 
-public record Coupon : IValueObject
+public record struct Coupon(Money ValuePerYear) : IValueObject
 {
-    public Money ValuePerYear { get; init; }
-
-    public Coupon(Money ValuePerYear)
-    {
-        this.ValuePerYear = ValuePerYear;
-    }
-
-    public Coupon(CurrencyId CurrencyId, decimal Amount)
-        : this(new Money(CurrencyId, Amount))
+    public static Coupon Empty = new Coupon(Money.Empty);
+    
+    public Coupon(CurrencyCode Currency, decimal Amount)
+        : this(new Money(Currency, Amount))
     {
     }
 }

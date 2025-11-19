@@ -7,6 +7,6 @@ public class AddCurrencyHandler(IPortfolioRepository repository) : ICommandHandl
 {
     public Task Handle(AddCurrency request, CancellationToken cancellationToken)
     {
-        return repository.AddCurrency(request.PortfolioId, request.Money.CurrencyId, request.Money.Amount);
+        return repository.AddCurrency(request.PortfolioId, request.Money.Currency, request.Money.Amount);
     }
 }

@@ -74,7 +74,7 @@ public class StockAggregation : AggregateRoot
 
     public void AddDividend(Money dividend)
     {
-        if (dividend.CurrencyId != TotalDividends.CurrencyId)
+        if (dividend.Currency != TotalDividends.Currency)
             throw new ArgumentException("Different Currencies are not supported");
 
         TotalDividends = dividend with { Amount = TotalDividends.Amount + dividend.Amount };
@@ -82,7 +82,7 @@ public class StockAggregation : AggregateRoot
 
     private void AddInvestment(Money investment)
     {
-        if (investment.CurrencyId != TotalInvestments.CurrencyId)
+        if (investment.Currency != TotalInvestments.Currency)
             throw new ArgumentException("Different Currencies are not supported");
 
         TotalInvestments = investment with { Amount = TotalInvestments.Amount + investment.Amount };

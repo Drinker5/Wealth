@@ -15,17 +15,17 @@ public class ChangeCouponCommandHandlerTests
     {
         var bondsRepository = A.Fake<IBondsRepository>();
         var currencyService = A.Fake<ICurrencyService>();
-        A.CallTo(() => currencyService.IsCurrencyExists(CurrencyCode.RUB)).Returns(true);
+        A.CallTo(() => currencyService.IsCurrencyExists(CurrencyCode.Rub)).Returns(true);
         var command = new ChangeCouponCommand
         {
             Id = new BondId(3),
-            Coupon = new Coupon(CurrencyCode.RUB, 3.42m),
+            Coupon = new Coupon(CurrencyCode.Rub, 3.42m),
         };
         var handler = new ChangeCouponCommandHandler(bondsRepository, currencyService);
         
         await handler.Handle(command, CancellationToken.None);
         
-        A.CallTo(() => currencyService.IsCurrencyExists(command.Coupon.ValuePerYear.CurrencyId)).MustHaveHappened();
+        A.CallTo(() => currencyService.IsCurrencyExists(command.Coupon.ValuePerYear.Currency)).MustHaveHappened();
         A.CallTo(() => bondsRepository.ChangeCoupon(command.Id, command.Coupon)).MustHaveHappened();
     }
 }

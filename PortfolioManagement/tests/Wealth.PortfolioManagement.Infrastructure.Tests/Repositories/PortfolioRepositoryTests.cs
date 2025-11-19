@@ -58,7 +58,7 @@ public class PortfolioRepositoryTests
     {
         var instrumentId = new StockId(32);
         var quantity = 32;
-        var money = new Money(CurrencyCode.RUB, 23.3m);
+        var money = new Money(CurrencyCode.Rub, 23.3m);
         var id = await CreatePortfolio("Foo");
 
         await repository.Buy(id, instrumentId, money, quantity);

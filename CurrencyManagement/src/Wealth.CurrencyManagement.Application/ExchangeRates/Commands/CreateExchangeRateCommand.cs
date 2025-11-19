@@ -4,7 +4,7 @@ using Wealth.BuildingBlocks.Domain.Common;
 namespace Wealth.CurrencyManagement.Application.ExchangeRates.Commands;
 
 public record CreateExchangeRateCommand(
-    CurrencyId BaseCurrencyId,
-    CurrencyId TargetCurrencyId,
+    CurrencyCode BaseCurrency,
+    CurrencyCode TargetCurrency,
     decimal ExchangeRate,
     DateOnly ValidOnDate) : ICommand;

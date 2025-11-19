@@ -90,7 +90,7 @@ public sealed class WalletManagementApiTests : IClassFixture<WalletManagementApi
 
         Assert.NotNull(changedWallet);
         var currency = Assert.Single(changedWallet.Currencies);
-        Assert.Equal(insertMoney.money.CurrencyId, currency.CurrencyId);
+        Assert.Equal(insertMoney.money.Currency, currency.CurrencyId);
         Assert.Equal(150, currency.Amount);
     }
 

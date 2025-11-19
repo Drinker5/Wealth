@@ -48,7 +48,7 @@ public class Deposit : AggregateRoot
 
     public void Invest(Money investment)
     {
-        if (Investment.CurrencyId != investment.CurrencyId)
+        if (Investment.Currency != investment.Currency)
             throw new InvalidOperationException("Cannot invest in different currencies");
 
         Apply(new DepositInvested(Id, investment));
@@ -56,7 +56,7 @@ public class Deposit : AggregateRoot
 
     public void Withdraw(Money withdraw)
     {
-        if (Investment.CurrencyId != withdraw.CurrencyId)
+        if (Investment.Currency != withdraw.Currency)
             throw new InvalidOperationException("Cannot withdraw in different currencies");
 
         if (Investment.Amount < withdraw.Amount)

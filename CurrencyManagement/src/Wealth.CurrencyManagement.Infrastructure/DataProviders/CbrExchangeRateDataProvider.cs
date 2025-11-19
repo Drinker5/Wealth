@@ -36,7 +36,7 @@ public class CbrExchangeRateDataProvider : IExchangeRateDataProvider
 
     public async Task<decimal> GetRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, DateOnly? validOnDate)
     {
-        if (targetCurrencyId != CurrencyCode.RUB)
+        if (targetCurrencyId != CurrencyCode.Rub)
             throw new ArgumentException("Only RUB targetCurrencyId is supported");
 
         if (baseCurrencyId == targetCurrencyId)

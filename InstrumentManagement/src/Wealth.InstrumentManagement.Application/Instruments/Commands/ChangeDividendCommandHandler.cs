@@ -8,7 +8,7 @@ public class ChangeDividendCommandHandler(IStocksRepository repository, ICurrenc
 {
     public async Task Handle(ChangeDividendCommand request, CancellationToken cancellationToken)
     {
-        if (!await currencyService.IsCurrencyExists(request.Dividend.ValuePerYear.CurrencyId))
+        if (!await currencyService.IsCurrencyExists(request.Dividend.ValuePerYear.Currency))
             return;
 
         await repository.ChangeDividend(request.Id, request.Dividend);

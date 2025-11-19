@@ -17,7 +17,7 @@ public class ChangeCouponCommandHandler : ICommandHandler<ChangeCouponCommand>
 
     public async Task Handle(ChangeCouponCommand request, CancellationToken cancellationToken)
     {
-        if (!await currencyService.IsCurrencyExists(request.Coupon.ValuePerYear.CurrencyId))
+        if (!await currencyService.IsCurrencyExists(request.Coupon.ValuePerYear.Currency))
             return;
         
         await repository.ChangeCoupon(request.Id, request.Coupon);

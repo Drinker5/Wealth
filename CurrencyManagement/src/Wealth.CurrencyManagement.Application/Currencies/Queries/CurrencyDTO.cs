@@ -4,12 +4,11 @@ using Wealth.CurrencyManagement.Domain.Currencies;
 namespace Wealth.CurrencyManagement.Application.Currencies.Queries;
 
 public record CurrencyDTO(
-    CurrencyId CurrencyId,
-    string Name,
-    string Symbol)
+    byte CurrencyCodeId,
+    string Name)
 {
-    public static CurrencyDTO From(Currency currency)
+    public static CurrencyDTO From(CurrencyCode currency)
     {
-        return new CurrencyDTO(currency.Id, currency.Name, currency.Symbol);
+        return new CurrencyDTO((byte)currency, currency.ToString());
     }
 }

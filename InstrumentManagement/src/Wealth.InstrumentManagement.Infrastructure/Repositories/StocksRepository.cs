@@ -54,13 +54,13 @@ public class StocksRepository : IStocksRepository
         instrument.ChangePrice(price);
         const string sql = """
                            UPDATE "Stocks" 
-                           SET "Price_CurrencyId" = @CurrencyId, "Price_Amount" = @Amount
+                           SET "Price_Currency" = @Currency, "Price_Amount" = @Amount
                            WHERE "Id" = @Id
                            """;
         await connection.ExecuteAsync(sql, new
         {
             Id = id.Value,
-            CurrencyId = instrument.Price.CurrencyId.Value,
+            Currency = instrument.Price.Currency,
             Amount = instrument.Price.Amount,
         });
         dbContext.AddEvents(instrument);
@@ -114,13 +114,13 @@ public class StocksRepository : IStocksRepository
         instrument.ChangeDividend(dividend);
         const string sql = """
                            UPDATE "Stocks" 
-                           SET "Dividend_CurrencyId" = @CurrencyId, "Dividend_Amount" = @Amount
+                           SET "Dividend_Currency" = @Currency, "Dividend_Amount" = @Amount
                            WHERE "Id" = @Id
                            """;
         await connection.ExecuteAsync(sql, new
         {
             Id = id.Value,
-            CurrencyId = dividend.ValuePerYear.CurrencyId.Value,
+            Currency = dividend.ValuePerYear.Currency,
             Amount = dividend.ValuePerYear.Amount,
         });
         dbContext.AddEvents(instrument);
@@ -151,9 +151,9 @@ public class StocksRepository : IStocksRepository
         Id = 0,
         Name,
         ISIN,
-        Price_CurrencyId,
+        Price_Currency,
         Price_Amount,
-        Dividend_CurrencyId,
+        Dividend_Currency,
         Dividend_Amount,
         LotSize,
         FIGI
@@ -167,10 +167,10 @@ public class StocksRepository : IStocksRepository
         while (reader.Read())
         {
             var stock = new Stock(reader.GetInt32((int)Columns.Id));
-            if (!reader.IsDBNull((int)Columns.Dividend_CurrencyId))
+            if (!reader.IsDBNull((int)Columns.Dividend_Currency))
             {
                 stock.Dividend = new Dividend(
-                    reader.GetString((int)Columns.Dividend_CurrencyId),
+                    (CurrencyCode)reader.GetByte((int)Columns.Dividend_Currency),
                     reader.GetDecimal((int)Columns.Dividend_Amount));
             }
 
@@ -178,10 +178,10 @@ public class StocksRepository : IStocksRepository
             stock.Name = reader.GetString((int)Columns.Name);
             stock.Isin = reader.GetString((int)Columns.ISIN);
             stock.Figi = reader.GetString((int)Columns.FIGI);
-            if (!reader.IsDBNull((int)Columns.Price_CurrencyId))
+            if (!reader.IsDBNull((int)Columns.Price_Currency))
             {
                 stock.Price = new Money(
-                    reader.GetString((int)Columns.Price_CurrencyId),
+                    (CurrencyCode)reader.GetByte((int)Columns.Price_Currency),
                     reader.GetDecimal((int)Columns.Price_Amount));
             }
 

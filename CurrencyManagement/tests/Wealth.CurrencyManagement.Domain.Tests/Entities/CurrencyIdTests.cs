@@ -8,7 +8,7 @@ public class CurrencyIdTests
     [Fact]
     public void WhenCurrencyIdCreated()
     {
-        var expectedCode = CurrencyCode.RUB;
+        var expectedCode = CurrencyCode.Rub;
         
         var currencyId = new CurrencyId(expectedCode);
 

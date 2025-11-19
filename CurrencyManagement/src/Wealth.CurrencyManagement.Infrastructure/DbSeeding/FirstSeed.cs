@@ -21,15 +21,15 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
 
     private static IEnumerable<Currency> GetPredefinedCurrencies()
     {
-        yield return Currency.Create(CurrencyCode.RUB, "Ruble", "₽");
-        yield return Currency.Create(CurrencyCode.USD, "Dollar", "$");
+        yield return Currency.Create(CurrencyCode.Rub, "Ruble", "₽");
+        yield return Currency.Create(CurrencyCode.Usd, "Dollar", "$");
     }
 
     private static IEnumerable<ExchangeRate> GetPredefinedExchangeRates()
     {
-        yield return ExchangeRate.Create(CurrencyCode.RUB, CurrencyCode.USD, 2.42m, new DateOnly(2020, 10, 10));
-        yield return ExchangeRate.Create(CurrencyCode.RUB, CurrencyCode.USD, 3.42m, new DateOnly(2020, 10, 11));
-        yield return ExchangeRate.Create(CurrencyCode.USD, CurrencyCode.RUB, 10.10m, new DateOnly(2020, 10, 10));
-        yield return ExchangeRate.Create(CurrencyCode.USD, CurrencyCode.RUB, 12.34m, new DateOnly(2020, 10, 11));
+        yield return ExchangeRate.Create(CurrencyCode.Rub, CurrencyCode.Usd, 2.42m, new DateOnly(2020, 10, 10));
+        yield return ExchangeRate.Create(CurrencyCode.Rub, CurrencyCode.Usd, 3.42m, new DateOnly(2020, 10, 11));
+        yield return ExchangeRate.Create(CurrencyCode.Usd, CurrencyCode.Rub, 10.10m, new DateOnly(2020, 10, 10));
+        yield return ExchangeRate.Create(CurrencyCode.Usd, CurrencyCode.Rub, 12.34m, new DateOnly(2020, 10, 11));
     }
 }

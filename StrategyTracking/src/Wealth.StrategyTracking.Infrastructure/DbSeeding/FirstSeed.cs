@@ -27,7 +27,7 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
         var bar = Strategy.Create("Seed-strategy-2");
         bar.AddOrUpdateComponent(stockId: 2, weight: 30f);
         bar.AddOrUpdateComponent(bondId: 2, weight: 30f);
-        bar.AddOrUpdateComponent(currencyId: CurrencyCode.RUB, weight: 40f);
+        bar.AddOrUpdateComponent(currencyId: CurrencyCode.Rub, weight: 40f);
         yield return bar;
     }
 }
