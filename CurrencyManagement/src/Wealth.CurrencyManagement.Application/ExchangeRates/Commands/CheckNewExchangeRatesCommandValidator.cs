@@ -9,7 +9,7 @@ public class CheckNewExchangeRatesCommandValidator : CommandValidator<CheckNewEx
     public CheckNewExchangeRatesCommandValidator()
     {
         RuleFor(cmd => cmd.ToCurrency.Value)
-            .Equal(CurrencyCode.RUB)
+            .Equal(CurrencyCode.Rub)
             .WithMessage("Only RUB is supported");
 
         RuleFor(cmd => cmd.ToCurrency.Value)

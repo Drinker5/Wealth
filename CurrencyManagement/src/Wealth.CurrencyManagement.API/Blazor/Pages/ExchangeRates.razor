@@ -1,6 +1,7 @@
 ﻿@page "/exchange-rates"
 @rendermode InteractiveServer
 @using Wealth.BuildingBlocks.Application
+@using Wealth.BuildingBlocks.Domain.Common
 @using Wealth.CurrencyManagement.Application.Currencies.Queries
 @using Wealth.CurrencyManagement.Application.ExchangeRates.Queries
 @using Wealth.CurrencyManagement.Domain.Repositories
@@ -105,9 +106,9 @@ else
     private bool showErrorModal = false;
     private string errorMessage = string.Empty;
     private PaginatedResult<ExchangeRateDTO>? exchangeRates;
-    private string CurrentSelectedFrom = "USD";
-    private string CurrentSelectedTo = "RUB";
-    private IEnumerable<string>? currencies;
+    private CurrencyCode CurrentSelectedFrom = CurrencyCode.Usd;
+    private CurrencyCode CurrentSelectedTo = CurrencyCode.Rub;
+    private List<string>? currencies;
 
     private PaginationModel pagination = new PaginationModel
     {
@@ -124,16 +125,19 @@ else
     {
         if (firstRender)
         {
-            await LoadCurrencies();
+            LoadCurrencies();
             await LoadData();
             StateHasChanged();
         }
     }
 
-    private async Task LoadCurrencies()
+    private void LoadCurrencies()
     {
-        var currencyDtos = await cqrsInvoker.Query(new GetCurrenciesQuery());
-        currencies = currencyDtos.Select(i => i.CurrencyId.Value.ToString());
+        foreach (CurrencyCode code in Enum.GetValues(typeof(CurrencyCode)))
+        {
+            currencies ??= [];
+            currencies.Add(code.ToString());
+        } 
     }
 
     private async Task LoadData()

@@ -5,8 +5,8 @@ using Wealth.CurrencyManagement.Domain.Repositories;
 namespace Wealth.CurrencyManagement.Application.ExchangeRates.Queries;
 
 public record GetExchangeRatesQuery(
-    CurrencyId FromId,
-    CurrencyId ToId,
+    CurrencyCode FromId,
+    CurrencyCode ToId,
     int? Page = 1,
     int? PageSize = 50) : IQuery<PaginatedResult<ExchangeRateDTO>>;
 

@@ -54,13 +54,13 @@ public class BondsRepository : IBondsRepository
         bond.ChangePrice(price);
         const string sql = """
                            UPDATE "Bonds" 
-                           SET "Price_CurrencyId" = @CurrencyId, "Price_Amount" = @Amount
+                           SET "Price_Currency" = @Currency, "Price_Amount" = @Amount
                            WHERE "Id" = @Id
                            """;
         await connection.ExecuteAsync(sql, new
         {
             Id = id.Value,
-            CurrencyId = bond.Price.CurrencyId.Value,
+            Currency = bond.Price.Currency,
             Amount = bond.Price.Amount,
         });
         dbContext.AddEvents(bond);
@@ -112,13 +112,13 @@ public class BondsRepository : IBondsRepository
         instrument.ChangeCoupon(coupon);
         const string sql = """
                            UPDATE "Bonds" 
-                           SET "Coupon_CurrencyId" = @CurrencyId, "Coupon_Amount" = @Amount
+                           SET "Coupon_CurrencyId" = @Currency, "Coupon_Amount" = @Amount
                            WHERE "Id" = @Id
                            """;
         await connection.ExecuteAsync(sql, new
         {
             Id = id.Value,
-            CurrencyId = coupon.ValuePerYear.CurrencyId.Value,
+            Currency = coupon.ValuePerYear.Currency,
             Amount = coupon.ValuePerYear.Amount,
         });
         dbContext.AddEvents(instrument);
@@ -129,9 +129,9 @@ public class BondsRepository : IBondsRepository
         Id = 0,
         Name,
         ISIN,
-        Price_CurrencyId,
+        Price_Currency,
         Price_Amount,
-        Coupon_CurrencyId,
+        Coupon_Currency,
         Coupon_Amount,
         FIGI
     }
@@ -144,20 +144,20 @@ public class BondsRepository : IBondsRepository
         while (reader.Read())
         {
             var bond = new Bond(reader.GetInt32((int)Columns.Id));
-            if (!reader.IsDBNull((int)Columns.Coupon_CurrencyId))
+            if (!reader.IsDBNull((int)Columns.Coupon_Currency))
             {
                 bond.Coupon = new Coupon(
-                    reader.GetString((int)Columns.Coupon_CurrencyId),
+                    (CurrencyCode)reader.GetByte((int)Columns.Coupon_Currency),
                     reader.GetDecimal((int)Columns.Coupon_Amount));
             }
 
             bond.Name = reader.GetString((int)Columns.Name);
             bond.Isin = reader.GetString((int)Columns.ISIN);
             bond.Figi = reader.GetString((int)Columns.FIGI);
-            if (!reader.IsDBNull((int)Columns.Price_CurrencyId))
+            if (!reader.IsDBNull((int)Columns.Price_Currency))
             {
                 bond.Price = new Money(
-                    reader.GetString((int)Columns.Price_CurrencyId),
+                    (CurrencyCode)reader.GetByte((int)Columns.Price_Currency),
                     reader.GetDecimal((int)Columns.Price_Amount));
             }
 

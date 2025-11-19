@@ -32,7 +32,7 @@ public sealed class CurrencyControllersTests : IClassFixture<CurrencyManagementA
         Assert.Equal(2, currencies.Count());
 
         // get not existed currency
-        var currencyCode = CurrencyCode.CNY;
+        var currencyCode = CurrencyCode.Cny;
         var response0 = await httpClient.GetAsync($"/api/currency/{currencyCode}");
 
         Assert.Equal(HttpStatusCode.NotFound, response0.StatusCode);

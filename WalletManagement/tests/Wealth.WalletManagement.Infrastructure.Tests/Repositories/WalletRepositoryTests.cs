@@ -56,7 +56,7 @@ public class WalletRepositoryTests
     [Fact]
     public async Task WhenInsertMoney()
     {
-        var money = new Money(CurrencyCode.RUB, 23m);
+        var money = new Money(CurrencyCode.Rub, 23m);
         var id = await CreateWallet("Foo");
 
         await repository.InsertMoney(id, money);
@@ -64,14 +64,14 @@ public class WalletRepositoryTests
         var portfolio = await repository.GetWallet(id);
         Assert.NotNull(portfolio);
         var currency = Assert.Single(portfolio.Currencies);
-        Assert.Equal(money.CurrencyId, currency.CurrencyId);
+        Assert.Equal(money.Currency, currency.CurrencyId);
         Assert.Equal(money.Amount, currency.Amount);
     }
 
     [Fact]
     public async Task WhenEjectMoney()
     {
-        var money = new Money(CurrencyCode.RUB, 23m);
+        var money = new Money(CurrencyCode.Rub, 23m);
         var id = await CreateWallet("Foo");
 
         await repository.EjectMoney(id, money);
@@ -79,7 +79,7 @@ public class WalletRepositoryTests
         var portfolio = await repository.GetWallet(id);
         Assert.NotNull(portfolio);
         var currency = Assert.Single(portfolio.Currencies);
-        Assert.Equal(money.CurrencyId, currency.CurrencyId);
+        Assert.Equal(money.Currency, currency.CurrencyId);
         Assert.Equal(-money.Amount, currency.Amount);
     }
 

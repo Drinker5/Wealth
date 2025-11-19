@@ -9,8 +9,8 @@ public class ExchangeRate : AggregateRoot
 {
     private const decimal minimalRate = 1e-5m;
 
-    public CurrencyId BaseCurrencyId { get; private set; }
-    public CurrencyId TargetCurrencyId { get; private set; }
+    public CurrencyCode BaseCurrency { get; private set; }
+    public CurrencyCode TargetCurrency { get; private set; }
     public decimal Rate { get; private set; }
     public DateOnly ValidOnDate { get; private set; }
 
@@ -18,7 +18,7 @@ public class ExchangeRate : AggregateRoot
     {
     }
 
-    public static ExchangeRate Create(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, decimal rate, DateOnly date)
+    public static ExchangeRate Create(CurrencyCode baseCurrency, CurrencyCode targetCurrency, decimal rate, DateOnly date)
     {
         if (rate < minimalRate)
             throw new ArgumentException("Rate must be greater than 0");
@@ -26,14 +26,14 @@ public class ExchangeRate : AggregateRoot
         if (date == default)
             throw new ArgumentException("Date must be set");
 
-        if (baseCurrencyId == targetCurrencyId)
+        if (baseCurrency == targetCurrency)
             throw new ArgumentException("Currencies should be different");
 
         var exchangeRate = new ExchangeRate
         {
             Rate = rate,
-            BaseCurrencyId = baseCurrencyId,
-            TargetCurrencyId = targetCurrencyId,
+            BaseCurrency = baseCurrency,
+            TargetCurrency = targetCurrency,
             ValidOnDate = date
         };
         return exchangeRate;
@@ -41,11 +41,11 @@ public class ExchangeRate : AggregateRoot
 
     public Money Convert(Money money)
     {
-        if (money.CurrencyId == BaseCurrencyId)
-            return new Money(TargetCurrencyId, money.Amount * Rate);
+        if (money.Currency == BaseCurrency)
+            return new Money(TargetCurrency, money.Amount * Rate);
 
-        if (money.CurrencyId == TargetCurrencyId)
-            return new Money(BaseCurrencyId, money.Amount / Rate);
+        if (money.Currency == TargetCurrency)
+            return new Money(BaseCurrency, money.Amount / Rate);
 
         throw new ArgumentException("Invalid currency");
     }

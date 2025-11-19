@@ -20,22 +20,26 @@ public class ExchangeRateController : Controller
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] CreateEchangeRateRequest request)
     {
-        await invoker.Command(new CreateExchangeRateCommand(request.FromId, request.ToId, request.Rate, request.Date));
+        await invoker.Command(new CreateExchangeRateCommand(request.From, request.To, request.Rate, request.Date));
         return Ok();
     }
 
     [HttpGet]
-    public async Task<IActionResult> Exchange([FromQuery] string fromId, [FromQuery] decimal value, [FromQuery] string toId, [FromQuery] DateOnly date)
+    public async Task<IActionResult> Exchange(
+        [FromQuery] CurrencyCode from,
+        [FromQuery] decimal value,
+        [FromQuery] CurrencyCode to,
+        [FromQuery] DateOnly date)
     {
-        var result = await invoker.Query(new ExchangeQuery(new Money(fromId, value), new CurrencyId(toId), date));
+        var result = await invoker.Query(new ExchangeQuery(new Money(from, value), to, date));
         return Ok(result);
     }
 
-    
-    [HttpPost("[action]/{fromId}/{toId}")]
-    public async Task<IActionResult> CheckNewExchangeRates(string fromId, string toId)
+
+    [HttpPost("[action]/{from}/{to}")]
+    public async Task<IActionResult> CheckNewExchangeRates(CurrencyCode from, CurrencyCode to)
     {
-        await invoker.Command(new CheckNewExchangeRatesCommand(new CurrencyId(fromId), new CurrencyId(toId)));
+        await invoker.Command(new CheckNewExchangeRatesCommand(from, to));
         return Ok();
     }
 }

@@ -5,19 +5,19 @@ namespace Wealth.CurrencyManagement.Domain.Repositories;
 
 public interface IExchangeRateRepository
 {
-    Task<ExchangeRate?> GetExchangeRate(CurrencyId baseCurrencyId,
-        CurrencyId targetCurrencyId,
+    Task<ExchangeRate?> GetExchangeRate(CurrencyCode baseCurrency,
+        CurrencyCode targetCurrency,
         DateOnly validOnDate);
 
     Task<ExchangeRate> CreateExchangeRate(
-        CurrencyId baseCurrencyId,
-        CurrencyId targetCurrencyId,
+        CurrencyCode baseCurrency,
+        CurrencyCode targetCurrency,
         decimal rate,
         DateOnly validOnDate);
 
-    Task<DateOnly> GetLastExchangeRateDate(CurrencyId requestFromCurrency, CurrencyId requestToCurrency);
+    Task<DateOnly> GetLastExchangeRateDate(CurrencyCode requestFromCurrency, CurrencyCode requestToCurrency);
     Task<PaginatedResult<ExchangeRate>> GetExchangeRates(
-        CurrencyId requestFromId,
-        CurrencyId requestToId,
+        CurrencyCode requestFrom,
+        CurrencyCode requestTo,
         PageRequest pageRequest);
 }

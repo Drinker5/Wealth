@@ -9,12 +9,8 @@ message GuidProto {
 }
 
 message MoneyProto {
-  CurrencyIdProto currency_id = 1;
+  CurrencyCodeProto currency = 1;
   DecimalProto amount = 2;
-}
-
-message CurrencyIdProto {
-  CurrencyCodeProto code = 1;
 }
 
 enum CurrencyCodeProto {
@@ -48,6 +44,10 @@ message BondIdProto {
 }
 
 message StockIdProto {
+  int32 id = 1;
+}
+
+message CurrencyIdProto {
   int32 id = 1;
 }
 

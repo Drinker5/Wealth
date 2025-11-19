@@ -72,7 +72,7 @@ public class Wallet : AggregateRoot
     
     private void ChangeCurrencyAmount(Money money)
     {
-        var currency = GetOrCreate(money.CurrencyId);
+        var currency = GetOrCreate(money.Currency);
         currency.Amount += money.Amount;
         if (currency.Amount == 0)
             Currencies.Remove(currency);

@@ -18,8 +18,8 @@ public class ExchangeRateRepository : IExchangeRateRepository
     public Task<ExchangeRate?> GetExchangeRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, DateOnly validOnDate)
     {
         return context.ExchangeRates.AsNoTracking().SingleOrDefaultAsync(e =>
-            e.BaseCurrencyId == baseCurrencyId
-            && e.TargetCurrencyId == targetCurrencyId
+            e.BaseCurrency == baseCurrencyId
+            && e.TargetCurrency == targetCurrencyId
             && e.ValidOnDate == validOnDate);
     }
 
@@ -37,7 +37,7 @@ public class ExchangeRateRepository : IExchangeRateRepository
     public async Task<DateOnly> GetLastExchangeRateDate(CurrencyId requestFromCurrency, CurrencyId requestToCurrency)
     {
         var date = await context.ExchangeRates.AsNoTracking()
-            .Where(e => e.BaseCurrencyId == requestFromCurrency && e.TargetCurrencyId == requestToCurrency)
+            .Where(e => e.BaseCurrency == requestFromCurrency && e.TargetCurrency == requestToCurrency)
             .OrderByDescending(e => e.ValidOnDate)
             .Select(e => e.ValidOnDate)
             .FirstOrDefaultAsync();
@@ -53,7 +53,7 @@ public class ExchangeRateRepository : IExchangeRateRepository
         var skip = pageRequest.PageSize * (pageRequest.Page - 1);
         var take = pageRequest.PageSize;
         var queryable = context.ExchangeRates.AsNoTracking()
-            .Where(e => e.BaseCurrencyId == requestFromId)
+            .Where(e => e.BaseCurrency == requestFromId)
             .Where(e => e.TargetCurrencyId == requestToId);
         var total = await queryable.CountAsync();
         var exchangeRates = await queryable

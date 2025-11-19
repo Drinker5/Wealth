@@ -14,7 +14,7 @@ public class StockTradeRepository(ITableWriterBuilder tableWriterBuilder) : ISto
         .AddColumn("stock_id", i => i.StockId.Value)
         .AddColumn("quantity", i => i.Quantity)
         .AddColumn("amount", i => i.Amount.Amount)
-        .AddColumn("currency", i => (byte)i.Amount.CurrencyId.Value)
+        .AddColumn("currency", i => (byte)i.Amount.Currency)
         .AddColumn("type", i => (byte)i.Type)
         .Build();
 

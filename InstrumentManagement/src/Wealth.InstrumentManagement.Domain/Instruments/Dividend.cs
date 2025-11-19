@@ -3,19 +3,12 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.InstrumentManagement.Domain.Instruments;
 
-public record struct Dividend : IValueObject
+public record struct Dividend(Money ValuePerYear) : IValueObject
 {
     public static Dividend Empty = new Dividend(Money.Empty);
     
-    public Money ValuePerYear { get; init; }
-
-    public Dividend(Money ValuePerYear)
-    {
-        this.ValuePerYear = ValuePerYear;
-    }
-
-    public Dividend(CurrencyId CurrencyId, decimal Amount)
-        : this(new Money(CurrencyId, Amount))
+    public Dividend(CurrencyCode Currency, decimal Amount)
+        : this(new Money(Currency, Amount))
     {
     }
 }

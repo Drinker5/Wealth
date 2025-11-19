@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.CurrencyManagement.API.Controllers.Requests;
-using Wealth.CurrencyManagement.Application.Currencies.Commands;
 using Wealth.CurrencyManagement.Application.Currencies.Queries;
 
 namespace Wealth.CurrencyManagement.API.Controllers;
@@ -19,14 +17,14 @@ public class CurrencyController(ICqrsInvoker invoker) : Controller
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<IActionResult> Get(string id)
+    public async Task<IActionResult> Get(CurrencyCode id)
     {
         try
         {
-            if (!CurrencyId.TryParse(id, out var currencyId))
+            if (id == CurrencyCode.None)
                 return BadRequest("Cannot parse currency");
                 
-            var result = await invoker.Query(new GetCurrencyQuery(currencyId));
+            var result = await invoker.Query(new GetCurrencyQuery(id));
             if (result is null)
                 return NotFound("Currency not found");
 
@@ -36,19 +34,5 @@ public class CurrencyController(ICqrsInvoker invoker) : Controller
         {
             return BadRequest(ex.Message);
         }
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Post([FromBody] CreateCurrencyRequest request)
-    {
-        var result = await invoker.Command(new CreateCurrencyCommand(request.Id, request.Name, request.Symbol));
-        return Ok(result);
-    }
-
-    [HttpPut]
-    public async Task<IActionResult> Put([FromBody] RenameCurrencyRequest request)
-    {
-        await invoker.Command(new RenameCurrencyCommand(request.Id, request.NewName));
-        return Ok();
     }
 }

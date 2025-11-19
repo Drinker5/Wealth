@@ -4,5 +4,5 @@ namespace Wealth.InstrumentManagement.Application.Services;
 
 public interface ICurrencyService
 {
-    Task<bool> IsCurrencyExists(CurrencyId currency);
+    Task<bool> IsCurrencyExists(CurrencyCode currency);
 }

@@ -22,7 +22,7 @@ public class CurrencyDTOSerializationTests
         var obj = JsonSerializer.Deserialize<CurrencyDTO>(json, jsonSerializerOptions);
 
         Assert.NotNull(obj);
-        Assert.Equal(CurrencyCode.EUR, obj.CurrencyId.Value);
+        Assert.Equal(CurrencyCode.Eur, obj.CurrencyId.Value);
         Assert.Equal("Foo", obj.Name);
         Assert.Equal("F", obj.Symbol);
     }

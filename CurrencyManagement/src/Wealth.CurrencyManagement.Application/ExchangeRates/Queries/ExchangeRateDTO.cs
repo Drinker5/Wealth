@@ -12,8 +12,8 @@ public record ExchangeRateDTO(
     public static ExchangeRateDTO From(ExchangeRate exchangeRate)
     {
         return new ExchangeRateDTO(
-            exchangeRate.BaseCurrencyId,
-            exchangeRate.TargetCurrencyId,
+            exchangeRate.BaseCurrency,
+            exchangeRate.TargetCurrency,
             exchangeRate.ValidOnDate,
             exchangeRate.Rate);
     }

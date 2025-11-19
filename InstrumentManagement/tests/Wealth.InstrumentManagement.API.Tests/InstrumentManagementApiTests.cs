@@ -29,7 +29,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
         client = new InstrumentsService.InstrumentsServiceClient(channel);
         currencyService = fixture.CurrencyService;
 
-        A.CallTo(() => currencyService.IsCurrencyExists("RUB")).Returns(true);
+        A.CallTo(() => currencyService.IsCurrencyExists(CurrencyCode.Rub)).Returns(true);
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
 
         Assert.Equal(1, instrument.BondId.Id);
         Assert.Equal<decimal>(12.34m, instrument.Price.Amount);
-        Assert.Equal(CurrencyCode.RUB, instrument.Price.CurrencyId);
+        Assert.Equal(CurrencyCode.Rub, instrument.Price.CurrencyId);
         Assert.Equal("test-bond-1", instrument.Name);
     }
 
@@ -67,10 +67,10 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
         Assert.Equal(1, instrument.StockId.Id);
         Assert.Equal(10, instrument.LotSize);
         Assert.Equal<decimal>(111m, instrument.Price.Amount);
-        Assert.Equal(CurrencyCode.RUB, instrument.Price.CurrencyId);
+        Assert.Equal(CurrencyCode.Rub, instrument.Price.CurrencyId);
         Assert.Equal("test-stock-1", instrument.Name);
         Assert.Equal<decimal>(222m, instrument.DividendPerYear.Amount);
-        Assert.Equal(CurrencyCode.USD, instrument.DividendPerYear.CurrencyId);
+        Assert.Equal(CurrencyCode.Usd, instrument.DividendPerYear.CurrencyId);
     }
 
     [Fact]
@@ -94,7 +94,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
         Assert.Equal(createStockRequest.Isin, instrument.Isin);
         Assert.Equal(createStockRequest.Figi, instrument.Figi);
         Assert.Equal(0, instrument.Price.Amount);
-        var newPrice = new Money("RUB", 123);
+        var newPrice = new Money(CurrencyCode.Rub, 123);
 
         await client.ChangeStockPriceAsync(new ChangeStockPriceRequest { StockId = stockId, Price = newPrice });
 
@@ -127,7 +127,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
         Assert.Equal(createStockRequest.Isin, instrument.Isin);
         Assert.Equal(createStockRequest.Figi, instrument.Figi);
         Assert.Equal(0, instrument.Price.Amount);
-        var newPrice = new Money("RUB", 123);
+        var newPrice = new Money(CurrencyCode.Rub, 123);
 
         await client.ChangeBondPriceAsync(new ChangeBondPriceRequest { BondId = bondId, Price = newPrice });
 

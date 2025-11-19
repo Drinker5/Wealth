@@ -8,7 +8,7 @@ public class ChangeStockPriceCommandHandler(IStocksRepository repository, ICurre
 {
     public async Task Handle(ChangeStockPriceCommand request, CancellationToken cancellationToken)
     {
-        if (!await currencyService.IsCurrencyExists(request.Price.CurrencyId))
+        if (!await currencyService.IsCurrencyExists(request.Price.Currency))
             return;
         
         await repository.ChangePrice(request.StockId, request.Price);

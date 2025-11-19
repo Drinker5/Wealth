@@ -15,17 +15,17 @@ public class ChangeDividendCommandHandlerTests
     {
         var stocksRepository = A.Fake<IStocksRepository>();
         var currencyService = A.Fake<ICurrencyService>();
-        A.CallTo(() => currencyService.IsCurrencyExists(CurrencyCode.RUB)).Returns(true);
+        A.CallTo(() => currencyService.IsCurrencyExists(CurrencyCode.Rub)).Returns(true);
         var command = new ChangeDividendCommand
         {
             Id = new StockId(3),
-            Dividend = new Dividend(CurrencyCode.RUB, 3.42m),
+            Dividend = new Dividend(CurrencyCode.Rub, 3.42m),
         };
         var handler = new ChangeDividendCommandHandler(stocksRepository, currencyService);
         
         await handler.Handle(command, CancellationToken.None);
         
-        A.CallTo(() => currencyService.IsCurrencyExists(command.Dividend.ValuePerYear.CurrencyId)).MustHaveHappened();
+        A.CallTo(() => currencyService.IsCurrencyExists(command.Dividend.ValuePerYear.Currency)).MustHaveHappened();
         A.CallTo(() => stocksRepository.ChangeDividend(command.Id, command.Dividend)).MustHaveHappened();
     }
 }

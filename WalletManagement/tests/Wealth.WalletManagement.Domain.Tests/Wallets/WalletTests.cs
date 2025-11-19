@@ -28,13 +28,13 @@ public class WalletTests
     [Fact]
     public void WhenInsert()
     {
-        var money = new Money(CurrencyCode.RUB, 10);
+        var money = new Money(CurrencyCode.Rub, 10);
 
         wallet.Insert(money);
 
         var currency = Assert.Single(wallet.Currencies);
         Assert.Equal(money.Amount, currency.Amount);
-        Assert.Equal(money.CurrencyId, currency.CurrencyId);
+        Assert.Equal(money.Currency, currency.CurrencyId);
         var ev = wallet.HasEvent<WalletMoneyInserted>();
         Assert.Equal(wallet.Id, ev.WalletId);
         Assert.Equal(money, ev.Money);
@@ -44,15 +44,15 @@ public class WalletTests
     [Fact]
     public void WhenEject()
     {
-        var money = new Money(CurrencyCode.RUB, 10);
-        var eject = new Money(CurrencyCode.RUB, 3);
+        var money = new Money(CurrencyCode.Rub, 10);
+        var eject = new Money(CurrencyCode.Rub, 3);
         wallet.Insert(money);
         
         wallet.Eject(eject);
 
         var currency = Assert.Single(wallet.Currencies);
         Assert.Equal(money.Amount - eject.Amount, currency.Amount);
-        Assert.Equal(money.CurrencyId, currency.CurrencyId);
+        Assert.Equal(money.Currency, currency.CurrencyId);
         var ev = wallet.HasEvent<WalletMoneyEjected>();
         Assert.Equal(wallet.Id, ev.WalletId);
         Assert.Equal(eject, ev.Money);
@@ -61,7 +61,7 @@ public class WalletTests
     [Fact]
     public void WhenEjectSameMoney()
     {
-        var money = new Money(CurrencyCode.RUB, 10);
+        var money = new Money(CurrencyCode.Rub, 10);
         wallet.Insert(money);
         
         wallet.Eject(money);
@@ -72,12 +72,12 @@ public class WalletTests
     [Fact]
     public void WhenEjectNotExistedMoney()
     {
-        var money = new Money(CurrencyCode.RUB, 10);
+        var money = new Money(CurrencyCode.Rub, 10);
         
         wallet.Eject(money);
 
         var currency = Assert.Single(wallet.Currencies);
-        Assert.Equal(money.CurrencyId, currency.CurrencyId);
+        Assert.Equal(money.Currency, currency.CurrencyId);
         Assert.Equal(-money.Amount, currency.Amount);
     }
 

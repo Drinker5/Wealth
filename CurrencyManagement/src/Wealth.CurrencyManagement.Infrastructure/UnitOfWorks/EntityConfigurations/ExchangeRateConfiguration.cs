@@ -9,20 +9,20 @@ internal class ExchangeRateConfiguration : IEntityTypeConfiguration<ExchangeRate
 {
     public void Configure(EntityTypeBuilder<ExchangeRate> builder)
     {
-        builder.HasKey(x => new { x.BaseCurrencyId, x.TargetCurrencyId, x.ValidOnDate });
+        builder.HasKey(x => new { BaseCurrencyId = x.BaseCurrency, TargetCurrencyId = x.TargetCurrency, x.ValidOnDate });
 
         builder.HasOne<Currency>()
             .WithMany()
-            .HasForeignKey(i => i.BaseCurrencyId);
+            .HasForeignKey(i => i.BaseCurrency);
 
         builder.HasOne<Currency>()
             .WithMany()
-            .HasForeignKey(i => i.TargetCurrencyId);
+            .HasForeignKey(i => i.TargetCurrency);
 
-        builder.Property(x => x.BaseCurrencyId)
+        builder.Property(x => x.BaseCurrency)
             .IsRequired();
 
-        builder.Property(x => x.TargetCurrencyId)
+        builder.Property(x => x.TargetCurrency)
             .IsRequired();
 
         builder.Property(x => x.ValidOnDate).HasColumnType("date").IsRequired();

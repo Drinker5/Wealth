@@ -7,10 +7,10 @@ namespace Wealth.Aggregation.Domain.Tests;
 public class StockAggregationTests
 {
     private StockId id = new StockId(3);
-    private Money price = new Money(CurrencyCode.RUB, 12.34m);
-    private Money p1 = new Money(CurrencyCode.RUB, 1m);
+    private Money price = new Money(CurrencyCode.Rub, 12.34m);
+    private Money p1 = new Money(CurrencyCode.Rub, 1m);
 
-    private Money dividendPerYear = new Money(CurrencyCode.RUB, 3.22m);
+    private Money dividendPerYear = new Money(CurrencyCode.Rub, 3.22m);
     private readonly StockAggregation aggregation;
     private string name = "name";
     private int lotSize = 1;
@@ -34,13 +34,13 @@ public class StockAggregationTests
         Assert.Equal(0, aggregation.Quantity);
         Assert.Equal(1, aggregation.LotSize);
         Assert.Equal(dividendPerYear, aggregation.DividendPerYear);
-        Assert.Equal(price.CurrencyId, aggregation.CurrentValue.CurrencyId);
+        Assert.Equal(price.Currency, aggregation.CurrentValue.Currency);
         Assert.Equal(0, aggregation.CurrentValue.Amount);
-        Assert.Equal(price.CurrencyId, aggregation.CurrentDividendValue.CurrencyId);
+        Assert.Equal(price.Currency, aggregation.CurrentDividendValue.Currency);
         Assert.Equal(0, aggregation.CurrentDividendValue.Amount);
-        Assert.Equal(price.CurrencyId, aggregation.TotalDividends.CurrencyId);
+        Assert.Equal(price.Currency, aggregation.TotalDividends.Currency);
         Assert.Equal(0, aggregation.TotalDividends.Amount);
-        Assert.Equal(price.CurrencyId, aggregation.TotalInvestments.CurrencyId);
+        Assert.Equal(price.Currency, aggregation.TotalInvestments.Currency);
         Assert.Equal(0, aggregation.TotalInvestments.Amount);
     }
 

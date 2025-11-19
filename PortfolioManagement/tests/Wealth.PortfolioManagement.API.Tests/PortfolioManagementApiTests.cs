@@ -120,7 +120,7 @@ public sealed class PortfolioManagementApiTests : IClassFixture<PortfolioManagem
 
         Assert.NotNull(changedPortfolio);
         var currency = Assert.Single(changedPortfolio.Currencies);
-        Assert.Equal(newDeposit.money.CurrencyId, currency.CurrencyId);
+        Assert.Equal(newDeposit.money.Currency, currency.CurrencyId);
         Assert.Equal(150, currency.Amount);
         var asset = Assert.Single(changedPortfolio.Stocks);
         Assert.Equal(buyAsset.InstrumentId, asset.Id);

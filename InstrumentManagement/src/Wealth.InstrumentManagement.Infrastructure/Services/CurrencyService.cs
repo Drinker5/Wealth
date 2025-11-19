@@ -9,7 +9,7 @@ public class CurrencyService(ILogger<CurrencyService> logger, HttpClient httpCli
 {
     private readonly string remoteServiceBaseUrl = "api/currency";
 
-    public async Task<bool> IsCurrencyExists(CurrencyId currencyId)
+    public async Task<bool> IsCurrencyExists(CurrencyCode currencyId)
     {
         try
         {
@@ -22,9 +22,9 @@ public class CurrencyService(ILogger<CurrencyService> logger, HttpClient httpCli
         }
     }
 
-    private async Task<CurrencyItem?> GetCurrency(CurrencyId id)
+    private async Task<CurrencyItem?> GetCurrency(CurrencyCode currency)
     {
-        var uri = $"{remoteServiceBaseUrl}/{id.Value}";
+        var uri = $"{remoteServiceBaseUrl}/{currency}";
         var response = await httpClient.GetAsync(uri);
 
         if (response.IsSuccessStatusCode)
@@ -34,7 +34,7 @@ public class CurrencyService(ILogger<CurrencyService> logger, HttpClient httpCli
         }
 
         var errorContent = await response.Content.ReadAsStringAsync();
-        logger.LogError($"Error fetching currency {id.Value}. Status: {response.StatusCode}. Content: {errorContent}");
+        logger.LogError($"Error fetching currency {currency}. Status: {response.StatusCode}. Content: {errorContent}");
         return null;
     }
 }
