@@ -10,8 +10,8 @@ namespace Wealth.CurrencyManagement.Application.Tests.DataProviders;
 public class CbrExchangeRateDataProviderTests
 {
     private readonly CbrExchangeRateDataProvider provider;
-    private readonly CurrencyId USD = "USD";
-    private readonly CurrencyId RUB = "RUB";
+    private const CurrencyCode USD = CurrencyCode.Usd;
+    private const CurrencyCode RUB = CurrencyCode.Rub;
     private readonly DateOnly date = new DateOnly(2020, 1, 1);
     private readonly MockHttpMessageHandler handler;
     private readonly HttpResponseMessage httpResponse;

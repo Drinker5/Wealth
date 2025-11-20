@@ -40,7 +40,7 @@ public sealed class DepositManagementApiTests : IClassFixture<DepositManagementA
     {
         var createDepositRequest = new CreateDepositRequest
         {
-            CurrencyId = CurrencyCodeProto.Rub,
+            Currency = CurrencyCodeProto.Rub,
             Name = "Test",
             Yield = new YieldProto
             {
@@ -55,18 +55,18 @@ public sealed class DepositManagementApiTests : IClassFixture<DepositManagementA
         var createdDeposit = await GetDeposit(createResponse.DepositId);
         Assert.Equal(createDepositRequest.Name, createdDeposit.Name);
         Assert.Equal(createDepositRequest.Yield, createdDeposit.Yield);
-        Assert.Equal(createDepositRequest.CurrencyId, createdDeposit.InterestPerYear.CurrencyId);
+        Assert.Equal(createDepositRequest.Currency, createdDeposit.InterestPerYear.Currency);
 
-        var investment = new Money("RUB", 32.32m);
+        var investment = new Money(CurrencyCode.Rub, 32.32m);
         await client.InvestAsync(new InvestRequest { DepositId = createResponse.DepositId, Investment = investment });
         createdDeposit = await GetDeposit(createResponse.DepositId);
         Assert.Equal(investment, (Money)createdDeposit.Investment);
-        
-        var withdrawal = new Money("RUB", 20m);
+
+        var withdrawal = new Money(CurrencyCode.Rub, 20m);
         await client.WithdrawAsync(new WithdrawRequest { DepositId = createResponse.DepositId, Withdrawal = withdrawal });
         createdDeposit = await GetDeposit(createResponse.DepositId);
         Assert.Equal(investment - withdrawal, (Money)createdDeposit.Investment);
-        
+
         async Task<DepositProto> GetDeposit(DepositId depositId) => (await client.GetDepositAsync(new GetDepositRequest { DepositId = depositId })).Deposit;
     }
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wealth.BuildingBlocks.Application.CommandScheduler;
 using Wealth.BuildingBlocks.Infrastructure.EFCore;
-using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Domain.ExchangeRates;
 
 namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
@@ -12,7 +11,6 @@ namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 /// </summary>
 public class WealthDbContext : WealthDbContextBase
 {
-    public virtual DbSet<Currency> Currencies { get; internal init; }
     public virtual DbSet<ExchangeRate> ExchangeRates { get; internal init; }
     public virtual DbSet<DefferedCommand> DefferedCommands { get; internal init; }
 

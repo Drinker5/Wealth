@@ -1,10 +1,11 @@
+using System.Runtime.InteropServices;
 using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.CurrencyManagement.Domain.Currencies;
 
 namespace Wealth.CurrencyManagement.Application.Currencies.Queries;
 
-public record CurrencyDTO(
-    byte CurrencyCodeId,
+[StructLayout(LayoutKind.Auto)]
+public record struct CurrencyDTO(
+    byte Currency,
     string Name)
 {
     public static CurrencyDTO From(CurrencyCode currency)

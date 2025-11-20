@@ -12,9 +12,9 @@ public class ExchangeRateRepositoryTests
 {
     private readonly WealthDbContext context;
     private readonly ExchangeRateRepository repo;
-    private readonly CurrencyId c1 = 1;
-    private readonly CurrencyId c2 = 2;
-    private readonly CurrencyId c3 = 3;
+    private const CurrencyCode c1 = CurrencyCode.Rub;
+    private const CurrencyCode c2 = CurrencyCode.Usd;
+    private const CurrencyCode c3 = CurrencyCode.Eur;
     private readonly DateOnly defaultDate = new DateOnly(2018, 12, 31);
 
     public ExchangeRateRepositoryTests()
@@ -34,15 +34,15 @@ public class ExchangeRateRepositoryTests
 
         Assert.Equal(defaultDate, result);
     }
-    
+
     [Fact]
     public async Task WhenGetLastExchangeRateDate_NoDate2()
     {
         var date1 = new DateOnly(2021, 3, 4);
-        AddExchange(new ExchangeRateBuilder().SetBaseCurrencyId(c1).SetTargetCurrencyId(c3).SetDate(date1).Build());
+        AddExchange(new ExchangeRateBuilder().SetBaseCurrency(c1).SetTargetCurrency(c3).SetDate(date1).Build());
 
         var result = await repo.GetLastExchangeRateDate(c1, c2);
-    
+
         Assert.Equal(defaultDate, result);
     }
 
@@ -51,8 +51,8 @@ public class ExchangeRateRepositoryTests
     {
         var date1 = new DateOnly(2021, 3, 4);
         var date2 = new DateOnly(2022, 5, 6);
-        AddExchange(new ExchangeRateBuilder().SetBaseCurrencyId(c1).SetTargetCurrencyId(c2).SetDate(date1).Build());
-        AddExchange(new ExchangeRateBuilder().SetBaseCurrencyId(c1).SetTargetCurrencyId(c2).SetDate(date2).Build());
+        AddExchange(new ExchangeRateBuilder().SetBaseCurrency(c1).SetTargetCurrency(c2).SetDate(date1).Build());
+        AddExchange(new ExchangeRateBuilder().SetBaseCurrency(c1).SetTargetCurrency(c2).SetDate(date2).Build());
 
         var result = await repo.GetLastExchangeRateDate(c1, c2);
 

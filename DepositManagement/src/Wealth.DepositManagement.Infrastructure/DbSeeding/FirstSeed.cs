@@ -16,19 +16,19 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
 
         if (!context.DepositOperations.Any())
             context.DepositOperations.AddRange(GetPredefinedDepositOperations());
-        
+
         await context.SaveChangesAsync();
     }
 
     private static IEnumerable<Deposit> GetPredefinedDeposits()
     {
-        var foo = Deposit.Create("Foo", 0.20m, "RUB");
-        foo.Invest(new Money("RUB", 1000));
+        var foo = Deposit.Create("Foo", 0.20m, CurrencyCode.Rub);
+        foo.Invest(new Money(CurrencyCode.Rub, 1000));
         yield return foo;
 
-        var bar = Deposit.Create("Bar", 0.05m, "USD");
-        bar.Invest(new Money("USD", 500));
-        bar.Withdraw(new Money("USD", 100));
+        var bar = Deposit.Create("Bar", 0.05m, CurrencyCode.Usd);
+        bar.Invest(new Money(CurrencyCode.Usd, 500));
+        bar.Withdraw(new Money(CurrencyCode.Usd, 100));
 
         yield return bar;
     }
@@ -41,7 +41,7 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
             DepositId = 1,
             Date = Clock.Now,
             Type = DepositOperationType.Investment,
-            Money = new Money("RUB", 1000),
+            Money = new Money(CurrencyCode.Rub, 1000),
         };
 
         yield return new DepositOperation
@@ -50,7 +50,7 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
             DepositId = 2,
             Date = Clock.Now,
             Type = DepositOperationType.Investment,
-            Money = new Money("USD", 500),
+            Money = new Money(CurrencyCode.Usd, 500),
         };
 
         yield return new DepositOperation
@@ -59,7 +59,7 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
             DepositId = 2,
             Date = Clock.Now,
             Type = DepositOperationType.Withdrawal,
-            Money = new Money("USD", 100),
+            Money = new Money(CurrencyCode.Usd, 100),
         };
     }
 }

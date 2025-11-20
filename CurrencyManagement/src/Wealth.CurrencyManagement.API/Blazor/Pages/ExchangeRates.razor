@@ -133,7 +133,7 @@ else
 
     private void LoadCurrencies()
     {
-        foreach (CurrencyCode code in Enum.GetValues(typeof(CurrencyCode)))
+        foreach (var code in Enum.GetValues<CurrencyCode>())
         {
             currencies ??= [];
             currencies.Add(code.ToString());

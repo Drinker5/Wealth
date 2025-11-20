@@ -73,7 +73,7 @@ public class PortfolioRepositoryTests
     [Fact]
     public async Task WhenAddCurrency()
     {
-        CurrencyId currencyId = "RUB";
+        CurrencyId currencyId = CurrencyCode.Rub;
         var amount = 23m;
         var id = await CreatePortfolio("Foo");
 

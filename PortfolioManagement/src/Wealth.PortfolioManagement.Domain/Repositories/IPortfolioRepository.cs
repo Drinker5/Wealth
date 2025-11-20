@@ -10,7 +10,7 @@ public interface IPortfolioRepository
     Task RenamePortfolio(PortfolioId id, string newName);
     Task Buy(PortfolioId id, StockId stockId, Money totalPrice, int quantity);
     Task Buy(PortfolioId id, BondId bondId, Money totalPrice, int quantity);
-    Task AddCurrency(PortfolioId id, CurrencyId currencyId, decimal amount);
+    Task AddCurrency(PortfolioId id, CurrencyCode currency, decimal amount);
     Task<PortfolioId> CreatePortfolio(PortfolioId id, string requestName);
     Task<PortfolioId> CreatePortfolio(string requestName);
 }

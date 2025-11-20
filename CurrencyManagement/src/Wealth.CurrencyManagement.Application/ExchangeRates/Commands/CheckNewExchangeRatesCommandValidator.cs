@@ -8,12 +8,12 @@ public class CheckNewExchangeRatesCommandValidator : CommandValidator<CheckNewEx
 {
     public CheckNewExchangeRatesCommandValidator()
     {
-        RuleFor(cmd => cmd.ToCurrency.Value)
+        RuleFor(cmd => cmd.ToCurrency)
             .Equal(CurrencyCode.Rub)
             .WithMessage("Only RUB is supported");
 
-        RuleFor(cmd => cmd.ToCurrency.Value)
-            .NotEqual(currency => currency.FromCurrency.Value)
+        RuleFor(cmd => cmd.ToCurrency)
+            .NotEqual(currency => currency.FromCurrency)
             .WithMessage("Currencies should differ");
     }
 }

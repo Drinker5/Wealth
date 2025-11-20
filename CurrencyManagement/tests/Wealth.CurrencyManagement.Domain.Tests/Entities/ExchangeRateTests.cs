@@ -6,9 +6,9 @@ namespace Wealth.CurrencyManagement.Domain.Tests.Entities;
 [TestSubject(typeof(ExchangeRate))]
 public class ExchangeRateTests
 {
-    private readonly CurrencyId c1 = "Rub";
-    private readonly CurrencyId c2 = "EUR";
-    private readonly CurrencyId c3 = "CNY";
+    private const CurrencyCode c1 = CurrencyCode.Rub;
+    private const CurrencyCode c2 = CurrencyCode.Eur;
+    private const CurrencyCode c3 = CurrencyCode.Cny;
     private readonly DateOnly d = new DateOnly(2020, 01, 01);
     private readonly decimal r = 4.72m;
 
@@ -70,8 +70,8 @@ public class ExchangeRateTests
         Assert.Equal(backResult, m);
     }
 
-    private ExchangeRate CreateExchangeRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, decimal rate, DateOnly date)
+    private static ExchangeRate CreateExchangeRate(CurrencyCode baseCurrency, CurrencyCode targetCurrency, decimal rate, DateOnly date)
     {
-        return ExchangeRate.Create(baseCurrencyId, targetCurrencyId, rate, date);
+        return ExchangeRate.Create(baseCurrency, targetCurrency, rate, date);
     }
 }
