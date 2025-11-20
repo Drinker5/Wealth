@@ -11,9 +11,9 @@ public class DepositRepositoryTests
 {
     private readonly DepositRepository repository;
     private readonly WealthDbContext context;
-    private readonly string name = "Foo";
+    private const string name = "Foo";
     private readonly Yield yield = 1m;
-    private readonly CurrencyId currencyId = "RUB";
+    private const CurrencyCode currency = CurrencyCode.Rub;
 
     public DepositRepositoryTests()
     {
@@ -46,7 +46,7 @@ public class DepositRepositoryTests
     [Fact]
     public async Task WhenDepositCreated()
     {
-        var id = await repository.Create(name, yield, currencyId);
+        var id = await repository.Create(name, yield, currency);
 
         Assert.NotEqual(0, id.Id);
 
@@ -56,14 +56,14 @@ public class DepositRepositoryTests
         Assert.Equal(id, result.Id);
         Assert.Equal(name, result.Name);
         Assert.Equal(yield, result.Yield);
-        Assert.Equal(currencyId, result.Investment.Currency);
+        Assert.Equal(currency, result.Investment.Currency);
     }
 
     [Fact]
     public async Task WhenInvest()
     {
-        var id = await repository.Create(name, yield, currencyId);
-        var investment = new Money(currencyId, 100m);
+        var id = await repository.Create(name, yield, currency);
+        var investment = new Money(currency, 100m);
 
         await repository.Invest(id, investment);
 
@@ -75,9 +75,9 @@ public class DepositRepositoryTests
     [Fact]
     public async Task WhenWithdraw()
     {
-        var id = await repository.Create(name, yield, currencyId);
-        var investment = new Money(currencyId, 100m);
-        var withdrawal = new Money(currencyId, 90m);
+        var id = await repository.Create(name, yield, currency);
+        var investment = new Money(currency, 100m);
+        var withdrawal = new Money(currency, 90m);
         await repository.Invest(id, investment);
 
         await repository.Withdraw(id, withdrawal);

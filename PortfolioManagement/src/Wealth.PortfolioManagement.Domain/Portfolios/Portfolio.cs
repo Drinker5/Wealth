@@ -226,7 +226,7 @@ public class Portfolio : AggregateRoot
             Bonds.Remove(asset);
     }
 
-    private void ChangeCurrencyAmount(CurrencyId currencyId, decimal amount)
+    private void ChangeCurrencyAmount(CurrencyCode currencyId, decimal amount)
     {
         var currency = GetOrCreate(currencyId);
         currency.Amount += amount;
@@ -265,20 +265,20 @@ public class Portfolio : AggregateRoot
     }
 
 
-    private PortfolioCurrency GetOrCreate(CurrencyId currencyId)
+    private PortfolioCurrency GetOrCreate(CurrencyCode currency)
     {
-        var existed = Currencies.SingleOrDefault(i => i.CurrencyId == currencyId);
+        var existed = Currencies.SingleOrDefault(i => i.CurrencyId == currency);
         if (existed != null)
             return existed;
 
-        var currency = new PortfolioCurrency
+        var portfolioCurrency = new PortfolioCurrency
         {
-            CurrencyId = currencyId,
+            CurrencyId = currency,
             Amount = 0,
         };
 
-        Currencies.Add(currency);
-        return currency;
+        Currencies.Add(portfolioCurrency);
+        return portfolioCurrency;
     }
 
     public void Rename(string newName)

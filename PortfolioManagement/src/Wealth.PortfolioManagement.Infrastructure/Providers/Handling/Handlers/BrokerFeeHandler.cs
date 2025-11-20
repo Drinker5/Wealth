@@ -33,7 +33,7 @@ public class BrokerFeeHandler(IInstrumentIdProvider instrumentIdProvider) : IOpe
             {
                 Id = operation.Id,
                 Date = operation.Date.ToDateTimeOffset(),
-                Amount = new Money(operation.Currency, operation.Payment),
+                Amount = operation.Payment.ToMoney(),
                 BondId = await instrumentIdProvider.GetBondIdByFigi(operation.Figi),
                 PortfolioId = portfolioId,
             },
@@ -41,7 +41,7 @@ public class BrokerFeeHandler(IInstrumentIdProvider instrumentIdProvider) : IOpe
             {
                 Id = operation.Id,
                 Date = operation.Date.ToDateTimeOffset(),
-                Amount = new Money(operation.Currency, operation.Payment),
+                Amount = operation.Payment.ToMoney(),
                 StockId = await instrumentIdProvider.GetStockIdByFigi(operation.Figi),
                 PortfolioId = portfolioId,
             },
@@ -49,7 +49,7 @@ public class BrokerFeeHandler(IInstrumentIdProvider instrumentIdProvider) : IOpe
             {
                 Id = operation.Id,
                 Date = operation.Date.ToDateTimeOffset(),
-                Amount = new Money(operation.Currency, operation.Payment),
+                Amount = operation.Payment.ToMoney(),
                 CurrencyId = await instrumentIdProvider.GetCurrencyIdByFigi(operation.Figi),
                 PortfolioId = portfolioId,
             },

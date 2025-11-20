@@ -11,19 +11,16 @@ public class CurrencyDTOSerializationTests
     [Fact]
     public void DeserializeTest()
     {
-        var json = """
-                   {
-                     "currencyId" : 3,
-                     "name" : "Foo",
-                     "symbol" : "F"
-                   }
-                   """;
+        const string json = """
+                            {
+                              "currency" : 3,
+                              "name" : "Foo"
+                            }
+                            """;
 
         var obj = JsonSerializer.Deserialize<CurrencyDTO>(json, jsonSerializerOptions);
 
-        Assert.NotNull(obj);
-        Assert.Equal(CurrencyCode.Eur, obj.CurrencyId.Value);
+        Assert.Equal(CurrencyCode.Eur, (CurrencyCode)obj.Currency);
         Assert.Equal("Foo", obj.Name);
-        Assert.Equal("F", obj.Symbol);
     }
 }

@@ -63,7 +63,7 @@ public sealed class WalletManagementApiTests : IClassFixture<WalletManagementApi
         var insertMoney = new
         {
             WalletId = newWalletId,
-            money = new Money("RUB", 200)
+            money = new Money(CurrencyCode.Rub, 200)
         };
 
         var insertResponse = await httpClient.PutAsync("/api/wallet/insert", JsonContent.Create(insertMoney, options: jsonSerializerOptions));
@@ -74,7 +74,7 @@ public sealed class WalletManagementApiTests : IClassFixture<WalletManagementApi
         var ejectMoney = new
         {
             WalletId = newWalletId,
-            money = new Money("RUB", 50)
+            money = new Money(CurrencyCode.Rub, 50)
         };
 
         var ejectResponse = await httpClient.PutAsync("/api/wallet/eject", JsonContent.Create(ejectMoney, options: jsonSerializerOptions));

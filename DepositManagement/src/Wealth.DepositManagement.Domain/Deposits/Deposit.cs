@@ -17,7 +17,7 @@ public class Deposit : AggregateRoot
     {
     }
 
-    public static Deposit Create(string name, Yield yield, CurrencyId currency)
+    public static Deposit Create(string name, Yield yield, CurrencyCode currency)
     {
         var deposit = new Deposit
         {

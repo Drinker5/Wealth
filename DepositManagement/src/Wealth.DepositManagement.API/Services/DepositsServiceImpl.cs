@@ -1,4 +1,5 @@
 using Grpc.Core;
+using Wealth.BuildingBlocks;
 using Wealth.BuildingBlocks.Application;
 using Wealth.DepositManagement.Application.Deposits.Commands;
 using Wealth.DepositManagement.Application.Deposits.Queries;
@@ -39,7 +40,7 @@ public class DepositsServiceImpl : DepositsService.DepositsServiceBase
 
     public override async Task<CreateDepositResponse> CreateDeposit(CreateDepositRequest request, ServerCallContext context)
     {
-        var result = await cqrsInvoker.Command(new CreateDeposit(request.Name, request.Yield, request.CurrencyId));
+        var result = await cqrsInvoker.Command(new CreateDeposit(request.Name, request.Yield, request.Currency.FromProto()));
         return new CreateDepositResponse { DepositId = result };
     }
 

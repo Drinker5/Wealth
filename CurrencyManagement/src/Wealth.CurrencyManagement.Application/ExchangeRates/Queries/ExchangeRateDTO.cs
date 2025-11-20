@@ -4,8 +4,8 @@ using Wealth.CurrencyManagement.Domain.ExchangeRates;
 namespace Wealth.CurrencyManagement.Application.ExchangeRates.Queries;
 
 public record ExchangeRateDTO(
-    CurrencyId FromId,
-    CurrencyId ToId,
+    CurrencyCode FromId,
+    CurrencyCode ToId,
     DateOnly ValidOnDate,
     decimal Rate)
 {

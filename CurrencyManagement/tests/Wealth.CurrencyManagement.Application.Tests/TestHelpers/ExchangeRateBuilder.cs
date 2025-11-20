@@ -5,26 +5,26 @@ namespace Wealth.CurrencyManagement.Application.Tests.TestHelpers;
 
 public class ExchangeRateBuilder
 {
-    private CurrencyId baseCurrencyId = CurrencyCode.Rub;
-    private CurrencyId targetCurrencyId = CurrencyCode.Usd;
+    private CurrencyCode baseCurrency = CurrencyCode.Rub;
+    private CurrencyCode targetCurrency = CurrencyCode.Usd;
     private decimal rate = 1.42m;
     private DateOnly date = new DateOnly(2010, 10, 10);
 
     public ExchangeRate Build()
     {
-        return ExchangeRate.Create(baseCurrencyId, targetCurrencyId, rate, date);
+        return ExchangeRate.Create(baseCurrency, targetCurrency, rate, date);
     }
 
-    public ExchangeRateBuilder SetBaseCurrencyId(CurrencyId currencyId)
+    public ExchangeRateBuilder SetBaseCurrency(CurrencyCode currency)
     {
-        this.baseCurrencyId = currencyId;
+        this.baseCurrency = currency;
         return this;
     }
 
 
-    public ExchangeRateBuilder SetTargetCurrencyId(CurrencyId currencyId)
+    public ExchangeRateBuilder SetTargetCurrency(CurrencyCode currency)
     {
-        this.targetCurrencyId = currencyId;
+        this.targetCurrency = currency;
         return this;
     }
 
