@@ -1,6 +1,5 @@
 ﻿using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Infrastructure.EFCore.DbSeeding;
-using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Domain.ExchangeRates;
 using Wealth.CurrencyManagement.Infrastructure.UnitOfWorks;
 
@@ -10,19 +9,10 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
 {
     public async Task SeedAsync(WealthDbContext context)
     {
-        if (!context.Currencies.Any())
-            context.Currencies.AddRange(GetPredefinedCurrencies());
-
         if (!context.ExchangeRates.Any())
             context.ExchangeRates.AddRange(GetPredefinedExchangeRates());
 
         await context.SaveChangesAsync();
-    }
-
-    private static IEnumerable<Currency> GetPredefinedCurrencies()
-    {
-        yield return Currency.Create(CurrencyCode.Rub, "Ruble", "₽");
-        yield return Currency.Create(CurrencyCode.Usd, "Dollar", "$");
     }
 
     private static IEnumerable<ExchangeRate> GetPredefinedExchangeRates()

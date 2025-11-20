@@ -1,3 +1,4 @@
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.DepositManagement.Application.Deposits.Commands;
 using Wealth.DepositManagement.Domain.Repositories;
 
@@ -18,10 +19,10 @@ public class CreateDepositOperationHandlerTests
     [Fact]
     public async Task WhenHandle()
     {
-        var command = new CreateDeposit("foo", 0.3m, "RUB");
+        var command = new CreateDeposit("foo", 0.3m, CurrencyCode.Rub);
 
         await handler.Handle(command, CancellationToken.None);
 
-        repository.Verify(i => i.Create(command.Name, command.Yield, command.CurrencyId), Times.Once);
+        repository.Verify(i => i.Create(command.Name, command.Yield, command.Currency), Times.Once);
     }
 }

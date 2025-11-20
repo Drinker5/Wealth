@@ -4,5 +4,5 @@ namespace Wealth.CurrencyManagement.Application.DataProviders;
 
 public interface IExchangeRateDataProvider
 {
-    Task<decimal> GetRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, DateOnly? validOnDate);
+    Task<decimal> GetRate(CurrencyCode baseCurrency, CurrencyCode targetCurrency, DateOnly? validOnDate);
 }

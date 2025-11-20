@@ -55,7 +55,7 @@ public sealed class ExchangeRateControllerTests : IClassFixture<CurrencyManageme
         var body = await exchangeResponse.Content.ReadAsStringAsync();
         var money = JsonSerializer.Deserialize<Money>(body, jsonSerializerOptions);
 
-        Assert.Equal(obj.toId, money.Currency);
+        Assert.Equal(obj.toId, money.Currency.ToString());
         Assert.Equal(obj.rate * value, money.Amount);
     }
 
@@ -65,15 +65,14 @@ public sealed class ExchangeRateControllerTests : IClassFixture<CurrencyManageme
         // create new currency
         var cur1 = new
         {
-            id = new CurrencyId(CurrencyCode.Eur),
+            id = CurrencyCode.Eur,
             name = "A",
             symbol = "A"
         };
         var cur2 = new
         {
-            id = new CurrencyId(CurrencyCode.Rub) // only rub is supported
+            id = CurrencyCode.Rub // only rub is supported
         };
-        (await httpClient.PostAsync("/api/currency/", JsonContent.Create(cur1, options: jsonSerializerOptions))).EnsureSuccessStatusCode();
         Clock.SetCustomDate(new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.Zero));
         var limitCommandsPerRequest = 30;
 

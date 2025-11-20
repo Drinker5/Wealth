@@ -8,6 +8,6 @@ public class CreateDepositHandler(IDepositRepository repository) : ICommandHandl
 {
     public Task<DepositId> Handle(CreateDeposit request, CancellationToken cancellationToken)
     {
-        return repository.Create(request.Name, request.Yield, request.CurrencyId);
+        return repository.Create(request.Name, request.Yield, request.Currency);
     }
 }

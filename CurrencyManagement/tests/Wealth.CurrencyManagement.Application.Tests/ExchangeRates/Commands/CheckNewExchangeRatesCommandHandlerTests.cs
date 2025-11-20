@@ -11,27 +11,22 @@ namespace Wealth.CurrencyManagement.Application.Tests.ExchangeRates.Commands;
 public class CheckNewExchangeRatesCommandHandlerTests
 {
     private readonly CheckNewExchangeRatesCommandHandler handler;
-    private readonly ICurrencyRepository curencyRepo;
     private readonly IExchangeRateRepository exchangeRateRepository;
     private readonly ICommandsScheduler scheduler;
-    private readonly CurrencyId c1 = CurrencyCode.Rub;
-    private readonly CurrencyId c2 = CurrencyCode.Usd;
-    private readonly CurrencyId notExisted = CurrencyCode.None;
+    private readonly CurrencyCode c1 = CurrencyCode.Rub;
+    private readonly CurrencyCode c2 = CurrencyCode.Usd;
+    private readonly CurrencyCode notExisted = CurrencyCode.None;
     private readonly DateOnly d1 = new(2020, 1, 1);
 
     public CheckNewExchangeRatesCommandHandlerTests()
     {
-        curencyRepo = Substitute.For<ICurrencyRepository>();
         exchangeRateRepository = Substitute.For<IExchangeRateRepository>();
         scheduler = Substitute.For<ICommandsScheduler>();
 
         handler = new CheckNewExchangeRatesCommandHandler(
-            curencyRepo,
             exchangeRateRepository,
             scheduler);
 
-        curencyRepo.GetCurrency(c1).Returns(new CurrencyBuilder().SetId(c1).Build());
-        curencyRepo.GetCurrency(c2).Returns(new CurrencyBuilder().SetId(c2).Build());
         exchangeRateRepository.GetLastExchangeRateDate(c1, c2).Returns(d1);
     }
 
@@ -44,8 +39,6 @@ public class CheckNewExchangeRatesCommandHandlerTests
 
         await handler.Handle(command, CancellationToken.None);
 
-        await curencyRepo.Received(1).GetCurrency(c1); 
-        await curencyRepo.Received(1).GetCurrency(c2);
         await exchangeRateRepository.Received(1).GetLastExchangeRateDate(c1, c2);
         Assert.Equal(4, scheduler.ReceivedCalls().Count());
         await scheduler.Received(1)
@@ -67,8 +60,6 @@ public class CheckNewExchangeRatesCommandHandlerTests
 
         await handler.Handle(command, CancellationToken.None);
 
-        await curencyRepo.Received(1).GetCurrency(c1); 
-        await curencyRepo.Received(1).GetCurrency(c2);
         await exchangeRateRepository.Received(1).GetLastExchangeRateDate(c1, c2);
         Assert.Empty(scheduler.ReceivedCalls());
     }

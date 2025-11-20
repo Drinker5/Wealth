@@ -15,7 +15,10 @@ public class ExchangeQueryHandler : IQueryHandler<ExchangeQuery, Money?>
 
     public async Task<Money?> Handle(ExchangeQuery request, CancellationToken cancellationToken)
     {
-        var exchangeRate = await exchangeRateRepository.GetExchangeRate(request.Money.Currency, request.TargetCurrencyId, request.Date);
+        var exchangeRate = await exchangeRateRepository.GetExchangeRate(
+            request.Money.Currency,
+            request.TargetCurrency,
+            request.Date);
         return exchangeRate?.Convert(request.Money);
     }
 }

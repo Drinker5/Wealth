@@ -34,27 +34,26 @@ public class CbrExchangeRateDataProvider : IExchangeRateDataProvider
         this.cache = cache;
     }
 
-    public async Task<decimal> GetRate(CurrencyId baseCurrencyId, CurrencyId targetCurrencyId, DateOnly? validOnDate)
+    public async Task<decimal> GetRate(CurrencyCode baseCurrency, CurrencyCode targetCurrency, DateOnly? validOnDate)
     {
-        if (targetCurrencyId != CurrencyCode.Rub)
+        if (targetCurrency != CurrencyCode.Rub)
             throw new ArgumentException("Only RUB targetCurrencyId is supported");
 
-        if (baseCurrencyId == targetCurrencyId)
+        if (baseCurrency == targetCurrency)
             return 1;
 
         validOnDate ??= Clock.Today;
 
-        var currencyCode = baseCurrencyId.Value;
-        var cacheKey = $"{currencyCode}_{validOnDate:dd.MM.yyyy}";
+        var cacheKey = $"{baseCurrency}_{validOnDate:dd.MM.yyyy}";
         if (cache.TryGetValue(cacheKey, out decimal cachedRate))
             return cachedRate;
 
         if (cache.TryGetValue(cacheKey, out cachedRate))
             return cachedRate;
 
-        var valueString = await RequestValute(validOnDate.Value, currencyCode, CancellationToken.None);
+        var valueString = await RequestValute(validOnDate.Value, baseCurrency, CancellationToken.None);
         if (string.IsNullOrEmpty(valueString))
-            throw new InvalidOperationException($"No Valute found for {currencyCode}");
+            throw new InvalidOperationException($"No Valute found for {baseCurrency}");
 
         var rate = Parse(valueString);
         cache.Set(cacheKey, rate, cacheDuration);
@@ -74,7 +73,7 @@ public class CbrExchangeRateDataProvider : IExchangeRateDataProvider
     //  <Value>50,9632</Value>
     //  <VunitRate>50,9632</VunitRate>
     //</Valute>
-    private async Task<string?> RequestValute(DateOnly validOnDate, CurrencyId currencyId, CancellationToken token)
+    private async Task<string?> RequestValute(DateOnly validOnDate, CurrencyCode currency, CancellationToken token)
     {
         var url = $"{BaseUrl}?date_req={validOnDate:dd.MM.yyyy}";
         try
@@ -89,7 +88,7 @@ public class CbrExchangeRateDataProvider : IExchangeRateDataProvider
                 .Descendants("Valute")
                 .FirstOrDefault(v => string.Equals(
                     v?.Element("CharCode")?.Value,
-                    currencyId.ToString(),
+                    currency.ToString(),
                     StringComparison.InvariantCultureIgnoreCase));
 
             return valute?.Element("VunitRate")?.Value;

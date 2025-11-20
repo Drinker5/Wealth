@@ -79,7 +79,7 @@ public sealed class PortfolioManagementApiTests : IClassFixture<PortfolioManagem
         var newDeposit = new
         {
             PortfolioId = newPortfolioId,
-            money = new Money("RUB", 200)
+            money = new Money(CurrencyCode.Rub, 200)
         };
 
         var depositResponse = await httpClient.PutAsync(
@@ -92,7 +92,7 @@ public sealed class PortfolioManagementApiTests : IClassFixture<PortfolioManagem
         var buyAsset = new
         {
             InstrumentId = new StockId(32),
-            TotalPrice = new Money("RUB", 50),
+            TotalPrice = new Money(CurrencyCode.Rub, 50),
             Quantity = 3,
         };
 
