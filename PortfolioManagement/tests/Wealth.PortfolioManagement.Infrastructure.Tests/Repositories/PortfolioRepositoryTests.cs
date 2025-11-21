@@ -73,16 +73,16 @@ public class PortfolioRepositoryTests
     [Fact]
     public async Task WhenAddCurrency()
     {
-        CurrencyId currencyId = CurrencyCode.Rub;
+        CurrencyCode currencyCode = CurrencyCode.Rub;
         var amount = 23m;
         var id = await CreatePortfolio("Foo");
 
-        await repository.AddCurrency(id, currencyId, amount);
+        await repository.AddCurrency(id, currencyCode, amount);
 
         var portfolio = await repository.GetPortfolio(id);
         Assert.NotNull(portfolio);
         var currency = Assert.Single(portfolio.Currencies);
-        Assert.Equal(currencyId, currency.CurrencyId);
+        Assert.Equal(currencyCode, currency.Currency);
         Assert.Equal(amount, currency.Amount);
     }
 

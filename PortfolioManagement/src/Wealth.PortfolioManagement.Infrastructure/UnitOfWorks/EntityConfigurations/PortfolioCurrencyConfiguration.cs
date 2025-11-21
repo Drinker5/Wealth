@@ -12,9 +12,9 @@ internal class PortfolioCurrencyConfiguration : IEntityTypeConfiguration<Portfol
     {
         builder.Property<PortfolioId>("PortfolioId");
 
-        builder.HasKey("PortfolioId", nameof(PortfolioCurrency.CurrencyId));
+        builder.HasKey("PortfolioId", nameof(PortfolioCurrency.Currency));
 
-        builder.Property(x => x.CurrencyId)
+        builder.Property(x => x.Currency)
             .IsRequired();
 
         builder.Property(x => x.Amount)

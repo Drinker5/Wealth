@@ -59,6 +59,11 @@ public class InstrumentIdProvider(
         return bondId;
     }
 
+    public ValueTask<CurrencyId> GetCurrencyIdByFigi(string figi)
+    {
+        throw new NotImplementedException();
+    }
+
     private async Task<StockId?> GetStock(string figi)
     {
         try
