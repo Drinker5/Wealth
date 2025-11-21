@@ -8,6 +8,7 @@ public class PortfolioDTO
     public string Name { get; set; }
     public IEnumerable<StockDTO> Stocks { get; set; }
     public IEnumerable<BondDTO> Bonds { get; set; }
+    public IEnumerable<CurrencyAssetDTO> CurrencyAssets { get; set; }
     public IEnumerable<CurrencyDTO> Currencies { get; set; }
 
     public static PortfolioDTO ToDTO(Portfolio portfolio)
@@ -18,6 +19,7 @@ public class PortfolioDTO
             Name = portfolio.Name,
             Bonds = portfolio.Bonds.Select(BondDTO.ToDTO),
             Stocks = portfolio.Stocks.Select(StockDTO.ToDTO),
+            CurrencyAssets = portfolio.CurrencyAssets.Select(CurrencyAssetDTO.ToDTO),
             Currencies = portfolio.Currencies.Select(CurrencyDTO.ToDTO),
         };
     }

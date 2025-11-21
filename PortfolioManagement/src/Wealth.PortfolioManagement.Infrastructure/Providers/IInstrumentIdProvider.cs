@@ -7,4 +7,6 @@ public interface IInstrumentIdProvider
     ValueTask<StockId> GetStockIdByFigi(string figi);
 
     ValueTask<BondId> GetBondIdByFigi(string figi);
+
+    ValueTask<CurrencyId> GetCurrencyIdByFigi(string figi);
 }
