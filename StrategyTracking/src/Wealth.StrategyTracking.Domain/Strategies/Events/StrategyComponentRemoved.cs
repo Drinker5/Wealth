@@ -7,4 +7,6 @@ public record StockStrategyComponentRemoved(StrategyId StrategyId, StockId Stock
 
 public record BondStrategyComponentRemoved(StrategyId StrategyId, BondId BondId) : DomainEvent;
 
-public record CurrencyStrategyComponentRemoved(StrategyId StrategyId, CurrencyId CurrencyId) : DomainEvent;
+public record CurrencyAssetStrategyComponentRemoved(StrategyId StrategyId, CurrencyId CurrencyId) : DomainEvent;
+
+public record CurrencyStrategyComponentRemoved(StrategyId StrategyId, CurrencyCode Currency) : DomainEvent;

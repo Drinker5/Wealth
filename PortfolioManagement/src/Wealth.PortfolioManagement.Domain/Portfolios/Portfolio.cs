@@ -11,6 +11,7 @@ public class Portfolio : AggregateRoot
     public string Name { get; private set; }
     public ICollection<BondAsset> Bonds { get; } = [];
     public ICollection<StockAsset> Stocks { get; } = [];
+    public ICollection<CurrencyAsset> CurrencyAssets { get; } = [];
     public ICollection<PortfolioCurrency> Currencies { get; } = [];
 
     private Portfolio()
@@ -267,13 +268,13 @@ public class Portfolio : AggregateRoot
 
     private PortfolioCurrency GetOrCreate(CurrencyCode currency)
     {
-        var existed = Currencies.SingleOrDefault(i => i.CurrencyId == currency);
+        var existed = Currencies.SingleOrDefault(i => i.Currency == currency);
         if (existed != null)
             return existed;
 
         var portfolioCurrency = new PortfolioCurrency
         {
-            CurrencyId = currency,
+            Currency = currency,
             Amount = 0,
         };
 

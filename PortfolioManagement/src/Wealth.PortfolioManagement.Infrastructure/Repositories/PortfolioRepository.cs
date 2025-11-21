@@ -37,37 +37,29 @@ public class PortfolioRepository : IPortfolioRepository
     public async Task RenamePortfolio(PortfolioId id, string newName)
     {
         var portfolio = await GetPortfolio(id);
-        if (portfolio == null)
-            return;
 
-        portfolio.Rename(newName);
+        portfolio?.Rename(newName);
     }
 
     public async Task Buy(PortfolioId id, StockId instrumentId, Money totalPrice, int quantity)
     {
         var portfolio = await GetPortfolio(id);
-        if (portfolio == null)
-            return;
 
-        portfolio.Buy(instrumentId, totalPrice, quantity);
+        portfolio?.Buy(instrumentId, totalPrice, quantity);
     }
     
     public async Task Buy(PortfolioId id, BondId instrumentId, Money totalPrice, int quantity)
     {
         var portfolio = await GetPortfolio(id);
-        if (portfolio == null)
-            return;
 
-        portfolio.Buy(instrumentId, totalPrice, quantity);
+        portfolio?.Buy(instrumentId, totalPrice, quantity);
     }
 
-    public async Task AddCurrency(PortfolioId id, CurrencyId currencyId, decimal amount)
+    public async Task AddCurrency(PortfolioId id, CurrencyCode currency, decimal amount)
     {
         var portfolio = await GetPortfolio(id);
-        if (portfolio == null)
-            return;
 
-        portfolio.Deposit(new Money(currencyId, amount));
+        portfolio?.Deposit(new Money(currency, amount));
     }
 
     public Task<PortfolioId> CreatePortfolio(string requestName)

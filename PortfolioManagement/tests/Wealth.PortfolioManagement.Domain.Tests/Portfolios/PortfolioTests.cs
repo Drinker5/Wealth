@@ -12,7 +12,7 @@ public class PortfolioTests
     private readonly Portfolio portfolio;
     private readonly StockId stockId = new(1);
     private readonly BondId bondId = new(1);
-    private readonly CurrencyId currencyId = CurrencyCode.Rub;
+    private readonly CurrencyCode currencyCode = CurrencyCode.Rub;
     private readonly Money price = new Money(CurrencyCode.Rub, 123.23m);
     private readonly decimal amount = 32.32m;
     private readonly int quantity = 32;
@@ -39,35 +39,35 @@ public class PortfolioTests
     [Fact]
     public void WhenCurrencyDeposit()
     {
-        portfolio.Deposit(new Money(currencyId, amount));
+        portfolio.Deposit(new Money(this.currencyCode, amount));
 
         var ev = portfolio.HasEvent<CurrencyDeposited>();
         Assert.Equal(portfolio.Id, ev.PortfolioId);
-        Assert.Equal(currencyId, ev.Money.Currency);
+        Assert.Equal(this.currencyCode, ev.Money.Currency);
         Assert.Equal(amount, ev.Money.Amount);
         var currency = Assert.Single(portfolio.Currencies);
-        Assert.Equal(currencyId, currency.CurrencyId);
+        Assert.Equal(this.currencyCode, currency.Currency);
         Assert.Equal(amount, currency.Amount);
     }
 
     [Fact]
     public void WhenCurrencyWithdraw()
     {
-        portfolio.Withdraw(new Money(currencyId, amount));
+        portfolio.Withdraw(new Money(this.currencyCode, amount));
 
         var ev = portfolio.HasEvent<CurrencyWithdrew>();
         Assert.Equal(portfolio.Id, ev.PortfolioId);
-        Assert.Equal(currencyId, ev.Money.Currency);
+        Assert.Equal(this.currencyCode, ev.Money.Currency);
         Assert.Equal(amount, ev.Money.Amount);
         var currency = Assert.Single(portfolio.Currencies);
-        Assert.Equal(currencyId, currency.CurrencyId);
+        Assert.Equal(this.currencyCode, currency.Currency);
         Assert.Equal(-amount, currency.Amount);
     }
 
     [Fact]
     public void WhenDepositAndWithdraw()
     {
-        var money = new Money(currencyId, amount);
+        var money = new Money(currencyCode, amount);
 
         portfolio.Deposit(money);
         portfolio.Withdraw(money);
@@ -89,7 +89,7 @@ public class PortfolioTests
         Assert.Equal(stockId, asset.StockId);
         Assert.Equal(quantity, asset.Quantity);
         var currency = Assert.Single(portfolio.Currencies);
-        Assert.Equal(price.Currency, currency.CurrencyId);
+        Assert.Equal(price.Currency, currency.Currency);
         Assert.Equal(-price.Amount, currency.Amount);
     }
 
@@ -107,7 +107,7 @@ public class PortfolioTests
         Assert.Equal(bondId, asset.BondId);
         Assert.Equal(quantity, asset.Quantity);
         var currency = Assert.Single(portfolio.Currencies);
-        Assert.Equal(price.Currency, currency.CurrencyId);
+        Assert.Equal(price.Currency, currency.Currency);
         Assert.Equal(-price.Amount, currency.Amount);
     }
 
@@ -125,7 +125,7 @@ public class PortfolioTests
         Assert.Equal(stockId, asset.StockId);
         Assert.Equal(-quantity, asset.Quantity);
         var currency = Assert.Single(portfolio.Currencies);
-        Assert.Equal(price.Currency, currency.CurrencyId);
+        Assert.Equal(price.Currency, currency.Currency);
         Assert.Equal(price.Amount, currency.Amount);
     }
 
@@ -143,7 +143,7 @@ public class PortfolioTests
         Assert.Equal(bondId, asset.BondId);
         Assert.Equal(-quantity, asset.Quantity);
         var currency = Assert.Single(portfolio.Currencies);
-        Assert.Equal(price.Currency, currency.CurrencyId);
+        Assert.Equal(price.Currency, currency.Currency);
         Assert.Equal(price.Amount, currency.Amount);
     }
 
@@ -172,7 +172,7 @@ public class PortfolioTests
         Assert.Equal(stockId, ev.StockId);
         Assert.Equal(price, ev.Income);
         var currency = Assert.Single(portfolio.Currencies);
-        Assert.Equal(price.Currency, currency.CurrencyId);
+        Assert.Equal(price.Currency, currency.Currency);
         Assert.Equal(price.Amount, currency.Amount);
     }
 
@@ -188,7 +188,7 @@ public class PortfolioTests
         Assert.Equal(stockId, ev.StockId);
         Assert.Equal(price, ev.Expense);
         var currency = Assert.Single(portfolio.Currencies);
-        Assert.Equal(price.Currency, currency.CurrencyId);
+        Assert.Equal(price.Currency, currency.Currency);
         Assert.Equal(-price.Amount, currency.Amount);
     }
 
@@ -205,7 +205,7 @@ public class PortfolioTests
         Assert.Equal(bondId, ev.BondId);
         Assert.Equal(price, ev.Expense);
         var currency = Assert.Single(portfolio.Currencies);
-        Assert.Equal(price.Currency, currency.CurrencyId);
+        Assert.Equal(price.Currency, currency.Currency);
         Assert.Equal(-price.Amount, currency.Amount);
     }
 
