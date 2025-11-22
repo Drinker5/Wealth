@@ -18,7 +18,7 @@ public class ExchangeRateController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] CreateEchangeRateRequest request)
+    public async Task<IActionResult> Post([FromBody] CreateExchangeRateRequest request)
     {
         await invoker.Command(new CreateExchangeRateCommand(request.From, request.To, request.Rate, request.Date));
         return Ok();
