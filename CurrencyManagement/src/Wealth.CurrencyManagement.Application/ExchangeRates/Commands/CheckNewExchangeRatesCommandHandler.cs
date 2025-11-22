@@ -1,39 +1,30 @@
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Application.CommandScheduler;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.CurrencyManagement.Domain.Repositories;
 
 namespace Wealth.CurrencyManagement.Application.ExchangeRates.Commands;
 
-public class CheckNewExchangeRatesCommandHandler : ICommandHandler<CheckNewExchangeRatesCommand>
+public class CheckNewExchangeRatesCommandHandler(
+    IExchangeRateRepository exchangeRateRepository,
+    ICommandsScheduler scheduler)
+    : ICommandHandler<CheckNewExchangeRatesCommand>
 {
-    private readonly ICurrencyRepository currencyRepository;
-    private readonly IExchangeRateRepository exchangeRateRepository;
-    private readonly ICommandsScheduler scheduler;
-
-    public CheckNewExchangeRatesCommandHandler(
-        ICurrencyRepository currencyRepository,
-        IExchangeRateRepository exchangeRateRepository,
-        ICommandsScheduler scheduler)
-    {
-        this.currencyRepository = currencyRepository;
-        this.exchangeRateRepository = exchangeRateRepository;
-        this.scheduler = scheduler;
-    }
-
     public async Task Handle(CheckNewExchangeRatesCommand request, CancellationToken cancellationToken)
     {
-        var c1 = await currencyRepository.GetCurrency(request.FromCurrency);
-        var c2 = await currencyRepository.GetCurrency(request.ToCurrency);
-        if (c1 == null)
+        var c1 = request.FromCurrency;
+        var c2 = request.ToCurrency;
+
+        if (c1 == CurrencyCode.None)
             throw new InvalidOperationException($"Currency {request.FromCurrency} not found");
 
-        if (c2 == null)
+        if (c2 == CurrencyCode.None)
             throw new InvalidOperationException($"Currency {request.ToCurrency} not found");
 
         if (c1 == c2)
             throw new InvalidOperationException($"Currency {request.ToCurrency} is same");
-        
+
         var date = await exchangeRateRepository.GetLastExchangeRateDate(request.FromCurrency, request.ToCurrency);
 
         var scheduled = 0;

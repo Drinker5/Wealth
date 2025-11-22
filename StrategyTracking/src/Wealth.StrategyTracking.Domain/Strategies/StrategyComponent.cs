@@ -57,18 +57,34 @@ public class BondStrategyComponent : StrategyComponent
     }
 }
 
-public class CurrencyStrategyComponent : StrategyComponent
+public class CurrencyAssetStrategyComponent : StrategyComponent
 {
     private CurrencyId? _currencyId;
 
     public CurrencyId CurrencyId
     {
-        get => _currencyId ??= new CurrencyId(Id);
+        get => _currencyId ??= new CurrencyId(int.Parse(Id));
         init => Id = value.ToString();
     }
 
     public override int GetHashCode()
     {
         return CurrencyId.GetHashCode();
+    }
+}
+
+public class CurrencyStrategyComponent : StrategyComponent
+{
+    private CurrencyCode? _currency;
+
+    public CurrencyCode Currency
+    {
+        get => _currency ??= (CurrencyCode)byte.Parse(Id);
+        init => Id = value.ToString();
+    }
+
+    public override int GetHashCode()
+    {
+        return Currency.GetHashCode();
     }
 }

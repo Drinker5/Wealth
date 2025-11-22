@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Testcontainers.PostgreSql;
+using Testcontainers.ClickHouse;
 
 namespace Wealth.Aggregation.API.Tests;
 
@@ -10,14 +9,10 @@ public sealed class AggregationApiFixture : WebApplicationFactory<Program>, IAsy
 {
     private readonly IHost app;
 
-    private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder()
-        .WithImage("postgres")
-        .WithDatabase("PortfolioManagement")
-        .WithUsername("postgres")
-        .WithPassword("postgres")
+    private readonly ClickHouseContainer clickHouseContainer = new ClickHouseBuilder()
         .Build();
 
-    private string postgresConnectionString;
+    private string clickHouseConnectionString;
 
     public AggregationApiFixture()
     {
@@ -32,7 +27,7 @@ public sealed class AggregationApiFixture : WebApplicationFactory<Program>, IAsy
         {
             var data = new Dictionary<string, string>
             {
-                { "ConnectionStrings:Aggregation", postgresConnectionString },
+                { "ConnectionStrings:Aggregation", clickHouseConnectionString },
             };
             config.AddInMemoryCollection(data!);
         });
@@ -49,13 +44,13 @@ public sealed class AggregationApiFixture : WebApplicationFactory<Program>, IAsy
         await base.DisposeAsync();
         await app.StopAsync();
         app.Dispose();
-        await postgresContainer.StopAsync();
+        await clickHouseContainer.StopAsync();
     }
 
     public async Task InitializeAsync()
     {
-        await postgresContainer.StartAsync();
+        await clickHouseContainer.StartAsync();
         await app.StartAsync();
-        postgresConnectionString = postgresContainer.GetConnectionString();
+        clickHouseConnectionString = clickHouseContainer.GetConnectionString();
     }
 }

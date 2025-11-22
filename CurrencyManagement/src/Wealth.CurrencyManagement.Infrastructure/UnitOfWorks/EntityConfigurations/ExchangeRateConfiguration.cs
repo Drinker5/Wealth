@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Wealth.CurrencyManagement.Domain.Currencies;
 using Wealth.CurrencyManagement.Domain.ExchangeRates;
 
 namespace Wealth.CurrencyManagement.Infrastructure.UnitOfWorks.EntityConfigurations;
@@ -9,25 +8,25 @@ internal class ExchangeRateConfiguration : IEntityTypeConfiguration<ExchangeRate
 {
     public void Configure(EntityTypeBuilder<ExchangeRate> builder)
     {
-        builder.HasKey(x => new { x.BaseCurrencyId, x.TargetCurrencyId, x.ValidOnDate });
+        builder.HasKey(x => new
+        {
+            BaseCurrency = x.BaseCurrency, 
+            TargetCurrency = x.TargetCurrency, 
+            ValidOnDate = x.ValidOnDate
+        });
 
-        builder.HasOne<Currency>()
-            .WithMany()
-            .HasForeignKey(i => i.BaseCurrencyId);
-
-        builder.HasOne<Currency>()
-            .WithMany()
-            .HasForeignKey(i => i.TargetCurrencyId);
-
-        builder.Property(x => x.BaseCurrencyId)
+        builder.Property(x => x.BaseCurrency)
             .IsRequired();
 
-        builder.Property(x => x.TargetCurrencyId)
+        builder.Property(x => x.TargetCurrency)
             .IsRequired();
 
-        builder.Property(x => x.ValidOnDate).HasColumnType("date").IsRequired();
+        builder.Property(x => x.ValidOnDate)
+            .HasColumnType("date")
+            .IsRequired();
 
-        builder.Property(x => x.Rate).IsRequired();
+        builder.Property(x => x.Rate)
+            .IsRequired();
         
         builder.HasNoDiscriminator();
     }

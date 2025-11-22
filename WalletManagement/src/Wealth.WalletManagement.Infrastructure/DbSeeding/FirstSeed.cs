@@ -22,13 +22,13 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
     private static IEnumerable<Wallet> GetPredefinedWallets()
     {
         var foo = Wallet.Create("Seed-wallet-1");
-        foo.Insert(new Money("RUB", 13.4m));
-        foo.Insert(new Money("USD", 43.5m));
+        foo.Insert(new Money(CurrencyCode.Rub, 13.4m));
+        foo.Insert(new Money(CurrencyCode.Usd, 43.5m));
         yield return foo;
         
         var bar = Wallet.Create("Seed-wallet-2");
-        bar.Insert(new Money("RUB", 23.6m));
-        bar.Insert(new Money("USD", 33.7m));
+        bar.Insert(new Money(CurrencyCode.Rub, 23.6m));
+        bar.Insert(new Money(CurrencyCode.Usd, 33.7m));
         yield return bar;
     }
 
@@ -37,28 +37,28 @@ public class FirstSeed : IDbSeeder<WealthDbContext>
         yield return new WalletOperation
         {
             Id = Guid.NewGuid(),
-            Amount = new Money("RUB", 13.4m),
+            Amount = new Money(CurrencyCode.Rub, 13.4m),
             OperationType = WalletOperationType.Insert,
             WalletId = 1,
         };
         yield return new WalletOperation
         {
             Id = Guid.NewGuid(),
-            Amount = new Money("USD", 43.5m),
+            Amount = new Money(CurrencyCode.Usd, 43.5m),
             OperationType = WalletOperationType.Insert,
             WalletId = 1,
         };
         yield return new WalletOperation
         {
             Id = Guid.NewGuid(),
-            Amount = new Money("RUB", 23.6m),
+            Amount = new Money(CurrencyCode.Rub, 23.6m),
             OperationType = WalletOperationType.Insert,
             WalletId = 2,
         };
         yield return new WalletOperation
         {
             Id = Guid.NewGuid(),
-            Amount = new Money("USD", 33.7m),
+            Amount = new Money(CurrencyCode.Usd, 33.7m),
             OperationType = WalletOperationType.Insert,
             WalletId = 2,
         };

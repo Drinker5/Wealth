@@ -7,4 +7,6 @@ public record StockStrategyComponentWeightChanged(StrategyId StrategyId, StockId
 
 public record BondStrategyComponentWeightChanged(StrategyId StrategyId, BondId BondId, float Weight) : DomainEvent;
 
-public record CurrencyStrategyComponentWeightChanged(StrategyId StrategyId, CurrencyId CurrencyId, float Weight) : DomainEvent;
+public record CurrencyAssetStrategyComponentWeightChanged(StrategyId StrategyId, CurrencyId CurrencyId, float Weight) : DomainEvent;
+
+public record CurrencyStrategyComponentWeightChanged(StrategyId StrategyId, CurrencyCode Currency, float Weight) : DomainEvent;

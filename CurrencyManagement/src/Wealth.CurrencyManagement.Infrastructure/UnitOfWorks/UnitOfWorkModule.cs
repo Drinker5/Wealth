@@ -33,7 +33,6 @@ public class UnitOfWorkModule : IServiceModule
 
         services.AddMigration<WealthDbContext, FirstSeed>(); 
 
-        services.AddScoped<ICurrencyRepository, CurrencyRepository>();
         services.AddScoped<IExchangeRateRepository, ExchangeRateRepository>();
         services.AddScoped<IDeferredOperationRepository, DeferredOperationRepository>();
         services.AddScoped<IOutboxRepository, OutboxRepository>();

@@ -8,9 +8,9 @@ namespace Wealth.DepositManagement.Domain.Tests.Deposits;
 [TestSubject(typeof(Deposit))]
 public class DepositTests
 {
-    private readonly string name = "foo";
-    private Yield yield = new Yield(23.42m);
-    private CurrencyId currencyId = "RUB";
+    private const string name = "foo";
+    private readonly Yield yield = new Yield(23.42m);
+    private const CurrencyCode currencyId = CurrencyCode.Rub;
     private readonly Deposit deposit;
 
     public DepositTests()
@@ -25,9 +25,9 @@ public class DepositTests
         Assert.Equal(name, deposit.Name);
         Assert.Equal(yield, deposit.Yield);
         Assert.Equal(0, deposit.Investment.Amount);
-        Assert.Equal(currencyId, deposit.Investment.CurrencyId);
+        Assert.Equal(currencyId, deposit.Investment.Currency);
         Assert.Equal(0, deposit.InterestPerYear.Amount);
-        Assert.Equal(currencyId, deposit.InterestPerYear.CurrencyId);
+        Assert.Equal(currencyId, deposit.InterestPerYear.Currency);
     }
 
     [Fact]
@@ -80,7 +80,7 @@ public class DepositTests
     [Fact]
     public void WhenInvestDifferentCurrency()
     {
-        var investment = new Money("USD", 10);
+        var investment = new Money(CurrencyCode.Usd, 10);
 
         Assert.Throws<InvalidOperationException>(() => deposit.Invest(investment));
     }
@@ -102,9 +102,9 @@ public class DepositTests
     [Fact]
     public void WhenWithdrawDifferentCurrency()
     {
-        var investment = new Money("RUB", 10);
+        var investment = new Money(CurrencyCode.Rub, 10);
         deposit.Invest(investment);
-        var withdraw = new Money("USD", 10);
+        var withdraw = new Money(CurrencyCode.Usd, 10);
 
         Assert.Throws<InvalidOperationException>(() => deposit.Withdraw(withdraw));
     }

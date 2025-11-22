@@ -20,20 +20,20 @@ public class SellHandler(IInstrumentIdProvider instrumentIdProvider) : IOperatio
                 {
                     Id = trade.TradeId,
                     Date = trade.DateTime.ToDateTimeOffset(),
-                    Amount = new Money(operation.Currency, trade.Price),
+                    Amount = trade.Price.ToMoney(),
                     BondId = await instrumentIdProvider.GetBondIdByFigi(operation.Figi),
                     PortfolioId = portfolioId,
-                    Quantity = trade.Quantity,
+                    Quantity = -trade.Quantity,
                     Type = TradeOperationType.Sell,
                 },
                 InstrumentType.Share => new StockTradeOperation
                 {
                     Id = trade.TradeId,
                     Date = trade.DateTime.ToDateTimeOffset(),
-                    Amount = new Money(operation.Currency, trade.Price),
+                    Amount = trade.Price.ToMoney(),
                     StockId = await instrumentIdProvider.GetStockIdByFigi(operation.Figi),
                     PortfolioId = portfolioId,
-                    Quantity = trade.Quantity,
+                    Quantity = -trade.Quantity,
                     Type = TradeOperationType.Sell,
                 },
                 _ => throw new ArgumentOutOfRangeException()

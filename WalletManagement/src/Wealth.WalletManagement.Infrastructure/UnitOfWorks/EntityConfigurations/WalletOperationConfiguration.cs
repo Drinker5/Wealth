@@ -24,7 +24,7 @@ internal class WalletOperationConfiguration : IEntityTypeConfiguration<WalletOpe
 
         builder.ComplexProperty(y => y.Amount, z =>
         {
-            z.Property(i => i.CurrencyId)
+            z.Property(i => i.Currency)
                 .HasMaxLength(3)
                 .IsRequired();
                 

@@ -14,17 +14,17 @@ public class ChangePriceCommandHandlerTests
     {
         var instumentsRepository = A.Fake<IStocksRepository>();
         var currencyService = A.Fake<ICurrencyService>();
-        A.CallTo(() => currencyService.IsCurrencyExists(CurrencyCode.RUB)).Returns(true);
+        A.CallTo(() => currencyService.IsCurrencyExists(CurrencyCode.Rub)).Returns(true);
         var command = new ChangeStockPriceCommand
         {
             StockId = new StockId(3),
-            Price = new Money(CurrencyCode.RUB, 3.42m),
+            Price = new Money(CurrencyCode.Rub, 3.42m),
         };
         var handler = new ChangeStockPriceCommandHandler(instumentsRepository, currencyService);
         
         await handler.Handle(command, CancellationToken.None);
         
-        A.CallTo(() => currencyService.IsCurrencyExists(command.Price.CurrencyId)).MustHaveHappened();
+        A.CallTo(() => currencyService.IsCurrencyExists(command.Price.Currency)).MustHaveHappened();
         A.CallTo(() => instumentsRepository.ChangePrice(command.StockId, command.Price)).MustHaveHappened();
     }
 }

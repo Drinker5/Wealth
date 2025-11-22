@@ -3,4 +3,7 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.CurrencyManagement.Application.ExchangeRates.Commands;
 
-public record ProvideNewExchangeRateCommand(CurrencyId BaseCurrencyId, CurrencyId TargetCurrencyId, DateOnly OnDate) : ICommand;
+public record ProvideNewExchangeRateCommand(
+    CurrencyCode BaseCurrency,
+    CurrencyCode TargetCurrency,
+    DateOnly OnDate) : ICommand;

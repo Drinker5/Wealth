@@ -27,7 +27,7 @@ public class KafkaTests : IClassFixture<KafkaTestFixture>
         var producer = new KafkaProducer.KafkaProducer(producerOptions);
         var consumerOptions = Options.Create(new KafkaConsumerOptions { BootstrapServers = fixture.BootstrapServers, GroupId = groupId });
         var consumer = new Infrastructure.KafkaConsumer.KafkaConsumer(consumerOptions, Mock.Of<ILogger<Infrastructure.KafkaConsumer.KafkaConsumer>>());
-        var expected = new MoneyProto { Amount = 99.50m, CurrencyId = CurrencyCode.USD };
+        var expected = new MoneyProto { Amount = 99.50m, Currency = CurrencyCodeProto.Usd };
 
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
         var receivedTcs = new TaskCompletionSource<MoneyProto>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -54,7 +54,7 @@ public class KafkaTests : IClassFixture<KafkaTestFixture>
         var received = await receivedTcs.Task.WaitAsync(TimeSpan.FromSeconds(5), cts.Token);
 
         Assert.NotNull(received);
-        Assert.Equal(expected.CurrencyId, received.CurrencyId);
+        Assert.Equal(expected.Currency, received.Currency);
         Assert.Equal(expected.Amount, received.Amount);
     }
 }

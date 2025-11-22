@@ -8,7 +8,7 @@ namespace Wealth.DepositManagement.Infrastructure.Repositories;
 
 public class DepositRepository(WealthDbContext context) : IDepositRepository
 {
-    public async Task<DepositId> Create(string name, Yield yield, CurrencyId currency)
+    public async Task<DepositId> Create(string name, Yield yield, CurrencyCode currency)
     {
         var deposit = Deposit.Create(name, yield, currency);
         await context.Deposits.AddAsync(deposit);

@@ -39,7 +39,7 @@ public class PortfolioRepositoryTests
 
         await context.Portfolios.AddAsync(portfolio);
 
-        Assert.NotEqual(0, portfolio.Id.Id);
+        Assert.NotEqual(0, portfolio.Id.Value);
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public class PortfolioRepositoryTests
     {
         var id = await CreatePortfolio("Foo");
         
-        Assert.NotEqual(0, id.Id);
+        Assert.NotEqual(0, id.Value);
         var portfolio = await repository.GetPortfolio(id);
         Assert.NotNull(portfolio);
         Assert.Equal("Foo", portfolio.Name);
@@ -58,7 +58,7 @@ public class PortfolioRepositoryTests
     {
         var instrumentId = new StockId(32);
         var quantity = 32;
-        var money = new Money(CurrencyCode.RUB, 23.3m);
+        var money = new Money(CurrencyCode.Rub, 23.3m);
         var id = await CreatePortfolio("Foo");
 
         await repository.Buy(id, instrumentId, money, quantity);
@@ -73,16 +73,16 @@ public class PortfolioRepositoryTests
     [Fact]
     public async Task WhenAddCurrency()
     {
-        CurrencyId currencyId = "RUB";
+        CurrencyCode currencyCode = CurrencyCode.Rub;
         var amount = 23m;
         var id = await CreatePortfolio("Foo");
 
-        await repository.AddCurrency(id, currencyId, amount);
+        await repository.AddCurrency(id, currencyCode, amount);
 
         var portfolio = await repository.GetPortfolio(id);
         Assert.NotNull(portfolio);
         var currency = Assert.Single(portfolio.Currencies);
-        Assert.Equal(currencyId, currency.CurrencyId);
+        Assert.Equal(currencyCode, currency.Currency);
         Assert.Equal(amount, currency.Amount);
     }
 

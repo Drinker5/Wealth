@@ -18,7 +18,7 @@ namespace Wealth.DepositManagement.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "9.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -76,7 +76,7 @@ namespace Wealth.DepositManagement.Infrastructure.Migrations
                             b1.Property<decimal>("Amount")
                                 .HasColumnType("numeric");
 
-                            b1.Property<byte>("CurrencyId")
+                            b1.Property<byte>("Currency")
                                 .HasColumnType("smallint");
                         });
 
@@ -110,7 +110,7 @@ namespace Wealth.DepositManagement.Infrastructure.Migrations
                             b1.Property<decimal>("Amount")
                                 .HasColumnType("numeric");
 
-                            b1.Property<byte>("CurrencyId")
+                            b1.Property<byte>("Currency")
                                 .HasColumnType("smallint");
                         });
 

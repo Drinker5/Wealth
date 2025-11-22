@@ -72,25 +72,25 @@ public class Wallet : AggregateRoot
     
     private void ChangeCurrencyAmount(Money money)
     {
-        var currency = GetOrCreate(money.CurrencyId);
+        var currency = GetOrCreate(money.Currency);
         currency.Amount += money.Amount;
         if (currency.Amount == 0)
             Currencies.Remove(currency);
     }
     
-    private WalletCurrency GetOrCreate(CurrencyId currencyId)
+    private WalletCurrency GetOrCreate(CurrencyCode currency)
     {
-        var existed = Currencies.SingleOrDefault(i => i.CurrencyId == currencyId);
+        var existed = Currencies.SingleOrDefault(i => i.Currency == currency);
         if (existed != null)
             return existed;
 
-        var currency = new WalletCurrency
+        var walletCurrency = new WalletCurrency
         {
-            CurrencyId = currencyId,
+            Currency = currency,
             Amount = 0,
         };
 
-        Currencies.Add(currency);
-        return currency;
+        Currencies.Add(walletCurrency);
+        return walletCurrency;
     }
 }

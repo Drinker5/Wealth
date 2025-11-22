@@ -1,10 +1,11 @@
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Domain.Portfolios;
 
 namespace Wealth.PortfolioManagement.Application.Portfolios.Queries;
 
 public class CurrencyDTO
 {
-    public string CurrencyId { get; set; }
+    public CurrencyCode Currency { get; set; }
 
     public decimal Amount { get; set; }
 
@@ -12,7 +13,7 @@ public class CurrencyDTO
     {
         return new CurrencyDTO
         {
-            CurrencyId = currency.CurrencyId.ToString(),
+            Currency = currency.Currency,
             Amount = currency.Amount,
         };
     }

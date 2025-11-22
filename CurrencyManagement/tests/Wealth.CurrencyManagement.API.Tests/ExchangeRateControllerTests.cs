@@ -28,26 +28,25 @@ public sealed class ExchangeRateControllerTests : IClassFixture<CurrencyManageme
         // create new exchange rate
         var obj = new
         {
-            fromId = "RUB",
-            toId = "USD",
+            from = CurrencyCode.Rub,
+            to = CurrencyCode.Usd,
             rate = 10,
             date = "2025-10-20"
         };
 
-
         var createResponse = await httpClient.PostAsync("/api/exchangeRate/", JsonContent.Create(obj, options: jsonSerializerOptions));
 
         createResponse.EnsureSuccessStatusCode();
-        var value = 2.3m;
+        const decimal value = 2.3m;
         var queryParams = new Dictionary<string, string>
         {
-            ["fromId"] = obj.fromId,
-            ["toId"] = obj.toId,
+            ["from"] = obj.from.ToString(),
+            ["to"] = obj.to.ToString(),
             ["date"] = obj.date,
             ["value"] = value.ToString(CultureInfo.InvariantCulture),
         };
         var encodedParams = new FormUrlEncodedContent(queryParams);
-        string queryString = await encodedParams.ReadAsStringAsync();
+        var queryString = await encodedParams.ReadAsStringAsync();
 
         var exchangeResponse = await httpClient.GetAsync($"/api/exchangeRate?{queryString}");
 
@@ -55,7 +54,7 @@ public sealed class ExchangeRateControllerTests : IClassFixture<CurrencyManageme
         var body = await exchangeResponse.Content.ReadAsStringAsync();
         var money = JsonSerializer.Deserialize<Money>(body, jsonSerializerOptions);
 
-        Assert.Equal(obj.toId, money.CurrencyId);
+        Assert.Equal(obj.to, money.Currency);
         Assert.Equal(obj.rate * value, money.Amount);
     }
 
@@ -65,15 +64,14 @@ public sealed class ExchangeRateControllerTests : IClassFixture<CurrencyManageme
         // create new currency
         var cur1 = new
         {
-            id = new CurrencyId(CurrencyCode.EUR),
+            id = CurrencyCode.Eur,
             name = "A",
             symbol = "A"
         };
         var cur2 = new
         {
-            id = new CurrencyId(CurrencyCode.RUB) // only rub is supported
+            id = CurrencyCode.Rub // only rub is supported
         };
-        (await httpClient.PostAsync("/api/currency/", JsonContent.Create(cur1, options: jsonSerializerOptions))).EnsureSuccessStatusCode();
         Clock.SetCustomDate(new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.Zero));
         var limitCommandsPerRequest = 30;
 

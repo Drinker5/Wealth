@@ -4,19 +4,19 @@ namespace Wealth.BuildingBlocks;
 
 public partial class MoneyProto
 {
-    public MoneyProto(CurrencyId currencyId, decimal amount)
+    public MoneyProto(CurrencyCode currency, decimal amount)
     {
-        CurrencyId = currencyId;
+        Currency = currency.ToProto();
         Amount = amount;
     }
 
     public static implicit operator Money(MoneyProto grpcMoney)
     {
-        return new Money(grpcMoney.CurrencyId, grpcMoney.Amount);
+        return new Money(grpcMoney.Currency.FromProto(), grpcMoney.Amount);
     }
 
     public static implicit operator MoneyProto(Money money)
     {
-        return new MoneyProto(money.CurrencyId, money.Amount);
+        return new MoneyProto(money.Currency, money.Amount);
     }
 }

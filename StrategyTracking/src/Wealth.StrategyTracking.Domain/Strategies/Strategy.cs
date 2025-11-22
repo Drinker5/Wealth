@@ -78,16 +78,16 @@ public class Strategy : AggregateRoot
 
     public void AddOrUpdateComponent(CurrencyId currencyId, float weight)
     {
-        var c = Components.OfType<CurrencyStrategyComponent>().FirstOrDefault(c => c.CurrencyId == currencyId);
+        var c = Components.OfType<CurrencyAssetStrategyComponent>().FirstOrDefault(c => c.CurrencyId == currencyId);
         if (c != null)
         {
-            Apply(new CurrencyStrategyComponentWeightChanged(Id, currencyId, weight));
+            Apply(new CurrencyAssetStrategyComponentWeightChanged(Id, currencyId, weight));
         }
         else
         {
             Apply(new StrategyComponentAdded(
                 Id,
-                new CurrencyStrategyComponent
+                new CurrencyAssetStrategyComponent
                 {
                     CurrencyId = currencyId,
                     Weight = weight,
@@ -111,9 +111,9 @@ public class Strategy : AggregateRoot
 
     public void RemoveStrategyComponent(CurrencyId currencyId)
     {
-        var component = Components.OfType<CurrencyStrategyComponent>().SingleOrDefault(s => s.CurrencyId == currencyId);
+        var component = Components.OfType<CurrencyAssetStrategyComponent>().SingleOrDefault(s => s.CurrencyId == currencyId);
         if (component != null)
-            Apply(new CurrencyStrategyComponentRemoved(Id, currencyId));
+            Apply(new CurrencyAssetStrategyComponentRemoved(Id, currencyId));
     }
 
     private void When(StrategyCreated @event)
@@ -140,9 +140,9 @@ public class Strategy : AggregateRoot
     }
 
 
-    private void When(CurrencyStrategyComponentWeightChanged @event)
+    private void When(CurrencyAssetStrategyComponentWeightChanged @event)
     {
-        var component = Components.OfType<CurrencyStrategyComponent>().Single(c => c.CurrencyId == @event.CurrencyId);
+        var component = Components.OfType<CurrencyAssetStrategyComponent>().Single(c => c.CurrencyId == @event.CurrencyId);
         component.Weight = @event.Weight;
     }
 
@@ -163,9 +163,9 @@ public class Strategy : AggregateRoot
         Components.Remove(component);
     }
 
-    private void When(CurrencyStrategyComponentRemoved @event)
+    private void When(CurrencyAssetStrategyComponentRemoved @event)
     {
-        var component = Components.OfType<CurrencyStrategyComponent>().Single(s => s.CurrencyId == @event.CurrencyId);
+        var component = Components.OfType<CurrencyAssetStrategyComponent>().Single(s => s.CurrencyId == @event.CurrencyId);
         Components.Remove(component);
     }
 }

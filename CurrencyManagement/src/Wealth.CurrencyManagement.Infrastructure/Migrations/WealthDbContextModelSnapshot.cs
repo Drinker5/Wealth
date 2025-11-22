@@ -17,7 +17,7 @@ namespace Wealth.CurrencyManagement.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "9.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -87,30 +87,12 @@ namespace Wealth.CurrencyManagement.Infrastructure.Migrations
                     b.ToTable("OutboxMessages");
                 });
 
-            modelBuilder.Entity("Wealth.CurrencyManagement.Domain.Currencies.Currency", b =>
-                {
-                    b.Property<byte>("Id")
-                        .HasColumnType("smallint");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Symbol")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Currencies");
-                });
-
             modelBuilder.Entity("Wealth.CurrencyManagement.Domain.ExchangeRates.ExchangeRate", b =>
                 {
-                    b.Property<byte>("BaseCurrencyId")
+                    b.Property<byte>("BaseCurrency")
                         .HasColumnType("smallint");
 
-                    b.Property<byte>("TargetCurrencyId")
+                    b.Property<byte>("TargetCurrency")
                         .HasColumnType("smallint");
 
                     b.Property<DateOnly>("ValidOnDate")
@@ -119,26 +101,9 @@ namespace Wealth.CurrencyManagement.Infrastructure.Migrations
                     b.Property<decimal>("Rate")
                         .HasColumnType("numeric");
 
-                    b.HasKey("BaseCurrencyId", "TargetCurrencyId", "ValidOnDate");
-
-                    b.HasIndex("TargetCurrencyId");
+                    b.HasKey("BaseCurrency", "TargetCurrency", "ValidOnDate");
 
                     b.ToTable("ExchangeRates");
-                });
-
-            modelBuilder.Entity("Wealth.CurrencyManagement.Domain.ExchangeRates.ExchangeRate", b =>
-                {
-                    b.HasOne("Wealth.CurrencyManagement.Domain.Currencies.Currency", null)
-                        .WithMany()
-                        .HasForeignKey("BaseCurrencyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Wealth.CurrencyManagement.Domain.Currencies.Currency", null)
-                        .WithMany()
-                        .HasForeignKey("TargetCurrencyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
