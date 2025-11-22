@@ -151,12 +151,12 @@ public class StocksRepository : IStocksRepository
         Id = 0,
         Name,
         ISIN,
-        Price_Currency,
         Price_Amount,
-        Dividend_Currency,
         Dividend_Amount,
         LotSize,
-        FIGI
+        FIGI,
+        Price_Currency,
+        Dividend_Currency,
     }
 
     private async Task<IReadOnlyCollection<Stock>> GetStocks(string sql, object? param = null)
