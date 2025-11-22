@@ -8,7 +8,12 @@ internal class ExchangeRateConfiguration : IEntityTypeConfiguration<ExchangeRate
 {
     public void Configure(EntityTypeBuilder<ExchangeRate> builder)
     {
-        builder.HasKey(x => new { BaseCurrencyId = x.BaseCurrency, TargetCurrencyId = x.TargetCurrency, x.ValidOnDate });
+        builder.HasKey(x => new
+        {
+            BaseCurrency = x.BaseCurrency, 
+            TargetCurrency = x.TargetCurrency, 
+            ValidOnDate = x.ValidOnDate
+        });
 
         builder.Property(x => x.BaseCurrency)
             .IsRequired();
@@ -16,9 +21,12 @@ internal class ExchangeRateConfiguration : IEntityTypeConfiguration<ExchangeRate
         builder.Property(x => x.TargetCurrency)
             .IsRequired();
 
-        builder.Property(x => x.ValidOnDate).HasColumnType("date").IsRequired();
+        builder.Property(x => x.ValidOnDate)
+            .HasColumnType("date")
+            .IsRequired();
 
-        builder.Property(x => x.Rate).IsRequired();
+        builder.Property(x => x.Rate)
+            .IsRequired();
         
         builder.HasNoDiscriminator();
     }
