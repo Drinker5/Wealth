@@ -112,7 +112,7 @@ public class BondsRepository : IBondsRepository
         instrument.ChangeCoupon(coupon);
         const string sql = """
                            UPDATE "Bonds" 
-                           SET "Coupon_CurrencyId" = @Currency, "Coupon_Amount" = @Amount
+                           SET "Coupon_Currency" = @Currency, "Coupon_Amount" = @Amount
                            WHERE "Id" = @Id
                            """;
         await connection.ExecuteAsync(sql, new
@@ -129,11 +129,11 @@ public class BondsRepository : IBondsRepository
         Id = 0,
         Name,
         ISIN,
-        Price_Currency,
         Price_Amount,
-        Coupon_Currency,
         Coupon_Amount,
-        FIGI
+        FIGI,
+        Price_Currency,
+        Coupon_Currency,
     }
 
     private async Task<IReadOnlyCollection<Bond>> GetBonds(string sql, object? param = null)
