@@ -1,5 +1,6 @@
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Application.CommandScheduler;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.CurrencyManagement.Domain.Repositories;
 
@@ -14,6 +15,13 @@ public class CheckNewExchangeRatesCommandHandler(
     {
         var c1 = request.FromCurrency;
         var c2 = request.ToCurrency;
+
+        if (c1 == CurrencyCode.None)
+            throw new InvalidOperationException($"Currency {request.FromCurrency} not found");
+
+        if (c2 == CurrencyCode.None)
+            throw new InvalidOperationException($"Currency {request.ToCurrency} not found");
+
         if (c1 == c2)
             throw new InvalidOperationException($"Currency {request.ToCurrency} is same");
 
