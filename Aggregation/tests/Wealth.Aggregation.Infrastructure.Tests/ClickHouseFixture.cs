@@ -1,6 +1,7 @@
 ﻿using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Configurations;
 using DotNet.Testcontainers.Containers;
+using Octonica.ClickHouseClient;
 using Testcontainers.ClickHouse;
 
 namespace Wealth.Aggregation.Infrastructure.Tests;
@@ -15,7 +16,7 @@ public sealed class ClickHouseFixture : IAsyncLifetime
     {
         var network = new NetworkBuilder()
             .Build();
-        
+
         clickHouseContainer = new ClickHouseBuilder()
             .WithNetworkAliases("clickhouse")
             .WithNetwork(network)
@@ -23,7 +24,7 @@ public sealed class ClickHouseFixture : IAsyncLifetime
             .WithUsername("default")
             .WithPassword("default")
             .Build();
-        
+
         migratorContainer = new ContainerBuilder()
             .WithNetwork(network)
             .WithImage("gomicro/goose:3.26.0")
@@ -43,11 +44,13 @@ public sealed class ClickHouseFixture : IAsyncLifetime
     {
         await clickHouseContainer.StartAsync();
         await migratorContainer.StartAsync();
+
+        await WaitForDatabaseReady(TimeSpan.FromSeconds(10));
     }
 
     public async Task DisposeAsync()
     {
-        await migratorContainer.DisposeAsync(); 
+        await migratorContainer.DisposeAsync();
         await clickHouseContainer.DisposeAsync();
     }
 
@@ -65,5 +68,31 @@ public sealed class ClickHouseFixture : IAsyncLifetime
             };
             return string.Join(";", properties.Select(property => string.Join("=", property.Key, property.Value)));
         }
+    }
+
+    private async Task WaitForDatabaseReady(TimeSpan timeout)
+    {
+        var cancellationTokenSource = new CancellationTokenSource(timeout);
+
+        while (!cancellationTokenSource.Token.IsCancellationRequested)
+        {
+            await using var connection = new ClickHouseConnection(ClickHouseConnectionString);
+            await connection.OpenAsync(cancellationTokenSource.Token);
+
+            await using var command = connection.CreateCommand();
+            command.CommandText = """
+                                  select count(*) 
+                                  from system.tables
+                                  where database = 'default'
+                                  """;
+            var result = await command.ExecuteScalarAsync(cancellationTokenSource.Token);
+
+            if (result != null && Convert.ToInt64(result) > 0)
+                return;
+
+            await Task.Delay(1000, cancellationTokenSource.Token);
+        }
+
+        throw new TimeoutException("Database did not become ready within the specified timeout");
     }
 }

@@ -37,7 +37,6 @@ public class StockTradeRepositoryTests : IClassFixture<ClickHouseFixture>
         output.WriteLine(logs.Stdout);
         output.WriteLine(logs.Stderr);
         
-        
         var op = fixture.Create<StockTrade>();
 
         await repository.Upsert(op, CancellationToken.None);
