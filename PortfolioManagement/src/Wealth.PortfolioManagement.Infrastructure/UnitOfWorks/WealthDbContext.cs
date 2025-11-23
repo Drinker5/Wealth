@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Infrastructure.EFCore;
+using Wealth.BuildingBlocks.Infrastructure.EFCore.Converters;
 using Wealth.PortfolioManagement.Application.Providers;
 using Wealth.PortfolioManagement.Domain.Operations;
 using Wealth.PortfolioManagement.Domain.Portfolios;
@@ -41,5 +42,6 @@ public class WealthDbContext : WealthDbContextBase
     {
         configurationBuilder.Properties<PortfolioId>().HaveConversion<PortfolioIdConverter>();
         configurationBuilder.Properties<OperationId>().HaveConversion<OperationIdConverter>();
+        configurationBuilder.Properties<CurrencyId>().HaveConversion<CurrencyIdConverter>();
     }
 }
