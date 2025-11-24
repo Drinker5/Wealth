@@ -9,10 +9,13 @@ option csharp_namespace = "Wealth.InstrumentManagement";
 service InstrumentsService {
   rpc GetBond (GetBondRequest) returns (GetBondResponse);
   rpc GetStock (GetStockRequest) returns (GetStockResponse);
+  rpc GetCurrency (GetCurrencyRequest) returns (GetCurrencyResponse);
   rpc CreateStock (CreateStockRequest) returns (CreateStockResponse);
   rpc CreateBond (CreateBondRequest) returns (CreateBondResponse);
+  rpc CreateCurrency (CreateCurrencyRequest) returns (CreateCurrencyResponse);
   rpc ChangeStockPrice (ChangeStockPriceRequest) returns (ChangePriceResponse);
   rpc ChangeBondPrice (ChangeBondPriceRequest) returns (ChangePriceResponse);
+  rpc ChangeCurrencyPrice (ChangeCurrencyPriceRequest) returns (ChangePriceResponse);
 }
 
 // get by bondId, isin or figi
@@ -30,6 +33,13 @@ message GetStockRequest {
     StockIdProto stock_id = 1;
     ISINProto isin = 2;
     string figi = 3;
+  }
+}
+
+message GetCurrencyRequest {
+  oneof variant {
+    CurrencyIdProto currency_id = 1;
+    string figi = 2;
   }
 }
 
@@ -51,6 +61,13 @@ message GetStockResponse {
   MoneyProto dividend_per_year = 7;
 }
 
+message GetCurrencyResponse {
+  CurrencyIdProto currency_id = 1;
+  string name = 2;
+  MoneyProto price = 3;
+  string figi = 4;
+}
+
 message CreateStockRequest {
   string name = 1;
   ISINProto isin = 2;
@@ -68,8 +85,17 @@ message CreateBondRequest {
   string figi = 3;
 }
 
+message CreateCurrencyRequest {
+  string name = 1;
+  string figi = 2;
+}
+
 message CreateBondResponse {
   BondIdProto bond_id = 1;
+}
+
+message CreateCurrencyResponse {
+  CurrencyIdProto currency_id = 1;
 }
 
 message ChangeStockPriceRequest {
@@ -79,6 +105,11 @@ message ChangeStockPriceRequest {
 
 message ChangeBondPriceRequest {
   BondIdProto bond_id = 1;
+  MoneyProto price = 2;
+}
+
+message ChangeCurrencyPriceRequest {
+  CurrencyIdProto currency_id = 1;
   MoneyProto price = 2;
 }
 

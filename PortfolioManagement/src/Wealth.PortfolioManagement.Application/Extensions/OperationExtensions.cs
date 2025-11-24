@@ -48,6 +48,9 @@ public static class OperationExtensions
             case StockSplitOperation stockSplitOperation:
                 operationProto.StockSplit = stockSplitOperation.ToProto();
                 break;
+            case CurrencyBrokerFeeOperation currencyBrokerFeeOperation:
+                operationProto.CurrencyBrokerFee = currencyBrokerFeeOperation.ToProto();
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(operation));
         }
@@ -115,26 +118,26 @@ public static class OperationExtensions
             _ => throw new ArgumentOutOfRangeException(nameof(operation))
         }
     };
-    
+
     private static StockBrokerFeeOperationProto ToProto(this StockBrokerFeeOperation operation) => new()
     {
         PortfolioId = operation.PortfolioId,
         StockId = operation.StockId,
         Amount = operation.Amount
     };
-    
+
     private static StockDelistOperationProto ToProto(this StockDelistOperation operation) => new()
     {
         StockId = operation.StockId,
     };
-    
+
     private static StockDividendOperationProto ToProto(this StockDividendOperation operation) => new()
     {
         PortfolioId = operation.PortfolioId,
         StockId = operation.StockId,
         Amount = operation.Amount
     };
-    
+
     private static StockDividendTaxOperationProto ToProto(this StockDividendTaxOperation operation) => new()
     {
         PortfolioId = operation.PortfolioId,
@@ -147,5 +150,12 @@ public static class OperationExtensions
         StockId = operation.StockId,
         RationOld = operation.Ratio.Old,
         RationNew = operation.Ratio.New,
+    };
+
+    private static CurrencyBrokerFeeOperationProto ToProto(this CurrencyBrokerFeeOperation operation) => new()
+    {
+        PortfolioId = operation.PortfolioId,
+        CurrencyId = operation.CurrencyId,
+        Amount = operation.Amount
     };
 }

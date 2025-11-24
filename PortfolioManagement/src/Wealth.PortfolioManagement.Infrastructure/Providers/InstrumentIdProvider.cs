@@ -16,6 +16,7 @@ public class InstrumentIdProvider(
     private readonly InvestApiClient client = InvestApiClientFactory.Create(options.Value.Token);
     private readonly ConcurrentDictionary<string, StockId> stockIdCache = new();
     private readonly ConcurrentDictionary<string, BondId> bondIdCache = new();
+    private readonly ConcurrentDictionary<string, CurrencyId> currencyIdCache = new();
 
     //TODO metrics, count of existed/from cache, count of created
 
@@ -59,9 +60,24 @@ public class InstrumentIdProvider(
         return bondId;
     }
 
-    public ValueTask<CurrencyId> GetCurrencyIdByFigi(string figi)
+    public async ValueTask<CurrencyId> GetCurrencyIdByFigi(string figi)
     {
-        throw new NotImplementedException();
+        if (currencyIdCache.TryGetValue(figi, out var currencyId))
+            return currencyId;
+
+        var currency = await GetCurrencyAsync(figi);
+        if (currency == null)
+        {
+            var response = await CreateCurrency(figi);
+            currencyId = response.CurrencyId;
+        }
+        else
+        {
+            currencyId = currency.Value;
+        }
+
+        currencyIdCache.AddOrUpdate(figi, currencyId, (_, _) => currencyId);
+        return currencyId;
     }
 
     private async Task<StockId?> GetStock(string figi)
@@ -90,6 +106,22 @@ public class InstrumentIdProvider(
                 Figi = figi
             });
             return getBondResponse.BondId;
+        }
+        catch (RpcException ex) when (ex.StatusCode == StatusCode.NotFound)
+        {
+            return null;
+        }
+    }
+    
+    private async Task<CurrencyId?> GetCurrencyAsync(string figi)
+    {
+        try
+        {
+            var getCurrencyResponse = await instrumentsServiceClient.GetCurrencyAsync(new GetCurrencyRequest
+            {
+                Figi = figi
+            });
+            return getCurrencyResponse.CurrencyId;
         }
         catch (RpcException ex) when (ex.StatusCode == StatusCode.NotFound)
         {
@@ -128,6 +160,23 @@ public class InstrumentIdProvider(
         {
             Figi = figi,
             Isin = share.Instrument.Isin,
+            Name = share.Instrument.Name,
+        });
+
+        return response;
+    }
+    
+    private async Task<CreateCurrencyResponse> CreateCurrency(string figi)
+    {
+        var share = await client.Instruments.CurrencyByAsync(new InstrumentRequest
+        {
+            IdType = InstrumentIdType.Figi,
+            Id = figi
+        });
+
+        var response = await instrumentsServiceClient.CreateCurrencyAsync(new CreateCurrencyRequest
+        {
+            Figi = figi,
             Name = share.Instrument.Name,
         });
 

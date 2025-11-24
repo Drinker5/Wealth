@@ -3,4 +3,4 @@ using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Queries;
 
-public record GetBondsQuery : IQuery<IReadOnlyCollection<Bond>>;
+public record GetCurrenciesQuery : IQuery<IReadOnlyCollection<Currency>>;
