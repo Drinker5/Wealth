@@ -4,6 +4,7 @@
     <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="10.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Polly.RateLimiting" Version="8.6.5" />
     <ProjectReference Include="..\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" />
   </ItemGroup>
 </Project>
