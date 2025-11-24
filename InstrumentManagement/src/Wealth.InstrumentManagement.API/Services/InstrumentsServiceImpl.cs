@@ -2,7 +2,6 @@ using Grpc.Core;
 using Wealth.BuildingBlocks.Application;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Instruments.Queries;
-using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.API.Services;
 
@@ -46,6 +45,20 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
         };
     }
 
+    public override async Task<CreateCurrencyResponse> CreateCurrency(CreateCurrencyRequest request, ServerCallContext context)
+    {
+        var currencyId = await mediator.Command(new CreateCurrencyCommand
+        {
+            Name = request.Name,
+            Figi = request.Figi,
+        });
+
+        return new CreateCurrencyResponse
+        {
+            CurrencyId = currencyId
+        };
+    }
+
     public override async Task<GetBondResponse> GetBond(GetBondRequest request, ServerCallContext context)
     {
         var instrument = request.VariantCase switch
@@ -65,6 +78,29 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
             Name = instrument.Name,
             Price = instrument.Price,
             Isin = instrument.Isin,
+            Figi = instrument.Figi,
+        };
+
+        return response;
+    }
+    
+    public override async Task<GetCurrencyResponse> GetCurrency(GetCurrencyRequest request, ServerCallContext context)
+    {
+        var instrument = request.VariantCase switch
+        {
+            GetCurrencyRequest.VariantOneofCase.CurrencyId => await mediator.Query(new GetCurrency(request.CurrencyId)),
+            GetCurrencyRequest.VariantOneofCase.Figi => await mediator.Query(new GetCurrencyByFigi(request.Figi)),
+            _ => null
+        };
+
+        if (instrument == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Instrument not found"));
+
+        var response = new GetCurrencyResponse
+        {
+            CurrencyId = instrument.Id,
+            Name = instrument.Name,
+            Price = instrument.Price,
             Figi = instrument.Figi,
         };
 
@@ -122,6 +158,21 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
         await mediator.Command(new ChangeBondPriceCommand
         {
             BondId = request.BondId,
+            Price = request.Price,
+        });
+
+        return new ChangePriceResponse();
+    }
+    
+    public override async Task<ChangePriceResponse> ChangeCurrencyPrice(ChangeCurrencyPriceRequest request, ServerCallContext context)
+    {
+        var instrument = await mediator.Query(new GetCurrency(request.CurrencyId));
+        if (instrument == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Instrument not found"));
+
+        await mediator.Command(new ChangeCurrencyPriceCommand
+        {
+            CurrencyId = request.CurrencyId,
             Price = request.Price,
         });
 

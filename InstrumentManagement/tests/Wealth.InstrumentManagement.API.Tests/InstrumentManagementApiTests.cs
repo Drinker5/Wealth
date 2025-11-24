@@ -72,6 +72,25 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
         Assert.Equal<decimal>(222m, instrument.DividendPerYear.Amount);
         Assert.Equal(CurrencyCodeProto.Usd, instrument.DividendPerYear.Currency);
     }
+    
+    [Fact]
+    public async Task GetCurrencyFromSeeding()
+    {
+        var instrumentId = new CurrencyIdProto
+        {
+            Id = 1,
+        };
+
+        var instrument = await client.GetCurrencyAsync(new GetCurrencyRequest
+        {
+            CurrencyId = instrumentId
+        });
+
+        Assert.Equal(1, instrument.CurrencyId.Id);
+        Assert.Equal<decimal>(123m, instrument.Price.Amount);
+        Assert.Equal(CurrencyCodeProto.Rub, instrument.Price.Currency);
+        Assert.Equal("test-currency-1", instrument.Name);
+    }
 
     [Fact]
     public async Task WhenCreateStock()
@@ -132,6 +151,37 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
         await client.ChangeBondPriceAsync(new ChangeBondPriceRequest { BondId = bondId, Price = newPrice });
 
         instrument = await client.GetBondAsync(new GetBondRequest { BondId = bondId });
+
+        Assert.Equal(newPrice, (Money)instrument.Price);
+    }
+    
+    [Fact]
+    public async Task WhenCreateCurrency()
+    {
+        var createStockRequest = new CreateCurrencyRequest
+        {
+            Name = "Test",
+            Figi = "F00000000003",
+        };
+
+        var createCurrencyResponse = await client.CreateCurrencyAsync(createStockRequest);
+
+        Assert.NotEqual(0, createCurrencyResponse.CurrencyId.Id);
+        var currencyId = createCurrencyResponse.CurrencyId;
+
+        var instrument = await client.GetCurrencyAsync(new GetCurrencyRequest
+        {
+            CurrencyId = currencyId
+        });
+
+        Assert.Equal(createStockRequest.Name, instrument.Name);
+        Assert.Equal(createStockRequest.Figi, instrument.Figi);
+        Assert.Equal(0, instrument.Price.Amount);
+        var newPrice = new Money(CurrencyCode.Rub, 123);
+
+        await client.ChangeCurrencyPriceAsync(new ChangeCurrencyPriceRequest { CurrencyId = currencyId, Price = newPrice });
+
+        instrument = await client.GetCurrencyAsync(new GetCurrencyRequest { CurrencyId = currencyId });
 
         Assert.Equal(newPrice, (Money)instrument.Price);
     }

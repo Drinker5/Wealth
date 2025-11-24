@@ -1,0 +1,123 @@
+using System.Data;
+using Dapper;
+using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.InstrumentManagement.Domain.Instruments;
+using Wealth.InstrumentManagement.Domain.Repositories;
+using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
+
+namespace Wealth.InstrumentManagement.Infrastructure.Repositories;
+
+public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesRepository
+{
+    private readonly IDbConnection connection = dbContext.CreateConnection();
+
+    public async Task<Currency?> GetCurrency(CurrencyId id)
+    {
+        const string sql = "SELECT * FROM currencies WHERE id = @Id";
+        var instruments = await GetCurrencies(sql, new { Id = id.Value });
+        return instruments.FirstOrDefault();
+    }
+
+    public async Task<Currency?> GetCurrency(FIGI figi)
+    {
+        const string sql = "SELECT * FROM currencies WHERE figi = @figi";
+        var instruments = await GetCurrencies(sql, new { figi = figi.Value });
+        return instruments.FirstOrDefault();
+    }
+
+    public async Task DeleteCurrency(CurrencyId instrumentId)
+    {
+        const string sql = "DELETE FROM currencies WHERE id = @Id";
+        await connection.ExecuteAsync(sql, new { Id = instrumentId.Value });
+    }
+
+    public async Task ChangePrice(CurrencyId id, Money price)
+    {
+        var currency = await GetCurrency(id);
+        if (currency == null)
+            return;
+
+        currency.ChangePrice(price);
+        const string sql = """
+                           UPDATE currencies 
+                           SET price_currency = @Currency, price_amount = @Amount
+                           WHERE id = @Id
+                           """;
+        await connection.ExecuteAsync(sql, new
+        {
+            Id = id.Value,
+            Currency = currency.Price.Currency,
+            Amount = currency.Price.Amount,
+        });
+        dbContext.AddEvents(currency);
+    }
+
+    public async Task<CurrencyId> CreateCurrency(string name, FIGI figi, CancellationToken token = default)
+    {
+        const string sql = "SELECT nextval('currencies_hilo')";
+        var command = new CommandDefinition(
+            commandText: sql,
+            cancellationToken: token);
+
+        var nextId = await connection.ExecuteScalarAsync<int>(command);
+
+        var currencyInstrument = Currency.Create(new CurrencyId(nextId), name, figi);
+        return await CreateCurrency(currencyInstrument);
+    }
+
+    public Task<IReadOnlyCollection<Currency>> GetCurrencies()
+    {
+        const string sql = "SELECT * FROM currencies LIMIT 10";
+        return GetCurrencies(sql);
+    }
+
+    private async Task<CurrencyId> CreateCurrency(Currency currency)
+    {
+        const string sql = """
+                           INSERT INTO currencies (id, name, figi) 
+                           VALUES (@Id, @Name, @FIGI)
+                           """;
+        await connection.ExecuteAsync(sql, new
+        {
+            Id = currency.Id.Value,
+            Name = currency.Name,
+            FIGI = currency.Figi.Value,
+        });
+        dbContext.AddEvents(currency);
+
+        return currency.Id;
+    }
+
+    private enum Columns
+    {
+        Id = 0,
+        Name,
+        FIGI,
+        Price_Currency,
+        Price_Amount,
+    }
+
+    private async Task<IReadOnlyCollection<Currency>> GetCurrencies(string sql, object? param = null)
+    {
+        using var reader = await connection.ExecuteReaderAsync(sql, param);
+
+        var instruments = new List<Currency>();
+        while (reader.Read())
+        {
+            var currency = new Currency(reader.GetInt32((int)Columns.Id));
+
+            currency.Name = reader.GetString((int)Columns.Name);
+            currency.Figi = reader.GetString((int)Columns.FIGI);
+            if (!reader.IsDBNull((int)Columns.Price_Currency))
+            {
+                currency.Price = new Money(
+                    (CurrencyCode)reader.GetByte((int)Columns.Price_Currency),
+                    reader.GetDecimal((int)Columns.Price_Amount));
+            }
+
+            instruments.Add(currency);
+        }
+
+        return instruments;
+    }
+}

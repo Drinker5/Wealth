@@ -9,7 +9,8 @@ namespace Wealth.InstrumentManagement.Infrastructure.DbSeeding.Seeds;
 public class FirstSeed(
     IUnitOfWork unitOfWork,
     IBondsRepository bondsRepository,
-    IStocksRepository stocksRepository) : IDbSeeder
+    IStocksRepository stocksRepository,
+    ICurrenciesRepository currenciesRepository) : IDbSeeder
 {
     public async Task SeedAsync(CancellationToken token = default)
     {
@@ -23,6 +24,7 @@ public class FirstSeed(
         {
             await CreateBonds(token);
             await CreateStocks(token);
+            await CreateCurrencies(token);
         }
 
         return Unit.Value;
@@ -48,5 +50,14 @@ public class FirstSeed(
         var stock2 = await stocksRepository.CreateStock("test-stock-2", new ISIN("000000000004"), new FIGI("000000000004"), LotSize.One, token);
         await stocksRepository.ChangePrice(stock2, new Money(CurrencyCode.Usd, 222m));
         await stocksRepository.ChangeDividend(stock2, new Dividend(CurrencyCode.Usd, 333m));
+    }
+    
+    private async Task CreateCurrencies(CancellationToken token)
+    {
+        var currency1 = await currenciesRepository.CreateCurrency("test-currency-1", new FIGI("000000000006"), token);
+        await currenciesRepository.ChangePrice(currency1, new Money(CurrencyCode.Rub, 123m));
+
+        var currency2 = await currenciesRepository.CreateCurrency("test-currency-2", new FIGI("000000000007"), token);
+        await currenciesRepository.ChangePrice(currency2, new Money(CurrencyCode.Usd, 234m));
     }
 }

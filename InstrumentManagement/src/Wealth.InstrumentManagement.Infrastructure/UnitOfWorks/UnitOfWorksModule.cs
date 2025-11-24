@@ -24,6 +24,7 @@ public class UnitOfWorksModule : IServiceModule
         {
             services.AddScoped<IBondsRepository, BondsRepository>();
             services.AddScoped<IStocksRepository, StocksRepository>();
+            services.AddScoped<ICurrenciesRepository, CurrenciesRepository>();
         }
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
