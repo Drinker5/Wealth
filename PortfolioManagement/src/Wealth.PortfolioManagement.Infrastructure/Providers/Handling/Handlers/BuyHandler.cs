@@ -36,6 +36,16 @@ public class BuyHandler(IInstrumentIdProvider instrumentIdProvider) : IOperation
                     Quantity = trade.Quantity,
                     Type = TradeOperationType.Buy,
                 },
+                InstrumentType.Currency => new CurrencyTradeOperation
+                {
+                    Id = trade.TradeId,
+                    Date = trade.DateTime.ToDateTimeOffset(),
+                    Amount = trade.Price.ToMoney(),
+                    CurrencyId = await instrumentIdProvider.GetCurrencyIdByFigi(operation.Figi),
+                    PortfolioId = portfolioId,
+                    Quantity = trade.Quantity,
+                    Type = TradeOperationType.Buy,
+                },
                 _ => throw new ArgumentOutOfRangeException()
             };
         }

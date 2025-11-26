@@ -22,7 +22,8 @@ message OperationProto {
     StockDividendOperationProto stock_dividend = 11;
     StockDividendTaxOperationProto stock_dividend_tax = 12;
     StockSplitOperationProto stock_split = 13;
-    CurrencyBrokerFeeOperationProto currency_broker_fee = 14; 
+    CurrencyBrokerFeeOperationProto currency_broker_fee = 14;
+    CurrencyTradeOperationProto currency_trade = 15;
   }
 }
 
@@ -110,4 +111,12 @@ message CurrencyBrokerFeeOperationProto {
   PortfolioIdProto portfolio_id = 1;
   CurrencyIdProto currency_id = 2;
   MoneyProto amount = 3;
+}
+
+message CurrencyTradeOperationProto {
+  PortfolioIdProto portfolio_id = 1;
+  MoneyProto amount = 2;
+  int64 quantity = 3;
+  TradeOperationTypeProto type = 4;
+  CurrencyIdProto currency_id = 5;
 }

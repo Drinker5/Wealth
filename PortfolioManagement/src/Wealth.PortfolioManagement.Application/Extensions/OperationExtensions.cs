@@ -24,14 +24,14 @@ public static class OperationExtensions
             case StockTradeOperation stockTradeOperation:
                 operationProto.StockTrade = stockTradeOperation.ToProto();
                 break;
+            case BondTradeOperation bondTradeOperation:
+                operationProto.BondTrade = bondTradeOperation.ToProto();
+                break;
             case BondBrokerFeeOperation bondBrokerFeeOperation:
                 operationProto.BondBrokerFee = bondBrokerFeeOperation.ToProto();
                 break;
             case BondCouponOperation bondCouponOperation:
                 operationProto.BondCoupon = bondCouponOperation.ToProto();
-                break;
-            case BondTradeOperation bondTradeOperation:
-                operationProto.BondTrade = bondTradeOperation.ToProto();
                 break;
             case StockBrokerFeeOperation stockBrokerFeeOperation:
                 operationProto.StockBrokerFee = stockBrokerFeeOperation.ToProto();
@@ -50,6 +50,9 @@ public static class OperationExtensions
                 break;
             case CurrencyBrokerFeeOperation currencyBrokerFeeOperation:
                 operationProto.CurrencyBrokerFee = currencyBrokerFeeOperation.ToProto();
+                break;
+            case CurrencyTradeOperation currencyTradeOperation:
+                operationProto.CurrencyTrade = currencyTradeOperation.ToProto();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(operation));
@@ -157,5 +160,19 @@ public static class OperationExtensions
         PortfolioId = operation.PortfolioId,
         CurrencyId = operation.CurrencyId,
         Amount = operation.Amount
+    };
+
+    private static CurrencyTradeOperationProto ToProto(this CurrencyTradeOperation operation) => new()
+    {
+        PortfolioId = operation.PortfolioId,
+        CurrencyId = operation.CurrencyId,
+        Amount = operation.Amount,
+        Quantity = operation.Quantity,
+        Type = operation.Type switch
+        {
+            TradeOperationType.Buy => TradeOperationTypeProto.Buy,
+            TradeOperationType.Sell => TradeOperationTypeProto.Sell,
+            _ => throw new ArgumentOutOfRangeException(nameof(operation))
+        }
     };
 }
