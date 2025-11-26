@@ -80,6 +80,8 @@ public sealed class OperationEventHandler(ICqrsInvoker mediator) : IMessageHandl
                         BondCurrencyOperationType.BrokerFee),
                     token);
                 return;
+            case OperationProto.VariantOneofCase.CurrencyBrokerFee:
+            case OperationProto.VariantOneofCase.CurrencyTrade:
             case OperationProto.VariantOneofCase.BondAmortizationOperation:
             case OperationProto.VariantOneofCase.BondTrade:
             case OperationProto.VariantOneofCase.StockDelist:

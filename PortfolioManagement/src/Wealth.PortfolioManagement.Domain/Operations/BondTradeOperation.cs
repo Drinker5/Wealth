@@ -4,5 +4,5 @@ namespace Wealth.PortfolioManagement.Domain.Operations;
 
 public sealed record BondTradeOperation : TradeOperation
 {
-    public BondId BondId { get; set; }
+    public BondId BondId { get; init; }
 }
