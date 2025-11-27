@@ -5,16 +5,16 @@ using Wealth.PortfolioManagement;
 
 namespace Wealth.Aggregation.Application.Commands;
 
-public record CurrencyOperation(
+public record MoneyOperation(
     string Id,
     DateTime Date,
     PortfolioId PortfolioId,
     Money Amount,
-    CurrencyOperationTypeProto Type) : ICommand;
+    MoneyOperationTypeProto Type) : ICommand;
     
-public class CurrencyOperationHandler(ICurrencyOperationRepository repository) : ICommandHandler<CurrencyOperation>
+public class MoneyOperationHandler(IMoneyOperationRepository repository) : ICommandHandler<MoneyOperation>
 {
-    public Task Handle(CurrencyOperation request, CancellationToken cancellationToken)
+    public Task Handle(MoneyOperation request, CancellationToken cancellationToken)
     {
         return repository.Upsert(request, cancellationToken);
     }

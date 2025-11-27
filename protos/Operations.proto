@@ -12,7 +12,7 @@ message OperationProto {
   google.protobuf.Timestamp date = 2;
   oneof variant {
     BondAmortizationOperationProto bond_amortization_operation = 3;
-    CurrencyOperationProto currency_operation = 4;
+    MoneyOperationProto money_operation = 4;
     StockTradeOperationProto stock_trade = 5;
     BondBrokerFeeOperationProto bond_broker_fee = 6;
     BondCouponOperationProto bond_coupon = 7;
@@ -33,16 +33,16 @@ message BondAmortizationOperationProto {
   MoneyProto amount = 3;
 }
 
-message CurrencyOperationProto {
+message MoneyOperationProto {
   PortfolioIdProto portfolio_id = 1;
   MoneyProto Amount = 2;
-  CurrencyOperationTypeProto Type = 3;
+  MoneyOperationTypeProto Type = 3;
 }
 
-enum CurrencyOperationTypeProto {
-  CURRENCY_OPERATION_TYPE_PROTO_UNKNOWN = 0;
-  CURRENCY_OPERATION_TYPE_PROTO_DEPOSIT = 1;
-  CURRENCY_OPERATION_TYPE_PROTO_WITHDRAW = 2;
+enum MoneyOperationTypeProto {
+  MONEY_OPERATION_TYPE_PROTO_UNKNOWN = 0;
+  MONEY_OPERATION_TYPE_PROTO_DEPOSIT = 1;
+  MONEY_OPERATION_TYPE_PROTO_WITHDRAW = 2;
 }
 
 message StockTradeOperationProto {

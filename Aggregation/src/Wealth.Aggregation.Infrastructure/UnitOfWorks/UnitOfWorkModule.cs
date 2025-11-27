@@ -22,9 +22,11 @@ public class UnitOfWorkModule : IServiceModule
         });
 
         services.AddSingleton<ITableWriterBuilder, TableWriterBuilder>();
-        services.AddSingleton<IStockTradeRepository, StockTradeRepository>();
-        services.AddSingleton<IStockCurrencyOperationRepository, StockCurrencyOperationRepository>();
-        services.AddSingleton<IBondCurrencyOperationRepository, BondCurrencyOperationRepository>();
-        services.AddSingleton<ICurrencyOperationRepository, CurrencyOperationRepository>();
+        services.AddSingleton<IStockTradeOperationRepository, StockTradeOperationRepository>();
+        services.AddSingleton<ICurrencyTradeOperationRepository, CurrencyTradeOperationRepository>();
+        services.AddSingleton<IStockMoneyOperationRepository, StockMoneyOperationRepository>();
+        services.AddSingleton<IBondMoneyOperationRepository, BondMoneyOperationRepository>();
+        services.AddSingleton<ICurrencyMoneyOperationRepository, CurrencyMoneyOperationRepository>();
+        services.AddSingleton<IMoneyOperationRepository, MoneyOperationRepository>();
     }
 }

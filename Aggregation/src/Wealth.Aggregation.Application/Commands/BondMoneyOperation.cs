@@ -4,23 +4,23 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.Aggregation.Application.Commands;
 
-public sealed record BondCurrencyOperation(    
+public sealed record BondMoneyOperation(    
     string Id,
     DateTime Date,
     PortfolioId PortfolioId,
     BondId BondId,
     Money Amount,
-    BondCurrencyOperationType Type) : ICommand;
+    BondMoneyOperationType Type) : ICommand;
     
-public class BondCurrencyOperationHandler(IBondCurrencyOperationRepository repository) : ICommandHandler<BondCurrencyOperation>
+public class BondMoneyOperationHandler(IBondMoneyOperationRepository repository) : ICommandHandler<BondMoneyOperation>
 {
-    public async Task Handle(BondCurrencyOperation command, CancellationToken token)
+    public async Task Handle(BondMoneyOperation command, CancellationToken token)
     {
         await repository.Upsert(command, token);
     }
 }
 
-public enum BondCurrencyOperationType : byte
+public enum BondMoneyOperationType : byte
 {
     Coupon = 1,
     CouponTax = 2,

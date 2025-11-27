@@ -5,9 +5,9 @@ using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations;
 
-internal class CurrencyOperationConfiguration : IEntityTypeConfiguration<CurrencyOperation>
+internal class CurrencyOperationConfiguration : IEntityTypeConfiguration<MoneyOperation>
 {
-    public void Configure(EntityTypeBuilder<CurrencyOperation> builder)
+    public void Configure(EntityTypeBuilder<MoneyOperation> builder)
     {
         builder.Property(x => x.PortfolioId)
             .IsRequired();

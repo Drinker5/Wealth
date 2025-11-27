@@ -11,7 +11,7 @@ public sealed class OperationEventHandler(ICqrsInvoker mediator) : IMessageHandl
         switch (message.VariantCase)
         {
             case OperationProto.VariantOneofCase.StockTrade:
-                await mediator.Command(new StockTrade(
+                await mediator.Command(new StockTradeOperation(
                         message.Id,
                         message.Date.ToDateTime(),
                         message.StockTrade.PortfolioId,
@@ -21,67 +21,86 @@ public sealed class OperationEventHandler(ICqrsInvoker mediator) : IMessageHandl
                         message.StockTrade.Type),
                     token);
                 return;
+            case OperationProto.VariantOneofCase.CurrencyTrade:
+                await mediator.Command(new CurrencyTradeOperation(
+                        message.Id,
+                        message.Date.ToDateTime(),
+                        message.CurrencyTrade.PortfolioId,
+                        message.CurrencyTrade.CurrencyId,
+                        message.CurrencyTrade.Quantity,
+                        message.CurrencyTrade.Amount,
+                        message.CurrencyTrade.Type),
+                    token);
+                return;
             case OperationProto.VariantOneofCase.BondCoupon:
-                await mediator.Command(new BondCurrencyOperation(
+                await mediator.Command(new BondMoneyOperation(
                         message.Id,
                         message.Date.ToDateTime(),
                         message.BondCoupon.PortfolioId,
                         message.BondCoupon.BondId,
                         message.BondCoupon.Amount,
-                        BondCurrencyOperationType.Coupon),
+                        BondMoneyOperationType.Coupon),
                     token);
                 return;
             case OperationProto.VariantOneofCase.StockDividend:
-                await mediator.Command(new StockCurrencyOperation(
+                await mediator.Command(new StockMoneyOperation(
                         message.Id,
                         message.Date.ToDateTime(),
                         message.StockDividend.PortfolioId,
                         message.StockDividend.StockId,
                         message.StockDividend.Amount,
-                        StockCurrencyOperationType.Dividend),
+                        StockMoneyOperationType.Dividend),
                     token);
                 return;
             case OperationProto.VariantOneofCase.StockDividendTax:
-                await mediator.Command(new StockCurrencyOperation(
+                await mediator.Command(new StockMoneyOperation(
                         message.Id,
                         message.Date.ToDateTime(),
                         message.StockDividendTax.PortfolioId,
                         message.StockDividendTax.StockId,
                         message.StockDividendTax.Amount,
-                        StockCurrencyOperationType.DividendTax),
+                        StockMoneyOperationType.DividendTax),
                     token);
                 return;
             case OperationProto.VariantOneofCase.StockBrokerFee:
-                await mediator.Command(new StockCurrencyOperation(
+                await mediator.Command(new StockMoneyOperation(
                         message.Id,
                         message.Date.ToDateTime(),
                         message.StockBrokerFee.PortfolioId,
                         message.StockBrokerFee.StockId,
                         message.StockBrokerFee.Amount,
-                        StockCurrencyOperationType.BrokerFee),
+                        StockMoneyOperationType.BrokerFee),
                     token);
                 return;
-            case OperationProto.VariantOneofCase.CurrencyOperation:
-                await mediator.Command(new CurrencyOperation(
+            case OperationProto.VariantOneofCase.MoneyOperation:
+                await mediator.Command(new MoneyOperation(
                         message.Id,
                         message.Date.ToDateTime(),
-                        message.CurrencyOperation.PortfolioId,
-                        message.CurrencyOperation.Amount,
-                        message.CurrencyOperation.Type),
+                        message.MoneyOperation.PortfolioId,
+                        message.MoneyOperation.Amount,
+                        message.MoneyOperation.Type),
                     token);
                 return;
             case OperationProto.VariantOneofCase.BondBrokerFee:
-                await mediator.Command(new BondCurrencyOperation(
+                await mediator.Command(new BondMoneyOperation(
                         message.Id,
                         message.Date.ToDateTime(),
                         message.BondBrokerFee.PortfolioId,
                         message.BondBrokerFee.BondId,
                         message.BondBrokerFee.Amount,
-                        BondCurrencyOperationType.BrokerFee),
+                        BondMoneyOperationType.BrokerFee),
                     token);
                 return;
             case OperationProto.VariantOneofCase.CurrencyBrokerFee:
-            case OperationProto.VariantOneofCase.CurrencyTrade:
+                await mediator.Command(new CurrencyMoneyOperation(
+                        message.Id,
+                        message.Date.ToDateTime(),
+                        message.CurrencyBrokerFee.PortfolioId,
+                        message.CurrencyBrokerFee.CurrencyId,
+                        message.CurrencyBrokerFee.Amount,
+                        CurrencyMoneyOperationType.BrokerFee),
+                    token);
+                return;
             case OperationProto.VariantOneofCase.BondAmortizationOperation:
             case OperationProto.VariantOneofCase.BondTrade:
             case OperationProto.VariantOneofCase.StockDelist:

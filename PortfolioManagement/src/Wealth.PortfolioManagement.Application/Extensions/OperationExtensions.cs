@@ -18,8 +18,8 @@ public static class OperationExtensions
             case BondAmortizationOperation bondAmortizationOperation:
                 operationProto.BondAmortizationOperation = bondAmortizationOperation.ToProto();
                 break;
-            case CurrencyOperation currencyOperation:
-                operationProto.CurrencyOperation = currencyOperation.ToProto();
+            case MoneyOperation moneyOperation:
+                operationProto.MoneyOperation = moneyOperation.ToProto();
                 break;
             case StockTradeOperation stockTradeOperation:
                 operationProto.StockTrade = stockTradeOperation.ToProto();
@@ -68,14 +68,14 @@ public static class OperationExtensions
         Amount = operation.Amount
     };
 
-    private static CurrencyOperationProto ToProto(this CurrencyOperation operation) => new()
+    private static MoneyOperationProto ToProto(this MoneyOperation operation) => new()
     {
         PortfolioId = operation.PortfolioId,
         Amount = operation.Amount,
         Type = operation.Type switch
         {
-            CurrencyOperationType.Deposit => CurrencyOperationTypeProto.Deposit,
-            CurrencyOperationType.Withdraw => CurrencyOperationTypeProto.Withdraw,
+            MoneyOperationType.Deposit => MoneyOperationTypeProto.Deposit,
+            MoneyOperationType.Withdraw => MoneyOperationTypeProto.Withdraw,
             _ => throw new ArgumentOutOfRangeException(nameof(operation))
         }
     };

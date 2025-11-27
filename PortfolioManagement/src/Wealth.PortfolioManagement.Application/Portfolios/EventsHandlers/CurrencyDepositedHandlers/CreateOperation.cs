@@ -12,11 +12,11 @@ public class CreateOperation(ICqrsInvoker mediator) : IDomainEventHandler<Curren
     public Task Handle(CurrencyDeposited notification, CancellationToken cancellationToken)
     {
         return mediator.Command(
-            new AddOperation(new CurrencyOperation
+            new AddOperation(new MoneyOperation
             {
                 Id = OperationId.NewId(),
                 Date = Clock.Now,
-                Type = CurrencyOperationType.Deposit,
+                Type = MoneyOperationType.Deposit,
                 Amount = notification.Money,
                 PortfolioId = notification.PortfolioId,
             }),

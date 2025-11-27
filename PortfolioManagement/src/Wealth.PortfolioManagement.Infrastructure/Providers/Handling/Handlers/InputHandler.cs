@@ -12,12 +12,12 @@ public class InputHandler : IOperationHandler
         InstrumentType instrumentType,
         PortfolioId portfolioId) => new[]
     {
-        new CurrencyOperation
+        new MoneyOperation
         {
             Id = operation.Id,
             Date = operation.Date.ToDateTimeOffset(),
             Amount = operation.Payment.ToMoney(),
-            Type = CurrencyOperationType.Deposit,
+            Type = MoneyOperationType.Deposit,
             PortfolioId = portfolioId
         }
     }.ToAsyncEnumerable();
