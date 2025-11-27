@@ -5,7 +5,7 @@ using Wealth.PortfolioManagement;
 
 namespace Wealth.Aggregation.Application.Commands;
 
-public sealed record StockTrade(
+public sealed record StockTradeOperation(
     string Id,
     DateTime Date,
     PortfolioId PortfolioId,
@@ -14,15 +14,15 @@ public sealed record StockTrade(
     Money Amount,
     TradeOperationTypeProto Type) : ICommand;
 
-public class StockTradeHandler(IStockTradeRepository repository) : ICommandHandler<StockTrade>
+public class StockTradeOperationHandler(IStockTradeOperationRepository operationRepository) : ICommandHandler<StockTradeOperation>
 {
-    public async Task Handle(StockTrade command, CancellationToken token)
+    public async Task Handle(StockTradeOperation command, CancellationToken token)
     {
         switch (command.Type)
         {
             case TradeOperationTypeProto.Buy:
             case TradeOperationTypeProto.Sell:
-                await repository.Upsert(command, token);
+                await operationRepository.Upsert(command, token);
                 break;
             case TradeOperationTypeProto.Unknown:
             default:

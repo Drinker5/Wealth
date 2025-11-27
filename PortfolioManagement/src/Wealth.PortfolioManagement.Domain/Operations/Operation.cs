@@ -5,7 +5,7 @@ namespace Wealth.PortfolioManagement.Domain.Operations;
 [JsonDerivedType(typeof(BondBrokerFeeOperation), typeDiscriminator: nameof(BondBrokerFeeOperation))]
 [JsonDerivedType(typeof(BondCouponOperation), typeDiscriminator: nameof(BondCouponOperation))]
 [JsonDerivedType(typeof(BondAmortizationOperation), typeDiscriminator: nameof(BondAmortizationOperation))]
-[JsonDerivedType(typeof(CurrencyOperation), typeDiscriminator: nameof(CurrencyOperation))]
+[JsonDerivedType(typeof(MoneyOperation), typeDiscriminator: nameof(MoneyOperation))]
 [JsonDerivedType(typeof(StockSplitOperation), typeDiscriminator: nameof(StockSplitOperation))]
 [JsonDerivedType(typeof(StockBrokerFeeOperation), typeDiscriminator: nameof(StockBrokerFeeOperation))]
 [JsonDerivedType(typeof(StockDividendOperation), typeDiscriminator: nameof(StockDividendOperation))]

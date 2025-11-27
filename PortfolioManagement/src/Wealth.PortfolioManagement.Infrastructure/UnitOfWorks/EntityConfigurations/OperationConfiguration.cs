@@ -12,7 +12,7 @@ internal class OperationConfiguration : IEntityTypeConfiguration<Operation>
         builder.Property(x => x.Id);
 
         builder.HasDiscriminator<OperationType>("operation_type")
-            .HasValue<CurrencyOperation>(OperationType.Currency)
+            .HasValue<MoneyOperation>(OperationType.Currency)
             .HasValue<BondAmortizationOperation>(OperationType.BondAmortization)
             .HasValue<BondTradeOperation>(OperationType.BondTrade)
             .HasValue<StockTradeOperation>(OperationType.StockTrade)

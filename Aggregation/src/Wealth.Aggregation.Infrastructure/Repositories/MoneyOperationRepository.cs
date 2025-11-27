@@ -4,20 +4,19 @@ using Wealth.Aggregation.Application.Repository;
 
 namespace Wealth.Aggregation.Infrastructure.Repositories;
 
-public class StockCurrencyOperationRepository(ITableWriterBuilder tableWriterBuilder) : IStockCurrencyOperationRepository
+public class MoneyOperationRepository(ITableWriterBuilder tableWriterBuilder) : IMoneyOperationRepository
 {
-    private readonly ITableWriter<StockCurrencyOperation> _tableWriter = tableWriterBuilder
-        .For<StockCurrencyOperation>("stock_currency_operation")
+    private readonly ITableWriter<MoneyOperation> _tableWriter = tableWriterBuilder
+        .For<MoneyOperation>("money_operation")
         .AddColumn("op_id", i => i.Id)
         .AddColumn("date", i => i.Date)
         .AddColumn("portfolio_id", i => i.PortfolioId.Value)
-        .AddColumn("stock_id", i => i.StockId.Value)
         .AddColumn("amount", i => i.Amount.Amount)
         .AddColumn("currency", i => (byte)i.Amount.Currency)
         .AddColumn("type", i => (byte)i.Type)
         .Build();
 
-    public async Task Upsert(StockCurrencyOperation operation, CancellationToken token)
+    public async Task Upsert(MoneyOperation operation, CancellationToken token)
     {
         await _tableWriter.Insert([operation], token);
     }

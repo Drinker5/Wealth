@@ -3,7 +3,7 @@ using Wealth.BuildingBlocks.Application;
 
 namespace Wealth.Aggregation.Application.Commands;
 
-public class StockChangePriceHandler(IStockTradeRepository repository) : ICommandHandler<StockChangePrice>
+public class StockChangePriceHandler(IStockTradeOperationRepository operationRepository) : ICommandHandler<StockChangePrice>
 {
     public Task Handle(StockChangePrice request, CancellationToken cancellationToken)
     {

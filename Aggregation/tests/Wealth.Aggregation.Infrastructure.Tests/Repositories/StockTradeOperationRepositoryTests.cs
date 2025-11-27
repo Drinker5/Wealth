@@ -10,15 +10,15 @@ using Xunit.Abstractions;
 
 namespace Wealth.Aggregation.Infrastructure.Tests.Repositories;
 
-[TestSubject(typeof(StockTradeRepository))]
-public class StockTradeRepositoryTests : IClassFixture<ClickHouseFixture>
+[TestSubject(typeof(StockTradeOperationRepository))]
+public class StockTradeOperationRepositoryTests : IClassFixture<ClickHouseFixture>
 {
     private readonly ITestOutputHelper output;
     private readonly ClickHouseFixture clickHouseFixture;
-    private readonly StockTradeRepository repository;
+    private readonly StockTradeOperationRepository operationRepository;
     private readonly Fixture fixture;
 
-    public StockTradeRepositoryTests(ITestOutputHelper output, ClickHouseFixture clickHouseFixture)
+    public StockTradeOperationRepositoryTests(ITestOutputHelper output, ClickHouseFixture clickHouseFixture)
     {
         fixture = new Fixture();
         this.output = output;
@@ -27,7 +27,7 @@ public class StockTradeRepositoryTests : IClassFixture<ClickHouseFixture>
         var clickHouseConnectionStringBuilder = new ClickHouseConnectionStringBuilder(clickHouseFixture.ClickHouseConnectionString);
         var clickHouseConnectionSettings = clickHouseConnectionStringBuilder.BuildSettings();
         var connectionFactory = new ClickHouseConnectionFactory(clickHouseConnectionSettings);
-        repository = new StockTradeRepository(new TableWriterBuilder(connectionFactory));
+        operationRepository = new StockTradeOperationRepository(new TableWriterBuilder(connectionFactory));
     }
 
     [Fact]
@@ -37,14 +37,14 @@ public class StockTradeRepositoryTests : IClassFixture<ClickHouseFixture>
         output.WriteLine(logs.Stdout);
         output.WriteLine(logs.Stderr);
         
-        var op = fixture.Create<StockTrade>();
+        var op = fixture.Create<StockTradeOperation>();
 
-        await repository.Upsert(op, CancellationToken.None);
+        await operationRepository.Upsert(op, CancellationToken.None);
 
         await CheckOp(op, CancellationToken.None);
     }
 
-    private async Task CheckOp(StockTrade op, CancellationToken token)
+    private async Task CheckOp(StockTradeOperation op, CancellationToken token)
     {
         await using var connection = new ClickHouseConnection(clickHouseFixture.ClickHouseConnectionString);
         await connection.OpenAsync(token);
