@@ -3,7 +3,7 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.Aggregation.Domain;
 
-public class StockAggregation : AggregateRoot
+public class StockAggregation
 {
     public StockId Id { get; init; }
     public string Name { get; private set; }

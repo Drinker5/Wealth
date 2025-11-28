@@ -4,6 +4,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.0" />
     <PackageReference Include="Polly.RateLimiting" Version="8.6.5" />
     <PackageReference Include="SharpJuice.ClickHouse" Version="1.0.7" />
+    <PackageReference Include="System.Linq.Async" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure.KafkaConsumer\Wealth.BuildingBlocks.Infrastructure.KafkaConsumer.csproj" />

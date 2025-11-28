@@ -28,5 +28,7 @@ public class UnitOfWorkModule : IServiceModule
         services.AddSingleton<IBondMoneyOperationRepository, BondMoneyOperationRepository>();
         services.AddSingleton<ICurrencyMoneyOperationRepository, CurrencyMoneyOperationRepository>();
         services.AddSingleton<IMoneyOperationRepository, MoneyOperationRepository>();
+
+        services.AddSingleton<IStockAggregationRepository, StockAggregationRepository>();
     }
 }
