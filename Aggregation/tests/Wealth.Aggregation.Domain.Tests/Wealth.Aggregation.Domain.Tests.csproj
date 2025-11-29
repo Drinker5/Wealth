@@ -1,7 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Wealth.Aggregation.Domain\Wealth.Aggregation.Domain.csproj" />
-  </ItemGroup>
-
-</Project>

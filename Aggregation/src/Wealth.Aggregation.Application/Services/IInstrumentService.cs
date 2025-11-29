@@ -4,7 +4,10 @@ namespace Wealth.Aggregation.Application.Services;
 
 public interface IInstrumentService
 {
-    Task<StockInfo?> GetStockInfo(StockId stockId);
+    Task<IReadOnlyDictionary<StockId, StockInfo>> GetStocksInfo(
+        IReadOnlyCollection<StockId> stockIds,
+        CancellationToken token);
+
     Task<BondInfo?> GetBondInfo(BondId bondId);
 }
 

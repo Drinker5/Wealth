@@ -1,16 +1,34 @@
-using Grpc.Core;
+using System.Collections.ObjectModel;
 using Wealth.Aggregation.Application.Services;
+using Wealth.BuildingBlocks;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement;
 
-namespace Wealth.Aggregation.API.Services;
+namespace Wealth.Aggregation.Infrastructure.Services;
 
 public class GrpcInstrumentService(InstrumentsService.InstrumentsServiceClient client) : IInstrumentService
 {
+    public async Task<IReadOnlyDictionary<StockId, StockInfo>> GetStocksInfo(
+        IReadOnlyCollection<StockId> stockIds,
+        CancellationToken token)
+    {
+        if (stockIds.Count == 0)
+            return ReadOnlyDictionary<StockId, StockInfo>.Empty;
+
+        var response = await client.GetStocksAsync(new GetStocksRequest
+        {
+            StockIds = { stockIds.Select(i => (StockIdProto)i).ToArray() }
+        });
+
+        return response.StockInfos
+            .Select(i => i.FromProto())
+            .ToDictionary(i => i.Id, i => i);
+    }
+
     public async Task<StockInfo?> GetStockInfo(StockId stockId)
     {
         var response = await client.GetStockAsync(new GetStockRequest { StockId = stockId });
-        return response.FromProto();
+        return response.StockInfo.FromProto();
     }
 
     public async Task<BondInfo?> GetBondInfo(BondId bondId)
@@ -34,7 +52,7 @@ internal static class ProtoConverters
         return info;
     }
 
-    public static StockInfo FromProto(this GetStockResponse stock)
+    public static StockInfo FromProto(this StockInfoProto stock)
     {
         StockInfo info = new()
         {

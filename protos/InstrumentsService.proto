@@ -9,6 +9,7 @@ option csharp_namespace = "Wealth.InstrumentManagement";
 service InstrumentsService {
   rpc GetBond (GetBondRequest) returns (GetBondResponse);
   rpc GetStock (GetStockRequest) returns (GetStockResponse);
+  rpc GetStocks (GetStocksRequest) returns (GetStocksResponse);
   rpc GetCurrency (GetCurrencyRequest) returns (GetCurrencyResponse);
   rpc CreateStock (CreateStockRequest) returns (CreateStockResponse);
   rpc CreateBond (CreateBondRequest) returns (CreateBondResponse);
@@ -36,6 +37,10 @@ message GetStockRequest {
   }
 }
 
+message GetStocksRequest {
+  repeated StockIdProto stock_ids = 1;
+}
+
 message GetCurrencyRequest {
   oneof variant {
     CurrencyIdProto currency_id = 1;
@@ -52,6 +57,14 @@ message GetBondResponse {
 }
 
 message GetStockResponse {
+  StockInfoProto stock_info = 1;
+}
+
+message GetStocksResponse{
+  repeated StockInfoProto stock_infos = 1;
+}
+
+message StockInfoProto {
   StockIdProto stock_id = 1;
   string name = 2;
   MoneyProto price = 3;

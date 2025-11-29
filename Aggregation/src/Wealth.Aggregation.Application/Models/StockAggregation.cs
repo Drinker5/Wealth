@@ -1,7 +1,6 @@
-using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Domain.Common;
 
-namespace Wealth.Aggregation.Domain;
+namespace Wealth.Aggregation.Application.Models;
 
 public class StockAggregation
 {

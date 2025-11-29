@@ -1,7 +1,8 @@
 using JetBrains.Annotations;
+using Wealth.Aggregation.Application.Models;
 using Wealth.BuildingBlocks.Domain.Common;
 
-namespace Wealth.Aggregation.Domain.Tests;
+namespace Wealth.Aggregation.Application.Tests;
 
 [TestSubject(typeof(StockAggregation))]
 public class StockAggregationTests

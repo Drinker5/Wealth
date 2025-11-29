@@ -59,18 +59,18 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
             Id = 1,
         };
 
-        var instrument = await client.GetStockAsync(new GetStockRequest
+        var response = await client.GetStockAsync(new GetStockRequest
         {
             StockId = instrumentId
         });
 
-        Assert.Equal(1, instrument.StockId.Id);
-        Assert.Equal(10, instrument.LotSize);
-        Assert.Equal<decimal>(111m, instrument.Price.Amount);
-        Assert.Equal(CurrencyCodeProto.Rub, instrument.Price.Currency);
-        Assert.Equal("test-stock-1", instrument.Name);
-        Assert.Equal<decimal>(222m, instrument.DividendPerYear.Amount);
-        Assert.Equal(CurrencyCodeProto.Usd, instrument.DividendPerYear.Currency);
+        Assert.Equal(1, response.StockInfo.StockId.Id);
+        Assert.Equal(10, response.StockInfo.LotSize);
+        Assert.Equal<decimal>(111m, response.StockInfo.Price.Amount);
+        Assert.Equal(CurrencyCodeProto.Rub, response.StockInfo.Price.Currency);
+        Assert.Equal("test-stock-1", response.StockInfo.Name);
+        Assert.Equal<decimal>(222m, response.StockInfo.DividendPerYear.Amount);
+        Assert.Equal(CurrencyCodeProto.Usd, response.StockInfo.DividendPerYear.Currency);
     }
     
     [Fact]
@@ -109,17 +109,17 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
 
         var instrument = await client.GetStockAsync(new GetStockRequest { StockId = stockId });
 
-        Assert.Equal(createStockRequest.Name, instrument.Name);
-        Assert.Equal(createStockRequest.Isin, instrument.Isin);
-        Assert.Equal(createStockRequest.Figi, instrument.Figi);
-        Assert.Equal(0, instrument.Price.Amount);
+        Assert.Equal(createStockRequest.Name, instrument.StockInfo.Name);
+        Assert.Equal(createStockRequest.Isin, instrument.StockInfo.Isin);
+        Assert.Equal(createStockRequest.Figi, instrument.StockInfo.Figi);
+        Assert.Equal(0, instrument.StockInfo.Price.Amount);
         var newPrice = new Money(CurrencyCode.Rub, 123);
 
         await client.ChangeStockPriceAsync(new ChangeStockPriceRequest { StockId = stockId, Price = newPrice });
 
         instrument = await client.GetStockAsync(new GetStockRequest { StockId = stockId });
 
-        Assert.Equal(newPrice, (Money)instrument.Price);
+        Assert.Equal(newPrice, (Money)instrument.StockInfo.Price);
     }
 
     [Fact]

@@ -6,14 +6,13 @@
   <Folder Name="/Aggregation/src/">
     <Project Path="Aggregation\src\Wealth.Aggregation.API\Wealth.Aggregation.API.csproj" />
     <Project Path="Aggregation\src\Wealth.Aggregation.Application\Wealth.Aggregation.Application.csproj" />
-    <Project Path="Aggregation\src\Wealth.Aggregation.Domain\Wealth.Aggregation.Domain.csproj" />
     <Project Path="Aggregation\src\Wealth.Aggregation.Infrastructure\Wealth.Aggregation.Infrastructure.csproj" />
     <File Path="Aggregation\src\Directory.Build.props" />
   </Folder>
   <Folder Name="/Aggregation/tests/">
     <Project Path="Aggregation/tests/Wealth.Aggregation.API.Tests/Wealth.Aggregation.API.Tests.csproj" />
+    <Project Path="Aggregation/tests/Wealth.Aggregation.Application.Tests/Wealth.Aggregation.Application.Tests.csproj" />
     <Project Path="Aggregation/tests/Wealth.Aggregation.Infrastructure.Tests/Wealth.Aggregation.Infrastructure.Tests.csproj" />
-    <Project Path="Aggregation\tests\Wealth.Aggregation.Domain.Tests\Wealth.Aggregation.Domain.Tests.csproj" />
     <File Path="Aggregation\tests\Directory.Build.props" />
   </Folder>
   <Folder Name="/BuildingBlocks/" />

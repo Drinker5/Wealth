@@ -84,12 +84,12 @@ public class InstrumentIdProvider(
     {
         try
         {
-            var getStockResponse = await instrumentsServiceClient.GetStockAsync(new GetStockRequest
+            var response = await instrumentsServiceClient.GetStockAsync(new GetStockRequest
             {
                 Figi = figi
             });
 
-            return getStockResponse.StockId;
+            return response.StockInfo.StockId;
         }
         catch (RpcException ex) when (ex.StatusCode == StatusCode.NotFound)
         {

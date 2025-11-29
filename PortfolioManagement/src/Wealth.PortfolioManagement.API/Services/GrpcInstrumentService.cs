@@ -9,13 +9,15 @@ public class GrpcInstrumentService(InstrumentsService.InstrumentsServiceClient c
     public async Task<StockInstrumentInfo> GetStockInfo(StockId instrumentId)
     {
         var response = await client.GetStockAsync(new GetStockRequest { StockId = instrumentId });
+        var stockInfo = response.StockInfo;
+
         return new StockInstrumentInfo
         {
-            DividendPerYear = response.DividendPerYear,
-            Id = response.StockId,
-            LotSize = response.LotSize,
-            Name = response.Name,
-            Price = response.Price,
+            DividendPerYear = stockInfo.DividendPerYear,
+            Id = stockInfo.StockId,
+            LotSize = stockInfo.LotSize,
+            Name = stockInfo.Name,
+            Price = stockInfo.Price,
         };
     }
 

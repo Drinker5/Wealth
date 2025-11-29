@@ -83,7 +83,7 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
 
         return response;
     }
-    
+
     public override async Task<GetCurrencyResponse> GetCurrency(GetCurrencyRequest request, ServerCallContext context)
     {
         var instrument = request.VariantCase switch
@@ -122,13 +122,16 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
 
         var response = new GetStockResponse
         {
-            StockId = instrument.Id,
-            Name = instrument.Name,
-            Price = instrument.Price,
-            Isin = instrument.Isin,
-            Figi = instrument.Figi,
-            DividendPerYear = instrument.Dividend.ValuePerYear,
-            LotSize = instrument.LotSize,
+            StockInfo = new StockInfoProto
+            {
+                StockId = instrument.Id,
+                Name = instrument.Name,
+                Price = instrument.Price,
+                Isin = instrument.Isin,
+                Figi = instrument.Figi,
+                DividendPerYear = instrument.Dividend.ValuePerYear,
+                LotSize = instrument.LotSize,
+            }
         };
 
         return response;
@@ -163,7 +166,7 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
 
         return new ChangePriceResponse();
     }
-    
+
     public override async Task<ChangePriceResponse> ChangeCurrencyPrice(ChangeCurrencyPriceRequest request, ServerCallContext context)
     {
         var instrument = await mediator.Query(new GetCurrency(request.CurrencyId));
