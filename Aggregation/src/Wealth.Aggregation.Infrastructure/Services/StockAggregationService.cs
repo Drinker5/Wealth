@@ -30,11 +30,16 @@ public sealed class StockAggregationService(
         {
             var stockInfo = stockInfos[raw.StockId];
             result.Add(new StockAggregation(
-                raw.StockId,
+                Index: "TODO",
                 stockInfo.Name,
-                Money.Empty,
+                Weight: -1, // TODO
+                WeightSkipped: -1, // TODO
+                stockInfo.Price,
                 stockInfo.DividendPerYear,
-                stockInfo.LotSize));
+                stockInfo.LotSize,
+                raw.Quantity,
+                new Money(raw.Currency, raw.TradeAmount),
+                new Money(raw.Currency, raw.MoneyAmount)));
         }
 
         return result;

@@ -15,10 +15,12 @@ public class GrpcInstrumentService(InstrumentsService.InstrumentsServiceClient c
         if (stockIds.Count == 0)
             return ReadOnlyDictionary<StockId, StockInfo>.Empty;
 
-        var response = await client.GetStocksAsync(new GetStocksRequest
+        var request = new GetStocksRequest
         {
             StockIds = { stockIds.Select(i => (StockIdProto)i).ToArray() }
-        });
+        };
+
+        var response = await client.GetStocksAsync(request, cancellationToken: token);
 
         return response.StockInfos
             .Select(i => i.FromProto())

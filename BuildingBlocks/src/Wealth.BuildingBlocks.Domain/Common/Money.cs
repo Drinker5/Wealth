@@ -13,6 +13,16 @@ public record struct Money(CurrencyCode Currency, decimal Amount) : IValueObject
         return a with { Amount = a.Amount - b.Amount };
     }
     
+    public static Money operator +(Money a, Money b)
+    {
+        return a with { Amount = a.Amount + b.Amount };
+    }
+
+    public static Money operator *(Money a, long b)
+    {
+        return a with { Amount = a.Amount * b };
+    }
+
     public static Money operator *(Money a, int b)
     {
         return a with { Amount = a.Amount * b };
