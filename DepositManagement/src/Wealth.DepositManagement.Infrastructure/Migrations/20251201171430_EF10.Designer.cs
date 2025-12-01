@@ -3,18 +3,21 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Wealth.WalletManagement.Infrastructure.UnitOfWorks;
+using Wealth.DepositManagement.Infrastructure.UnitOfWorks;
 
 #nullable disable
 
-namespace Wealth.WalletManagement.Infrastructure.Migrations
+namespace Wealth.DepositManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(WealthDbContext))]
-    partial class WealthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251201171430_EF10")]
+    partial class EF10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,7 +26,7 @@ namespace Wealth.WalletManagement.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.HasSequence("WalletIdHiLo")
+            modelBuilder.HasSequence("DepositIdHiLo")
                 .IncrementsBy(10);
 
             modelBuilder.Entity("Wealth.BuildingBlocks.Application.OutboxMessage", b =>
@@ -56,7 +59,7 @@ namespace Wealth.WalletManagement.Infrastructure.Migrations
                     b.ToTable("OutboxMessages");
                 });
 
-            modelBuilder.Entity("Wealth.WalletManagement.Domain.WalletOperations.WalletOperation", b =>
+            modelBuilder.Entity("Wealth.DepositManagement.Domain.DepositOperations.DepositOperation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -65,76 +68,75 @@ namespace Wealth.WalletManagement.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("OperationType")
+                    b.Property<int>("DepositId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("WalletId")
+                    b.Property<int>("Type")
                         .HasColumnType("integer");
 
-                    b.ComplexProperty(typeof(Dictionary<string, object>), "Amount", "Wealth.WalletManagement.Domain.WalletOperations.WalletOperation.Amount#Money", b1 =>
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Money", "Wealth.DepositManagement.Domain.DepositOperations.DepositOperation.Money#Money", b1 =>
                         {
                             b1.IsRequired();
 
                             b1.Property<decimal>("Amount")
                                 .HasColumnType("numeric")
-                                .HasColumnName("Amount_Amount");
+                                .HasColumnName("Money_Amount");
 
                             b1.Property<byte>("Currency")
                                 .HasColumnType("smallint")
-                                .HasColumnName("Amount_Currency");
+                                .HasColumnName("Money_Currency");
                         });
 
                     b.HasKey("Id");
 
-                    b.ToTable("WalletOperations");
+                    b.HasIndex("DepositId");
+
+                    b.ToTable("DepositOperations");
+
+                    b.UseTpcMappingStrategy();
                 });
 
-            modelBuilder.Entity("Wealth.WalletManagement.Domain.Wallets.Wallet", b =>
+            modelBuilder.Entity("Wealth.DepositManagement.Domain.Deposits.Deposit", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "WalletIdHiLo");
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "DepositIdHiLo");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Wallets");
-                });
-
-            modelBuilder.Entity("Wealth.WalletManagement.Domain.Wallets.WalletCurrency", b =>
-                {
-                    b.Property<int>("WalletId")
-                        .HasColumnType("integer");
-
-                    b.Property<byte>("Currency")
-                        .HasColumnType("smallint");
-
-                    b.Property<decimal>("Amount")
+                    b.Property<decimal>("Yield")
                         .HasColumnType("numeric");
 
-                    b.HasKey("WalletId", "Currency");
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Investment", "Wealth.DepositManagement.Domain.Deposits.Deposit.Investment#Money", b1 =>
+                        {
+                            b1.IsRequired();
 
-                    b.ToTable("WalletCurrency");
+                            b1.Property<decimal>("Amount")
+                                .HasColumnType("numeric")
+                                .HasColumnName("Investment_Amount");
+
+                            b1.Property<byte>("Currency")
+                                .HasColumnType("smallint")
+                                .HasColumnName("Investment_Currency");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Deposits");
                 });
 
-            modelBuilder.Entity("Wealth.WalletManagement.Domain.Wallets.WalletCurrency", b =>
+            modelBuilder.Entity("Wealth.DepositManagement.Domain.DepositOperations.DepositOperation", b =>
                 {
-                    b.HasOne("Wealth.WalletManagement.Domain.Wallets.Wallet", null)
-                        .WithMany("Currencies")
-                        .HasForeignKey("WalletId")
+                    b.HasOne("Wealth.DepositManagement.Domain.Deposits.Deposit", null)
+                        .WithMany()
+                        .HasForeignKey("DepositId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Wealth.WalletManagement.Domain.Wallets.Wallet", b =>
-                {
-                    b.Navigation("Currencies");
                 });
 #pragma warning restore 612, 618
         }

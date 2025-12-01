@@ -4,6 +4,10 @@ using Wealth.BuildingBlocks.Application;
 
 namespace Wealth.BuildingBlocks.Infrastructure.EFCore;
 
+/// <summary>
+///  dotnet tool update --global dotnet-ef 
+/// </summary>
+/// <param name="context"></param>
 internal class EFCoreUnitOfWork(DbContext context) : IUnitOfWork
 {
     public Task<TResponse> Transaction<TResponse>(RequestHandlerDelegate<TResponse> next, CancellationToken token)

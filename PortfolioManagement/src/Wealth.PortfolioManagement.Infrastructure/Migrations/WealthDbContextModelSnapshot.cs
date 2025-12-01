@@ -18,7 +18,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.11")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -53,7 +53,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OutboxMessages");
+                    b.ToTable("OutboxMessages", (string)null);
                 });
 
             modelBuilder.Entity("Wealth.PortfolioManagement.Application.Providers.PortfolioIdMap", b =>
@@ -66,7 +66,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
 
                     b.HasKey("AccountId");
 
-                    b.ToTable("PortfolioIdMaps");
+                    b.ToTable("PortfolioIdMaps", (string)null);
                 });
 
             modelBuilder.Entity("Wealth.PortfolioManagement.Domain.Operations.Operation", b =>
@@ -82,7 +82,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InstrumentOperations");
+                    b.ToTable("InstrumentOperations", (string)null);
 
                     b.HasDiscriminator<byte>("operation_type");
 
@@ -102,7 +102,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
 
                     b.HasKey("PortfolioId", "BondId");
 
-                    b.ToTable("BondAsset");
+                    b.ToTable("BondAsset", (string)null);
                 });
 
             modelBuilder.Entity("Wealth.PortfolioManagement.Domain.Portfolios.CurrencyAsset", b =>
@@ -118,7 +118,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
 
                     b.HasKey("PortfolioId", "CurrencyId");
 
-                    b.ToTable("CurrencyAsset");
+                    b.ToTable("CurrencyAsset", (string)null);
                 });
 
             modelBuilder.Entity("Wealth.PortfolioManagement.Domain.Portfolios.Portfolio", b =>
@@ -136,7 +136,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Portfolios");
+                    b.ToTable("Portfolios", (string)null);
                 });
 
             modelBuilder.Entity("Wealth.PortfolioManagement.Domain.Portfolios.PortfolioCurrency", b =>
@@ -152,7 +152,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
 
                     b.HasKey("PortfolioId", "Currency");
 
-                    b.ToTable("PortfolioCurrency");
+                    b.ToTable("PortfolioCurrency", (string)null);
                 });
 
             modelBuilder.Entity("Wealth.PortfolioManagement.Domain.Portfolios.StockAsset", b =>
@@ -168,7 +168,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
 
                     b.HasKey("PortfolioId", "StockId");
 
-                    b.ToTable("StockAsset");
+                    b.ToTable("StockAsset", (string)null);
                 });
 
             modelBuilder.Entity("Wealth.PortfolioManagement.Domain.Operations.BondAmortizationOperation", b =>
@@ -181,7 +181,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                     b.Property<int>("PortfolioId")
                         .HasColumnType("integer");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Amount", "Wealth.PortfolioManagement.Domain.Operations.BondAmortizationOperation.Amount#Money", b1 =>
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Amount", "Wealth.PortfolioManagement.Domain.Operations.BondAmortizationOperation.Amount#Money", b1 =>
                         {
                             b1.Property<decimal>("Amount")
                                 .ValueGeneratedOnUpdateSometimes()
@@ -192,7 +192,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                                 .HasColumnType("smallint");
                         });
 
-                    b.ToTable("InstrumentOperations", t =>
+                    b.ToTable("InstrumentOperations", null, t =>
                         {
                             t.Property("BondId")
                                 .HasColumnName("BondAmortizationOperation_BondId");
@@ -214,7 +214,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                     b.Property<int>("PortfolioId")
                         .HasColumnType("integer");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Amount", "Wealth.PortfolioManagement.Domain.Operations.BondCouponOperation.Amount#Money", b1 =>
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Amount", "Wealth.PortfolioManagement.Domain.Operations.BondCouponOperation.Amount#Money", b1 =>
                         {
                             b1.Property<decimal>("Amount")
                                 .ValueGeneratedOnUpdateSometimes()
@@ -225,7 +225,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                                 .HasColumnType("smallint");
                         });
 
-                    b.ToTable("InstrumentOperations", t =>
+                    b.ToTable("InstrumentOperations", null, t =>
                         {
                             t.Property("BondId")
                                 .HasColumnName("BondCouponOperation_BondId");
@@ -247,7 +247,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                     b.Property<byte>("Type")
                         .HasColumnType("smallint");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Amount", "Wealth.PortfolioManagement.Domain.Operations.CurrencyOperation.Amount#Money", b1 =>
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Amount", "Wealth.PortfolioManagement.Domain.Operations.CurrencyOperation.Amount#Money", b1 =>
                         {
                             b1.Property<decimal>("Amount")
                                 .ValueGeneratedOnUpdateSometimes()
@@ -281,7 +281,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                     b.Property<int>("StockId")
                         .HasColumnType("integer");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Amount", "Wealth.PortfolioManagement.Domain.Operations.StockDividendOperation.Amount#Money", b1 =>
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Amount", "Wealth.PortfolioManagement.Domain.Operations.StockDividendOperation.Amount#Money", b1 =>
                         {
                             b1.Property<decimal>("Amount")
                                 .ValueGeneratedOnUpdateSometimes()
@@ -292,7 +292,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                                 .HasColumnType("smallint");
                         });
 
-                    b.ToTable("InstrumentOperations", t =>
+                    b.ToTable("InstrumentOperations", null, t =>
                         {
                             t.Property("PortfolioId")
                                 .HasColumnName("StockDividendOperation_PortfolioId");
@@ -314,7 +314,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                     b.Property<int>("StockId")
                         .HasColumnType("integer");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Amount", "Wealth.PortfolioManagement.Domain.Operations.StockDividendTaxOperation.Amount#Money", b1 =>
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Amount", "Wealth.PortfolioManagement.Domain.Operations.StockDividendTaxOperation.Amount#Money", b1 =>
                         {
                             b1.Property<decimal>("Amount")
                                 .ValueGeneratedOnUpdateSometimes()
@@ -325,7 +325,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                                 .HasColumnType("smallint");
                         });
 
-                    b.ToTable("InstrumentOperations", t =>
+                    b.ToTable("InstrumentOperations", null, t =>
                         {
                             t.Property("PortfolioId")
                                 .HasColumnName("StockDividendTaxOperation_PortfolioId");
@@ -344,7 +344,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                     b.Property<int>("StockId")
                         .HasColumnType("integer");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Ratio", "Wealth.PortfolioManagement.Domain.Operations.StockSplitOperation.Ratio#SplitRatio", b1 =>
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Ratio", "Wealth.PortfolioManagement.Domain.Operations.StockSplitOperation.Ratio#SplitRatio", b1 =>
                         {
                             b1.Property<int>("New")
                                 .HasColumnType("integer");
@@ -353,7 +353,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                                 .HasColumnType("integer");
                         });
 
-                    b.ToTable("InstrumentOperations", t =>
+                    b.ToTable("InstrumentOperations", null, t =>
                         {
                             t.Property("StockId")
                                 .HasColumnName("StockSplitOperation_StockId");
@@ -375,7 +375,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Amount", "Wealth.PortfolioManagement.Domain.Operations.TradeOperation.Amount#Money", b1 =>
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Amount", "Wealth.PortfolioManagement.Domain.Operations.TradeOperation.Amount#Money", b1 =>
                         {
                             b1.Property<decimal>("Amount")
                                 .ValueGeneratedOnUpdateSometimes()
@@ -386,7 +386,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                                 .HasColumnType("smallint");
                         });
 
-                    b.ToTable("InstrumentOperations", t =>
+                    b.ToTable("InstrumentOperations", null, t =>
                         {
                             t.Property("PortfolioId")
                                 .HasColumnName("TradeOperation_PortfolioId");
@@ -403,7 +403,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                     b.Property<int>("BondId")
                         .HasColumnType("integer");
 
-                    b.ToTable("InstrumentOperations", t =>
+                    b.ToTable("InstrumentOperations", null, t =>
                         {
                             t.Property("PortfolioId")
                                 .HasColumnName("TradeOperation_PortfolioId");
@@ -422,7 +422,7 @@ namespace Wealth.PortfolioManagement.Infrastructure.Migrations
                     b.Property<int>("StockId")
                         .HasColumnType("integer");
 
-                    b.ToTable("InstrumentOperations", t =>
+                    b.ToTable("InstrumentOperations", null, t =>
                         {
                             t.Property("PortfolioId")
                                 .HasColumnName("TradeOperation_PortfolioId");

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Wealth.WalletManagement.Infrastructure.UnitOfWorks;
@@ -12,9 +13,11 @@ using Wealth.WalletManagement.Infrastructure.UnitOfWorks;
 namespace Wealth.WalletManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(WealthDbContext))]
-    partial class WealthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251201172647_EF10")]
+    partial class EF10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -14,7 +14,6 @@ internal class WalletCurrencyConfiguration : IEntityTypeConfiguration<WalletCurr
         builder.HasKey("WalletId", nameof(WalletCurrency.Currency));
 
         builder.Property(x => x.Currency)
-            .HasMaxLength(3)
             .IsRequired();
 
         builder.Property(x => x.Amount)

@@ -18,7 +18,7 @@ namespace Wealth.DepositManagement.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.11")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -71,13 +71,17 @@ namespace Wealth.DepositManagement.Infrastructure.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Money", "Wealth.DepositManagement.Domain.DepositOperations.DepositOperation.Money#Money", b1 =>
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Money", "Wealth.DepositManagement.Domain.DepositOperations.DepositOperation.Money#Money", b1 =>
                         {
+                            b1.IsRequired();
+
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("numeric");
+                                .HasColumnType("numeric")
+                                .HasColumnName("Money_Amount");
 
                             b1.Property<byte>("Currency")
-                                .HasColumnType("smallint");
+                                .HasColumnType("smallint")
+                                .HasColumnName("Money_Currency");
                         });
 
                     b.HasKey("Id");
@@ -105,13 +109,17 @@ namespace Wealth.DepositManagement.Infrastructure.Migrations
                     b.Property<decimal>("Yield")
                         .HasColumnType("numeric");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Investment", "Wealth.DepositManagement.Domain.Deposits.Deposit.Investment#Money", b1 =>
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Investment", "Wealth.DepositManagement.Domain.Deposits.Deposit.Investment#Money", b1 =>
                         {
+                            b1.IsRequired();
+
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("numeric");
+                                .HasColumnType("numeric")
+                                .HasColumnName("Investment_Amount");
 
                             b1.Property<byte>("Currency")
-                                .HasColumnType("smallint");
+                                .HasColumnType("smallint")
+                                .HasColumnName("Investment_Currency");
                         });
 
                     b.HasKey("Id");

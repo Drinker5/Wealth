@@ -25,11 +25,12 @@ internal class WalletOperationConfiguration : IEntityTypeConfiguration<WalletOpe
         builder.ComplexProperty(y => y.Amount, z =>
         {
             z.Property(i => i.Currency)
-                .HasMaxLength(3)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnName("Amount_Currency");
                 
             z.Property(i => i.Amount)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnName("Amount_Amount");
         });
 
         builder.HasNoDiscriminator();

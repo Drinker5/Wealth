@@ -17,8 +17,8 @@ internal class StockDividendOperationConfiguration : IEntityTypeConfiguration<St
 
         builder.ComplexProperty(y => y.Amount, z =>
         {
-            z.Property(i => i.Currency);
-            z.Property(i => i.Amount);
+            z.Property(i => i.Currency).HasColumnName("Amount_Currency");
+            z.Property(i => i.Amount).HasColumnName("Amount_Amount");
         });
     }
 }
