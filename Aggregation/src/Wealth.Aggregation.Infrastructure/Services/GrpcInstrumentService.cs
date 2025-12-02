@@ -48,7 +48,6 @@ internal static class ProtoConverters
         {
             Id = bond.BondId,
             Name = bond.Name,
-            Price = bond.Price
         };
 
         return info;
@@ -62,7 +61,6 @@ internal static class ProtoConverters
             LotSize = stock.LotSize,
             Id = stock.StockId,
             Name = stock.Name,
-            Price = stock.Price
         };
 
         return info;

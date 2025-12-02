@@ -7,4 +7,5 @@ public sealed record StockAggregationRaw(
     CurrencyCode Currency,
     long Quantity,
     decimal TradeAmount,
-    decimal MoneyAmount);
+    decimal MoneyAmount, 
+    decimal Price);

@@ -37,13 +37,14 @@ public class StockAggregationRepositoryTests : IClassFixture<ClickHouseFixture>
             Assert.Equal(100L, item.Quantity);
             Assert.Equal(1000m, item.TradeAmount);
             Assert.Equal(200m, item.MoneyAmount);
+            Assert.Equal(42.42m, item.Price);
         });
     }
 
-    private async Task InitData()
+    private async Task InitData(CancellationToken token = default)
     {
         await using var connection = connectionFactory.Create();
-        await connection.OpenAsync(CancellationToken.None);
+        await connection.OpenAsync(token);
 
         const string insertTradeQuery =
             """
@@ -61,7 +62,7 @@ public class StockAggregationRepositoryTests : IClassFixture<ClickHouseFixture>
         tradeCommand.Parameters.AddWithValue("@currency", (byte)CurrencyCode.Rub);
         tradeCommand.Parameters.AddWithValue("@type", 1);
 
-        await tradeCommand.ExecuteNonQueryAsync(CancellationToken.None);
+        await tradeCommand.ExecuteNonQueryAsync(token);
 
         const string insertMoneyQuery =
             """
@@ -78,6 +79,21 @@ public class StockAggregationRepositoryTests : IClassFixture<ClickHouseFixture>
         moneyCommand.Parameters.AddWithValue("@currency", (byte)CurrencyCode.Rub);
         moneyCommand.Parameters.AddWithValue("@type", 1);
 
-        await moneyCommand.ExecuteNonQueryAsync(CancellationToken.None);
+        await moneyCommand.ExecuteNonQueryAsync(token);
+
+        const string insertPriceQuery =
+            """
+            INSERT INTO instrument_price (instrument_id, instrument_type, price) 
+            VALUES (@instrumentId, @instrument_type, @price)
+            """;
+
+        await using var priceCommand = connection.CreateCommand(insertPriceQuery);
+        priceCommand.Parameters.AddWithValue("@instrumentId", 1);
+        priceCommand.Parameters.AddWithValue("@instrument_type", (byte)1);
+        priceCommand.Parameters.AddWithValue("@price", 42.42m);
+
+        await priceCommand.ExecuteNonQueryAsync(token);
+
+        await connection.CreateCommand("SYSTEM RELOAD DICTIONARIES").ExecuteNonQueryAsync(token);
     }
 }

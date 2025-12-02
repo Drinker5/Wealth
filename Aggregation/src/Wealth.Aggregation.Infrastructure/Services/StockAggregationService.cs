@@ -34,7 +34,7 @@ public sealed class StockAggregationService(
                 stockInfo.Name,
                 Weight: -1, // TODO
                 WeightSkipped: -1, // TODO
-                stockInfo.Price,
+                UnitPrice: new Money(raw.Currency, raw.Price),
                 stockInfo.DividendPerYear,
                 stockInfo.LotSize,
                 raw.Quantity,

@@ -14,7 +14,6 @@ public interface IInstrumentService
 public abstract class InstrumentInfo
 {
     public string Name { get; set; }
-    public Money Price { get; set; }
 }
 
 public class StockInfo : InstrumentInfo

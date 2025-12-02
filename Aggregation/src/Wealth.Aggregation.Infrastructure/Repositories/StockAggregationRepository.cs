@@ -36,9 +36,10 @@ public sealed class StockAggregationRepository(IClickHouseConnectionFactory conn
                    t.currency,
                    t.quantity,
                    t.trade_amount,
-                   m.money_amount
+                   m.money_amount,
+                   dictGet('instrument_price_dictionary', 'price', (t.stock_id, 1)) as price
             FROM trades t
-                     LEFT JOIN money m on t.stock_id = m.stock_id;
+            LEFT JOIN money m on t.stock_id = m.stock_id;
             """;
 
         await using var command = connection.CreateCommand(query);
@@ -56,5 +57,6 @@ public sealed class StockAggregationRepository(IClickHouseConnectionFactory conn
             (CurrencyCode)reader.GetByte(1),
             reader.GetInt64(2),
             reader.GetDecimal(3),
-            reader.GetDecimal(4));
+            reader.GetDecimal(4),
+            reader.GetDecimal(5));
 }

@@ -18,6 +18,7 @@ public sealed class ClickHouseFixture : IAsyncLifetime
             .Build();
 
         clickHouseContainer = new ClickHouseBuilder()
+            .WithImage("clickhouse/clickhouse-server:25.9-alpine")
             .WithNetworkAliases("clickhouse")
             .WithNetwork(network)
             .WithDatabase("default")
