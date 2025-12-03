@@ -6,7 +6,7 @@ namespace Wealth.InstrumentManagement.Infrastructure.Repositories;
 
 public class InMemoryStocksRepository : IStocksRepository
 {
-    private List<Stock> stocks = [];
+    private readonly List<Stock> stocks = [];
 
     public Task<IReadOnlyCollection<Stock>> GetStocks()
     {

@@ -3,7 +3,6 @@ using Grpc.Net.Client;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Wealth.BuildingBlocks;
 using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.InstrumentManagement.Application.Services;
 using Xunit;
 using Assert = Xunit.Assert;
 
@@ -13,7 +12,6 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
 {
     private readonly JsonSerializerOptions jsonSerializerOptions = new(JsonSerializerDefaults.Web);
     private readonly InstrumentsService.InstrumentsServiceClient client;
-    private readonly ICurrencyService currencyService;
 
     public InstrumentManagementApiTests(InstrumentManagementApiFixture fixture)
     {
@@ -27,9 +25,6 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
             });
 
         client = new InstrumentsService.InstrumentsServiceClient(channel);
-        currencyService = fixture.CurrencyService;
-
-        A.CallTo(() => currencyService.IsCurrencyExists(CurrencyCode.Rub)).Returns(true);
     }
 
     [Fact]

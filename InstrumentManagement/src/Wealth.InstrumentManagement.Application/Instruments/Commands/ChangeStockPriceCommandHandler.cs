@@ -1,16 +1,12 @@
 using Wealth.BuildingBlocks.Application;
-using Wealth.InstrumentManagement.Application.Services;
 using Wealth.InstrumentManagement.Domain.Repositories;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Commands;
 
-public class ChangeStockPriceCommandHandler(IStocksRepository repository, ICurrencyService currencyService) : ICommandHandler<ChangeStockPriceCommand>
+public class ChangeStockPriceCommandHandler(IStocksRepository repository) : ICommandHandler<ChangeStockPriceCommand>
 {
     public async Task Handle(ChangeStockPriceCommand request, CancellationToken cancellationToken)
     {
-        if (!await currencyService.IsCurrencyExists(request.Price.Currency))
-            return;
-        
         await repository.ChangePrice(request.StockId, request.Price);
     }
 }

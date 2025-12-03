@@ -5,14 +5,9 @@ using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Repositories;
 
-public class OutboxRepository : IOutboxRepository
+public class OutboxRepository(WealthDbContext dbContext) : IOutboxRepository
 {
-    private readonly IDbConnection connection;
-
-    public OutboxRepository(WealthDbContext dbContext)
-    {
-        connection = dbContext.CreateConnection();
-    }
+    private readonly IDbConnection connection = dbContext.CreateConnection();
 
     public async Task Add(OutboxMessage outboxMessage, CancellationToken cancellationToken)
     {

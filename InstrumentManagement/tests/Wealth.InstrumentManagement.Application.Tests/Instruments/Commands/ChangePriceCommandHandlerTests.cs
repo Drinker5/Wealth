@@ -1,6 +1,5 @@
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
-using Wealth.InstrumentManagement.Application.Services;
 using Wealth.InstrumentManagement.Domain.Repositories;
 
 namespace Wealth.InstrumentManagement.Application.Tests.Instruments.Commands;
@@ -13,18 +12,15 @@ public class ChangePriceCommandHandlerTests
     public async Task WhenHandle()
     {
         var instumentsRepository = A.Fake<IStocksRepository>();
-        var currencyService = A.Fake<ICurrencyService>();
-        A.CallTo(() => currencyService.IsCurrencyExists(CurrencyCode.Rub)).Returns(true);
         var command = new ChangeStockPriceCommand
         {
             StockId = new StockId(3),
             Price = new Money(CurrencyCode.Rub, 3.42m),
         };
-        var handler = new ChangeStockPriceCommandHandler(instumentsRepository, currencyService);
+        var handler = new ChangeStockPriceCommandHandler(instumentsRepository);
         
         await handler.Handle(command, CancellationToken.None);
         
-        A.CallTo(() => currencyService.IsCurrencyExists(command.Price.Currency)).MustHaveHappened();
         A.CallTo(() => instumentsRepository.ChangePrice(command.StockId, command.Price)).MustHaveHappened();
     }
 }

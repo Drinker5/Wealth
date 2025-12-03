@@ -7,16 +7,9 @@ using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Repositories;
 
-public class BondsRepository : IBondsRepository
+public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
 {
-    private readonly WealthDbContext dbContext;
-    private readonly IDbConnection connection;
-
-    public BondsRepository(WealthDbContext dbContext)
-    {
-        this.dbContext = dbContext;
-        connection = dbContext.CreateConnection();
-    }
+    private readonly IDbConnection connection = dbContext.CreateConnection();
 
     public async Task<Bond?> GetBond(BondId id)
     {

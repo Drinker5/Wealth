@@ -7,17 +7,9 @@ using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Repositories;
 
-public class StocksRepository : IStocksRepository
+public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
 {
-    private readonly WealthDbContext dbContext;
-
-    private readonly IDbConnection connection;
-
-    public StocksRepository(WealthDbContext dbContext)
-    {
-        this.dbContext = dbContext;
-        connection = dbContext.CreateConnection();
-    }
+    private readonly IDbConnection connection = dbContext.CreateConnection();
 
     public async Task<IReadOnlyCollection<Stock>> GetStocks()
     {

@@ -45,6 +45,7 @@ public class InMemoryBondsRepository : IBondsRepository
     {
         var bondId = Interlocked.Increment(ref currentId);
         var bond = Bond.Create(bondId, name, isin, figi);
+        bonds.Add(bond);
         return Task.FromResult(bond.Id);
     }
 
