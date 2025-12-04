@@ -72,6 +72,7 @@ message StockInfoProto {
   string figi = 5;
   int32 lot_size = 6;
   MoneyProto dividend_per_year = 7;
+  string index = 8;
 }
 
 message GetCurrencyResponse {
@@ -86,6 +87,7 @@ message CreateStockRequest {
   ISINProto isin = 2;
   string figi = 3;
   int32 lot_size = 4;
+  string index = 5;
 }
 
 message CreateStockResponse {

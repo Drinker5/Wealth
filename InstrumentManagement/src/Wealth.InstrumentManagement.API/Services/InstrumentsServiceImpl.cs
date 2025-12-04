@@ -13,6 +13,7 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
         {
             var stockId = await mediator.Command(new CreateStockCommand
             {
+                Index = request.Index,
                 Name = request.Name,
                 Isin = request.Isin,
                 Figi = request.Figi,
@@ -131,6 +132,7 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
                 Figi = instrument.Figi,
                 DividendPerYear = instrument.Dividend.ValuePerYear,
                 LotSize = instrument.LotSize,
+                Index = instrument.Index
             }
         };
 

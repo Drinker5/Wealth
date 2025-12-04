@@ -8,6 +8,7 @@ public class Stock(StockId id) : AggregateRoot
 {
     public StockId Id { get; private set; } = id;
 
+    public string Index { get; set; }
     public string Name { get; set; }
 
     public ISIN Isin { get; set; }
@@ -19,12 +20,13 @@ public class Stock(StockId id) : AggregateRoot
 
     public LotSize LotSize { get; set; } = 1;
 
-    public static Stock Create(StockId id, string name, ISIN isin, FIGI figi)
+    public static Stock Create(StockId id, string index, string name, ISIN isin, FIGI figi)
     {
         var stock = new Stock(id);
         stock.Apply(new StockCreated
         {
             StockId = id,
+            Index = index,
             Name = name,
             Isin = isin,
             Figi = figi,
@@ -53,6 +55,11 @@ public class Stock(StockId id) : AggregateRoot
             ISIN = Isin,
             NewLotSize = lotSize,
         });
+    }
+
+    public void ChangeIndex(string newIndex)
+    {
+        Apply(new StockIndexChanged(Id, newIndex));
     }
 
     private void When(StockCreated @event)
@@ -89,5 +96,10 @@ public class Stock(StockId id) : AggregateRoot
     private void When(StockPriceChanged @event)
     {
         Price = @event.NewPrice;
+    }
+
+    private void When(StockIndexChanged @event)
+    {
+        Index = @event.NewIndex;
     }
 }

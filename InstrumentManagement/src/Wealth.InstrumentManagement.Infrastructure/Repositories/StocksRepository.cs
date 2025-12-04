@@ -23,7 +23,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         var instruments = await GetStocks(sql, new { isin = isin.Value });
         return instruments.FirstOrDefault();
     }
-    
+
     public async Task<Stock?> GetStock(FIGI figi)
     {
         const string sql = """SELECT * FROM "Stocks" WHERE "FIGI" = @figi""";
@@ -65,7 +65,13 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         return instruments.FirstOrDefault();
     }
 
-    public async Task<StockId> CreateStock(string name, ISIN isin, FIGI figi, LotSize lotSize, CancellationToken token = default)
+    public async Task<StockId> CreateStock(
+        string index,
+        string name,
+        ISIN isin,
+        FIGI figi,
+        LotSize lotSize,
+        CancellationToken token = default)
     {
         const string sql = """SELECT nextval('"StocksHiLo"')""";
         var command = new CommandDefinition(
@@ -73,7 +79,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             cancellationToken: token);
 
         var nextId = await connection.ExecuteScalarAsync<int>(command);
-        var stock = Stock.Create(new StockId(nextId), name, isin, figi);
+        var stock = Stock.Create(new StockId(nextId), index, name, isin, figi);
         stock.ChangeLotSize(lotSize);
         return await CreateStock(stock);
     }
@@ -81,12 +87,13 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
     private async Task<StockId> CreateStock(Stock stock)
     {
         const string sql = """
-                           INSERT INTO "Stocks" ("Id", "Name", "ISIN", "FIGI", "LotSize") 
-                           VALUES (@Id, @Name, @ISIN, @FIGI, @LotSize)
+                           INSERT INTO "Stocks" ("Id", index, "Name", "ISIN", "FIGI", "LotSize") 
+                           VALUES (@Id, @Index, @Name, @ISIN, @FIGI, @LotSize)
                            """;
         await connection.ExecuteAsync(sql, new
         {
             Id = stock.Id.Value,
+            Index = stock.Index,
             Name = stock.Name,
             ISIN = stock.Isin.Value,
             FIGI = stock.Figi.Value,
@@ -134,6 +141,26 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         {
             Id = id.Value,
             LotSize = lotSize,
+        });
+        dbContext.AddEvents(instrument);
+    }
+
+    public async Task ChangeIndex(StockId id, string index)
+    {
+        var instrument = await GetStock(id);
+        if (instrument == null)
+            return;
+        
+        instrument.ChangeIndex(index);
+        const string sql = """
+                           UPDATE "Stocks" 
+                           SET index = @Index
+                           WHERE "Id" = @Id
+                           """;
+        await connection.ExecuteAsync(sql, new
+        {
+            Id = id.Value,
+            Index = index,
         });
         dbContext.AddEvents(instrument);
     }

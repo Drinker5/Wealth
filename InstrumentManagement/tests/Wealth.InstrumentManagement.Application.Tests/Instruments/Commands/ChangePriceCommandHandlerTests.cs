@@ -11,16 +11,16 @@ public class ChangePriceCommandHandlerTests
     [Test]
     public async Task WhenHandle()
     {
-        var instumentsRepository = A.Fake<IStocksRepository>();
+        var instrumentsRepository = A.Fake<IStocksRepository>();
         var command = new ChangeStockPriceCommand
         {
             StockId = new StockId(3),
             Price = new Money(CurrencyCode.Rub, 3.42m),
         };
-        var handler = new ChangeStockPriceCommandHandler(instumentsRepository);
+        var handler = new ChangeStockPriceCommandHandler(instrumentsRepository);
         
         await handler.Handle(command, CancellationToken.None);
         
-        A.CallTo(() => instumentsRepository.ChangePrice(command.StockId, command.Price)).MustHaveHappened();
+        A.CallTo(() => instrumentsRepository.ChangePrice(command.StockId, command.Price)).MustHaveHappened();
     }
 }

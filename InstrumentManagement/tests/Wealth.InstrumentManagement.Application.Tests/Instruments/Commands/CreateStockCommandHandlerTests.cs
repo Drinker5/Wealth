@@ -15,19 +15,33 @@ public class CreateStockCommandHandlerTests
         var stocksRepository = A.Fake<IStocksRepository>();
         var command = new CreateStockCommand
         {
+            Index = "FAKE",
             Isin = ISIN.Empty,
             Figi = FIGI.Empty,
             Name = "Foo",
             LotSize = LotSize.One,
         };
+
         StockId id = 1;
-        A.CallTo(() => stocksRepository.CreateStock(command.Name, command.Isin, command.Figi, command.LotSize, CancellationToken.None))
+        A.CallTo(() => stocksRepository.CreateStock(
+                command.Index,
+                command.Name,
+                command.Isin,
+                command.Figi,
+                command.LotSize,
+                CancellationToken.None))
             .Returns(id);
         var handler = new CreateStockCommandHandler(stocksRepository);
 
         var result = await handler.Handle(command, CancellationToken.None);
 
-        A.CallTo(() => stocksRepository.CreateStock(command.Name, command.Isin, command.Figi, command.LotSize, CancellationToken.None))
+        A.CallTo(() => stocksRepository.CreateStock(
+                command.Index,
+                command.Name,
+                command.Isin,
+                command.Figi,
+                command.LotSize,
+                CancellationToken.None))
             .MustHaveHappened();
         Assert.That(result, Is.EqualTo(id));
     }

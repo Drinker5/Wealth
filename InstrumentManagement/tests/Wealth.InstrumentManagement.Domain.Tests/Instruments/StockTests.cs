@@ -8,25 +8,27 @@ namespace Wealth.InstrumentManagement.Domain.Tests.Instruments;
 [TestOf(typeof(Stock))]
 public class StockTests
 {
+    readonly string index = "bar";
     readonly string name = "foo";
     readonly ISIN isin = "barbarbarbar";
     readonly FIGI figi = "arbarbarbarb";
     readonly Dividend dividend = new Dividend(CurrencyCode.Rub, Decimal.One);
 
-    private Stock CreateStockInstrument(string name, ISIN isin, FIGI figi)
+    private Stock CreateStockInstrument(string index, string name, ISIN isin, FIGI figi)
     {
-        return Stock.Create(3, name, isin, figi);
+        return Stock.Create(3, index, name, isin, figi);
     }
 
     [Test]
     public void WhenCreate()
     {
-        var stock = CreateStockInstrument(name, isin, figi);
+        var stock = CreateStockInstrument(index, name, isin, figi);
 
         var @event = stock.HasEvent<StockCreated>();
         using (Assert.EnterMultipleScope())
         {
             Assert.That(@event.StockId, Is.Not.Zero);
+            Assert.That(@event.Index, Is.EqualTo(index));
             Assert.That(@event.Name, Is.EqualTo(name));
             Assert.That(@event.Isin, Is.EqualTo(isin));
             Assert.That(stock.Id, Is.Not.Zero);
@@ -40,7 +42,7 @@ public class StockTests
     [Test]
     public void WhenPriceChanged()
     {
-        var stock = CreateStockInstrument(name, isin, figi);
+        var stock = CreateStockInstrument(index, name, isin, figi);
         var money = new Money(CurrencyCode.Eur, 23.3m);
 
         stock.ChangePrice(money);
@@ -57,7 +59,7 @@ public class StockTests
     [Test]
     public void WhenDividendChanged()
     {
-        var stock = CreateStockInstrument(name, isin, figi);
+        var stock = CreateStockInstrument(index, name, isin, figi);
 
         stock.ChangeDividend(dividend);
 
@@ -73,7 +75,7 @@ public class StockTests
     [Test]
     public void WhenLotSizeChanged()
     {
-        var instrument = CreateStockInstrument(name, isin, figi);
+        var instrument = CreateStockInstrument(index, name, isin, figi);
 
         instrument.ChangeLotSize(10);
 
@@ -83,6 +85,21 @@ public class StockTests
             Assert.That(@event.StockId, Is.Not.Zero);
             Assert.That(@event.ISIN, Is.EqualTo(isin));
             Assert.That(@event.NewLotSize, Is.EqualTo(10));
+        }
+    }
+    
+    [Test]
+    public void WhenIndexChanged()
+    {
+        var instrument = CreateStockInstrument(index, name, isin, figi);
+
+        instrument.ChangeIndex("qwe");
+
+        var @event = instrument.HasEvent<StockIndexChanged>();
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(@event.StockId, Is.Not.Zero);
+            Assert.That(@event.NewIndex, Is.EqualTo("qwe"));
         }
     }
 }

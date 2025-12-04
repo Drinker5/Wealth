@@ -15,17 +15,9 @@ public class UnitOfWorksModule : IServiceModule
 {
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        if (configuration.GetValue<bool>("InMemoryRepository"))
-        {
-            services.AddSingleton<IBondsRepository, InMemoryBondsRepository>();
-            services.AddSingleton<IStocksRepository, InMemoryStocksRepository>();
-        }
-        else
-        {
-            services.AddScoped<IBondsRepository, BondsRepository>();
-            services.AddScoped<IStocksRepository, StocksRepository>();
-            services.AddScoped<ICurrenciesRepository, CurrenciesRepository>();
-        }
+        services.AddScoped<IBondsRepository, BondsRepository>();
+        services.AddScoped<IStocksRepository, StocksRepository>();
+        services.AddScoped<ICurrenciesRepository, CurrenciesRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IDomainEventsResolver, WealthDbContext>();

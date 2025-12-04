@@ -43,11 +43,11 @@ public class FirstSeed(
 
     private async Task CreateStocks(CancellationToken token)
     {
-        var stock1 = await stocksRepository.CreateStock("test-stock-1", new ISIN("000000000003"), new FIGI("000000000003"), 10, token);
+        var stock1 = await stocksRepository.CreateStock("IDX1", "test-stock-1", new ISIN("000000000003"), new FIGI("000000000003"), 10, token);
         await stocksRepository.ChangePrice(stock1, new Money(CurrencyCode.Rub, 111m));
         await stocksRepository.ChangeDividend(stock1, new Dividend(CurrencyCode.Usd, 222m));
 
-        var stock2 = await stocksRepository.CreateStock("test-stock-2", new ISIN("000000000004"), new FIGI("000000000004"), LotSize.One, token);
+        var stock2 = await stocksRepository.CreateStock("IDX2", "test-stock-2", new ISIN("000000000004"), new FIGI("000000000004"), LotSize.One, token);
         await stocksRepository.ChangePrice(stock2, new Money(CurrencyCode.Usd, 222m));
         await stocksRepository.ChangeDividend(stock2, new Dividend(CurrencyCode.Usd, 333m));
     }
