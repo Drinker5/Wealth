@@ -19,6 +19,7 @@ public abstract class InstrumentInfo
 public class StockInfo : InstrumentInfo
 {
     public StockId Id { get; set; }
+    public string Index { get; set; }
     public Money DividendPerYear { get; set; }
     public int LotSize { get; set; }
 }

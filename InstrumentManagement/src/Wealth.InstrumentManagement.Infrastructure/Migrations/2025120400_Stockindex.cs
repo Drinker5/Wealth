@@ -9,7 +9,7 @@ public class StockIndex : Migration
     public override void Up()
     {
         Alter.Table("Stocks")
-            .AddColumn("index").AsString().Nullable();
+            .AddColumn("index").AsString().NotNullable();
     }
 
     public override void Down()

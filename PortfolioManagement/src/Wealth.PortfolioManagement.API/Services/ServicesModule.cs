@@ -14,6 +14,6 @@ public class ServicesModule : IServiceModule
         services.AddGrpcClient<InstrumentsService.InstrumentsServiceClient>(o => { o.Address = new Uri("http://instrument"); })
             .AddServiceDiscovery();
 
-        services.AddTopicHandler<Tinkoff.InvestApi.V1.Operation, OperationHandler>(configuration, "OperationsTopic");
+        services.AddTopicHandler<Tinkoff.InvestApi.V1.Operation, OperationHandler>("OperationsTopic");
     }
-}   
+}

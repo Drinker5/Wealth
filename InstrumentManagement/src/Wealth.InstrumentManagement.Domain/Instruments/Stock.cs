@@ -66,6 +66,7 @@ public class Stock(StockId id) : AggregateRoot
     {
         Id = @event.StockId;
         Name = @event.Name;
+        Index = @event.Index;
         Isin = @event.Isin;
         Figi = @event.Figi;
     }

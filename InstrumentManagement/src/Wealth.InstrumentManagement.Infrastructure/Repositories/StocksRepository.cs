@@ -165,7 +165,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         dbContext.AddEvents(instrument);
     }
 
-    private enum Columns
+    private enum Columns : byte
     {
         Id = 0,
         Name,
@@ -176,6 +176,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         FIGI,
         Price_Currency,
         Dividend_Currency,
+        Index
     }
 
     private async Task<IReadOnlyCollection<Stock>> GetStocks(string sql, object? param = null)
@@ -197,6 +198,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             stock.Name = reader.GetString((int)Columns.Name);
             stock.Isin = reader.GetString((int)Columns.ISIN);
             stock.Figi = reader.GetString((int)Columns.FIGI);
+            stock.Index = reader.GetString((int)Columns.Index);
             if (!reader.IsDBNull((int)Columns.Price_Currency))
             {
                 stock.Price = new Money(

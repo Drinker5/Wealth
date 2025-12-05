@@ -13,8 +13,8 @@ public class EventBusModule : IServiceModule
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         services.AddTopicHandler<StockPriceChangedIntegrationEvent, StockPriceChangedIntegrationEventHandler>(
-            configuration, "WealthInstrumentManagement");
+            "WealthInstrumentManagement");
         services.AddTopicHandler<OperationProto, OperationEventHandler>(
-            configuration, "WealthOperationsConverted");
+            "WealthOperationsConverted");
     }
 }

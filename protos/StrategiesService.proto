@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+import "Common.proto";
+
+package wealth;
+
+option csharp_namespace = "Wealth.InstrumentManagement";
+
+service StrategiesService {
+  rpc GetStrategy (GetStrategyRequest) returns (GetStrategyResponse);
+}
+
+message GetStrategyRequest {
+  int32 strategy_id = 1;
+}
+
+message GetStrategyResponse {
+  string name = 1;
+  repeated StrategyItem items= 2;
+
+  message StrategyItem {
+    int32 instrument_id = 1;
+    InstrumentTypeProto instrument_type = 2;
+    double weight = 3;
+  }
+}

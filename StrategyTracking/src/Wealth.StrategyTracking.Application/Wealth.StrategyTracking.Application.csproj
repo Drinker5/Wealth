@@ -1,6 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <PackageReference Include="Grpc.Net.Client" Version="2.71.0" />
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.71.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.76.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Application\Wealth.BuildingBlocks.Application.csproj" />
     <ProjectReference Include="..\Wealth.StrategyTracking.Domain\Wealth.StrategyTracking.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="..\..\..\protos\StrategiesService.proto"
+              GrpcServices="Client,Server"
+              Link="StrategiesService.proto" />
   </ItemGroup>
 </Project>

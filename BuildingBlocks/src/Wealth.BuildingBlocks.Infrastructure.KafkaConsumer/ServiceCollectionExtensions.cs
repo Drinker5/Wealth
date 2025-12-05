@@ -10,7 +10,6 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddTopicHandler<T, H>(
         this IServiceCollection services,
-        IConfiguration configuration,
         string section)
         where T : Google.Protobuf.IMessage
         where H : IMessageHandler<T>
@@ -18,6 +17,7 @@ public static class ServiceCollectionExtensions
         services.TryAddSingleton(typeof(H));
         return services.AddHostedService(sp =>
         {
+            var configuration = sp.GetRequiredService<IConfiguration>();
             var topicOptions = new TopicOptions();
             configuration.GetRequiredSection(section).Bind(topicOptions);
             return new ConsumerHostedService<T>(
