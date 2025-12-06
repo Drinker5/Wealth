@@ -11,7 +11,7 @@ public sealed class StrategiesApiTests : IClassFixture<StrategyTrackingApiFixtur
 {
     private readonly JsonSerializerOptions jsonSerializerOptions = new(JsonSerializerDefaults.Web);
     private readonly HttpClient httpClient;
-    private Fixture fixture = new Fixture();
+    private readonly Fixture fixture = new Fixture();
 
     public StrategiesApiTests(StrategyTrackingApiFixture apiFixture)
     {
@@ -46,7 +46,27 @@ public sealed class StrategiesApiTests : IClassFixture<StrategyTrackingApiFixtur
 
         Assert.NotNull(strategy);
         Assert.Equal(1, strategy.StrategyId.Value);
-        Assert.NotEmpty(strategy.Components);
+        Assert.Collection(strategy.Components,
+            c1 =>
+            {
+                Assert.Equal(50, c1.Weight);
+                Assert.IsType<StockStrategyComponent>(c1);
+            },
+            c2 =>
+            {
+                Assert.Equal(30, c2.Weight);
+                Assert.IsType<BondStrategyComponent>(c2);
+            },
+            c3 =>
+            {
+                Assert.Equal(12, c3.Weight);
+                Assert.IsType<CurrencyAssetStrategyComponent>(c3);
+            },
+            c4 =>
+            {
+                Assert.Equal(8, c4.Weight);
+                Assert.IsType<CurrencyStrategyComponent>(c4);
+            });
     }
 
     [Fact]
@@ -87,8 +107,8 @@ public sealed class StrategiesApiTests : IClassFixture<StrategyTrackingApiFixtur
         var responseGet = await httpClient.GetAsync($"/api/strategy/{strategyId}");
 
         createResponse.EnsureSuccessStatusCode();
-        var currenciesJson = await responseGet.Content.ReadAsStringAsync();
-        var strategy = JsonSerializer.Deserialize<StrategyDTO>(currenciesJson, jsonSerializerOptions);
+        var strategyJson = await responseGet.Content.ReadAsStringAsync();
+        var strategy = JsonSerializer.Deserialize<StrategyDTO>(strategyJson, jsonSerializerOptions);
         Assert.NotNull(strategy);
         Assert.Equal(strategyId, strategy.StrategyId.Value);
         Assert.Equal(obj.name, strategy.Name);

@@ -7,7 +7,7 @@ internal static class DynamicInvoker
 {
     private const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
     private static volatile Dictionary<int, CompiledMethodInfo?> _cachedMembers = new();
-    private static readonly object _lockObj = new();
+    private static readonly Lock _lockObj = new();
 
     public static object Invoke<T>(this T obj, string methodname, params object[] args)
         where T : notnull
@@ -18,12 +18,9 @@ internal static class DynamicInvoker
         var exists = _cachedMembers.TryGetValue(hash, out var method);
         if (exists)
         {
-            if (method is null)
-            {
-                throw new Exception(methodname + " method not found!");
-            }
-
-            return method.Invoke(obj, args);
+            return method is null
+                ? throw new Exception(methodname + " method not found!")
+                : method.Invoke(obj, args);
         }
 
         lock (_lockObj)
@@ -31,10 +28,9 @@ internal static class DynamicInvoker
             exists = _cachedMembers.TryGetValue(hash, out method);
             if (exists)
             {
-                if (method is null)
-                    throw new Exception(methodname + " method not found!");
-
-                return method.Invoke(obj, args);
+                return method is null
+                    ? throw new Exception(methodname + " method not found!")
+                    : method.Invoke(obj, args);
             }
 
             var argtypes = GetArgTypes(args);

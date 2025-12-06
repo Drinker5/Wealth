@@ -25,13 +25,13 @@ public sealed class OperationConverter(IServiceProvider sp)
 
     private readonly Dictionary<OperationType, IOperationHandler> _handlers = new();
 
-    private static readonly FrozenDictionary<string, InstrumentType> _instrumentTypeMap =
-        new Dictionary<string, InstrumentType>
+    private static readonly FrozenDictionary<string, Tinkoff.InvestApi.V1.InstrumentType> _instrumentTypeMap =
+        new Dictionary<string, Tinkoff.InvestApi.V1.InstrumentType>
         {
-            { "", InstrumentType.Unspecified },
-            { "bond", InstrumentType.Bond },
-            { "share", InstrumentType.Share },
-            { "currency", InstrumentType.Currency },
+            { "", Tinkoff.InvestApi.V1.InstrumentType.Unspecified },
+            { "bond", Tinkoff.InvestApi.V1.InstrumentType.Bond },
+            { "share", Tinkoff.InvestApi.V1.InstrumentType.Share },
+            { "currency", Tinkoff.InvestApi.V1.InstrumentType.Currency },
         }.ToFrozenDictionary();
 
     public async IAsyncEnumerable<Operation> ConvertOperation(

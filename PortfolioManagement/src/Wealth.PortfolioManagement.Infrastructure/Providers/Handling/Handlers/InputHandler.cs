@@ -9,7 +9,7 @@ public class InputHandler : IOperationHandler
 {
     public IAsyncEnumerable<Operation> Handle(
         Tinkoff.InvestApi.V1.Operation operation,
-        InstrumentType instrumentType,
+        Tinkoff.InvestApi.V1.InstrumentType instrumentType,
         PortfolioId portfolioId) => new[]
     {
         new MoneyOperation

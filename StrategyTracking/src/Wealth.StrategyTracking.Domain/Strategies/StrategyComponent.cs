@@ -4,35 +4,25 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.StrategyTracking.Domain.Strategies;
 
-[JsonDerivedType(typeof(StockStrategyComponent), typeDiscriminator: (byte)StrategyComponentType.Stock)]
-[JsonDerivedType(typeof(BondStrategyComponent), typeDiscriminator: (byte)StrategyComponentType.Bond)]
-[JsonDerivedType(typeof(CurrencyStrategyComponent), typeDiscriminator: (byte)StrategyComponentType.Currency)]
+[JsonDerivedType(typeof(StockStrategyComponent), typeDiscriminator: (byte)InstrumentType.Stock)]
+[JsonDerivedType(typeof(BondStrategyComponent), typeDiscriminator: (byte)InstrumentType.Bond)]
+[JsonDerivedType(typeof(CurrencyAssetStrategyComponent), typeDiscriminator: (byte)InstrumentType.CurrencyAsset)]
+[JsonDerivedType(typeof(CurrencyStrategyComponent), typeDiscriminator: (byte)InstrumentType.Currency)]
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 public abstract class StrategyComponent : IEntity
 {
     public float Weight { get; set; }
-    public string Id { get; protected init; }
-}
-
-public enum StrategyComponentType : byte
-{
-    Stock,
-    Bond,
-    Currency
+    public int Id { get; init; }
 }
 
 public class StockStrategyComponent : StrategyComponent
 {
-    private readonly StockId _stockId;
+    private StockId? _stockId;
 
     public StockId StockId
     {
-        get => _stockId;
-        init
-        {
-            Id = value.ToString();
-            _stockId = value;
-        }
+        get => _stockId ??= new StockId(Id);
+        init => Id = value;
     }
 
     public override int GetHashCode()
@@ -47,8 +37,8 @@ public class BondStrategyComponent : StrategyComponent
 
     public BondId BondId
     {
-        get => _bondId ??= new BondId(int.Parse(Id));
-        init => Id = value.ToString();
+        get => _bondId ??= new BondId(Id);
+        init => Id = value;
     }
 
     public override int GetHashCode()
@@ -63,8 +53,8 @@ public class CurrencyAssetStrategyComponent : StrategyComponent
 
     public CurrencyId CurrencyId
     {
-        get => _currencyId ??= new CurrencyId(int.Parse(Id));
-        init => Id = value.ToString();
+        get => _currencyId ??= new CurrencyId(Id);
+        init => Id = value;
     }
 
     public override int GetHashCode()
@@ -79,8 +69,8 @@ public class CurrencyStrategyComponent : StrategyComponent
 
     public CurrencyCode Currency
     {
-        get => _currency ??= (CurrencyCode)byte.Parse(Id);
-        init => Id = value.ToString();
+        get => _currency ??= (CurrencyCode)Id;
+        init => Id = (int)value;
     }
 
     public override int GetHashCode()

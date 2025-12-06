@@ -9,14 +9,14 @@ public class BuyHandler(IInstrumentIdProvider instrumentIdProvider) : IOperation
 {
     public async IAsyncEnumerable<Operation> Handle(
         Tinkoff.InvestApi.V1.Operation operation,
-        InstrumentType instrumentType,
+        Tinkoff.InvestApi.V1.InstrumentType instrumentType,
         PortfolioId portfolioId)
     {
         foreach (var trade in operation.Trades)
         {
             yield return instrumentType switch
             {
-                InstrumentType.Bond => new BondTradeOperation
+                Tinkoff.InvestApi.V1.InstrumentType.Bond => new BondTradeOperation
                 {
                     Id = trade.TradeId,
                     Date = trade.DateTime.ToDateTimeOffset(),
@@ -26,7 +26,7 @@ public class BuyHandler(IInstrumentIdProvider instrumentIdProvider) : IOperation
                     Quantity = trade.Quantity,
                     Type = TradeOperationType.Buy,
                 },
-                InstrumentType.Share => new StockTradeOperation
+                Tinkoff.InvestApi.V1.InstrumentType.Share => new StockTradeOperation
                 {
                     Id = trade.TradeId,
                     Date = trade.DateTime.ToDateTimeOffset(),
@@ -36,7 +36,7 @@ public class BuyHandler(IInstrumentIdProvider instrumentIdProvider) : IOperation
                     Quantity = trade.Quantity,
                     Type = TradeOperationType.Buy,
                 },
-                InstrumentType.Currency => new CurrencyTradeOperation
+                Tinkoff.InvestApi.V1.InstrumentType.Currency => new CurrencyTradeOperation
                 {
                     Id = trade.TradeId,
                     Date = trade.DateTime.ToDateTimeOffset(),

@@ -9,10 +9,10 @@ public class BondAmortizationHandler(IInstrumentIdProvider instrumentIdProvider)
 {
     public async IAsyncEnumerable<Operation> Handle(
         Tinkoff.InvestApi.V1.Operation operation,
-        InstrumentType instrumentType,
+        Tinkoff.InvestApi.V1.InstrumentType instrumentType,
         PortfolioId portfolioId)
     {
-        if (instrumentType != InstrumentType.Bond)
+        if (instrumentType != Tinkoff.InvestApi.V1.InstrumentType.Bond)
             throw new ArgumentOutOfRangeException(nameof(instrumentType));
 
         yield return new BondAmortizationOperation

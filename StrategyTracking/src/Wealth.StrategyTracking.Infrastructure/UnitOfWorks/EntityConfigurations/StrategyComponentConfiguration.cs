@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.StrategyTracking.Domain.Strategies;
 
 namespace Wealth.StrategyTracking.Infrastructure.UnitOfWorks.EntityConfigurations;
@@ -10,7 +11,7 @@ internal class StrategyComponentConfiguration : IEntityTypeConfiguration<Strateg
     {
         builder.Property<StrategyId>("StrategyId");
 
-        builder.Property<StrategyComponentType>("type")
+        builder.Property<InstrumentType>("type")
             .IsRequired();
 
         builder.Property(i => i.Id)
@@ -18,10 +19,11 @@ internal class StrategyComponentConfiguration : IEntityTypeConfiguration<Strateg
         
         builder.HasKey("StrategyId", "type", "Id");
         
-        builder.HasDiscriminator<StrategyComponentType>("type")
-            .HasValue<StockStrategyComponent>(StrategyComponentType.Stock)
-            .HasValue<BondStrategyComponent>(StrategyComponentType.Bond)
-            .HasValue<CurrencyStrategyComponent>(StrategyComponentType.Currency);
+        builder.HasDiscriminator<InstrumentType>("type")
+            .HasValue<StockStrategyComponent>(InstrumentType.Stock)
+            .HasValue<BondStrategyComponent>(InstrumentType.Bond)
+            .HasValue<CurrencyAssetStrategyComponent>(InstrumentType.CurrencyAsset)
+            .HasValue<CurrencyStrategyComponent>(InstrumentType.Currency);
 
         builder.Property(x => x.Weight)
             .IsRequired();

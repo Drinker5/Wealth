@@ -9,12 +9,12 @@ public class BrokerFeeHandler(IInstrumentIdProvider instrumentIdProvider) : IOpe
 {
     public async IAsyncEnumerable<Operation> Handle(
         Tinkoff.InvestApi.V1.Operation operation,
-        InstrumentType instrumentType,
+        Tinkoff.InvestApi.V1.InstrumentType instrumentType,
         PortfolioId portfolioId)
     {
         yield return instrumentType switch
         {
-            InstrumentType.Bond => new BondBrokerFeeOperation
+            Tinkoff.InvestApi.V1.InstrumentType.Bond => new BondBrokerFeeOperation
             {
                 Id = operation.Id,
                 Date = operation.Date.ToDateTimeOffset(),
@@ -22,7 +22,7 @@ public class BrokerFeeHandler(IInstrumentIdProvider instrumentIdProvider) : IOpe
                 BondId = await instrumentIdProvider.GetBondIdByFigi(operation.Figi),
                 PortfolioId = portfolioId,
             },
-            InstrumentType.Share => new StockBrokerFeeOperation
+            Tinkoff.InvestApi.V1.InstrumentType.Share => new StockBrokerFeeOperation
             {
                 Id = operation.Id,
                 Date = operation.Date.ToDateTimeOffset(),
@@ -30,7 +30,7 @@ public class BrokerFeeHandler(IInstrumentIdProvider instrumentIdProvider) : IOpe
                 StockId = await instrumentIdProvider.GetStockIdByFigi(operation.Figi),
                 PortfolioId = portfolioId,
             },
-            InstrumentType.Currency => new CurrencyBrokerFeeOperation
+            Tinkoff.InvestApi.V1.InstrumentType.Currency => new CurrencyBrokerFeeOperation
             {
                 Id = operation.Id,
                 Date = operation.Date.ToDateTimeOffset(),
