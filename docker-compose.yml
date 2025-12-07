@@ -91,6 +91,7 @@ services:
       - Services__currency__http=currency-management
       - Services__instrument__http=instrument-management
       - Services__portfolio__http=portfolio-management
+      - Services__strategy__http=strategy-tracking
       - ConnectionStrings__ClickHouse=Host=clickhouse;Port=9000;Database=default;User=default;Password=default;
       - KafkaConsumer__BootstrapServers=kafka
     ports:

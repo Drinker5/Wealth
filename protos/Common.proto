@@ -31,8 +31,10 @@ message ISINProto {
 }
 
 enum InstrumentTypeProto {
-  InstrumentTypeProto_STOCK = 0;
-  InstrumentTypeProto_BOND = 1;
+  INSTRUMENT_TYPE_PROTO_STOCK = 0;
+  INSTRUMENT_TYPE_PROTO_BOND = 1;
+  INSTRUMENT_TYPE_PROTO_CURRENCY_ASSET = 2;
+  INSTRUMENT_TYPE_PROTO_CURRENCY = 3;
 }
 
 message PortfolioIdProto {

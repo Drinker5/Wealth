@@ -17,7 +17,6 @@ public static class Extensions
         builder.Services.AddHostedService<MigrationService>();
 
         DapperMapping.Map();
-
     }
 
     public static void MapEndpoints(this WebApplication app)

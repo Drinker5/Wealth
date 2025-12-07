@@ -11,5 +11,6 @@ public class ServicesModule : IServiceModule
     {
         services.AddSingleton<IInstrumentService, GrpcInstrumentService>();
         services.AddSingleton<IStockAggregationService, StockAggregationService>();
+        services.AddSingleton<IStrategyService, GrpcStrategyService>();
     }
 }

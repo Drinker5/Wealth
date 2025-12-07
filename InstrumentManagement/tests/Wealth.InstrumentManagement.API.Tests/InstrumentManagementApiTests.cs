@@ -11,7 +11,7 @@ namespace Wealth.InstrumentManagement.API.Tests;
 public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManagementApiFixture>
 {
     private readonly JsonSerializerOptions jsonSerializerOptions = new(JsonSerializerDefaults.Web);
-    private readonly InstrumentsService.InstrumentsServiceClient client;
+    private readonly InstrumentsService.InstrumentsServiceClient grpcClient;
 
     public InstrumentManagementApiTests(InstrumentManagementApiFixture fixture)
     {
@@ -24,7 +24,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
                 HttpClient = httpClient,
             });
 
-        client = new InstrumentsService.InstrumentsServiceClient(channel);
+        grpcClient = new InstrumentsService.InstrumentsServiceClient(channel);
     }
 
     [Fact]
@@ -35,7 +35,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
             Id = 1,
         };
 
-        var instrument = await client.GetBondAsync(new GetBondRequest
+        var instrument = await grpcClient.GetBondAsync(new GetBondRequest
         {
             BondId = instrumentId
         });
@@ -54,7 +54,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
             Id = 1,
         };
 
-        var response = await client.GetStockAsync(new GetStockRequest
+        var response = await grpcClient.GetStockAsync(new GetStockRequest
         {
             StockId = instrumentId
         });
@@ -76,7 +76,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
             Id = 1,
         };
 
-        var instrument = await client.GetCurrencyAsync(new GetCurrencyRequest
+        var instrument = await grpcClient.GetCurrencyAsync(new GetCurrencyRequest
         {
             CurrencyId = instrumentId
         });
@@ -97,12 +97,12 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
             Figi = "F00000000001",
         };
 
-        var createStockResponse = await client.CreateStockAsync(createStockRequest);
+        var createStockResponse = await grpcClient.CreateStockAsync(createStockRequest);
 
         Assert.NotEqual(0, createStockResponse.StockId.Id);
         var stockId = createStockResponse.StockId;
 
-        var instrument = await client.GetStockAsync(new GetStockRequest { StockId = stockId });
+        var instrument = await grpcClient.GetStockAsync(new GetStockRequest { StockId = stockId });
 
         Assert.Equal(createStockRequest.Name, instrument.StockInfo.Name);
         Assert.Equal(createStockRequest.Isin, instrument.StockInfo.Isin);
@@ -110,9 +110,9 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
         Assert.Equal(0, instrument.StockInfo.Price.Amount);
         var newPrice = new Money(CurrencyCode.Rub, 123);
 
-        await client.ChangeStockPriceAsync(new ChangeStockPriceRequest { StockId = stockId, Price = newPrice });
+        await grpcClient.ChangeStockPriceAsync(new ChangeStockPriceRequest { StockId = stockId, Price = newPrice });
 
-        instrument = await client.GetStockAsync(new GetStockRequest { StockId = stockId });
+        instrument = await grpcClient.GetStockAsync(new GetStockRequest { StockId = stockId });
 
         Assert.Equal(newPrice, (Money)instrument.StockInfo.Price);
     }
@@ -127,12 +127,12 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
             Figi = "F00000000002",
         };
 
-        var createBondResponse = await client.CreateBondAsync(createStockRequest);
+        var createBondResponse = await grpcClient.CreateBondAsync(createStockRequest);
 
         Assert.NotEqual(0, createBondResponse.BondId.Id);
         var bondId = createBondResponse.BondId;
 
-        var instrument = await client.GetBondAsync(new GetBondRequest
+        var instrument = await grpcClient.GetBondAsync(new GetBondRequest
         {
             BondId = bondId
         });
@@ -143,9 +143,9 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
         Assert.Equal(0, instrument.Price.Amount);
         var newPrice = new Money(CurrencyCode.Rub, 123);
 
-        await client.ChangeBondPriceAsync(new ChangeBondPriceRequest { BondId = bondId, Price = newPrice });
+        await grpcClient.ChangeBondPriceAsync(new ChangeBondPriceRequest { BondId = bondId, Price = newPrice });
 
-        instrument = await client.GetBondAsync(new GetBondRequest { BondId = bondId });
+        instrument = await grpcClient.GetBondAsync(new GetBondRequest { BondId = bondId });
 
         Assert.Equal(newPrice, (Money)instrument.Price);
     }
@@ -159,12 +159,12 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
             Figi = "F00000000003",
         };
 
-        var createCurrencyResponse = await client.CreateCurrencyAsync(createStockRequest);
+        var createCurrencyResponse = await grpcClient.CreateCurrencyAsync(createStockRequest);
 
         Assert.NotEqual(0, createCurrencyResponse.CurrencyId.Id);
         var currencyId = createCurrencyResponse.CurrencyId;
 
-        var instrument = await client.GetCurrencyAsync(new GetCurrencyRequest
+        var instrument = await grpcClient.GetCurrencyAsync(new GetCurrencyRequest
         {
             CurrencyId = currencyId
         });
@@ -174,9 +174,9 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
         Assert.Equal(0, instrument.Price.Amount);
         var newPrice = new Money(CurrencyCode.Rub, 123);
 
-        await client.ChangeCurrencyPriceAsync(new ChangeCurrencyPriceRequest { CurrencyId = currencyId, Price = newPrice });
+        await grpcClient.ChangeCurrencyPriceAsync(new ChangeCurrencyPriceRequest { CurrencyId = currencyId, Price = newPrice });
 
-        instrument = await client.GetCurrencyAsync(new GetCurrencyRequest { CurrencyId = currencyId });
+        instrument = await grpcClient.GetCurrencyAsync(new GetCurrencyRequest { CurrencyId = currencyId });
 
         Assert.Equal(newPrice, (Money)instrument.Price);
     }

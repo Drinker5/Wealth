@@ -1,7 +1,10 @@
 using Wealth.BuildingBlocks.Application;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.StrategyTracking.Domain.Repositories;
 
 namespace Wealth.StrategyTracking.Application.Strategies.Queries;
+
+public record struct GetStrategy(StrategyId StrategyId) : IQuery<StrategyDTO?>;
 
 public class GetStrategyQueryHandler(IStrategyRepository repository) : IQueryHandler<GetStrategy, StrategyDTO?>
 {

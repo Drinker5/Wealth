@@ -6,6 +6,6 @@ public class ServicesModule : IServiceModule
 {
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-
+        services.AddGrpc();
     }
 }

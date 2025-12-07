@@ -21,5 +21,8 @@
     <Protobuf Include="..\..\..\protos\InstrumentsService.proto"
               GrpcServices="Client"
               Link="InstrumentsService.proto" />
+    <Protobuf Include="..\..\..\protos\StrategiesService.proto"
+              GrpcServices="Client"
+              Link="StrategiesService.proto" />
   </ItemGroup>
 </Project>

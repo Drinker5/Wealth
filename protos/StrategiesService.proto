@@ -4,7 +4,7 @@ import "Common.proto";
 
 package wealth;
 
-option csharp_namespace = "Wealth.InstrumentManagement";
+option csharp_namespace = "Wealth.StrategyTracking";
 
 service StrategiesService {
   rpc GetStrategy (GetStrategyRequest) returns (GetStrategyResponse);
@@ -21,6 +21,6 @@ message GetStrategyResponse {
   message StrategyItem {
     int32 instrument_id = 1;
     InstrumentTypeProto instrument_type = 2;
-    double weight = 3;
+    float weight = 3;
   }
 }

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Wealth.StrategyTracking.Domain.Strategies;
+using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.StrategyTracking.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
 

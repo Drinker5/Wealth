@@ -1,5 +1,6 @@
 using Wealth.BuildingBlocks.API;
 using Wealth.StrategyTracking.API.APIs;
+using Wealth.StrategyTracking.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,4 +20,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.MapStrategiesApi();
 app.MapStrategyApi();
+app.MapGrpcServices();
 app.Run();

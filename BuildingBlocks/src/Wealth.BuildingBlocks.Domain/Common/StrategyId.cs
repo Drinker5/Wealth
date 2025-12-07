@@ -1,8 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Wealth.BuildingBlocks.Domain;
 
-namespace Wealth.StrategyTracking.Domain.Strategies;
+namespace Wealth.BuildingBlocks.Domain.Common;
 
 [JsonConverter(typeof(StrategyIdJsonConverter))]
 public readonly record struct StrategyId(int Value) : IIdentity

@@ -6,7 +6,7 @@ using Wealth.InstrumentManagement;
 
 namespace Wealth.Aggregation.Infrastructure.Services;
 
-public class GrpcInstrumentService(InstrumentsService.InstrumentsServiceClient client) : IInstrumentService
+public sealed class GrpcInstrumentService(InstrumentsService.InstrumentsServiceClient client) : IInstrumentService
 {
     public async Task<IReadOnlyDictionary<StockId, StockInfo>> GetStocksInfo(
         IReadOnlyCollection<StockId> stockIds,
