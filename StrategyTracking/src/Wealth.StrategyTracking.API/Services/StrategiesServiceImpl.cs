@@ -17,13 +17,13 @@ public sealed class StrategiesServiceImpl(ICqrsInvoker mediator) : StrategiesSer
         return new GetStrategyResponse
         {
             Name = strategy.Name,
-            Items = { strategy.Components.Select(ToProto) }
+            Components = { strategy.Components.Select(ToProto) }
         };
     }
 
-    private static GetStrategyResponse.Types.StrategyItem ToProto(StrategyComponent strategyComponent)
+    private static GetStrategyResponse.Types.StrategyComponent ToProto(StrategyComponent strategyComponent)
     {
-        return new GetStrategyResponse.Types.StrategyItem
+        return new GetStrategyResponse.Types.StrategyComponent
         {
             InstrumentId = strategyComponent.Id,
             InstrumentType = strategyComponent switch

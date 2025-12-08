@@ -7,7 +7,9 @@ public interface IStrategyService
     Task<Strategy?> GetStrategy(StrategyId strategyId, CancellationToken token);
 }
 
-public record Strategy(StrategyId Id, string Name)
-{
-    // TODO components
-}
+public record Strategy(
+    StrategyId Id,
+    string Name,
+    IReadOnlyCollection<StrategyComponent> Components);
+
+public record struct StrategyComponent(int Id, InstrumentType type, float Weight);

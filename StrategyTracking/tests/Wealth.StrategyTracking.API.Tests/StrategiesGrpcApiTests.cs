@@ -26,7 +26,6 @@ public sealed class StrategiesGrpcApiTests : IClassFixture<StrategyTrackingApiFi
         grpcClient = new StrategiesService.StrategiesServiceClient(channel);
     }
 
-
     [Fact]
     public async Task GetStrategy_AsExpected()
     {
@@ -34,7 +33,7 @@ public sealed class StrategiesGrpcApiTests : IClassFixture<StrategyTrackingApiFi
 
         Assert.NotNull(response);
         Assert.Equal("Seed-strategy-1", response.Name);
-        Assert.Collection(response.Items,
+        Assert.Collection(response.Components,
             c1 =>
             {
                 Assert.Equal(50, c1.Weight);

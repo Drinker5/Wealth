@@ -16,9 +16,9 @@ message GetStrategyRequest {
 
 message GetStrategyResponse {
   string name = 1;
-  repeated StrategyItem items= 2;
+  repeated StrategyComponent components = 2;
 
-  message StrategyItem {
+  message StrategyComponent {
     int32 instrument_id = 1;
     InstrumentTypeProto instrument_type = 2;
     float weight = 3;
