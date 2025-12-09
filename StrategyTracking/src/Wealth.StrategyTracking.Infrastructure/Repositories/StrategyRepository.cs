@@ -8,85 +8,91 @@ namespace Wealth.StrategyTracking.Infrastructure.Repositories;
 
 public class StrategyRepository(WealthDbContext context) : IStrategyRepository
 {
-    public async Task<StrategyId> CreateStrategy(string name)
+    public async Task<StrategyId> CreateStrategy(string name, CancellationToken token = default)
     {
         var strategy = Strategy.Create(name);
-        await context.Strategies.AddAsync(strategy);
+        await context.Strategies.AddAsync(strategy, token);
         return strategy.Id;
     }
 
-    public async Task<IReadOnlyList<Strategy>> GetStrategies()
+    public async Task<IReadOnlyList<Strategy>> GetStrategies(CancellationToken token = default)
     {
         return await context.Strategies.AsNoTracking()
             .Include(i => i.Components)
-            .ToListAsync();
+            .ToListAsync(cancellationToken: token);
     }
 
-    public Task<Strategy?> GetStrategy(StrategyId id)
+    public Task<Strategy?> GetStrategy(StrategyId id, CancellationToken token = default)
     {
         return context.Strategies
             .Include(i => i.Components)
-            .SingleOrDefaultAsync(i => i.Id == id);
+            .SingleOrDefaultAsync(i => i.Id == id, cancellationToken: token);
     }
 
-    public async Task RenameStrategy(StrategyId strategyId, string newName)
+    public async Task RenameStrategy(StrategyId strategyId, string newName, CancellationToken token = default)
     {
-        var strategy = await GetStrategy(strategyId);
+        var strategy = await GetStrategy(strategyId, token);
 
         strategy?.Rename(newName);
     }
 
-    public async Task AddStrategyComponent(StrategyId strategyId, StockId stockId, float weight)
+    public async Task AddStrategyComponent(StrategyId strategyId, StockId stockId, float weight, CancellationToken token = default)
     {
-        var strategy = await GetStrategy(strategyId);
+        var strategy = await GetStrategy(strategyId, token);
         strategy?.AddOrUpdateComponent(stockId, weight);
     }
 
-    public async Task AddStrategyComponent(StrategyId strategyId, BondId bondId, float weight)
+    public async Task AddStrategyComponent(StrategyId strategyId, BondId bondId, float weight, CancellationToken token = default)
     {
-        var strategy = await GetStrategy(strategyId);
+        var strategy = await GetStrategy(strategyId, token);
         strategy?.AddOrUpdateComponent(bondId, weight);
     }
 
-    public async Task AddStrategyComponent(StrategyId strategyId, CurrencyId currencyId, float weight)
+    public async Task AddStrategyComponent(StrategyId strategyId, CurrencyId currencyId, float weight, CancellationToken token = default)
     {
-        var strategy = await GetStrategy(strategyId);
+        var strategy = await GetStrategy(strategyId, token);
         strategy?.AddOrUpdateComponent(currencyId, weight);
     }
 
-    public async Task RemoveStrategyComponent(StrategyId strategyId, StockId instrumentId)
+    public async Task RemoveStrategyComponent(StrategyId strategyId, StockId instrumentId, CancellationToken token = default)
     {
-        var strategy = await GetStrategy(strategyId);
+        var strategy = await GetStrategy(strategyId, token);
         strategy?.RemoveStrategyComponent(instrumentId);
     }
 
-    public async Task RemoveStrategyComponent(StrategyId strategyId, BondId instrumentId)
+    public async Task RemoveStrategyComponent(StrategyId strategyId, BondId instrumentId, CancellationToken token = default)
     {
-        var strategy = await GetStrategy(strategyId);
+        var strategy = await GetStrategy(strategyId, token);
         strategy?.RemoveStrategyComponent(instrumentId);
     }
 
-    public async Task RemoveStrategyComponent(StrategyId strategyId, CurrencyId instrumentId)
+    public async Task RemoveStrategyComponent(StrategyId strategyId, CurrencyId instrumentId, CancellationToken token = default)
     {
-        var strategy = await GetStrategy(strategyId);
+        var strategy = await GetStrategy(strategyId, token);
         strategy?.RemoveStrategyComponent(instrumentId);
     }
 
-    public async Task ChangeStrategyComponentWeight(StrategyId strategyId, StockId instrumentId, float weight)
+    public async Task ChangeStrategyComponentWeight(StrategyId strategyId, StockId instrumentId, float weight, CancellationToken token = default)
     {
-        var strategy = await GetStrategy(strategyId);
+        var strategy = await GetStrategy(strategyId, token);
         strategy?.AddOrUpdateComponent(instrumentId, weight);
     }
     
-    public async Task ChangeStrategyComponentWeight(StrategyId strategyId, BondId instrumentId, float weight)
+    public async Task ChangeStrategyComponentWeight(StrategyId strategyId, BondId instrumentId, float weight, CancellationToken token = default)
     {
-        var strategy = await GetStrategy(strategyId);
+        var strategy = await GetStrategy(strategyId, token);
         strategy?.AddOrUpdateComponent(instrumentId, weight);
     }
     
-    public async Task ChangeStrategyComponentWeight(StrategyId strategyId, CurrencyId instrumentId, float weight)
+    public async Task ChangeStrategyComponentWeight(StrategyId strategyId, CurrencyId instrumentId, float weight, CancellationToken token = default)
     {
-        var strategy = await GetStrategy(strategyId);
+        var strategy = await GetStrategy(strategyId, token);
         strategy?.AddOrUpdateComponent(instrumentId, weight);
+    }
+
+    public async Task ChangeMasterStrategy(StrategyId strategyId, MasterStrategy masterStrategy, CancellationToken token = default)
+    {
+        var strategy = await GetStrategy(strategyId, token);
+        strategy?.Follow(masterStrategy);
     }
 }

@@ -8,7 +8,7 @@ public sealed class Strategy : AggregateRoot
 {
     public StrategyId Id { get; private set; }
     public string Name { get; private set; }
-
+    public MasterStrategy FollowedStrategy { get; private set; }
     public List<StrategyComponent> Components { get; } = [];
 
     private Strategy()
@@ -36,6 +36,14 @@ public sealed class Strategy : AggregateRoot
             return;
 
         Apply(new StrategyRenamed(Id, newName));
+    }
+
+    public void Follow(MasterStrategy toFollow)
+    {
+        if (FollowedStrategy == toFollow)
+            return;
+        
+        Apply(new MasterStrategyFollowed(Id, toFollow));
     }
 
     public void AddOrUpdateComponent(StockId stockId, float weight)
@@ -204,5 +212,10 @@ public sealed class Strategy : AggregateRoot
     {
         var component = Components.OfType<CurrencyStrategyComponent>().Single(s => s.Currency == @event.Currency);
         Components.Remove(component);
+    }
+
+    private void When(MasterStrategyFollowed @event)
+    {
+        FollowedStrategy = @event.NewFollowedStrategy;
     }
 }

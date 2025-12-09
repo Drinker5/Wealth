@@ -4,10 +4,12 @@ using Wealth.StrategyTracking.Domain.Repositories;
 
 namespace Wealth.StrategyTracking.Application.Strategies.Commands;
 
+public record struct CreateStrategy(string Name) : ICommand<StrategyId>;
+
 public class CreateStrategyCommandHandler(IStrategyRepository repository) : ICommandHandler<CreateStrategy, StrategyId>
 {
     public Task<StrategyId> Handle(CreateStrategy request, CancellationToken cancellationToken)
     {
-        return repository.CreateStrategy(request.Name);
+        return repository.CreateStrategy(request.Name, cancellationToken);
     }
 }

@@ -5,17 +5,18 @@ namespace Wealth.StrategyTracking.Domain.Repositories;
 
 public interface IStrategyRepository
 {
-    public Task<StrategyId> CreateStrategy(string name);
-    public Task<IReadOnlyList<Strategy>> GetStrategies();
-    public Task<Strategy?> GetStrategy(StrategyId strategyId);
-    public Task RenameStrategy(StrategyId strategyId, string newName);
-    public Task AddStrategyComponent(StrategyId strategyId, StockId stockId, float weight);
-    public Task AddStrategyComponent(StrategyId strategyId, BondId bondId, float weight);
-    public Task AddStrategyComponent(StrategyId strategyId, CurrencyId currencyId, float weight);
-    public Task RemoveStrategyComponent(StrategyId strategyId, StockId instrumentId);
-    public Task RemoveStrategyComponent(StrategyId strategyId, BondId instrumentId);
-    public Task RemoveStrategyComponent(StrategyId strategyId, CurrencyId instrumentId);
-    public Task ChangeStrategyComponentWeight(StrategyId strategyId, StockId instrumentId, float weight);
-    public Task ChangeStrategyComponentWeight(StrategyId strategyId, BondId instrumentId, float weight);
-    public Task ChangeStrategyComponentWeight(StrategyId strategyId, CurrencyId instrumentId, float weight);
+    public Task<StrategyId> CreateStrategy(string name, CancellationToken token = default);
+    public Task<IReadOnlyList<Strategy>> GetStrategies(CancellationToken token = default);
+    public Task<Strategy?> GetStrategy(StrategyId strategyId, CancellationToken token = default);
+    public Task RenameStrategy(StrategyId strategyId, string newName, CancellationToken token = default);
+    public Task AddStrategyComponent(StrategyId strategyId, StockId stockId, float weight, CancellationToken token = default);
+    public Task AddStrategyComponent(StrategyId strategyId, BondId bondId, float weight, CancellationToken token = default);
+    public Task AddStrategyComponent(StrategyId strategyId, CurrencyId currencyId, float weight, CancellationToken token = default);
+    public Task RemoveStrategyComponent(StrategyId strategyId, StockId instrumentId, CancellationToken token = default);
+    public Task RemoveStrategyComponent(StrategyId strategyId, BondId instrumentId, CancellationToken token = default);
+    public Task RemoveStrategyComponent(StrategyId strategyId, CurrencyId instrumentId, CancellationToken token = default);
+    public Task ChangeStrategyComponentWeight(StrategyId strategyId, StockId instrumentId, float weight, CancellationToken token = default);
+    public Task ChangeStrategyComponentWeight(StrategyId strategyId, BondId instrumentId, float weight, CancellationToken token = default);
+    public Task ChangeStrategyComponentWeight(StrategyId strategyId, CurrencyId instrumentId, float weight, CancellationToken token = default);
+    public Task ChangeMasterStrategy(StrategyId strategyId, MasterStrategy masterStrategy, CancellationToken token = default);
 }

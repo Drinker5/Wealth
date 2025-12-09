@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.StrategyTracking.Application.Strategies.Commands;
 using Wealth.StrategyTracking.Application.Strategies.Queries;
@@ -14,6 +15,7 @@ public static class StrategyApi
 
         api.MapGet("{strategyId:int}", GetStrategy);
         api.MapPost("/", CreateStrategy);
+        api.MapPost("/follow", ChangeMasterStrategy);
         api.MapPut("/add-stock-component", AddStockStrategyComponent);
         return api;
     }
@@ -40,7 +42,7 @@ public static class StrategyApi
         var result = await services.Mediator.Query(new GetStrategy(strategyId));
         if (result == null)
             return TypedResults.NotFound();
-        
+
         return TypedResults.Ok(result);
     }
 
@@ -58,8 +60,25 @@ public static class StrategyApi
             return TypedResults.BadRequest(ex.Message);
         }
     }
+
+    private static async Task<Results<Ok, BadRequest<string>>> ChangeMasterStrategy(
+        ChangeMasterStrategyRequest request,
+        [AsParameters] StrategyTrackingServices services)
+    {
+        try
+        {
+            await services.Mediator.Command(new ChangeMasterStrategy(request.StrategyId, request.MasterStrategy));
+            return TypedResults.Ok();
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
+        }
+    }
 }
 
-internal record AddStockStrategyComponentRequest(StrategyId StrategyId, StockId StockId, float Weight);
+internal record struct AddStockStrategyComponentRequest(StrategyId StrategyId, StockId StockId, float Weight);
 
 internal record struct CreateStrategyRequest(string Name);
+
+internal record struct ChangeMasterStrategyRequest(int StrategyId, MasterStrategy MasterStrategy);

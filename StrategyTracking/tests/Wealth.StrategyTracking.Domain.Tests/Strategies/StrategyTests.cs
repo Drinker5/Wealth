@@ -23,6 +23,7 @@ public class StrategyTests
         Assert.Equal(0, strategy.Id.Value);
         Assert.Equal(name, strategy.Name);
         Assert.Empty(strategy.Components);
+        Assert.Equal(MasterStrategy.None, strategy.FollowedStrategy);
         var ev = strategy.HasEvent<StrategyCreated>();
         Assert.Same(strategy, ev.Strategy);
     }
@@ -81,5 +82,18 @@ public class StrategyTests
         strategy.RemoveStrategyComponent(stockId1);
 
         strategy.HasNoEvents<StockStrategyComponentRemoved>();
+    }
+
+    [Fact]
+    public void MasterStrategyFollowed_AsExpected()
+    {
+        const MasterStrategy masterStrategy = MasterStrategy.IMOEX;
+
+        strategy.Follow(masterStrategy);
+
+        var ev = strategy.HasEvent<MasterStrategyFollowed>();
+        Assert.Equal(strategy.Id, ev.StrategyId);
+        Assert.Equal(masterStrategy, ev.NewFollowedStrategy);
+        Assert.Equal(masterStrategy, strategy.FollowedStrategy);
     }
 }

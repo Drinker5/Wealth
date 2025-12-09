@@ -71,6 +71,33 @@ public sealed class StrategiesApiTests : IClassFixture<StrategyTrackingApiFixtur
     }
 
     [Fact]
+    public async Task ChangeMasterStrategy_AsExpected()
+    {
+        var obj = new
+        {
+            name = "Test",
+        };
+
+        var createResponse = await httpClient.PostAsync("/api/strategy", JsonContent.Create(obj, options: jsonSerializerOptions));
+        createResponse.EnsureSuccessStatusCode();
+        var strategyId = int.Parse(await createResponse.Content.ReadAsStringAsync());
+        var obj2 = new
+        {
+            strategyId = strategyId,
+            masterStrategy = (byte)MasterStrategy.IMOEX
+        };
+
+        var followResponse = await httpClient.PostAsync("/api/strategy/follow", JsonContent.Create(obj2, options: jsonSerializerOptions));
+        
+        followResponse.EnsureSuccessStatusCode();
+        var responseGet = await httpClient.GetAsync($"/api/strategy/{strategyId}");
+        var strategyJson = await responseGet.Content.ReadAsStringAsync();
+        var strategy = JsonSerializer.Deserialize<StrategyDTO>(strategyJson, jsonSerializerOptions);
+        Assert.NotNull(strategy);
+        Assert.Equal(MasterStrategy.IMOEX, strategy.FollowedStrategy);
+    }
+    
+    [Fact]
     public async Task GetStrategy_NotFound()
     {
         var responseGet = await httpClient.GetAsync("/api/strategy/123");

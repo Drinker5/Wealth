@@ -22,15 +22,15 @@ public class StrategyRepositoryTests
         context = new WealthDbContext(options);
         context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
-        
+
         repository = new StrategyRepository(context);
     }
 
     [Fact]
     public async Task Repository_GetStrategies()
     {
-        var portfolios = await repository.GetStrategies();
-        
+        var portfolios = await repository.GetStrategies(CancellationToken.None);
+
         Assert.Empty(portfolios);
     }
 
@@ -48,7 +48,7 @@ public class StrategyRepositoryTests
     public async Task Repository_StrategyCreated_ThenIdReturned()
     {
         var id = await CreateStrategy("Foo");
-        
+
         Assert.NotEqual(0, id.Value);
         var portfolio = await repository.GetStrategy(id);
         Assert.NotNull(portfolio);
@@ -66,7 +66,7 @@ public class StrategyRepositoryTests
         var strategy = await repository.GetStrategy(id);
         Assert.NotNull(strategy);
         var component = Assert.Single(strategy.Components.OfType<StockStrategyComponent>());
-        
+
         Assert.Equal(stockId, component.StockId);
         Assert.Equal(weight, component.Weight);
     }
@@ -98,6 +98,19 @@ public class StrategyRepositoryTests
         var component = Assert.Single(strategy.Components.OfType<StockStrategyComponent>());
         Assert.Equal(stockId, component.StockId);
         Assert.Equal(weight, component.Weight);
+    }
+    
+    [Fact]
+    public async Task Repository_ChangeMasterStrategy_AsExpected()
+    {
+        const MasterStrategy masterStrategy = MasterStrategy.IMOEX;
+        var id = await CreateStrategy("Foo");
+
+        await repository.ChangeMasterStrategy(id, masterStrategy);
+
+        var strategy = await repository.GetStrategy(id);
+        Assert.NotNull(strategy);
+        Assert.Equal(masterStrategy, strategy.FollowedStrategy);
     }
 
     private async Task<StrategyId> CreateStrategy(string strategyName)

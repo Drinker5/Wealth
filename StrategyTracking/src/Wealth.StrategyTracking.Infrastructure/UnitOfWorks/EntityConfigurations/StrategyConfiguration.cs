@@ -16,6 +16,10 @@ internal class StrategyConfiguration : IEntityTypeConfiguration<Strategy>
 
         builder.Property(x => x.Name).HasMaxLength(255).IsRequired();
 
+        builder.Property(x => x.FollowedStrategy)
+            .HasDefaultValue(MasterStrategy.None)
+            .IsRequired();
+
         builder.HasMany(i => i.Components)
             .WithOne()
             .HasForeignKey("StrategyId")
