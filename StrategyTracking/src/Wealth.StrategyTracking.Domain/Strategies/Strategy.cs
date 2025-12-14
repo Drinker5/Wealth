@@ -42,7 +42,7 @@ public sealed class Strategy : AggregateRoot
     {
         if (FollowedStrategy == toFollow)
             return;
-        
+
         Apply(new MasterStrategyFollowed(Id, toFollow));
     }
 
@@ -148,6 +148,83 @@ public sealed class Strategy : AggregateRoot
         var component = Components.OfType<CurrencyStrategyComponent>().SingleOrDefault(s => s.Currency == currency);
         if (component != null)
             Apply(new CurrencyStrategyComponentRemoved(Id, currency));
+    }
+
+    public void SetComponents(IReadOnlyCollection<StrategyComponent> newComponents)
+    {
+        if (newComponents.Count > 0)
+        {
+            var totalWeight = newComponents.Sum(c => c.Weight);
+            const float tolerance = 0.01f;
+
+            if (Math.Abs(totalWeight - 1.0f) > tolerance)
+                throw new ArgumentException($"Total weight must be 1.0 (currently: {totalWeight})", nameof(newComponents));
+        }
+
+        var duplicateStocks = newComponents.OfType<StockStrategyComponent>()
+            .GroupBy(c => c.StockId)
+            .Where(g => g.Count() > 1);
+
+        var duplicateBonds = newComponents.OfType<BondStrategyComponent>()
+            .GroupBy(c => c.BondId)
+            .Where(g => g.Count() > 1);
+
+        var duplicateCurrencyAssets = newComponents.OfType<CurrencyAssetStrategyComponent>()
+            .GroupBy(c => c.CurrencyId)
+            .Where(g => g.Count() > 1);
+
+        var duplicateCurrencies = newComponents.OfType<CurrencyStrategyComponent>()
+            .GroupBy(c => c.Currency)
+            .Where(g => g.Count() > 1);
+
+        var duplicates = duplicateStocks
+            .Concat<object>(duplicateBonds)
+            .Concat(duplicateCurrencyAssets)
+            .Concat(duplicateCurrencies);
+
+        if (duplicates.Any())
+            throw new ArgumentException("Duplicate components found in the collection", nameof(newComponents));
+
+        var currentStocks = Components.OfType<StockStrategyComponent>();
+        var newStocks = newComponents.OfType<StockStrategyComponent>().ToDictionary(i => i.StockId);
+
+        var currentBonds = Components.OfType<BondStrategyComponent>();
+        var newBonds = newComponents.OfType<BondStrategyComponent>().ToDictionary(i => i.BondId);
+
+        var currentCurrencyAssets = Components.OfType<CurrencyAssetStrategyComponent>();
+        var newCurrencyAssets = newComponents.OfType<CurrencyAssetStrategyComponent>().ToDictionary(i => i.CurrencyId);
+
+        var currentCurrencies = Components.OfType<CurrencyStrategyComponent>();
+        var newCurrencies = newComponents.OfType<CurrencyStrategyComponent>().ToDictionary(i => i.Currency);
+
+        var stocksToRemove = currentStocks.Where(i => !newStocks.ContainsKey(i.StockId)).ToList();
+        var bondsToRemove = currentBonds.Where(i => !newBonds.ContainsKey(i.BondId)).ToList();
+        var currencyAssetsToRemove = currentCurrencyAssets.Where(i => !newCurrencyAssets.ContainsKey(i.CurrencyId)).ToList();
+        var currenciesToRemove = currentCurrencies.Where(i => !newCurrencies.ContainsKey(i.Currency)).ToList();
+
+        foreach (var newStock in newStocks.Values)
+            AddOrUpdateComponent(newStock.StockId, newStock.Weight);
+
+        foreach (var newBond in newBonds.Values)
+            AddOrUpdateComponent(newBond.BondId, newBond.Weight);
+
+        foreach (var newCurrencyAsset in newCurrencyAssets.Values)
+            AddOrUpdateComponent(newCurrencyAsset.CurrencyId, newCurrencyAsset.Weight);
+
+        foreach (var newCurrency in newCurrencies.Values)
+            AddOrUpdateComponent(newCurrency.Currency, newCurrency.Weight);
+
+        foreach (var stockToRemove in stocksToRemove)
+            RemoveStrategyComponent(stockToRemove.StockId);
+
+        foreach (var bondToRemove in bondsToRemove)
+            RemoveStrategyComponent(bondToRemove.BondId);
+
+        foreach (var currencyAssetToRemove in currencyAssetsToRemove)
+            RemoveStrategyComponent(currencyAssetToRemove.CurrencyId);
+
+        foreach (var currencyToRemove in currenciesToRemove)
+            RemoveStrategyComponent(currencyToRemove.Currency);
     }
 
     private void When(StrategyCreated @event)

@@ -96,4 +96,5 @@ public class StrategyTests
         Assert.Equal(masterStrategy, ev.NewFollowedStrategy);
         Assert.Equal(masterStrategy, strategy.FollowedStrategy);
     }
+
 }

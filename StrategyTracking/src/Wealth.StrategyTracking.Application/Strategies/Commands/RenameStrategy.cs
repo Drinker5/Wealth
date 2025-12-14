@@ -10,6 +10,6 @@ public class RenameStrategyCommandHandler(IStrategyRepository repository) : ICom
 {
     public Task Handle(RenameStrategy request, CancellationToken cancellationToken)
     {
-        return repository.RenameStrategy(request.StrategyId, request.NewName);
+        return repository.RenameStrategy(request.StrategyId, request.NewName, cancellationToken);
     }
 }

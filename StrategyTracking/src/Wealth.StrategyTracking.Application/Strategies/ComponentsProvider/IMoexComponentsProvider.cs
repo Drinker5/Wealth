@@ -1,0 +1,3 @@
+namespace Wealth.StrategyTracking.Application.Strategies.ComponentsProvider;
+
+public interface IMoexComponentsProvider : IComponentsProvider;

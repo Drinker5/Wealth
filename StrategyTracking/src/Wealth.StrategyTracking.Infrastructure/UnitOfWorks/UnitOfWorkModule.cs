@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Infrastructure;
 using Wealth.BuildingBlocks.Infrastructure.EFCore.Extensions;
+using Wealth.StrategyTracking.Application.Strategies.ComponentsProvider;
 using Wealth.StrategyTracking.Domain.Repositories;
 using Wealth.StrategyTracking.Infrastructure.DbSeeding;
 using Wealth.StrategyTracking.Infrastructure.Repositories;
@@ -36,5 +37,8 @@ public class UnitOfWorkModule : IServiceModule
         services.AddScoped<IOutboxRepository, OutboxRepository>();
 
         services.AddScoped<DbContext>(sp => sp.GetRequiredService<WealthDbContext>());
+
+        services.AddSingleton<ComponentsProviderFactory>();
+        services.AddSingleton<IMoexComponentsProvider, MoexComponentProvider>();
     }
 }

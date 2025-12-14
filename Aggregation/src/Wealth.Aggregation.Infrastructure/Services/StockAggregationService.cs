@@ -20,7 +20,7 @@ public sealed class StockAggregationService(
         return BuildStockAggregations(raws, stockInfos);
     }
 
-    private IReadOnlyCollection<StockAggregation> BuildStockAggregations(
+    private static IReadOnlyCollection<StockAggregation> BuildStockAggregations(
         List<StockAggregationRaw> raws,
         IReadOnlyDictionary<StockId, StockInfo> stockInfos)
     {

@@ -16,6 +16,7 @@ public static class StrategyApi
         api.MapGet("{strategyId:int}", GetStrategy);
         api.MapPost("/", CreateStrategy);
         api.MapPost("/follow", ChangeMasterStrategy);
+        api.MapPost("/update", UpdateStrategy);
         api.MapPut("/add-stock-component", AddStockStrategyComponent);
         return api;
     }
@@ -75,6 +76,21 @@ public static class StrategyApi
             return TypedResults.BadRequest(ex.Message);
         }
     }
+
+    private static async Task<Results<Ok, BadRequest<string>>> UpdateStrategy(
+        StrategyId strategyId,
+        [AsParameters] StrategyTrackingServices services)
+    {
+        try
+        {
+            await services.Mediator.Command(new UpdateStrategy(strategyId));
+            return TypedResults.Ok();
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
+        }
+    } 
 }
 
 internal record struct AddStockStrategyComponentRequest(StrategyId StrategyId, StockId StockId, float Weight);
