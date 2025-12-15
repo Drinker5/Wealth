@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Testcontainers.PostgreSql;
+using Wealth.StrategyTracking.Application.Strategies.ComponentsProvider;
 
 namespace Wealth.StrategyTracking.API.Tests;
 
@@ -38,6 +40,7 @@ public sealed class StrategyTrackingApiFixture : WebApplicationFactory<Program>,
 
         builder.ConfigureServices(services =>
         {
+            services.AddSingleton<IMoexComponentsProvider, TestMoexComponentsProvider>();
         });
         
         return base.CreateHost(builder);

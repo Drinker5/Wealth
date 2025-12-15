@@ -4,5 +4,5 @@ namespace Wealth.StrategyTracking.Application.Strategies.ComponentsProvider;
 
 public interface IComponentsProvider
 {
-    Task<IReadOnlyList<StrategyComponent>> GetComponents(CancellationToken token);
+    Task<IReadOnlyCollection<StrategyComponent>> GetComponents(CancellationToken token);
 }

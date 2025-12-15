@@ -7,8 +7,4 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Infrastructure\Wealth.BuildingBlocks.Infrastructure.csproj" />
     <ProjectReference Include="..\Wealth.StrategyTracking.Application\Wealth.StrategyTracking.Application.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Mediation\RequestProcessing\CommandBehaviors\" />
-    <Folder Include="Migrations\" />
-  </ItemGroup>
 </Project>

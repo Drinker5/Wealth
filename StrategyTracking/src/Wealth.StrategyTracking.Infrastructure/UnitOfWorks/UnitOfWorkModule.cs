@@ -37,8 +37,5 @@ public class UnitOfWorkModule : IServiceModule
         services.AddScoped<IOutboxRepository, OutboxRepository>();
 
         services.AddScoped<DbContext>(sp => sp.GetRequiredService<WealthDbContext>());
-
-        services.AddSingleton<ComponentsProviderFactory>();
-        services.AddSingleton<IMoexComponentsProvider, MoexComponentProvider>();
     }
 }
