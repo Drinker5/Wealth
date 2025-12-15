@@ -163,26 +163,23 @@ public sealed class Strategy : AggregateRoot
 
         var duplicateStocks = newComponents.OfType<StockStrategyComponent>()
             .GroupBy(c => c.StockId)
-            .Where(g => g.Count() > 1);
+            .Count(g => g.Count() > 1);
 
         var duplicateBonds = newComponents.OfType<BondStrategyComponent>()
             .GroupBy(c => c.BondId)
-            .Where(g => g.Count() > 1);
+            .Count(g => g.Count() > 1);
 
         var duplicateCurrencyAssets = newComponents.OfType<CurrencyAssetStrategyComponent>()
             .GroupBy(c => c.CurrencyId)
-            .Where(g => g.Count() > 1);
+            .Count(g => g.Count() > 1);
 
         var duplicateCurrencies = newComponents.OfType<CurrencyStrategyComponent>()
             .GroupBy(c => c.Currency)
-            .Where(g => g.Count() > 1);
+            .Count(g => g.Count() > 1);
 
-        var duplicates = duplicateStocks
-            .Concat<object>(duplicateBonds)
-            .Concat(duplicateCurrencyAssets)
-            .Concat(duplicateCurrencies);
+        var duplicates = duplicateStocks + duplicateBonds + duplicateCurrencyAssets + duplicateCurrencies;
 
-        if (duplicates.Any())
+        if (duplicates > 0)
             throw new ArgumentException("Duplicate components found in the collection", nameof(newComponents));
 
         var currentStocks = Components.OfType<StockStrategyComponent>();
