@@ -13,7 +13,7 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
         {
             var stockId = await mediator.Command(new CreateStockCommand
             {
-                Index = request.Index,
+                Ticker = request.Ticker,
                 Name = request.Name,
                 Isin = request.Isin,
                 Figi = request.Figi,
@@ -132,7 +132,7 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
                 Figi = instrument.Figi,
                 DividendPerYear = instrument.Dividend.ValuePerYear,
                 LotSize = instrument.LotSize,
-                Index = instrument.Index
+                Ticker = instrument.Ticker
             }
         };
 
@@ -182,5 +182,11 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
         });
 
         return new ChangePriceResponse();
+    }
+
+    public override Task<GetInstrumentsResponse> GetInstrumentsByIsin(GetInstrumentsByIsinRequest request, ServerCallContext context)
+    {
+        // TODO
+        throw new RpcException(new Status(StatusCode.Unimplemented, "Unimplemented"));
     }
 }

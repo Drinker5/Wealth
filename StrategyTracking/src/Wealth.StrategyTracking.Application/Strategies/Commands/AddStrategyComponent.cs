@@ -4,11 +4,11 @@ using Wealth.StrategyTracking.Domain.Repositories;
 
 namespace Wealth.StrategyTracking.Application.Strategies.Commands;
 
-public record struct AddStockStrategyComponent(StrategyId StrategyId, StockId InstrumentId, float Weight) : ICommand;
+public record struct AddStockStrategyComponent(StrategyId StrategyId, StockId InstrumentId, decimal Weight) : ICommand;
 
-public record struct AddBondStrategyComponent(StrategyId StrategyId, BondId InstrumentId, float Weight) : ICommand;
+public record struct AddBondStrategyComponent(StrategyId StrategyId, BondId InstrumentId, decimal Weight) : ICommand;
 
-public record struct AddCurrencyStrategyComponent(StrategyId StrategyId, CurrencyId InstrumentId, float Weight) : ICommand;
+public record struct AddCurrencyStrategyComponent(StrategyId StrategyId, CurrencyId InstrumentId, decimal Weight) : ICommand;
 
 public class AddStrategyComponentCommandHandler(IStrategyRepository repository) :
     ICommandHandler<AddStockStrategyComponent>,

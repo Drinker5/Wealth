@@ -4,16 +4,19 @@ using Wealth.InstrumentManagement.Domain.Instruments;
 namespace Wealth.InstrumentManagement.Infrastructure.Migrations;
 
 [Migration(2025120400)]
-public class StockIndex : Migration
+public class StockTicker : Migration
 {
     public override void Up()
     {
         Alter.Table("Stocks")
-            .AddColumn("index").AsString().NotNullable();
+            .AddColumn("ticker")
+            .AsString(10)
+            .NotNullable()
+            .WithDefaultValue(string.Empty);
     }
 
     public override void Down()
     {
-        Delete.Column("index").FromTable("Stocks");
+        Delete.Column("ticker").FromTable("Stocks");
     }
 }

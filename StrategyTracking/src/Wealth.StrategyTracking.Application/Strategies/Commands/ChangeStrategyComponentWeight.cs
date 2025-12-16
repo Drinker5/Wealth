@@ -4,9 +4,9 @@ using Wealth.StrategyTracking.Domain.Repositories;
 
 namespace Wealth.StrategyTracking.Application.Strategies.Commands;
 
-public record struct ChangeStockStrategyComponentWeight(StrategyId StrategyId, StockId InstrumentId, float Weight) : ICommand;
-public record struct ChangeBondStrategyComponentWeight(StrategyId StrategyId, BondId InstrumentId, float Weight) : ICommand;
-public record struct ChangeCurrencyStrategyComponentWeight(StrategyId StrategyId, CurrencyId InstrumentId, float Weight) : ICommand;
+public record struct ChangeStockStrategyComponentWeight(StrategyId StrategyId, StockId InstrumentId, decimal Weight) : ICommand;
+public record struct ChangeBondStrategyComponentWeight(StrategyId StrategyId, BondId InstrumentId, decimal Weight) : ICommand;
+public record struct ChangeCurrencyStrategyComponentWeight(StrategyId StrategyId, CurrencyId InstrumentId, decimal Weight) : ICommand;
 
 public class ChangeStrategyComponentWeightCommandHandler(IStrategyRepository repository) :
     ICommandHandler<ChangeStockStrategyComponentWeight>,

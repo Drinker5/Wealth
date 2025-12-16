@@ -21,6 +21,6 @@ message GetStrategyResponse {
   message StrategyComponent {
     int32 instrument_id = 1;
     InstrumentTypeProto instrument_type = 2;
-    float weight = 3;
+    DecimalProto weight = 3;
   }
 }

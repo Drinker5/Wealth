@@ -12,5 +12,5 @@ namespace Wealth.StrategyTracking.Domain.Strategies;
 public abstract class StrategyComponent : IEntity
 {
     public int Id { get; init; }
-    public float Weight { get; set; }
+    public decimal Weight { get; set; }
 }

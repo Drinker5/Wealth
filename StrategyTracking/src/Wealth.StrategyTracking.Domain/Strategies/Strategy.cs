@@ -46,7 +46,7 @@ public sealed class Strategy : AggregateRoot
         Apply(new MasterStrategyFollowed(Id, toFollow));
     }
 
-    public void AddOrUpdateComponent(StockId stockId, float weight)
+    public void AddOrUpdateComponent(StockId stockId, decimal weight)
     {
         var c = Components.OfType<StockStrategyComponent>().FirstOrDefault(c => c.StockId == stockId);
         if (c != null)
@@ -65,7 +65,7 @@ public sealed class Strategy : AggregateRoot
         }
     }
 
-    public void AddOrUpdateComponent(BondId bondId, float weight)
+    public void AddOrUpdateComponent(BondId bondId, decimal weight)
     {
         var c = Components.OfType<BondStrategyComponent>().FirstOrDefault(c => c.BondId == bondId);
         if (c != null)
@@ -84,7 +84,7 @@ public sealed class Strategy : AggregateRoot
         }
     }
 
-    public void AddOrUpdateComponent(CurrencyId currencyId, float weight)
+    public void AddOrUpdateComponent(CurrencyId currencyId, decimal weight)
     {
         var c = Components.OfType<CurrencyAssetStrategyComponent>().FirstOrDefault(c => c.CurrencyId == currencyId);
         if (c != null)
@@ -103,7 +103,7 @@ public sealed class Strategy : AggregateRoot
         }
     }
 
-    public void AddOrUpdateComponent(CurrencyCode currency, float weight)
+    public void AddOrUpdateComponent(CurrencyCode currency, decimal weight)
     {
         var c = Components.OfType<CurrencyStrategyComponent>().FirstOrDefault(c => c.Currency == currency);
         if (c != null)
@@ -155,10 +155,10 @@ public sealed class Strategy : AggregateRoot
         if (newComponents.Count > 0)
         {
             var totalWeight = newComponents.Sum(c => c.Weight);
-            const float tolerance = 0.01f;
+            const decimal tolerance = 0.01m;
 
-            if (Math.Abs(totalWeight - 1.0f) > tolerance)
-                throw new ArgumentException($"Total weight must be 1.0 (currently: {totalWeight})", nameof(newComponents));
+            if (Math.Abs(totalWeight - 100) > tolerance)
+                throw new ArgumentException($"Total weight must be 100.0 (currently: {totalWeight})", nameof(newComponents));
         }
 
         var duplicateStocks = newComponents.OfType<StockStrategyComponent>()

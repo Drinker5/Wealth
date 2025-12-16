@@ -50,7 +50,7 @@ public class StrategyTests
     [Fact]
     public void AddComponent()
     {
-        var weight = 0.42f;
+        var weight = 42m;
 
         strategy.AddOrUpdateComponent(stockId1, weight);
 
@@ -66,7 +66,7 @@ public class StrategyTests
     [Fact]
     public void RemoveComponent_AsExpected()
     {
-        strategy.AddOrUpdateComponent(stockId1, 0.42f);
+        strategy.AddOrUpdateComponent(stockId1, 42);
 
         strategy.RemoveStrategyComponent(stockId1);
 

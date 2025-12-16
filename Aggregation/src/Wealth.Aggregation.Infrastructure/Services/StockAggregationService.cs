@@ -30,7 +30,7 @@ public sealed class StockAggregationService(
         {
             var stockInfo = stockInfos[raw.StockId];
             result.Add(new StockAggregation(
-                Index: stockInfo.Index,
+                Index: stockInfo.Ticker,
                 Name: stockInfo.Name,
                 Weight: -1, // TODO
                 WeightSkipped: -1, // TODO

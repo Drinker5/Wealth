@@ -58,7 +58,7 @@ public class StrategyRepositoryTests
     [Fact]
     public async Task Repository_AddStrategyComponent()
     {
-        var weight = 23.23f;
+        var weight = 23.23m;
         var id = await CreateStrategy("Foo");
 
         await repository.AddStrategyComponent(id, stockId, weight);
@@ -75,7 +75,7 @@ public class StrategyRepositoryTests
     public async Task Repository_RemoveStrategyComponent()
     {
         var id = await CreateStrategy("Foo");
-        await repository.AddStrategyComponent(id, stockId, 23.23f);
+        await repository.AddStrategyComponent(id, stockId, 23.23m);
 
         await repository.RemoveStrategyComponent(id, stockId);
 
@@ -87,9 +87,9 @@ public class StrategyRepositoryTests
     [Fact]
     public async Task Repository_UpdateStrategyComponent()
     {
-        var weight = 13.13f;
+        var weight = 13.13m;
         var id = await CreateStrategy("Foo");
-        await repository.AddStrategyComponent(id, stockId, 23.23f);
+        await repository.AddStrategyComponent(id, stockId, 23.23m);
 
         await repository.ChangeStrategyComponentWeight(id, stockId, weight);
 

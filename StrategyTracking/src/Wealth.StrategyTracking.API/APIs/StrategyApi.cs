@@ -93,7 +93,7 @@ public static class StrategyApi
     } 
 }
 
-internal record struct AddStockStrategyComponentRequest(StrategyId StrategyId, StockId StockId, float Weight);
+internal record struct AddStockStrategyComponentRequest(StrategyId StrategyId, StockId StockId, decimal Weight);
 
 internal record struct CreateStrategyRequest(string Name);
 

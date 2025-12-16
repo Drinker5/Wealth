@@ -124,7 +124,7 @@ public sealed class StrategiesApiTests : IClassFixture<StrategyTrackingApiFixtur
         {
             strategyId = strategyId,
             stockId = 3,
-            weight = fixture.Create<float>(),
+            weight = fixture.Create<decimal>(),
         };
 
         var insertResponse = await httpClient.PutAsync("/api/strategy/add-stock-component", JsonContent.Create(addComponent, options: jsonSerializerOptions));

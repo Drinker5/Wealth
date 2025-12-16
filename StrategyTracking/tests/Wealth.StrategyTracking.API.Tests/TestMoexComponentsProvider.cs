@@ -11,22 +11,22 @@ public sealed class TestMoexComponentsProvider : IMoexComponentsProvider
         new StockStrategyComponent
         {
             StockId = 1,
-            Weight = 0.40f
+            Weight = 40
         },
         new BondStrategyComponent
         {
             BondId = 2,
-            Weight = 0.30f
+            Weight = 30
         },
         new CurrencyAssetStrategyComponent
         {
             CurrencyId = 3,
-            Weight = 0.20f
+            Weight = 20
         },
         new CurrencyStrategyComponent
         {
             Currency = CurrencyCode.Usd,
-            Weight = 0.10f
+            Weight = 10
         }
     ];
 

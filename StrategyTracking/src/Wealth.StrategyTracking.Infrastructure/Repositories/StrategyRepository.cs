@@ -36,19 +36,19 @@ public class StrategyRepository(WealthDbContext context) : IStrategyRepository
         strategy?.Rename(newName);
     }
 
-    public async Task AddStrategyComponent(StrategyId strategyId, StockId stockId, float weight, CancellationToken token = default)
+    public async Task AddStrategyComponent(StrategyId strategyId, StockId stockId, decimal weight, CancellationToken token = default)
     {
         var strategy = await GetStrategy(strategyId, token);
         strategy?.AddOrUpdateComponent(stockId, weight);
     }
 
-    public async Task AddStrategyComponent(StrategyId strategyId, BondId bondId, float weight, CancellationToken token = default)
+    public async Task AddStrategyComponent(StrategyId strategyId, BondId bondId, decimal weight, CancellationToken token = default)
     {
         var strategy = await GetStrategy(strategyId, token);
         strategy?.AddOrUpdateComponent(bondId, weight);
     }
 
-    public async Task AddStrategyComponent(StrategyId strategyId, CurrencyId currencyId, float weight, CancellationToken token = default)
+    public async Task AddStrategyComponent(StrategyId strategyId, CurrencyId currencyId, decimal weight, CancellationToken token = default)
     {
         var strategy = await GetStrategy(strategyId, token);
         strategy?.AddOrUpdateComponent(currencyId, weight);
@@ -72,19 +72,19 @@ public class StrategyRepository(WealthDbContext context) : IStrategyRepository
         strategy?.RemoveStrategyComponent(instrumentId);
     }
 
-    public async Task ChangeStrategyComponentWeight(StrategyId strategyId, StockId instrumentId, float weight, CancellationToken token = default)
+    public async Task ChangeStrategyComponentWeight(StrategyId strategyId, StockId instrumentId, decimal weight, CancellationToken token = default)
     {
         var strategy = await GetStrategy(strategyId, token);
         strategy?.AddOrUpdateComponent(instrumentId, weight);
     }
     
-    public async Task ChangeStrategyComponentWeight(StrategyId strategyId, BondId instrumentId, float weight, CancellationToken token = default)
+    public async Task ChangeStrategyComponentWeight(StrategyId strategyId, BondId instrumentId, decimal weight, CancellationToken token = default)
     {
         var strategy = await GetStrategy(strategyId, token);
         strategy?.AddOrUpdateComponent(instrumentId, weight);
     }
     
-    public async Task ChangeStrategyComponentWeight(StrategyId strategyId, CurrencyId instrumentId, float weight, CancellationToken token = default)
+    public async Task ChangeStrategyComponentWeight(StrategyId strategyId, CurrencyId instrumentId, decimal weight, CancellationToken token = default)
     {
         var strategy = await GetStrategy(strategyId, token);
         strategy?.AddOrUpdateComponent(instrumentId, weight);

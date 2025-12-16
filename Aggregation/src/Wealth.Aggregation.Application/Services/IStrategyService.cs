@@ -12,4 +12,4 @@ public record Strategy(
     string Name,
     IReadOnlyCollection<StrategyComponent> Components);
 
-public record struct StrategyComponent(int Id, InstrumentType type, float Weight);
+public record struct StrategyComponent(int Id, InstrumentType type, decimal Weight);

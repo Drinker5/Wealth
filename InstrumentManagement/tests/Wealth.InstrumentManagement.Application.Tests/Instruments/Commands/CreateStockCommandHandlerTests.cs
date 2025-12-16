@@ -15,7 +15,7 @@ public class CreateStockCommandHandlerTests
         var stocksRepository = A.Fake<IStocksRepository>();
         var command = new CreateStockCommand
         {
-            Index = "FAKE",
+            Ticker = "FAKE",
             Isin = ISIN.Empty,
             Figi = FIGI.Empty,
             Name = "Foo",
@@ -24,7 +24,7 @@ public class CreateStockCommandHandlerTests
 
         StockId id = 1;
         A.CallTo(() => stocksRepository.CreateStock(
-                command.Index,
+                command.Ticker,
                 command.Name,
                 command.Isin,
                 command.Figi,
@@ -36,7 +36,7 @@ public class CreateStockCommandHandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         A.CallTo(() => stocksRepository.CreateStock(
-                command.Index,
+                command.Ticker,
                 command.Name,
                 command.Isin,
                 command.Figi,

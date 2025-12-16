@@ -17,6 +17,7 @@ service InstrumentsService {
   rpc ChangeStockPrice (ChangeStockPriceRequest) returns (ChangePriceResponse);
   rpc ChangeBondPrice (ChangeBondPriceRequest) returns (ChangePriceResponse);
   rpc ChangeCurrencyPrice (ChangeCurrencyPriceRequest) returns (ChangePriceResponse);
+  rpc GetInstrumentsByIsin (GetInstrumentsByIsinRequest) returns (GetInstrumentsResponse);
 }
 
 // get by bondId, isin or figi
@@ -72,7 +73,7 @@ message StockInfoProto {
   string figi = 5;
   int32 lot_size = 6;
   MoneyProto dividend_per_year = 7;
-  string index = 8;
+  string ticker = 8;
 }
 
 message GetCurrencyResponse {
@@ -87,7 +88,7 @@ message CreateStockRequest {
   ISINProto isin = 2;
   string figi = 3;
   int32 lot_size = 4;
-  string index = 5;
+  string ticker = 5;
 }
 
 message CreateStockResponse {
@@ -129,4 +130,18 @@ message ChangeCurrencyPriceRequest {
 }
 
 message ChangePriceResponse {
+}
+
+message GetInstrumentsByIsinRequest {
+  repeated string isins = 1;
+}
+
+message GetInstrumentsResponse {
+  repeated InstrumentProto instruments = 1;
+}
+
+message InstrumentProto {
+  string isin = 1;
+  int32 id = 2;
+  InstrumentTypeProto type = 3;
 }

@@ -66,7 +66,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
     }
 
     public async Task<StockId> CreateStock(
-        string index,
+        string ticker,
         string name,
         ISIN isin,
         FIGI figi,
@@ -79,7 +79,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             cancellationToken: token);
 
         var nextId = await connection.ExecuteScalarAsync<int>(command);
-        var stock = Stock.Create(new StockId(nextId), index, name, isin, figi);
+        var stock = Stock.Create(new StockId(nextId), ticker, name, isin, figi);
         stock.ChangeLotSize(lotSize);
         return await CreateStock(stock);
     }
@@ -87,13 +87,13 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
     private async Task<StockId> CreateStock(Stock stock)
     {
         const string sql = """
-                           INSERT INTO "Stocks" ("Id", index, "Name", "ISIN", "FIGI", "LotSize") 
-                           VALUES (@Id, @Index, @Name, @ISIN, @FIGI, @LotSize)
+                           INSERT INTO "Stocks" ("Id", ticker, "Name", "ISIN", "FIGI", "LotSize") 
+                           VALUES (@Id, @Ticker, @Name, @ISIN, @FIGI, @LotSize)
                            """;
         await connection.ExecuteAsync(sql, new
         {
             Id = stock.Id.Value,
-            Index = stock.Index,
+            Ticker = stock.Ticker,
             Name = stock.Name,
             ISIN = stock.Isin.Value,
             FIGI = stock.Figi.Value,
@@ -145,22 +145,22 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         dbContext.AddEvents(instrument);
     }
 
-    public async Task ChangeIndex(StockId id, string index)
+    public async Task ChangeTicker(StockId id, string ticker)
     {
         var instrument = await GetStock(id);
         if (instrument == null)
             return;
         
-        instrument.ChangeIndex(index);
+        instrument.ChangeTicker(ticker);
         const string sql = """
                            UPDATE "Stocks" 
-                           SET index = @Index
+                           SET ticker = @Ticker
                            WHERE "Id" = @Id
                            """;
         await connection.ExecuteAsync(sql, new
         {
             Id = id.Value,
-            Index = index,
+            Ticker = ticker,
         });
         dbContext.AddEvents(instrument);
     }
@@ -176,7 +176,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         FIGI,
         Price_Currency,
         Dividend_Currency,
-        Index
+        Ticker
     }
 
     private async Task<IReadOnlyCollection<Stock>> GetStocks(string sql, object? param = null)
@@ -198,7 +198,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             stock.Name = reader.GetString((int)Columns.Name);
             stock.Isin = reader.GetString((int)Columns.ISIN);
             stock.Figi = reader.GetString((int)Columns.FIGI);
-            stock.Index = reader.GetString((int)Columns.Index);
+            stock.Ticker = reader.GetString((int)Columns.Ticker);
             if (!reader.IsDBNull((int)Columns.Price_Currency))
             {
                 stock.Price = new Money(

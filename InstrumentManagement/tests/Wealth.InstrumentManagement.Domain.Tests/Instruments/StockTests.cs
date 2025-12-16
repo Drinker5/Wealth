@@ -93,13 +93,13 @@ public class StockTests
     {
         var instrument = CreateStockInstrument(index, name, isin, figi);
 
-        instrument.ChangeIndex("qwe");
+        instrument.ChangeTicker("qwe");
 
-        var @event = instrument.HasEvent<StockIndexChanged>();
+        var @event = instrument.HasEvent<StockTickerChanged>();
         using (Assert.EnterMultipleScope())
         {
             Assert.That(@event.StockId, Is.Not.Zero);
-            Assert.That(@event.NewIndex, Is.EqualTo("qwe"));
+            Assert.That(@event.NewTicker, Is.EqualTo("qwe"));
         }
     }
 }

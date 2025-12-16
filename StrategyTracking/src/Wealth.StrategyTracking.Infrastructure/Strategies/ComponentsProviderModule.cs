@@ -10,6 +10,6 @@ public class ComponentsProviderModule : IServiceModule
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton<ComponentsProviderFactory>();
-        services.AddSingleton<IMoexComponentsProvider, MoexComponentProvider>();
+        services.AddSingleton<IMoexComponentsProvider, TinkoffMoexComponentProvider>();
     }
 }

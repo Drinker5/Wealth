@@ -28,18 +28,18 @@ public class StrategySetComponentsTests
         // Arrange
         var initialComponents = new List<StrategyComponent>
         {
-            new StockStrategyComponent { StockId = _stockId1, Weight = 0.5f },
-            new StockStrategyComponent { StockId = _stockId2, Weight = 0.5f }
+            new StockStrategyComponent { StockId = _stockId1, Weight = 50 },
+            new StockStrategyComponent { StockId = _stockId2, Weight = 50 }
         };
 
-        _strategy.AddOrUpdateComponent(_stockId1, 0.5f);
-        _strategy.AddOrUpdateComponent(_stockId2, 0.5f);
+        _strategy.AddOrUpdateComponent(_stockId1, 50);
+        _strategy.AddOrUpdateComponent(_stockId2, 50);
         _strategy.ClearDomainEvents();
 
         var newComponents = new List<StrategyComponent>
         {
-            new BondStrategyComponent { BondId = _bondId1, Weight = 0.3f },
-            new CurrencyStrategyComponent { Currency = _currencyCode1, Weight = 0.7f }
+            new BondStrategyComponent { BondId = _bondId1, Weight = 30 },
+            new CurrencyStrategyComponent { Currency = _currencyCode1, Weight = 70 }
         };
 
         // Act
@@ -54,9 +54,9 @@ public class StrategySetComponentsTests
         var currencyComponent = _strategy.Components.OfType<CurrencyStrategyComponent>().First();
 
         Assert.Equal(_bondId1, bondComponent.BondId);
-        Assert.Equal(0.3f, bondComponent.Weight);
+        Assert.Equal(30, bondComponent.Weight);
         Assert.Equal(_currencyCode1, currencyComponent.Currency);
-        Assert.Equal(0.7f, currencyComponent.Weight);
+        Assert.Equal(70, currencyComponent.Weight);
     }
 
     [Fact]
@@ -65,14 +65,14 @@ public class StrategySetComponentsTests
         // Arrange
         var invalidComponents = new List<StrategyComponent>
         {
-            new StockStrategyComponent { StockId = _stockId1, Weight = 0.3f },
-            new StockStrategyComponent { StockId = _stockId2, Weight = 0.3f }
+            new StockStrategyComponent { StockId = _stockId1, Weight = 30 },
+            new StockStrategyComponent { StockId = _stockId2, Weight = 30 }
         };
 
         // Act & Assert
         var exception = Assert.Throws<ArgumentException>(() =>
             _strategy.SetComponents(invalidComponents));
-        Assert.Contains("Total weight must be 1.0", exception.Message);
+        Assert.Contains("Total weight must be 100.0", exception.Message);
     }
 
     [Fact]
@@ -81,8 +81,8 @@ public class StrategySetComponentsTests
         // Arrange
         var duplicateComponents = new List<StrategyComponent>
         {
-            new StockStrategyComponent { StockId = _stockId1, Weight = 0.5f },
-            new StockStrategyComponent { StockId = _stockId1, Weight = 0.5f }
+            new StockStrategyComponent { StockId = _stockId1, Weight = 50 },
+            new StockStrategyComponent { StockId = _stockId1, Weight = 50 }
         };
 
         // Act & Assert
@@ -97,9 +97,9 @@ public class StrategySetComponentsTests
         // Arrange
         var duplicateComponents = new List<StrategyComponent>
         {
-            new StockStrategyComponent { StockId = _stockId1, Weight = 0.4f },
-            new BondStrategyComponent { BondId = _bondId1, Weight = 0.3f },
-            new StockStrategyComponent { StockId = _stockId1, Weight = 0.3f }
+            new StockStrategyComponent { StockId = _stockId1, Weight = 40 },
+            new BondStrategyComponent { BondId = _bondId1, Weight = 30 },
+            new StockStrategyComponent { StockId = _stockId1, Weight = 30 }
         };
 
         // Act & Assert
@@ -112,7 +112,7 @@ public class StrategySetComponentsTests
     public void SetComponents_WithEmptyCollection_ShouldClearAllComponents()
     {
         // Arrange
-        _strategy.AddOrUpdateComponent(_stockId1, 1.0f);
+        _strategy.AddOrUpdateComponent(_stockId1, 100);
         _strategy.ClearDomainEvents();
 
         // Act
@@ -126,13 +126,13 @@ public class StrategySetComponentsTests
     public void SetComponents_ShouldGenerateAppropriateEvents()
     {
         // Arrange
-        _strategy.AddOrUpdateComponent(_stockId1, 1.0f);
+        _strategy.AddOrUpdateComponent(_stockId1, 100);
         _strategy.ClearDomainEvents();
 
         var newComponents = new List<StrategyComponent>
         {
-            new StockStrategyComponent { StockId = _stockId2, Weight = 0.6f },
-            new BondStrategyComponent { BondId = _bondId1, Weight = 0.4f }
+            new StockStrategyComponent { StockId = _stockId2, Weight = 60 },
+            new BondStrategyComponent { BondId = _bondId1, Weight = 40 }
         };
 
         // Act
@@ -166,14 +166,14 @@ public class StrategySetComponentsTests
     public void SetComponents_WithSameComponentsDifferentWeights_ShouldUpdateWeights()
     {
         // Arrange
-        _strategy.AddOrUpdateComponent(_stockId1, 0.5f);
-        _strategy.AddOrUpdateComponent(_stockId2, 0.5f);
+        _strategy.AddOrUpdateComponent(_stockId1, 50);
+        _strategy.AddOrUpdateComponent(_stockId2, 50);
         _strategy.ClearDomainEvents();
 
         var sameComponentsNewWeights = new List<StrategyComponent>
         {
-            new StockStrategyComponent { StockId = _stockId1, Weight = 0.7f },
-            new StockStrategyComponent { StockId = _stockId2, Weight = 0.3f }
+            new StockStrategyComponent { StockId = _stockId1, Weight = 70 },
+            new StockStrategyComponent { StockId = _stockId2, Weight = 30 }
         };
 
         // Act
@@ -194,8 +194,8 @@ public class StrategySetComponentsTests
             weightChangedEvents.First(e =>
                 ((StockStrategyComponentWeightChanged)e).StockId == _stockId2));
 
-        Assert.Equal(0.7f, stock1Event.Weight);
-        Assert.Equal(0.3f, stock2Event.Weight);
+        Assert.Equal(70, stock1Event.Weight);
+        Assert.Equal(30, stock2Event.Weight);
     }
 
     [Fact]
@@ -204,10 +204,10 @@ public class StrategySetComponentsTests
         // Arrange
         var allTypeComponents = new List<StrategyComponent>
         {
-            new StockStrategyComponent { StockId = _stockId1, Weight = 0.25f },
-            new BondStrategyComponent { BondId = _bondId1, Weight = 0.25f },
-            new CurrencyAssetStrategyComponent { CurrencyId = _currencyId1, Weight = 0.25f },
-            new CurrencyStrategyComponent { Currency = _currencyCode1, Weight = 0.25f }
+            new StockStrategyComponent { StockId = _stockId1, Weight = 25 },
+            new BondStrategyComponent { BondId = _bondId1, Weight = 25 },
+            new CurrencyAssetStrategyComponent { CurrencyId = _currencyId1, Weight = 25 },
+            new CurrencyStrategyComponent { Currency = _currencyCode1, Weight = 25 }
         };
 
         // Act

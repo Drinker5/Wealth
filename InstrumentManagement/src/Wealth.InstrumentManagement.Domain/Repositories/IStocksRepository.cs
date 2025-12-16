@@ -14,7 +14,7 @@ public interface IStocksRepository
     Task ChangeDividend(StockId id, Dividend dividend);
 
     Task<StockId> CreateStock(
-        string index,
+        string ticker,
         string name,
         ISIN isin,
         FIGI figi,
@@ -22,5 +22,5 @@ public interface IStocksRepository
         CancellationToken token = default);
 
     Task ChangeLotSize(StockId id, int lotSize); 
-    Task ChangeIndex(StockId id, string index);
+    Task ChangeTicker(StockId id, string ticker);
 }
