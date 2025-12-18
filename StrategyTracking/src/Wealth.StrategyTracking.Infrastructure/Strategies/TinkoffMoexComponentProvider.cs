@@ -31,16 +31,14 @@ public sealed class TinkoffMoexComponentProvider(
 
     private async Task<List<StrategyComponent>> BuildCache(List<Instrument> instruments, CancellationToken token)
     {
-        var enriched = (await instrumentsServiceClient.GetInstrumentsByIsinAsync(new GetInstrumentsByIsinRequest
-            {
-                Isins =
-                {
-                    instruments
-                        .Select(i => i.Isin)
-                        .Where(i => i is not null)
-                }
-            }, cancellationToken: token))
-            .Instruments.ToDictionary(i => i.Isin);
+        var isins = instruments.Select(i => i.Isin).Where(i => i is not null).ToArray();
+        var instrumentsByIsinResponse = await instrumentsServiceClient.GetInstrumentsByIsinAsync(new GetInstrumentsByIsinRequest
+        {
+            Isins = { isins }
+        }, cancellationToken: token);
+        var instrumentsByIsin = instrumentsByIsinResponse.Instruments.ToDictionary(i => i.Isin);
+        if (isins.Length != instrumentsByIsinResponse.Instruments.Count)
+            throw new InvalidOperationException($"Did not find {string.Join(", ", isins.Where(i => instrumentsByIsin.ContainsKey(i!)))} instruments.");
 
         return instruments.Select(BuildComponent).ToList();
 
@@ -51,7 +49,7 @@ public sealed class TinkoffMoexComponentProvider(
                 if (instrument.Isin == null)
                     throw new InvalidOperationException($"{instrument.Name} stock isin is null.");
 
-                var instrumentProto = enriched[instrument.Isin];
+                var instrumentProto = instrumentsByIsin[instrument.Isin];
                 return new StockStrategyComponent
                 {
                     StockId = instrumentProto.Id,
@@ -67,13 +65,13 @@ public sealed class TinkoffMoexComponentProvider(
                     Weight = instrument.RelativeValue,
                 };
             }
-            
+
             if (StringComparer.OrdinalIgnoreCase.Equals(instrument.Type, "bond"))
             {
                 if (instrument.Isin == null)
                     throw new InvalidOperationException($"{instrument.Name} bond isin is null.");
 
-                var instrumentProto = enriched[instrument.Isin];
+                var instrumentProto = instrumentsByIsin[instrument.Isin];
                 return new BondStrategyComponent
                 {
                     BondId = instrumentProto.Id,

@@ -1,7 +1,7 @@
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Domain.Instruments;
 
-namespace Wealth.InstrumentManagement.Domain.Repositories;
+namespace Wealth.InstrumentManagement.Application.Repositories;
 
 public interface IStocksRepository
 {
@@ -21,6 +21,6 @@ public interface IStocksRepository
         LotSize lotSize,
         CancellationToken token = default);
 
-    Task ChangeLotSize(StockId id, int lotSize); 
+    Task ChangeLotSize(StockId id, int lotSize);
     Task ChangeTicker(StockId id, string ticker);
 }

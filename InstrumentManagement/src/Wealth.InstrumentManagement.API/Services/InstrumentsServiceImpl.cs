@@ -1,5 +1,6 @@
 using Grpc.Core;
 using Wealth.BuildingBlocks.Application;
+using Wealth.InstrumentManagement.API.Extensions;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Instruments.Queries;
 
@@ -184,9 +185,12 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
         return new ChangePriceResponse();
     }
 
-    public override Task<GetInstrumentsResponse> GetInstrumentsByIsin(GetInstrumentsByIsinRequest request, ServerCallContext context)
+    public override async Task<GetInstrumentsResponse> GetInstrumentsByIsin(GetInstrumentsByIsinRequest request, ServerCallContext context)
     {
-        // TODO
-        throw new RpcException(new Status(StatusCode.Unimplemented, "Unimplemented"));
+        var instruments = await mediator.Query(new GetInstrumentsQuery(request.Isins));
+        return new GetInstrumentsResponse
+        {
+            Instruments = { instruments.Select(i => i.ToProto()) }
+        };
     }
 }

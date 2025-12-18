@@ -1,6 +1,6 @@
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
-using Wealth.InstrumentManagement.Domain.Repositories;
+using Wealth.InstrumentManagement.Application.Repositories;
 
 namespace Wealth.InstrumentManagement.Application.Tests.Instruments.Commands;
 

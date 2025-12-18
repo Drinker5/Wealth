@@ -1,8 +1,8 @@
 using System.Data;
 using Dapper;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.InstrumentManagement.Application.Repositories;
 using Wealth.InstrumentManagement.Domain.Instruments;
-using Wealth.InstrumentManagement.Domain.Repositories;
 using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Repositories;
@@ -150,7 +150,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         var instrument = await GetStock(id);
         if (instrument == null)
             return;
-        
+
         instrument.ChangeTicker(ticker);
         const string sql = """
                            UPDATE "Stocks" 

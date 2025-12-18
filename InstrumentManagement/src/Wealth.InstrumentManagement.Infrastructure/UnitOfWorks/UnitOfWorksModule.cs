@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Infrastructure;
 using Wealth.BuildingBlocks.Infrastructure.Mediation;
-using Wealth.InstrumentManagement.Domain.Repositories;
+using Wealth.InstrumentManagement.Application.Repositories;
 using Wealth.InstrumentManagement.Infrastructure.DbSeeding;
 using Wealth.InstrumentManagement.Infrastructure.DbSeeding.Seeds;
 using Wealth.InstrumentManagement.Infrastructure.Migrations;
@@ -18,6 +18,7 @@ public class UnitOfWorksModule : IServiceModule
         services.AddScoped<IBondsRepository, BondsRepository>();
         services.AddScoped<IStocksRepository, StocksRepository>();
         services.AddScoped<ICurrenciesRepository, CurrenciesRepository>();
+        services.AddScoped<IInstrumentsRepository, InstrumentsRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IDomainEventsResolver, WealthDbContext>();

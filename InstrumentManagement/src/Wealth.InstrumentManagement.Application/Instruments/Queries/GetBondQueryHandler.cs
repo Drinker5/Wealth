@@ -1,6 +1,6 @@
 using Wealth.BuildingBlocks.Application;
+using Wealth.InstrumentManagement.Application.Repositories;
 using Wealth.InstrumentManagement.Domain.Instruments;
-using Wealth.InstrumentManagement.Domain.Repositories;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Queries;
 
