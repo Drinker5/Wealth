@@ -112,7 +112,7 @@ public class InstrumentIdProvider(
             return null;
         }
     }
-    
+
     private async Task<CurrencyId?> GetCurrencyAsync(string figi)
     {
         try
@@ -165,7 +165,7 @@ public class InstrumentIdProvider(
 
         return response;
     }
-    
+
     private async Task<CreateCurrencyResponse> CreateCurrency(string figi)
     {
         var share = await client.Instruments.CurrencyByAsync(new InstrumentRequest

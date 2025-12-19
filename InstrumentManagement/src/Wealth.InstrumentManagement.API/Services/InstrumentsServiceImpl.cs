@@ -188,6 +188,25 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
     public override async Task<GetInstrumentsResponse> GetInstrumentsByIsin(GetInstrumentsByIsinRequest request, ServerCallContext context)
     {
         var instruments = await mediator.Query(new GetInstrumentsQuery(request.Isins));
+
+        return new GetInstrumentsResponse
+        {
+            Instruments = { instruments.Select(i => i.ToProto()) }
+        };
+    }
+
+    public override async Task<GetInstrumentsResponse> UpdateInstruments(UpdateInstrumentsRequest request, ServerCallContext context)
+    {
+        var instruments = await mediator.Query(new GetInstrumentsQuery(request.Isins));
+        var notFound = request.Isins.ToHashSet();
+        foreach (var instrument in instruments)
+            notFound.Remove(instrument.Isin);
+
+        if (notFound.Count > 0)
+        {
+            await mediator.Command(new UpdateInstruments(notFound), context.CancellationToken);
+        }
+        
         return new GetInstrumentsResponse
         {
             Instruments = { instruments.Select(i => i.ToProto()) }
