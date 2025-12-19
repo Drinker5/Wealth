@@ -18,6 +18,7 @@ service InstrumentsService {
   rpc ChangeBondPrice (ChangeBondPriceRequest) returns (ChangePriceResponse);
   rpc ChangeCurrencyPrice (ChangeCurrencyPriceRequest) returns (ChangePriceResponse);
   rpc GetInstrumentsByIsin (GetInstrumentsByIsinRequest) returns (GetInstrumentsResponse);
+  rpc UpdateInstruments (UpdateInstrumentsRequest) returns (GetInstrumentsResponse);
 }
 
 // get by bondId, isin or figi
@@ -144,4 +145,8 @@ message InstrumentProto {
   string isin = 1;
   int32 id = 2;
   InstrumentTypeProto type = 3;
+}
+
+message UpdateInstrumentsRequest {
+  repeated string isins = 1;
 }

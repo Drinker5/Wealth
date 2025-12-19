@@ -22,11 +22,11 @@ internal class CqrsInvoker(IServiceProvider serviceProvider) : ICqrsInvoker
         await mediator.Send(command, token);
     }
 
-    public async Task<TResult> Query<TResult>(IQuery<TResult> query)
+    public async Task<TResult> Query<TResult>(IQuery<TResult> query, CancellationToken token = default)
     {
         using var scope = serviceProvider.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-        return await mediator.Send(query);
+        return await mediator.Send(query, token);
     }
 }

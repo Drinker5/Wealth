@@ -31,14 +31,34 @@ public sealed class TinkoffMoexComponentProvider(
 
     private async Task<List<StrategyComponent>> BuildCache(List<Instrument> instruments, CancellationToken token)
     {
-        var isins = instruments.Select(i => i.Isin).Where(i => i is not null).ToArray();
+        var isins = instruments.Select(i => i.Isin).Where(i => i is not null).ToHashSet();
         var instrumentsByIsinResponse = await instrumentsServiceClient.GetInstrumentsByIsinAsync(new GetInstrumentsByIsinRequest
         {
             Isins = { isins }
         }, cancellationToken: token);
         var instrumentsByIsin = instrumentsByIsinResponse.Instruments.ToDictionary(i => i.Isin);
-        if (isins.Length != instrumentsByIsinResponse.Instruments.Count)
-            throw new InvalidOperationException($"Did not find {string.Join(", ", isins.Where(i => instrumentsByIsin.ContainsKey(i!)))} instruments.");
+
+        if (isins.Count != instrumentsByIsinResponse.Instruments.Count)
+        {
+            foreach (var instrument in instrumentsByIsinResponse.Instruments)
+                isins.Remove(instrument.Isin);
+
+            if (isins.Count > 0)
+            {
+                var updateInstrumentsResponse = await instrumentsServiceClient.UpdateInstrumentsAsync(new UpdateInstrumentsRequest
+                {
+                    Isins = { isins }
+                }, cancellationToken: token);
+
+                if (isins.Count != updateInstrumentsResponse.Instruments.Count)
+                {
+                    foreach (var instrument in updateInstrumentsResponse.Instruments)
+                        isins.Remove(instrument.Isin);
+
+                    throw new InvalidOperationException($"Did not find {string.Join(", ", isins)} instruments.");
+                }
+            }
+        }
 
         return instruments.Select(BuildComponent).ToList();
 
@@ -83,7 +103,6 @@ public sealed class TinkoffMoexComponentProvider(
         }
     }
 
-
     private sealed class Response
     {
         public Payload? Payload { get; set; }
@@ -96,10 +115,10 @@ public sealed class TinkoffMoexComponentProvider(
 
     private sealed class Instrument
     {
-        public string? Name { get; set; }
-        public string? Ticker { get; set; }
-        public string? Isin { get; set; }
-        public string? Type { get; set; }
+        public string Name { get; set; }
+        public string Type { get; set; }
         public decimal RelativeValue { get; set; }
+        public string? Ticker { get; set; }
+        public Guid? instrumentUID { get; set; }
     }
 }
