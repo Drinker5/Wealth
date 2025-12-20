@@ -12,14 +12,13 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
     {
         try
         {
-            var stockId = await mediator.Command(new CreateStockCommand
-            {
-                Ticker = request.Ticker,
-                Name = request.Name,
-                Isin = request.Isin,
-                Figi = request.Figi,
-                LotSize = request.LotSize,
-            });
+            var stockId = await mediator.Command(new CreateStockCommand(
+                request.Ticker,
+                request.Name,
+                request.Isin,
+                request.Figi,
+                request.InstrumentId,
+                request.LotSize));
 
             return new CreateStockResponse
             {
@@ -39,6 +38,7 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
             Name = request.Name,
             Isin = request.Isin,
             Figi = request.Figi,
+            InstrumentId = request.InstrumentId
         });
 
         return new CreateBondResponse
@@ -53,6 +53,7 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
         {
             Name = request.Name,
             Figi = request.Figi,
+            InstrumentId = request.InstrumentId
         });
 
         return new CreateCurrencyResponse

@@ -1,11 +1,12 @@
+using System.Runtime.InteropServices;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Commands;
 
-public sealed record CreateBondCommand : ICommand<BondId>
-{
-    public required string Name { get; init; }
-    public required ISIN Isin { get; init; }
-    public required FIGI Figi { get; init; }
-}
+[StructLayout(LayoutKind.Auto)]
+public record struct CreateBondCommand(
+    string Name,
+    ISIN Isin,
+    FIGI Figi,
+    InstrumentId InstrumentId) : ICommand<BondId>;

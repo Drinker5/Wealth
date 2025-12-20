@@ -4,4 +4,8 @@ using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Queries;
 
-public record GetCurrency(CurrencyId Id) : IQuery<Currency?>;
+public record struct GetCurrency(CurrencyId Id) : IQuery<Currency?>;
+
+public record struct GetCurrencyByFigi(FIGI Figi) : IQuery<Currency?>;
+
+public record struct GetCurrencyByInstrumentId(InstrumentId Id) : IQuery<Currency?>;

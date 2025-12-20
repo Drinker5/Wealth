@@ -1,3 +1,4 @@
+using AutoFixture;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Repositories;
@@ -12,17 +13,10 @@ public class CreateStockCommandHandlerTests
     [Test]
     public async Task WhenHandle()
     {
+        
         var stocksRepository = A.Fake<IStocksRepository>();
-        var command = new CreateStockCommand
-        {
-            Ticker = "FAKE",
-            Isin = ISIN.Empty,
-            Figi = FIGI.Empty,
-            Name = "Foo",
-            LotSize = LotSize.One,
-        };
-
-        StockId id = 1;
+        var command = GlobalSetup.Fixture.Create<CreateStockCommand>();
+        var id = GlobalSetup.Fixture.Create<StockId>();
         A.CallTo(() => stocksRepository.CreateStock(
                 command.Ticker,
                 command.Name,

@@ -90,6 +90,7 @@ message CreateStockRequest {
   string figi = 3;
   int32 lot_size = 4;
   string ticker = 5;
+  InstrumentIdProto instrument_id = 6;
 }
 
 message CreateStockResponse {
@@ -100,11 +101,13 @@ message CreateBondRequest {
   string name = 1;
   ISINProto isin = 2;
   string figi = 3;
+  InstrumentIdProto instrument_id = 4;
 }
 
 message CreateCurrencyRequest {
   string name = 1;
   string figi = 2;
+  InstrumentIdProto instrument_id = 3;
 }
 
 message CreateBondResponse {

@@ -12,12 +12,13 @@ public class Bond(BondId id) : AggregateRoot
 
     public ISIN Isin { get; set; }
     public FIGI Figi { get; set; }
+    public InstrumentId InstrumentId { get; set; }
 
     public Money Price { get; set; } = Money.Empty;
 
     public Coupon Coupon { get; set; }
 
-    public static Bond Create(BondId bondId, string name, ISIN isin, FIGI figi)
+    public static Bond Create(BondId bondId, string name, ISIN isin, FIGI figi, InstrumentId instrumentId)
     {
         var bond = new Bond(bondId);
         bond.Apply(new BondCreated
@@ -26,6 +27,7 @@ public class Bond(BondId id) : AggregateRoot
             Name = name,
             Isin = isin,
             Figi = figi,
+            InstrumentId = instrumentId
         });
         return bond;
     }
@@ -49,6 +51,7 @@ public class Bond(BondId id) : AggregateRoot
         Name = @event.Name;
         Isin = @event.Isin;
         Figi = @event.Figi;
+        InstrumentId = @event.InstrumentId;
     }
 
     public void ChangeCoupon(Coupon coupon)

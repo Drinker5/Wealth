@@ -30,6 +30,10 @@ message ISINProto {
   string value = 1;
 }
 
+message InstrumentIdProto {
+  GuidProto value = 1;
+}
+
 enum InstrumentTypeProto {
   INSTRUMENT_TYPE_PROTO_STOCK = 0;
   INSTRUMENT_TYPE_PROTO_BOND = 1;

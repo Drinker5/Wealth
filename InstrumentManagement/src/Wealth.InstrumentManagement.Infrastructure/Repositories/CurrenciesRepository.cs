@@ -25,6 +25,13 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
         return instruments.FirstOrDefault();
     }
 
+    public async Task<Currency?> GetCurrency(InstrumentId id)
+    {
+        const string sql = "SELECT * FROM currencies WHERE instrument_id = @instrumentId";
+        var instruments = await GetCurrencies(sql, new { instrumentId = id.Value });
+        return instruments.FirstOrDefault();
+    }
+
     public async Task DeleteCurrency(CurrencyId instrumentId)
     {
         const string sql = "DELETE FROM currencies WHERE id = @Id";

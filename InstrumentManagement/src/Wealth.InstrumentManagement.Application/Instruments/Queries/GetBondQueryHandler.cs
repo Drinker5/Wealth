@@ -4,28 +4,31 @@ using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Queries;
 
-public class GetBondQueryHandler(IBondsRepository repository) : 
+public class GetBondQueryHandler(IBondsRepository repository) :
     IQueryHandler<GetBond, Bond?>,
     IQueryHandler<GetBondByIsin, Bond?>,
     IQueryHandler<GetBondByFigi, Bond?>,
+    IQueryHandler<GetBondByInstrumentId, Bond?>,
     IQueryHandler<GetBondsQuery, IReadOnlyCollection<Bond>>
 {
-    public async Task<Bond?> Handle(GetBond request, CancellationToken cancellationToken)
+    public Task<Bond?> Handle(GetBond request, CancellationToken cancellationToken)
     {
-        var instrument = await repository.GetBond(request.Id);
-        return instrument;
+        return repository.GetBond(request.Id);
     }
 
-    public async Task<Bond?> Handle(GetBondByIsin request, CancellationToken cancellationToken)
+    public Task<Bond?> Handle(GetBondByIsin request, CancellationToken cancellationToken)
     {
-        var instrument = await repository.GetBond(request.Isin);
-        return instrument;
+        return repository.GetBond(request.Isin);
     }
 
-    public async Task<Bond?> Handle(GetBondByFigi request, CancellationToken cancellationToken)
+    public Task<Bond?> Handle(GetBondByFigi request, CancellationToken cancellationToken)
     {
-        var instrument = await repository.GetBond(request.Figi);
-        return instrument;
+        return repository.GetBond(request.Figi);
+    }
+
+    public Task<Bond?> Handle(GetBondByInstrumentId request, CancellationToken cancellationToken)
+    {
+        return repository.GetBond(request.Id);
     }
 
     public async Task<IReadOnlyCollection<Bond>> Handle(GetBondsQuery request, CancellationToken cancellationToken)

@@ -11,17 +11,18 @@ public class BondTests
     readonly string name = "foo";
     readonly ISIN isin = "barbarbarbar";
     readonly FIGI figi = "arbarbarbarb";
+    readonly InstrumentId instrumentId = new Guid("2E7B63F8-EE1F-4007-850A-F52194B34476");
     readonly Coupon coupon = new Coupon(CurrencyCode.Rub, Decimal.One);
 
-    private Bond CreateBondInstrument(string name, ISIN isin, FIGI figi)
+    private Bond CreateBondInstrument(string name, ISIN isin, FIGI figi, InstrumentId instrumentId)
     {
-        return Bond.Create(3, name, isin, figi);
+        return Bond.Create(3, name, isin, figi, instrumentId);
     }
 
     [Test]
     public void WhenCreate()
     {
-        var bond = CreateBondInstrument(name, isin, figi);
+        var bond = CreateBondInstrument(name, isin, figi, instrumentId);
 
         var @event = bond.HasEvent<BondCreated>();
         using (Assert.EnterMultipleScope())
@@ -39,7 +40,7 @@ public class BondTests
     [Test]
     public void WhenPriceChanged()
     {
-        var bond = CreateBondInstrument(name, isin, figi);
+        var bond = CreateBondInstrument(name, isin, figi, instrumentId);
         var money = new Money(CurrencyCode.Eur, 23.3m);
 
         bond.ChangePrice(money);
@@ -56,7 +57,7 @@ public class BondTests
     [Test]
     public void CouponChanged()
     {
-        var bond = CreateBondInstrument(name, isin, figi);
+        var bond = CreateBondInstrument(name, isin, figi, instrumentId);
 
         bond.ChangeCoupon(coupon);
 

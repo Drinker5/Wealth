@@ -95,6 +95,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
             Name = "Test",
             Isin = "100000000001",
             Figi = "F00000000001",
+            InstrumentId = "32026DAF-31FF-4000-A8DC-68A0E1C609F2"
         };
 
         var createStockResponse = await grpcClient.CreateStockAsync(createStockRequest);
@@ -125,6 +126,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
             Name = "Test",
             Isin = "100000000002",
             Figi = "F00000000002",
+            InstrumentId = "F2752167-FDE5-4036-9799-F3F8C1F5454B",
         };
 
         var createBondResponse = await grpcClient.CreateBondAsync(createBondRequest);
@@ -157,6 +159,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
         {
             Name = "Test",
             Figi = "F00000000003",
+            InstrumentId = "4DFB4FD6-7918-46B6-85ED-994154925001"
         };
 
         var createCurrencyResponse = await grpcClient.CreateCurrencyAsync(createCurrencyRequest);
@@ -189,12 +192,14 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
             Name = "Test",
             Isin = "200000000001",
             Figi = "F20000000001",
+            InstrumentId = "F8475E09-A5BA-4119-BACD-83862FED00AC"
         };
         var createBondRequest = new CreateBondRequest
         {
             Name = "Test",
             Isin = "200000000002",
             Figi = "F20000000002",
+            InstrumentId = "6CAE7A9F-F466-4C4A-A15E-6D1E7AC5CF4A"
         };
 
         await grpcClient.CreateStockAsync(createStockRequest);

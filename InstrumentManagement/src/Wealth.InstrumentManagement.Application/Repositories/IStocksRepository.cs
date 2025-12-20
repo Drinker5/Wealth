@@ -9,6 +9,8 @@ public interface IStocksRepository
     Task<Stock?> GetStock(StockId id);
     Task<Stock?> GetStock(ISIN isin);
     Task<Stock?> GetStock(FIGI figi);
+    Task<Stock?> GetStock(InstrumentId id);
+    
     Task DeleteStock(StockId id);
     Task ChangePrice(StockId id, Money price);
     Task ChangeDividend(StockId id, Dividend dividend);

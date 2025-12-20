@@ -5,8 +5,9 @@ namespace Wealth.InstrumentManagement.Domain.Instruments.Events;
 
 public record BondCreated : DomainEvent
 {
-    public BondId BondId { get; set; }
-    public string Name { get; set; }
-    public ISIN Isin { get; set; }
-    public FIGI Figi { get; set; }
+    public required BondId BondId { get; init; }
+    public required string Name { get; init; }
+    public required ISIN Isin { get; init; }
+    public required FIGI Figi { get; init; }
+    public required InstrumentId InstrumentId { get; init; }
 }
