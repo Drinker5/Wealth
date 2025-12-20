@@ -4,17 +4,10 @@ using Wealth.InstrumentManagement.Application.Repositories;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Commands;
 
-public class CreateBondCommandHandler : ICommandHandler<CreateBondCommand, BondId>
+public class CreateBondCommandHandler(IBondsRepository repository) : ICommandHandler<CreateBondCommand, BondId>
 {
-    private readonly IBondsRepository repository;
-
-    public CreateBondCommandHandler(IBondsRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public Task<BondId> Handle(CreateBondCommand request, CancellationToken cancellationToken)
     {
-        return repository.CreateBond(request.Name, request.Isin, request.Figi, cancellationToken);
+        return repository.CreateBond(request, cancellationToken);
     }
 }

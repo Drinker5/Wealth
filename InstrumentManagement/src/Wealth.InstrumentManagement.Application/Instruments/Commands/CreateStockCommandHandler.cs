@@ -4,8 +4,7 @@ using Wealth.InstrumentManagement.Application.Repositories;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Commands;
 
-public class CreateStockCommandHandler(IStocksRepository repository)
-    : ICommandHandler<CreateStockCommand, StockId>
+public class CreateStockCommandHandler(IStocksRepository repository) : ICommandHandler<CreateStockCommand, StockId>
 {
     public Task<StockId> Handle(CreateStockCommand request, CancellationToken cancellationToken)
     {

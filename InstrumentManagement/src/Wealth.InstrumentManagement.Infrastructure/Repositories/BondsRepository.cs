@@ -1,6 +1,7 @@
 using System.Data;
 using Dapper;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Repositories;
 using Wealth.InstrumentManagement.Domain.Instruments;
 using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
@@ -32,6 +33,13 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
         return instruments.FirstOrDefault();
     }
 
+    public async Task<Bond?> GetBond(InstrumentId id)
+    {
+        const string sql = """SELECT * FROM "Bonds" WHERE instrument_id = @instrumentId""";
+        var instruments = await GetBonds(sql, new { instrumentId = id.Value });
+        return instruments.FirstOrDefault();
+    }
+
     public async Task DeleteBond(BondId instrumentId)
     {
         const string sql = """DELETE FROM "Bonds" WHERE "Id" = @Id""";
@@ -59,16 +67,15 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
         dbContext.AddEvents(bond);
     }
 
-    public async Task<BondId> CreateBond(string name, ISIN isin, FIGI figi, CancellationToken token = default)
+    public async Task<BondId> CreateBond(CreateBondCommand command, CancellationToken token = default)
     {
         const string sql = """SELECT nextval('"BondsHiLo"')""";
-        var command = new CommandDefinition(
+
+        var nextId = await connection.ExecuteScalarAsync<int>(new CommandDefinition(
             commandText: sql,
-            cancellationToken: token);
+            cancellationToken: token));
 
-        var nextId = await connection.ExecuteScalarAsync<int>(command);
-
-        var bondInstrument = Bond.Create(new BondId(nextId), name, isin, figi);
+        var bondInstrument = Bond.Create(new BondId(nextId), command.Name, command.Isin, command.Figi, command.InstrumentId);
         return await CreateBond(bondInstrument);
     }
 

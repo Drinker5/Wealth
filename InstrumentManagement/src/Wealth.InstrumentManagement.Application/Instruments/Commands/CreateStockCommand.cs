@@ -4,11 +4,10 @@ using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Commands;
 
-public sealed record CreateStockCommand : ICommand<StockId>
-{
-    public required string Ticker { get; init; }
-    public required string Name { get; init; }
-    public required ISIN Isin { get; init; }
-    public required FIGI Figi { get; init; }
-    public required LotSize LotSize { get; init; }
-}
+public sealed record CreateStockCommand(
+    string Ticker,
+    string Name,
+    ISIN Isin,
+    FIGI Figi,
+    InstrumentId InstrumentId,
+    LotSize LotSize) : ICommand<StockId>;

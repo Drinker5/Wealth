@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Repositories;
 using Wealth.InstrumentManagement.Domain.Instruments;
 
@@ -32,11 +33,23 @@ public class FirstSeed(
 
     private async Task CreateBonds(CancellationToken token)
     {
-        var bond1 = await bondsRepository.CreateBond("test-bond-1", new ISIN("000000000001"), new FIGI("000000000001"), token);
+        var bond1 = await bondsRepository.CreateBond(new CreateBondCommand
+        {
+            Name = "test-bond-1",
+            Isin = new ISIN("000000000001"),
+            Figi = new FIGI("000000000001"),
+            InstrumentId = new Guid("00000000-0000-0000-0000-000000000001"),
+        }, token);
         await bondsRepository.ChangePrice(bond1, new Money(CurrencyCode.Rub, 12.34m));
         await bondsRepository.ChangeCoupon(bond1, new Coupon(CurrencyCode.Rub, 33m));
 
-        var bond2 = await bondsRepository.CreateBond("test-bond-2", new ISIN("000000000002"), new FIGI("000000000002"), token);
+        var bond2 = await bondsRepository.CreateBond(new CreateBondCommand
+        {
+            Name = "test-bond-2",
+            Isin = new ISIN("000000000002"),
+            Figi = new FIGI("000000000002"),
+            InstrumentId = new Guid("00000000-0000-0000-0000-000000000002"),
+        }, token);
         await bondsRepository.ChangePrice(bond2, new Money(CurrencyCode.Usd, 2.12m));
         await bondsRepository.ChangeCoupon(bond2, new Coupon(CurrencyCode.Rub, 44m));
     }
@@ -51,7 +64,7 @@ public class FirstSeed(
         await stocksRepository.ChangePrice(stock2, new Money(CurrencyCode.Usd, 222m));
         await stocksRepository.ChangeDividend(stock2, new Dividend(CurrencyCode.Usd, 333m));
     }
-    
+
     private async Task CreateCurrencies(CancellationToken token)
     {
         var currency1 = await currenciesRepository.CreateCurrency("test-currency-1", new FIGI("000000000006"), token);

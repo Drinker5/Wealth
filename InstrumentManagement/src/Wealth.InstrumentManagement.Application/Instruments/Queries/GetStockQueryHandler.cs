@@ -8,24 +8,27 @@ public class GetStockQueryHandler(IStocksRepository repository) :
     IQueryHandler<GetStock, Stock?>,
     IQueryHandler<GetStockByIsin, Stock?>,
     IQueryHandler<GetStockByFigi, Stock?>,
+    IQueryHandler<GetStockByInstrumentId, Stock?>,
     IQueryHandler<GetStocksQuery, IReadOnlyCollection<Stock>>
 {
-    public async Task<Stock?> Handle(GetStock request, CancellationToken cancellationToken)
+    public Task<Stock?> Handle(GetStock request, CancellationToken cancellationToken)
     {
-        var instrument = await repository.GetStock(request.Id);
-        return instrument;
+        return repository.GetStock(request.Id);
     }
 
-    public async Task<Stock?> Handle(GetStockByIsin request, CancellationToken cancellationToken)
+    public Task<Stock?> Handle(GetStockByIsin request, CancellationToken cancellationToken)
     {
-        var instrument = await repository.GetStock(request.Isin);
-        return instrument;
+        return repository.GetStock(request.Isin);
     }
 
-    public async Task<Stock?> Handle(GetStockByFigi request, CancellationToken cancellationToken)
+    public Task<Stock?> Handle(GetStockByFigi request, CancellationToken cancellationToken)
     {
-        var instrument = await repository.GetStock(request.Figi);
-        return instrument;
+        return repository.GetStock(request.Figi);
+    }
+
+    public Task<Stock?> Handle(GetStockByInstrumentId request, CancellationToken cancellationToken)
+    {
+        return repository.GetStock(request.Id);
     }
 
     public async Task<IReadOnlyCollection<Stock>> Handle(GetStocksQuery request, CancellationToken cancellationToken)

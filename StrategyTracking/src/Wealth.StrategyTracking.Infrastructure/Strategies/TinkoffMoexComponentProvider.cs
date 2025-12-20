@@ -118,6 +118,7 @@ public sealed class TinkoffMoexComponentProvider(
         public string Name { get; set; }
         public string Type { get; set; }
         public decimal RelativeValue { get; set; }
+        public string? Isin { get; set; }
         public string? Ticker { get; set; }
         public Guid? instrumentUID { get; set; }
     }

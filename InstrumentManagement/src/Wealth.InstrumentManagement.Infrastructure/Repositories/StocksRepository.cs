@@ -30,6 +30,13 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         var instruments = await GetStocks(sql, new { figi = figi.Value });
         return instruments.FirstOrDefault();
     }
+    
+    public async Task<Stock?> GetStock(InstrumentId id)
+    {
+        const string sql = """SELECT * FROM "Stocks" WHERE instrument_id = @instrumentId""";
+        var instruments = await GetStocks(sql, new { instrumentId = id.Value });
+        return instruments.FirstOrDefault();
+    }
 
     public async Task DeleteStock(StockId id)
     {
