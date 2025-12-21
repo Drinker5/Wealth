@@ -12,17 +12,18 @@ public class StockTests
     readonly string name = "foo";
     readonly ISIN isin = "barbarbarbar";
     readonly FIGI figi = "arbarbarbarb";
+    readonly InstrumentId instrumentId = new Guid("FCFF748D-C4E9-4388-B9B0-6164AB55E428");
     readonly Dividend dividend = new Dividend(CurrencyCode.Rub, Decimal.One);
 
-    private Stock CreateStockInstrument(string index, string name, ISIN isin, FIGI figi)
+    private Stock CreateStockInstrument()
     {
-        return Stock.Create(3, index, name, isin, figi);
+        return Stock.Create(3, index, name, isin, figi, instrumentId);
     }
 
     [Test]
     public void WhenCreate()
     {
-        var stock = CreateStockInstrument(index, name, isin, figi);
+        var stock = CreateStockInstrument();
 
         var @event = stock.HasEvent<StockCreated>();
         using (Assert.EnterMultipleScope())
@@ -31,9 +32,11 @@ public class StockTests
             Assert.That(@event.Index, Is.EqualTo(index));
             Assert.That(@event.Name, Is.EqualTo(name));
             Assert.That(@event.Isin, Is.EqualTo(isin));
+            Assert.That(@event.InstrumentId, Is.EqualTo(instrumentId));
             Assert.That(stock.Id, Is.Not.Zero);
             Assert.That(stock.Name, Is.EqualTo(name));
             Assert.That(stock.Isin, Is.EqualTo(isin));
+            Assert.That(stock.InstrumentId, Is.EqualTo(instrumentId));
             Assert.That(stock.Dividend, Is.EqualTo(Dividend.Empty));
             Assert.That(stock.LotSize.Value, Is.EqualTo(1));
         }
@@ -42,7 +45,7 @@ public class StockTests
     [Test]
     public void WhenPriceChanged()
     {
-        var stock = CreateStockInstrument(index, name, isin, figi);
+        var stock = CreateStockInstrument();
         var money = new Money(CurrencyCode.Eur, 23.3m);
 
         stock.ChangePrice(money);
@@ -59,7 +62,7 @@ public class StockTests
     [Test]
     public void WhenDividendChanged()
     {
-        var stock = CreateStockInstrument(index, name, isin, figi);
+        var stock = CreateStockInstrument();
 
         stock.ChangeDividend(dividend);
 
@@ -75,7 +78,7 @@ public class StockTests
     [Test]
     public void WhenLotSizeChanged()
     {
-        var instrument = CreateStockInstrument(index, name, isin, figi);
+        var instrument = CreateStockInstrument();
 
         instrument.ChangeLotSize(10);
 
@@ -91,7 +94,7 @@ public class StockTests
     [Test]
     public void WhenIndexChanged()
     {
-        var instrument = CreateStockInstrument(index, name, isin, figi);
+        var instrument = CreateStockInstrument();
 
         instrument.ChangeTicker("qwe");
 

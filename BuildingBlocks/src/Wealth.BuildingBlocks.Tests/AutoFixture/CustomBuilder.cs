@@ -1,19 +1,19 @@
 using AutoFixture.Kernel;
 using Wealth.BuildingBlocks.Domain.Common;
 
-namespace Wealth.InstrumentManagement.Application.Tests;
+namespace Wealth.BuildingBlocks.Tests.AutoFixture;
 
 public class CustomBuilder : ISpecimenBuilder
 {
     private const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    
+    private readonly Random random = new Random();
+
     public object Create(object request, ISpecimenContext context)
     {
         if (request is Type type)
         {
             if (type == typeof(ISIN))
             {
-                var random = new Random();
                 var isinValue = new string(Enumerable.Repeat(chars, 12)
                     .Select(s => s[random.Next(s.Length)]).ToArray());
                 return new ISIN(isinValue);
@@ -21,10 +21,16 @@ public class CustomBuilder : ISpecimenBuilder
 
             if (type == typeof(FIGI))
             {
-                var random = new Random();
                 var figiValue = new string(Enumerable.Repeat(chars, 12)
                     .Select(s => s[random.Next(s.Length)]).ToArray());
                 return new FIGI(figiValue);
+            }
+
+            if (type == typeof(Ticker))
+            {
+                var tickerValue = new string(Enumerable.Repeat(chars, Ticker.MaxLength)
+                    .Select(s => s[random.Next(s.Length)]).ToArray());
+                return new Ticker(tickerValue);
             }
         }
 

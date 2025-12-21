@@ -1,4 +1,5 @@
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.Application.Repositories;
@@ -11,5 +12,5 @@ public interface ICurrenciesRepository
     Task<Currency?> GetCurrency(InstrumentId id);
     Task DeleteCurrency(CurrencyId id);
     Task ChangePrice(CurrencyId id, Money price);
-    Task<CurrencyId> CreateCurrency(string name, FIGI figi, CancellationToken token);
+    Task<CurrencyId> CreateCurrency(CreateCurrencyCommand command, CancellationToken token);
 }

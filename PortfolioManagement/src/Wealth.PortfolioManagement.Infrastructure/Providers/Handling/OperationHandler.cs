@@ -12,6 +12,7 @@ public sealed class OperationHandler(
     ICqrsInvoker mediator,
     IOptions<TBankOperationProviderOptions> options) : IMessageHandler<Tinkoff.InvestApi.V1.Operation>
 {
+    // TODO BATCH
     public async Task Handle(Tinkoff.InvestApi.V1.Operation operation, CancellationToken token)
     {
         var portfolioId = await portfolioIdProvider.GetPortfolioIdByAccountId(options.Value.AccountId, token);

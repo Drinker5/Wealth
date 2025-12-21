@@ -8,12 +8,6 @@ public class CreateStockCommandHandler(IStocksRepository repository) : ICommandH
 {
     public Task<StockId> Handle(CreateStockCommand request, CancellationToken cancellationToken)
     {
-        return repository.CreateStock(
-            request.Ticker,
-            request.Name,
-            request.Isin,
-            request.Figi,
-            request.LotSize,
-            cancellationToken);
+        return repository.CreateStock(request, cancellationToken);
     }
 }

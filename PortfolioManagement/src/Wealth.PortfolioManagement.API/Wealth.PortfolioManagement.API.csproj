@@ -7,7 +7,4 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.API\Wealth.BuildingBlocks.API.csproj" />
   <ProjectReference Include="..\Wealth.PortfolioManagement.Infrastructure\Wealth.PortfolioManagement.Infrastructure.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Remove="appsettings.Secrets.json" />
-  </ItemGroup>
 </Project>

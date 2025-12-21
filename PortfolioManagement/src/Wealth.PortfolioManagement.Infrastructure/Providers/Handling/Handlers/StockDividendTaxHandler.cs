@@ -21,7 +21,7 @@ public sealed class StockDividendTaxHandler(IInstrumentIdProvider instrumentIdPr
             Date = operation.Date.ToDateTimeOffset(),
             Amount = operation.Payment.ToMoney(),
             PortfolioId = portfolioId,
-            StockId = await instrumentIdProvider.GetStockIdByFigi(operation.Figi),
+            StockId = await instrumentIdProvider.GetStockId(operation.InstrumentUid),
         };
     }
 }

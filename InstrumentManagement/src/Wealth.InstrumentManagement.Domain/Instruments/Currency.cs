@@ -13,11 +13,13 @@ public class Currency(CurrencyId id) : AggregateRoot
     public FIGI Figi { get; set; }
 
     public Money Price { get; set; } = Money.Empty;
+    
+    public InstrumentId InstrumentId { get; set; }
 
-    public static Currency Create(CurrencyId currencyId, string name, FIGI figi)
+    public static Currency Create(CurrencyId currencyId, string name, FIGI figi, InstrumentId instrumentId)
     {
         var currency = new Currency(currencyId);
-        currency.Apply(new CurrencyCreated(currencyId, name, figi));
+        currency.Apply(new CurrencyCreated(currencyId, name, figi, instrumentId));
         return currency;
     }
 
@@ -34,6 +36,7 @@ public class Currency(CurrencyId id) : AggregateRoot
         Id = @event.CurrencyId;
         Name = @event.Name;
         Figi = @event.Figi;
+        InstrumentId = @event.InstrumentId;
     }
 
     private void When(CurrencyPriceChanged @event)

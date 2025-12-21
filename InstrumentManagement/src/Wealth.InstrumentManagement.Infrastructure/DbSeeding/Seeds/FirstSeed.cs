@@ -56,21 +56,43 @@ public class FirstSeed(
 
     private async Task CreateStocks(CancellationToken token)
     {
-        var stock1 = await stocksRepository.CreateStock("IDX1", "test-stock-1", new ISIN("000000000003"), new FIGI("000000000003"), 10, token);
+        var stock1 = await stocksRepository.CreateStock(new CreateStockCommand(
+                "IDX1",
+                "test-stock-1",
+                new ISIN("000000000003"),
+                new FIGI("000000000003"),
+                new Guid("00000000-0000-0000-0000-000000000003"),
+                10),
+            token);
         await stocksRepository.ChangePrice(stock1, new Money(CurrencyCode.Rub, 111m));
         await stocksRepository.ChangeDividend(stock1, new Dividend(CurrencyCode.Usd, 222m));
 
-        var stock2 = await stocksRepository.CreateStock("IDX2", "test-stock-2", new ISIN("000000000004"), new FIGI("000000000004"), LotSize.One, token);
+        var stock2 = await stocksRepository.CreateStock(new CreateStockCommand(
+                "IDX2",
+                "test-stock-2",
+                new ISIN("000000000004"),
+                new FIGI("000000000004"),
+                new Guid("00000000-0000-0000-0000-000000000004"),
+                LotSize.One),
+            token);
         await stocksRepository.ChangePrice(stock2, new Money(CurrencyCode.Usd, 222m));
         await stocksRepository.ChangeDividend(stock2, new Dividend(CurrencyCode.Usd, 333m));
     }
 
     private async Task CreateCurrencies(CancellationToken token)
     {
-        var currency1 = await currenciesRepository.CreateCurrency("test-currency-1", new FIGI("000000000006"), token);
+        var currency1 = await currenciesRepository.CreateCurrency(new CreateCurrencyCommand(
+                "test-currency-1",
+                new FIGI("000000000006"),
+                new Guid("00000000-0000-0000-0000-000000000006")),
+            token);
         await currenciesRepository.ChangePrice(currency1, new Money(CurrencyCode.Rub, 123m));
 
-        var currency2 = await currenciesRepository.CreateCurrency("test-currency-2", new FIGI("000000000007"), token);
+        var currency2 = await currenciesRepository.CreateCurrency(new CreateCurrencyCommand(
+                "test-currency-2",
+                new FIGI("000000000007"),
+                new Guid("00000000-0000-0000-0000-000000000007")),
+            token);
         await currenciesRepository.ChangePrice(currency2, new Money(CurrencyCode.Usd, 234m));
     }
 }

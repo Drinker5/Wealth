@@ -1,6 +1,7 @@
 using System.Data;
 using Dapper;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Repositories;
 using Wealth.InstrumentManagement.Domain.Instruments;
 using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
@@ -59,16 +60,14 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
         dbContext.AddEvents(currency);
     }
 
-    public async Task<CurrencyId> CreateCurrency(string name, FIGI figi, CancellationToken token = default)
+    public async Task<CurrencyId> CreateCurrency(CreateCurrencyCommand command, CancellationToken token = default)
     {
         const string sql = "SELECT nextval('currencies_hilo')";
-        var command = new CommandDefinition(
+        var nextId = await connection.ExecuteScalarAsync<int>(new CommandDefinition(
             commandText: sql,
-            cancellationToken: token);
+            cancellationToken: token));
 
-        var nextId = await connection.ExecuteScalarAsync<int>(command);
-
-        var currencyInstrument = Currency.Create(new CurrencyId(nextId), name, figi);
+        var currencyInstrument = Currency.Create(new CurrencyId(nextId), command.Name, command.Figi, command.InstrumentId);
         return await CreateCurrency(currencyInstrument);
     }
 
@@ -81,14 +80,15 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
     private async Task<CurrencyId> CreateCurrency(Currency currency)
     {
         const string sql = """
-                           INSERT INTO currencies (id, name, figi) 
-                           VALUES (@Id, @Name, @FIGI)
+                           INSERT INTO currencies (id, name, figi, instrument_id) 
+                           VALUES (@Id, @Name, @FIGI, @InstrumentId)
                            """;
         await connection.ExecuteAsync(sql, new
         {
             Id = currency.Id.Value,
             Name = currency.Name,
             FIGI = currency.Figi.Value,
+            InstrumentId = currency.InstrumentId.Value
         });
         dbContext.AddEvents(currency);
 
@@ -102,6 +102,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
         FIGI,
         Price_Currency,
         Price_Amount,
+        InstrumentId
     }
 
     private async Task<IReadOnlyCollection<Currency>> GetCurrencies(string sql, object? param = null)
@@ -115,6 +116,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
 
             currency.Name = reader.GetString((int)Columns.Name);
             currency.Figi = reader.GetString((int)Columns.FIGI);
+            currency.InstrumentId = reader.GetGuid((int)Columns.InstrumentId);
             if (!reader.IsDBNull((int)Columns.Price_Currency))
             {
                 currency.Price = new Money(

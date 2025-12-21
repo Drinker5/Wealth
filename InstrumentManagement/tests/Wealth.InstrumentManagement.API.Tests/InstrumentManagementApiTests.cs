@@ -1,21 +1,27 @@
 ﻿using System.Text.Json;
+using AutoFixture;
 using Grpc.Net.Client;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Wealth.BuildingBlocks;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Xunit;
 using Assert = Xunit.Assert;
 
 namespace Wealth.InstrumentManagement.API.Tests;
 
-public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManagementApiFixture>
+public sealed class InstrumentManagementApiTests :
+    IClassFixture<InstrumentManagementApiFixture>,
+    IClassFixture<AutoFixtureInitializer>
 {
+    private readonly IFixture fixture;
     private readonly JsonSerializerOptions jsonSerializerOptions = new(JsonSerializerDefaults.Web);
     private readonly InstrumentsService.InstrumentsServiceClient grpcClient;
 
-    public InstrumentManagementApiTests(InstrumentManagementApiFixture fixture)
+    public InstrumentManagementApiTests(InstrumentManagementApiFixture apiFixture, AutoFixtureInitializer fixtureInitializer)
     {
-        WebApplicationFactory<Program> webApplicationFactory = fixture;
+        fixture = fixtureInitializer.fixture;
+        WebApplicationFactory<Program> webApplicationFactory = apiFixture;
         var httpClient = webApplicationFactory.CreateDefaultClient();
         var channel = GrpcChannel.ForAddress(
             httpClient.BaseAddress!,
@@ -27,65 +33,70 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
         grpcClient = new InstrumentsService.InstrumentsServiceClient(channel);
     }
 
-    [Fact]
-    public async Task GetBondFromSeeding()
+    [Xunit.Theory]
+    [MemberData(nameof(GetBondRequests))]
+    public async Task GetBondFromSeeding(GetBondRequest request)
     {
-        var instrumentId = new BondIdProto
-        {
-            Id = 1,
-        };
-
-        var instrument = await grpcClient.GetBondAsync(new GetBondRequest
-        {
-            BondId = instrumentId
-        });
+        var instrument = await grpcClient.GetBondAsync(request);
 
         Assert.Equal(1, instrument.BondId.Id);
         Assert.Equal<decimal>(12.34m, instrument.Price.Amount);
+        Assert.Equal(new Guid("00000000-0000-0000-0000-000000000001"), instrument.InstrumentId);
         Assert.Equal(CurrencyCodeProto.Rub, instrument.Price.Currency);
         Assert.Equal("test-bond-1", instrument.Name);
     }
 
-    [Fact]
-    public async Task GetStockFromSeeding()
+    public static TheoryData<GetBondRequest> GetBondRequests =>
+    [
+        new GetBondRequest { BondId = new BondIdProto { Id = 1 } },
+        new GetBondRequest { Figi = "000000000001" },
+        new GetBondRequest { Isin = "000000000001" },
+        new GetBondRequest { InstrumentId = "00000000-0000-0000-0000-000000000001" }
+    ];
+
+    [Xunit.Theory]
+    [MemberData(nameof(GetStockRequest))]
+    public async Task GetStockFromSeeding(GetStockRequest request)
     {
-        var instrumentId = new StockIdProto
-        {
-            Id = 1,
-        };
+        var instrument = await grpcClient.GetStockAsync(request);
 
-        var response = await grpcClient.GetStockAsync(new GetStockRequest
-        {
-            StockId = instrumentId
-        });
-
-        Assert.Equal(1, response.StockInfo.StockId.Id);
-        Assert.Equal(10, response.StockInfo.LotSize);
-        Assert.Equal<decimal>(111m, response.StockInfo.Price.Amount);
-        Assert.Equal(CurrencyCodeProto.Rub, response.StockInfo.Price.Currency);
-        Assert.Equal("test-stock-1", response.StockInfo.Name);
-        Assert.Equal<decimal>(222m, response.StockInfo.DividendPerYear.Amount);
-        Assert.Equal(CurrencyCodeProto.Usd, response.StockInfo.DividendPerYear.Currency);
+        Assert.Equal(1, instrument.StockInfo.StockId.Id);
+        Assert.Equal(10, instrument.StockInfo.LotSize);
+        Assert.Equal(new Guid("00000000-0000-0000-0000-000000000003"), instrument.StockInfo.InstrumentId);
+        Assert.Equal<decimal>(111m, instrument.StockInfo.Price.Amount);
+        Assert.Equal(CurrencyCodeProto.Rub, instrument.StockInfo.Price.Currency);
+        Assert.Equal("test-stock-1", instrument.StockInfo.Name);
+        Assert.Equal<decimal>(222m, instrument.StockInfo.DividendPerYear.Amount);
+        Assert.Equal(CurrencyCodeProto.Usd, instrument.StockInfo.DividendPerYear.Currency);
     }
 
-    [Fact]
-    public async Task GetCurrencyFromSeeding()
-    {
-        var instrumentId = new CurrencyIdProto
-        {
-            Id = 1,
-        };
+    public static TheoryData<GetStockRequest> GetStockRequest =>
+    [
+        new GetStockRequest { StockId = new StockIdProto { Id = 1 } },
+        new GetStockRequest { Figi = "000000000003" },
+        new GetStockRequest { Isin = "000000000003" },
+        new GetStockRequest { InstrumentId = "00000000-0000-0000-0000-000000000003" }
+    ];
 
-        var instrument = await grpcClient.GetCurrencyAsync(new GetCurrencyRequest
-        {
-            CurrencyId = instrumentId
-        });
+    [Xunit.Theory]
+    [MemberData(nameof(GetCurrencyRequests))]
+    public async Task GetCurrencyFromSeeding(GetCurrencyRequest request)
+    {
+        var instrument = await grpcClient.GetCurrencyAsync(request);
 
         Assert.Equal(1, instrument.CurrencyId.Id);
         Assert.Equal<decimal>(123m, instrument.Price.Amount);
+        Assert.Equal(new Guid("00000000-0000-0000-0000-000000000006"), instrument.InstrumentId);
         Assert.Equal(CurrencyCodeProto.Rub, instrument.Price.Currency);
         Assert.Equal("test-currency-1", instrument.Name);
     }
+
+    public static TheoryData<GetCurrencyRequest> GetCurrencyRequests =>
+    [
+        new GetCurrencyRequest { CurrencyId = new CurrencyIdProto { Id = 1 } },
+        new GetCurrencyRequest { Figi = "000000000006" },
+        new GetCurrencyRequest { InstrumentId = "00000000-0000-0000-0000-000000000006" }
+    ];
 
     [Fact]
     public async Task WhenCreateStock()
@@ -95,6 +106,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
             Name = "Test",
             Isin = "100000000001",
             Figi = "F00000000001",
+            Ticker = "FOO",
             InstrumentId = "32026DAF-31FF-4000-A8DC-68A0E1C609F2"
         };
 
@@ -108,6 +120,8 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
         Assert.Equal(createStockRequest.Name, instrument.StockInfo.Name);
         Assert.Equal(createStockRequest.Isin, instrument.StockInfo.Isin);
         Assert.Equal(createStockRequest.Figi, instrument.StockInfo.Figi);
+        Assert.Equal(createStockRequest.Ticker, instrument.StockInfo.Ticker);
+        Assert.Equal(createStockRequest.InstrumentId, instrument.StockInfo.InstrumentId);
         Assert.Equal(0, instrument.StockInfo.Price.Amount);
         var newPrice = new Money(CurrencyCode.Rub, 123);
 
@@ -142,6 +156,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
         Assert.Equal(createBondRequest.Name, instrument.Name);
         Assert.Equal(createBondRequest.Isin, instrument.Isin);
         Assert.Equal(createBondRequest.Figi, instrument.Figi);
+        Assert.Equal(createBondRequest.InstrumentId, instrument.InstrumentId);
         Assert.Equal(0, instrument.Price.Amount);
         var newPrice = new Money(CurrencyCode.Rub, 123);
 
@@ -174,6 +189,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
 
         Assert.Equal(createCurrencyRequest.Name, instrument.Name);
         Assert.Equal(createCurrencyRequest.Figi, instrument.Figi);
+        Assert.Equal(createCurrencyRequest.InstrumentId, instrument.InstrumentId);
         Assert.Equal(0, instrument.Price.Amount);
         var newPrice = new Money(CurrencyCode.Rub, 123);
 
@@ -192,6 +208,7 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
             Name = "Test",
             Isin = "200000000001",
             Figi = "F20000000001",
+            Ticker = "FOO",
             InstrumentId = "F8475E09-A5BA-4119-BACD-83862FED00AC"
         };
         var createBondRequest = new CreateBondRequest
@@ -204,24 +221,60 @@ public sealed class InstrumentManagementApiTests : IClassFixture<InstrumentManag
 
         await grpcClient.CreateStockAsync(createStockRequest);
         await grpcClient.CreateBondAsync(createBondRequest);
-        var req = new GetInstrumentsByIsinRequest
+        var req = new GetInstrumentsRequest
         {
-            Isins = { createStockRequest.Isin.Value, createBondRequest.Isin.Value }
+            InstrumentIds = { createStockRequest.InstrumentId, createBondRequest.InstrumentId }
         };
 
         // Act
-        var response = await grpcClient.GetInstrumentsByIsinAsync(req);
+        var response = await grpcClient.GetInstrumentsAsync(req);
 
         Assert.Collection(response.Instruments,
             s =>
             {
-                Assert.Equal(createStockRequest.Isin, s.Isin);
+                Assert.Equal(createStockRequest.InstrumentId, s.InstrumentId);
                 Assert.Equal(InstrumentTypeProto.Stock, s.Type);
             },
             b =>
             {
-                Assert.Equal(createBondRequest.Isin, b.Isin);
+                Assert.Equal(createBondRequest.InstrumentId, b.InstrumentId);
                 Assert.Equal(InstrumentTypeProto.Bond, b.Type);
+            });
+    }
+
+    [Fact]
+    public async Task ImportInstruments_AsExpected()
+    {
+        var instrumentIds = fixture.CreateMany<InstrumentId>(3).ToArray();
+        var createStockCommand = fixture.Create<CreateStockCommand>();
+        var createBondCommand = fixture.Create<CreateBondCommand>();
+        var createCurrencyCommand = fixture.Create<CreateCurrencyCommand>();
+        TestInstrumentsProvider.Stocks.Add(instrumentIds[0], createStockCommand);
+        TestInstrumentsProvider.Bonds.Add(instrumentIds[1], createBondCommand);
+        TestInstrumentsProvider.Currencies.Add(instrumentIds[2], createCurrencyCommand);
+
+        var response = await grpcClient.ImportInstrumentsAsync(new ImportInstrumentsRequest
+        {
+            StockInstrumentIds = { instrumentIds[0] },
+            BondInstrumentIds = { instrumentIds[1] },
+            CurrencyInstrumentIds = { instrumentIds[2] }
+        });
+
+        Assert.Collection(response.Instruments,
+            i =>
+            {
+                Assert.Equal(instrumentIds[0], (InstrumentId)i.InstrumentId);
+                Assert.Equal(InstrumentTypeProto.Stock, i.Type);
+            },
+            i =>
+            {
+                Assert.Equal(instrumentIds[1], (InstrumentId)i.InstrumentId);
+                Assert.Equal(InstrumentTypeProto.Bond, i.Type);
+            },
+            i =>
+            {
+                Assert.Equal(instrumentIds[2], (InstrumentId)i.InstrumentId);
+                Assert.Equal(InstrumentTypeProto.CurrencyAsset, i.Type);
             });
     }
 }
