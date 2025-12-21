@@ -21,7 +21,7 @@ public class BondCouponHandler(IInstrumentIdProvider instrumentIdProvider) : IOp
             Date = operation.Date.ToDateTimeOffset(),
             Amount = operation.Payment.ToMoney(),
             PortfolioId = portfolioId,
-            BondId = await instrumentIdProvider.GetBondIdByFigi(operation.Figi),
+            BondId = await instrumentIdProvider.GetBondId(operation.InstrumentUid),
         };
     }
 }

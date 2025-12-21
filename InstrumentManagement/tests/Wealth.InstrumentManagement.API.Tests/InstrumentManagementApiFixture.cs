@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
 using Testcontainers.PostgreSql;
+using Wealth.InstrumentManagement.Application.Providers;
 using Xunit;
 
 namespace Wealth.InstrumentManagement.API.Tests;
@@ -42,7 +44,9 @@ public sealed class InstrumentManagementApiFixture : WebApplicationFactory<Progr
 
         builder.ConfigureServices(services =>
         {
+            services.AddSingleton<IInstrumentsProvider, TestInstrumentsProvider>();
         });
+
         return base.CreateHost(builder);
     }
 

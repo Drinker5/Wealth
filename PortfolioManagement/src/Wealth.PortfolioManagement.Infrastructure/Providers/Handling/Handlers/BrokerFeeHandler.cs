@@ -19,7 +19,7 @@ public class BrokerFeeHandler(IInstrumentIdProvider instrumentIdProvider) : IOpe
                 Id = operation.Id,
                 Date = operation.Date.ToDateTimeOffset(),
                 Amount = operation.Payment.ToMoney(),
-                BondId = await instrumentIdProvider.GetBondIdByFigi(operation.Figi),
+                BondId = await instrumentIdProvider.GetBondId(operation.InstrumentUid),
                 PortfolioId = portfolioId,
             },
             Tinkoff.InvestApi.V1.InstrumentType.Share => new StockBrokerFeeOperation
@@ -27,7 +27,7 @@ public class BrokerFeeHandler(IInstrumentIdProvider instrumentIdProvider) : IOpe
                 Id = operation.Id,
                 Date = operation.Date.ToDateTimeOffset(),
                 Amount = operation.Payment.ToMoney(),
-                StockId = await instrumentIdProvider.GetStockIdByFigi(operation.Figi),
+                StockId = await instrumentIdProvider.GetStockId(operation.InstrumentUid),
                 PortfolioId = portfolioId,
             },
             Tinkoff.InvestApi.V1.InstrumentType.Currency => new CurrencyBrokerFeeOperation
@@ -35,7 +35,7 @@ public class BrokerFeeHandler(IInstrumentIdProvider instrumentIdProvider) : IOpe
                 Id = operation.Id,
                 Date = operation.Date.ToDateTimeOffset(),
                 Amount = operation.Payment.ToMoney(),
-                CurrencyId = await instrumentIdProvider.GetCurrencyIdByFigi(operation.Figi),
+                CurrencyId = await instrumentIdProvider.GetCurrencyId(operation.InstrumentUid),
                 PortfolioId = portfolioId,
             },
             _ => throw new ArgumentOutOfRangeException()

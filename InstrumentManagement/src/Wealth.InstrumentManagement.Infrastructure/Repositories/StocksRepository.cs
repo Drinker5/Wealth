@@ -1,6 +1,7 @@
 using System.Data;
 using Dapper;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Repositories;
 using Wealth.InstrumentManagement.Domain.Instruments;
 using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
@@ -30,7 +31,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         var instruments = await GetStocks(sql, new { figi = figi.Value });
         return instruments.FirstOrDefault();
     }
-    
+
     public async Task<Stock?> GetStock(InstrumentId id)
     {
         const string sql = """SELECT * FROM "Stocks" WHERE instrument_id = @instrumentId""";
@@ -73,38 +74,34 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
     }
 
     public async Task<StockId> CreateStock(
-        string ticker,
-        string name,
-        ISIN isin,
-        FIGI figi,
-        LotSize lotSize,
+        CreateStockCommand command,
         CancellationToken token = default)
     {
         const string sql = """SELECT nextval('"StocksHiLo"')""";
-        var command = new CommandDefinition(
+        var nextId = await connection.ExecuteScalarAsync<int>(new CommandDefinition(
             commandText: sql,
-            cancellationToken: token);
+            cancellationToken: token));
 
-        var nextId = await connection.ExecuteScalarAsync<int>(command);
-        var stock = Stock.Create(new StockId(nextId), ticker, name, isin, figi);
-        stock.ChangeLotSize(lotSize);
+        var stock = Stock.Create(new StockId(nextId), command.Ticker, command.Name, command.Isin, command.Figi, command.InstrumentId);
+        stock.ChangeLotSize(command.LotSize);
         return await CreateStock(stock);
     }
 
     private async Task<StockId> CreateStock(Stock stock)
     {
         const string sql = """
-                           INSERT INTO "Stocks" ("Id", ticker, "Name", "ISIN", "FIGI", "LotSize") 
-                           VALUES (@Id, @Ticker, @Name, @ISIN, @FIGI, @LotSize)
+                           INSERT INTO "Stocks" ("Id", ticker, "Name", "ISIN", "FIGI", "LotSize", instrument_id) 
+                           VALUES (@Id, @Ticker, @Name, @ISIN, @FIGI, @LotSize, @InstrumentId)
                            """;
         await connection.ExecuteAsync(sql, new
         {
             Id = stock.Id.Value,
-            Ticker = stock.Ticker,
+            Ticker = stock.Ticker.Value,
             Name = stock.Name,
             ISIN = stock.Isin.Value,
             FIGI = stock.Figi.Value,
             LotSize = stock.LotSize.Value,
+            InstrumentId = stock.InstrumentId.Value
         });
         dbContext.AddEvents(stock);
 
@@ -152,7 +149,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         dbContext.AddEvents(instrument);
     }
 
-    public async Task ChangeTicker(StockId id, string ticker)
+    public async Task ChangeTicker(StockId id, Ticker ticker)
     {
         var instrument = await GetStock(id);
         if (instrument == null)
@@ -183,7 +180,8 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         FIGI,
         Price_Currency,
         Dividend_Currency,
-        Ticker
+        Ticker,
+        InstrumentId
     }
 
     private async Task<IReadOnlyCollection<Stock>> GetStocks(string sql, object? param = null)
@@ -205,6 +203,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             stock.Name = reader.GetString((int)Columns.Name);
             stock.Isin = reader.GetString((int)Columns.ISIN);
             stock.Figi = reader.GetString((int)Columns.FIGI);
+            stock.InstrumentId = reader.GetGuid((int)Columns.InstrumentId);
             stock.Ticker = reader.GetString((int)Columns.Ticker);
             if (!reader.IsDBNull((int)Columns.Price_Currency))
             {

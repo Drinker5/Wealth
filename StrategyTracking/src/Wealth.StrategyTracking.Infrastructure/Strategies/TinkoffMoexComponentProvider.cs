@@ -1,6 +1,7 @@
 using Wealth.StrategyTracking.Application.Strategies.ComponentsProvider;
 using Wealth.StrategyTracking.Domain.Strategies;
 using System.Net.Http.Json;
+using Wealth.BuildingBlocks;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement;
 
@@ -11,65 +12,72 @@ public sealed class TinkoffMoexComponentProvider(
     : IMoexComponentsProvider
 {
     private const string Url = "https://www.tinkoff.ru/api/invest-gw/capital/funds/v1/portfolio/structure?ticker=TMOS";
-    private List<StrategyComponent>? cache;
+    private const string Stock = "stock";
+    private const string Bond = "bond";
+    private const string? Currency = "currency";
     private readonly HttpClient _httpClient = new();
 
     public async Task<IReadOnlyCollection<StrategyComponent>> GetComponents(CancellationToken token)
     {
-        if (cache != null)
-            return cache;
-
         var response = await _httpClient.GetFromJsonAsync<Response>(Url, token);
 
         if (response?.Payload?.Instruments != null)
-            cache = await BuildCache(response.Payload.Instruments, token);
-        else
-            throw new InvalidOperationException($"{nameof(TinkoffMoexComponentProvider)} returned null.");
+            return await Build(response.Payload.Instruments, token);
 
-        return cache;
+        throw new InvalidOperationException($"{nameof(TinkoffMoexComponentProvider)} returned null.");
     }
 
-    private async Task<List<StrategyComponent>> BuildCache(List<Instrument> instruments, CancellationToken token)
+    private async Task<List<StrategyComponent>> Build(List<Instrument> strategyInstruments, CancellationToken token)
     {
-        var isins = instruments.Select(i => i.Isin).Where(i => i is not null).ToHashSet();
-        var instrumentsByIsinResponse = await instrumentsServiceClient.GetInstrumentsByIsinAsync(new GetInstrumentsByIsinRequest
+        var strategyInstrumentIds = strategyInstruments
+            .Where(i => i.InstrumentId.HasValue)
+            .ToDictionary(i => i.InstrumentId!.Value);
+
+        var instrumentsResponse = await instrumentsServiceClient.GetInstrumentsAsync(new GetInstrumentsRequest
         {
-            Isins = { isins }
+            InstrumentIds = { strategyInstrumentIds.Select(i => new InstrumentIdProto(i.Key)) }
         }, cancellationToken: token);
-        var instrumentsByIsin = instrumentsByIsinResponse.Instruments.ToDictionary(i => i.Isin);
 
-        if (isins.Count != instrumentsByIsinResponse.Instruments.Count)
+        var instruments = instrumentsResponse.Instruments.ToDictionary(i => (InstrumentId)i.InstrumentId);
+        if (strategyInstrumentIds.Count != instruments.Count)
         {
-            foreach (var instrument in instrumentsByIsinResponse.Instruments)
-                isins.Remove(instrument.Isin);
+            foreach (var id in instruments.Keys)
+                strategyInstrumentIds.Remove(id);
 
-            if (isins.Count > 0)
+            if (strategyInstrumentIds.Count > 0)
             {
-                var updateInstrumentsResponse = await instrumentsServiceClient.UpdateInstrumentsAsync(new UpdateInstrumentsRequest
+                var g = strategyInstrumentIds.Values.GroupBy(i => i.Type)
+                    .ToDictionary(k => k.Key, v => v.Select(i => new InstrumentIdProto(i.InstrumentId!.Value)));
+                var request = new ImportInstrumentsRequest
                 {
-                    Isins = { isins }
-                }, cancellationToken: token);
+                    StockInstrumentIds = { g.TryGetValue(Stock, out var stocks) ? stocks : null },
+                    BondInstrumentIds = { g.TryGetValue(Bond, out var bonds) ? bonds : null },
+                    CurrencyInstrumentIds = { }
+                };
 
-                if (isins.Count != updateInstrumentsResponse.Instruments.Count)
+                var updateInstrumentsResponse = await instrumentsServiceClient.ImportInstrumentsAsync(
+                    request, cancellationToken: token);
+
+                if (strategyInstrumentIds.Count != updateInstrumentsResponse.Instruments.Count)
                 {
                     foreach (var instrument in updateInstrumentsResponse.Instruments)
-                        isins.Remove(instrument.Isin);
+                        strategyInstrumentIds.Remove(instrument.InstrumentId.Value);
 
-                    throw new InvalidOperationException($"Did not find {string.Join(", ", isins)} instruments.");
+                    throw new InvalidOperationException($"Did not find {string.Join(", ", strategyInstrumentIds)} instruments.");
                 }
             }
         }
 
-        return instruments.Select(BuildComponent).ToList();
+        return strategyInstruments.Select(BuildComponent).ToList();
 
         StrategyComponent BuildComponent(Instrument instrument)
         {
-            if (StringComparer.OrdinalIgnoreCase.Equals(instrument.Type, "stock"))
+            if (StringComparer.OrdinalIgnoreCase.Equals(instrument.Type, Stock))
             {
                 if (instrument.Isin == null)
                     throw new InvalidOperationException($"{instrument.Name} stock isin is null.");
 
-                var instrumentProto = instrumentsByIsin[instrument.Isin];
+                var instrumentProto = instruments[instrument.Isin];
                 return new StockStrategyComponent
                 {
                     StockId = instrumentProto.Id,
@@ -77,7 +85,7 @@ public sealed class TinkoffMoexComponentProvider(
                 };
             }
 
-            if (StringComparer.OrdinalIgnoreCase.Equals(instrument.Type, "currency"))
+            if (StringComparer.OrdinalIgnoreCase.Equals(instrument.Type, Currency))
             {
                 return new CurrencyStrategyComponent
                 {
@@ -86,12 +94,12 @@ public sealed class TinkoffMoexComponentProvider(
                 };
             }
 
-            if (StringComparer.OrdinalIgnoreCase.Equals(instrument.Type, "bond"))
+            if (StringComparer.OrdinalIgnoreCase.Equals(instrument.Type, Bond))
             {
                 if (instrument.Isin == null)
                     throw new InvalidOperationException($"{instrument.Name} bond isin is null.");
 
-                var instrumentProto = instrumentsByIsin[instrument.Isin];
+                var instrumentProto = instruments[instrument.Isin];
                 return new BondStrategyComponent
                 {
                     BondId = instrumentProto.Id,
@@ -120,6 +128,6 @@ public sealed class TinkoffMoexComponentProvider(
         public decimal RelativeValue { get; set; }
         public string? Isin { get; set; }
         public string? Ticker { get; set; }
-        public Guid? instrumentUID { get; set; }
+        public Guid? InstrumentId { get; set; }
     }
 }

@@ -88,8 +88,8 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
     private async Task<BondId> CreateBond(Bond bond)
     {
         const string sql = """
-                           INSERT INTO "Bonds" ("Id", "Name", "ISIN", "FIGI") 
-                           VALUES (@Id, @Name, @ISIN, @FIGI)
+                           INSERT INTO "Bonds" ("Id", "Name", "ISIN", "FIGI", instrument_id) 
+                           VALUES (@Id, @Name, @ISIN, @FIGI, @InstrumentId)
                            """;
         await connection.ExecuteAsync(sql, new
         {
@@ -97,6 +97,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
             Name = bond.Name,
             ISIN = bond.Isin.Value,
             FIGI = bond.Figi.Value,
+            InstrumentId = bond.InstrumentId.Value
         });
         dbContext.AddEvents(bond);
 
@@ -134,6 +135,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
         FIGI,
         Price_Currency,
         Coupon_Currency,
+        InstrumentId
     }
 
     private async Task<IReadOnlyCollection<Bond>> GetBonds(string sql, object? param = null)
@@ -154,6 +156,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
             bond.Name = reader.GetString((int)Columns.Name);
             bond.Isin = reader.GetString((int)Columns.ISIN);
             bond.Figi = reader.GetString((int)Columns.FIGI);
+            bond.InstrumentId = reader.GetGuid((int)Columns.InstrumentId);
             if (!reader.IsDBNull((int)Columns.Price_Currency))
             {
                 bond.Price = new Money(

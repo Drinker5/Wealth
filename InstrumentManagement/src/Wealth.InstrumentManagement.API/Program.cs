@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddGrpc();
 builder.AddApplicationServices();
 builder.AddServiceModules();
+builder.Configuration.AddJsonFile("appsettings.Secrets.json", optional: true);
 builder.Services.ConfigureHttpClientDefaults(http =>
 {
     // Turn on resilience by default

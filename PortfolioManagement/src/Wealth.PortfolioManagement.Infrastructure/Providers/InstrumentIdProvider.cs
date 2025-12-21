@@ -1,92 +1,51 @@
-using System.Collections.Concurrent;
 using Grpc.Core;
-using Microsoft.Extensions.Options;
-using Tinkoff.InvestApi;
-using Tinkoff.InvestApi.V1;
+using Wealth.BuildingBlocks;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement;
 using InstrumentsService = Wealth.InstrumentManagement.InstrumentsService;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Providers;
 
-public class InstrumentIdProvider(
-    InstrumentsService.InstrumentsServiceClient instrumentsServiceClient,
-    IOptions<TBankOperationProviderOptions> options) : IInstrumentIdProvider
+public sealed class InstrumentIdProvider(
+    InstrumentsService.InstrumentsServiceClient instrumentsServiceClient) : IInstrumentIdProvider
 {
-    private readonly InvestApiClient client = InvestApiClientFactory.Create(options.Value.Token);
-    private readonly ConcurrentDictionary<string, StockId> stockIdCache = new();
-    private readonly ConcurrentDictionary<string, BondId> bondIdCache = new();
-    private readonly ConcurrentDictionary<string, CurrencyId> currencyIdCache = new();
-
-    //TODO metrics, count of existed/from cache, count of created
-
-    public async ValueTask<StockId> GetStockIdByFigi(string figi)
+    public async ValueTask<StockId> GetStockId(InstrumentId instrumentId)
     {
-        if (stockIdCache.TryGetValue(figi, out var stockId))
-            return stockId;
+        var stock = await GetStock(instrumentId);
+        if (stock != null)
+            return stock.Value;
 
-        var stock = await GetStock(figi);
-        if (stock == null)
-        {
-            var response = await CreateStock(figi);
-            stockId = response.StockId;
-        }
-        else
-        {
-            stockId = stock.Value;
-        }
-
-        stockIdCache.AddOrUpdate(figi, stockId, (_, _) => stockId);
-        return stockId;
+        var response = await CreateInstrument(stockInstrumentIds: [instrumentId]);
+        return new StockId(response.Id);
     }
 
-    public async ValueTask<BondId> GetBondIdByFigi(string figi)
+    public async ValueTask<BondId> GetBondId(InstrumentId instrumentId)
     {
-        if (bondIdCache.TryGetValue(figi, out var bondId))
-            return bondId;
+        var bond = await GetBond(instrumentId);
+        if (bond != null)
+            return bond.Value;
 
-        var bond = await GetBondAsync(figi);
-        if (bond == null)
-        {
-            var response = await CreateBond(figi);
-            bondId = response.BondId;
-        }
-        else
-        {
-            bondId = bond.Value;
-        }
-
-        bondIdCache.AddOrUpdate(figi, bondId, (_, _) => bondId);
-        return bondId;
+        var response = await CreateInstrument(bondInstrumentIds: [instrumentId]);
+        return new BondId(response.Id);
     }
 
-    public async ValueTask<CurrencyId> GetCurrencyIdByFigi(string figi)
+    public async ValueTask<CurrencyId> GetCurrencyId(InstrumentId instrumentId)
     {
-        if (currencyIdCache.TryGetValue(figi, out var currencyId))
-            return currencyId;
+        var currency = await GetCurrency(instrumentId);
+        if (currency != null)
+            return currency.Value;
 
-        var currency = await GetCurrencyAsync(figi);
-        if (currency == null)
-        {
-            var response = await CreateCurrency(figi);
-            currencyId = response.CurrencyId;
-        }
-        else
-        {
-            currencyId = currency.Value;
-        }
-
-        currencyIdCache.AddOrUpdate(figi, currencyId, (_, _) => currencyId);
-        return currencyId;
+        var response = await CreateInstrument(currencyInstrumentIds: [instrumentId]);
+        return new CurrencyId(response.Id);
     }
 
-    private async Task<StockId?> GetStock(string figi)
+    private async Task<StockId?> GetStock(InstrumentId instrumentId)
     {
         try
         {
             var response = await instrumentsServiceClient.GetStockAsync(new GetStockRequest
             {
-                Figi = figi
+                InstrumentId = instrumentId
             });
 
             return response.StockInfo.StockId;
@@ -97,13 +56,13 @@ public class InstrumentIdProvider(
         }
     }
 
-    private async Task<BondId?> GetBondAsync(string figi)
+    private async Task<BondId?> GetBond(InstrumentId instrumentId)
     {
         try
         {
             var getBondResponse = await instrumentsServiceClient.GetBondAsync(new GetBondRequest
             {
-                Figi = figi
+                InstrumentId = instrumentId
             });
             return getBondResponse.BondId;
         }
@@ -113,13 +72,13 @@ public class InstrumentIdProvider(
         }
     }
 
-    private async Task<CurrencyId?> GetCurrencyAsync(string figi)
+    private async Task<CurrencyId?> GetCurrency(InstrumentId instrumentId)
     {
         try
         {
             var getCurrencyResponse = await instrumentsServiceClient.GetCurrencyAsync(new GetCurrencyRequest
             {
-                Figi = figi
+                InstrumentId = instrumentId
             });
             return getCurrencyResponse.CurrencyId;
         }
@@ -129,57 +88,18 @@ public class InstrumentIdProvider(
         }
     }
 
-    private async Task<CreateStockResponse> CreateStock(string figi)
+    private async Task<InstrumentProto> CreateInstrument(
+        IEnumerable<InstrumentId>? stockInstrumentIds = null, 
+        IEnumerable<InstrumentId>? bondInstrumentIds = null, 
+        IEnumerable<InstrumentId>? currencyInstrumentIds = null)
     {
-        var share = await client.Instruments.ShareByAsync(new InstrumentRequest
+        var response = await instrumentsServiceClient.ImportInstrumentsAsync(new ImportInstrumentsRequest
         {
-            IdType = InstrumentIdType.Figi,
-            Id = figi
+            StockInstrumentIds = { stockInstrumentIds?.Select(i => new InstrumentIdProto(i.Value)) },
+            BondInstrumentIds = { bondInstrumentIds?.Select(i => new InstrumentIdProto(i.Value)) },
+            CurrencyInstrumentIds = { currencyInstrumentIds?.Select(i => new InstrumentIdProto(i.Value)) }
         });
 
-        var response = await instrumentsServiceClient.CreateStockAsync(new CreateStockRequest
-        {
-            Figi = figi,
-            Isin = share.Instrument.Isin,
-            LotSize = share.Instrument.Lot,
-            Name = share.Instrument.Name,
-        });
-
-        return response;
-    }
-
-    private async Task<CreateBondResponse> CreateBond(string figi)
-    {
-        var share = await client.Instruments.BondByAsync(new InstrumentRequest
-        {
-            IdType = InstrumentIdType.Figi,
-            Id = figi
-        });
-
-        var response = await instrumentsServiceClient.CreateBondAsync(new CreateBondRequest
-        {
-            Figi = figi,
-            Isin = share.Instrument.Isin,
-            Name = share.Instrument.Name,
-        });
-
-        return response;
-    }
-
-    private async Task<CreateCurrencyResponse> CreateCurrency(string figi)
-    {
-        var share = await client.Instruments.CurrencyByAsync(new InstrumentRequest
-        {
-            IdType = InstrumentIdType.Figi,
-            Id = figi
-        });
-
-        var response = await instrumentsServiceClient.CreateCurrencyAsync(new CreateCurrencyRequest
-        {
-            Figi = figi,
-            Name = share.Instrument.Name,
-        });
-
-        return response;
+        return response.Instruments.Single();
     }
 }

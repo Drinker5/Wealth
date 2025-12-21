@@ -1,4 +1,5 @@
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.Application.Repositories;
@@ -15,14 +16,8 @@ public interface IStocksRepository
     Task ChangePrice(StockId id, Money price);
     Task ChangeDividend(StockId id, Dividend dividend);
 
-    Task<StockId> CreateStock(
-        string ticker,
-        string name,
-        ISIN isin,
-        FIGI figi,
-        LotSize lotSize,
-        CancellationToken token = default);
+    Task<StockId> CreateStock(CreateStockCommand command, CancellationToken token = default);
 
     Task ChangeLotSize(StockId id, int lotSize);
-    Task ChangeTicker(StockId id, string ticker);
+    Task ChangeTicker(StockId id, Ticker ticker);
 }

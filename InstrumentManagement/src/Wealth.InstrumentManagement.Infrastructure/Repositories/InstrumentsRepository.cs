@@ -12,28 +12,32 @@ public sealed class InstrumentsRepository(WealthDbContext dbContext) : IInstrume
     private readonly IDbConnection connection = dbContext.CreateConnection();
 
     public async Task<IReadOnlyCollection<Instrument>> GetInstruments(
-        IReadOnlyCollection<string> requestIsins,
+        IReadOnlyCollection<InstrumentId> instrumentIds,
         CancellationToken token)
     {
-        if (requestIsins.Count == 0)
+        if (instrumentIds.Count == 0)
             return [];
 
         const string sql =
             """
-            SELECT "Id", "ISIN", 0
+            SELECT "Id", instrument_id, 0
             FROM "Stocks" 
-            WHERE "ISIN" = ANY(@Isins)
+            WHERE instrument_id = ANY(@instrumentIds)
             UNION ALL
-            SELECT "Id", "ISIN", 1
+            SELECT "Id", instrument_id, 1
             FROM "Bonds" 
-            WHERE "ISIN" = ANY(@Isins);
+            WHERE instrument_id = ANY(@instrumentIds)
+            UNION ALL
+            SELECT id, instrument_id, 2
+            FROM currencies 
+            WHERE instrument_id = ANY(@instrumentIds);
             """;
 
         var command = new CommandDefinition(
             sql,
             parameters: new
             {
-                Isins = requestIsins
+                instrumentIds = instrumentIds.Select(i=>i.Value).ToArray()
             },
             cancellationToken: token);
 
@@ -43,7 +47,7 @@ public sealed class InstrumentsRepository(WealthDbContext dbContext) : IInstrume
         {
             var instrument = new Instrument(
                 Id: reader.GetInt32(0),
-                Isin: reader.GetString(1),
+                InstrumentId: reader.GetGuid(1),
                 Type: (InstrumentType)reader.GetByte(2));
 
             result.Add(instrument);

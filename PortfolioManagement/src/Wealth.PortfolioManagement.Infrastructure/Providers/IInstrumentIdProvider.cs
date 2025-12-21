@@ -4,9 +4,9 @@ namespace Wealth.PortfolioManagement.Infrastructure.Providers;
 
 public interface IInstrumentIdProvider
 {
-    ValueTask<StockId> GetStockIdByFigi(string figi);
+    ValueTask<StockId> GetStockId(InstrumentId instrumentId);
 
-    ValueTask<BondId> GetBondIdByFigi(string figi);
+    ValueTask<BondId> GetBondId(InstrumentId instrumentId);
 
-    ValueTask<CurrencyId> GetCurrencyIdByFigi(string figi);
+    ValueTask<CurrencyId> GetCurrencyId(InstrumentId instrumentId);
 }

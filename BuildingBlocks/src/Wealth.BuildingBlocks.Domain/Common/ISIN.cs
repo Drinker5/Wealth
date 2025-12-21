@@ -23,7 +23,7 @@ public readonly record struct ISIN : IValueObject
 
         for (var i = 0; i < 12; i++)
         {
-            if (!Char.IsLetterOrDigit(value, i))
+            if (!char.IsLetterOrDigit(value, i))
                 throw new ArgumentException("ISIN must be alphanumeric");
         }
 

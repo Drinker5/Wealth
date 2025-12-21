@@ -11,5 +11,6 @@ public class ComponentsProviderModule : IServiceModule
     {
         services.AddSingleton<ComponentsProviderFactory>();
         services.AddSingleton<IMoexComponentsProvider, TinkoffMoexComponentProvider>();
+        services.Decorate<IMoexComponentsProvider, MoexComponentsProviderDecorator>();
     }
 }

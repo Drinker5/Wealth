@@ -8,6 +8,6 @@ public class CreateCurrencyCommandHandler(ICurrenciesRepository repository) : IC
 {
     public Task<CurrencyId> Handle(CreateCurrencyCommand request, CancellationToken cancellationToken)
     {
-        return repository.CreateCurrency(request.Name, request.Figi, cancellationToken);
+        return repository.CreateCurrency(request, cancellationToken);
     }
 }

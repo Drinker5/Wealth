@@ -20,7 +20,7 @@ public class BondAmortizationHandler(IInstrumentIdProvider instrumentIdProvider)
             Id = operation.Id,
             Date = operation.Date.ToDateTimeOffset(),
             Amount = operation.Payment.ToMoney(),
-            BondId = await instrumentIdProvider.GetBondIdByFigi(operation.Figi),
+            BondId = await instrumentIdProvider.GetBondId(operation.InstrumentUid),
             PortfolioId = portfolioId,
         };
     }

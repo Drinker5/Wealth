@@ -1,4 +1,5 @@
 using AutoFixture;
+using Wealth.BuildingBlocks.Tests.AutoFixture;
 
 namespace Wealth.InstrumentManagement.Application.Tests;
 

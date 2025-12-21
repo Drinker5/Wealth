@@ -14,7 +14,7 @@ public class BondTests
     readonly InstrumentId instrumentId = new Guid("2E7B63F8-EE1F-4007-850A-F52194B34476");
     readonly Coupon coupon = new Coupon(CurrencyCode.Rub, Decimal.One);
 
-    private Bond CreateBondInstrument(string name, ISIN isin, FIGI figi, InstrumentId instrumentId)
+    private Bond CreateBondInstrument()
     {
         return Bond.Create(3, name, isin, figi, instrumentId);
     }
@@ -22,7 +22,7 @@ public class BondTests
     [Test]
     public void WhenCreate()
     {
-        var bond = CreateBondInstrument(name, isin, figi, instrumentId);
+        var bond = CreateBondInstrument();
 
         var @event = bond.HasEvent<BondCreated>();
         using (Assert.EnterMultipleScope())
@@ -30,9 +30,11 @@ public class BondTests
             Assert.That(@event.BondId, Is.Not.Zero);
             Assert.That(@event.Name, Is.EqualTo(name));
             Assert.That(@event.Isin, Is.EqualTo(isin));
+            Assert.That(@event.InstrumentId, Is.EqualTo(instrumentId));
             Assert.That(bond.Id, Is.Not.Zero);
             Assert.That(bond.Name, Is.EqualTo(name));
             Assert.That(bond.Isin, Is.EqualTo(isin));
+            Assert.That(bond.InstrumentId, Is.EqualTo(instrumentId));
             Assert.That(bond.Coupon, Is.EqualTo(Coupon.Empty));
         }
     }
@@ -40,7 +42,7 @@ public class BondTests
     [Test]
     public void WhenPriceChanged()
     {
-        var bond = CreateBondInstrument(name, isin, figi, instrumentId);
+        var bond = CreateBondInstrument();
         var money = new Money(CurrencyCode.Eur, 23.3m);
 
         bond.ChangePrice(money);
@@ -57,7 +59,7 @@ public class BondTests
     [Test]
     public void CouponChanged()
     {
-        var bond = CreateBondInstrument(name, isin, figi, instrumentId);
+        var bond = CreateBondInstrument();
 
         bond.ChangeCoupon(coupon);
 

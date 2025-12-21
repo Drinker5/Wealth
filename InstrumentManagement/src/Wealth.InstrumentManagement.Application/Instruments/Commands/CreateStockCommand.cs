@@ -1,11 +1,13 @@
+using System.Runtime.InteropServices;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Commands;
 
-public sealed record CreateStockCommand(
-    string Ticker,
+[StructLayout(LayoutKind.Auto)]
+public record struct CreateStockCommand(
+    Ticker Ticker,
     string Name,
     ISIN Isin,
     FIGI Figi,

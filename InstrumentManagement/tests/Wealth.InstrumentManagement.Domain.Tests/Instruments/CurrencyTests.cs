@@ -10,31 +10,34 @@ public class CurrencyTests
 {
     readonly string name = "foo";
     readonly FIGI figi = "arbarbarbarb";
+    readonly InstrumentId instrumentId = new Guid("46042ADD-269E-4B54-8848-2004109FF14A");
 
-    private Currency CreateCurrencyInstrument(string name, FIGI figi)
+    private Currency CreateCurrencyInstrument()
     {
-        return Currency.Create(3, name, figi);
+        return Currency.Create(3, name, figi, instrumentId);
     }
 
     [Test]
     public void WhenCreate()
     {
-        var currency = CreateCurrencyInstrument(name, figi);
+        var currency = CreateCurrencyInstrument();
 
         var @event = currency.HasEvent<CurrencyCreated>();
         using (Assert.EnterMultipleScope())
         {
             Assert.That(@event.CurrencyId, Is.Not.Zero);
             Assert.That(@event.Name, Is.EqualTo(name));
+            Assert.That(@event.InstrumentId, Is.EqualTo(instrumentId));
             Assert.That(currency.Id, Is.Not.Zero);
             Assert.That(currency.Name, Is.EqualTo(name));
+            Assert.That(currency.InstrumentId, Is.EqualTo(instrumentId));
         }
     }
 
     [Test]
     public void WhenPriceChanged()
     {
-        var currency = CreateCurrencyInstrument(name, figi);
+        var currency = CreateCurrencyInstrument();
         var money = new Money(CurrencyCode.Eur, 23.3m);
 
         currency.ChangePrice(money);

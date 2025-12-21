@@ -24,7 +24,7 @@ public readonly record struct FIGI : IValueObject
 
         for (var i = 0; i < 12; i++)
         {
-            if (!Char.IsLetterOrDigit(value, i))
+            if (!char.IsLetterOrDigit(value, i))
                 throw new ArgumentException("FIGI must be alphanumeric");
         }
 

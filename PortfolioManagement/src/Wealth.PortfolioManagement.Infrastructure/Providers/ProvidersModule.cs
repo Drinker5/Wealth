@@ -24,6 +24,7 @@ public class ProvidersModule : IServiceModule
         services.AddSingleton<IOperationProducer, TBankOperationProducer>();
         services.AddSingleton<IPortfolioIdProvider, PortfolioIdProvider>();
         services.AddSingleton<IInstrumentIdProvider, InstrumentIdProvider>();
+        services.Decorate<IInstrumentIdProvider, InstrumentIdProviderCacheDecorator>();
         services.AddSingleton<OperationConverter>();
         RegisterOperationHandlers(services);
     }
