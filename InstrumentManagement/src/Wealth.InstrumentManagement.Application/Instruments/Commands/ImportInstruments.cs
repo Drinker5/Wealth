@@ -55,7 +55,7 @@ public sealed class UpdateInstrumentsHandler(
         foreach (var stockInstrumentId in stockInstrumentIds)
         {
             var stockProvideCommand = await instrumentsProvider.StockProvide(stockInstrumentId, token);
-            var stockId = await stocksRepository.CreateStock(stockProvideCommand, token);
+            var stockId = await stocksRepository.UpsertStock(stockProvideCommand, token);
             result.Add(new Instrument
             {
                 InstrumentId = stockInstrumentId,
@@ -73,6 +73,7 @@ public sealed class UpdateInstrumentsHandler(
         foreach (var bondInstrumentId in bondInstrumentIds)
         {
             var bondProvideCommand = await instrumentsProvider.BondProvide(bondInstrumentId, token);
+            // TODO Upsert
             var bondId = await bondsRepository.CreateBond(bondProvideCommand, token);
             result.Add(new Instrument
             {
@@ -91,6 +92,7 @@ public sealed class UpdateInstrumentsHandler(
         foreach (var currencyInstrumentId in currencyInstrumentIds)
         {
             var currencyProvideCommand = await instrumentsProvider.CurrencyProvide(currencyInstrumentId, token);
+            // TODO Upsert
             var currencyId = await currenciesRepository.CreateCurrency(currencyProvideCommand, token);
             result.Add(new Instrument
             {

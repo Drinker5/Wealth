@@ -99,4 +99,43 @@ public class Stock(StockId id) : AggregateRoot
     {
         Ticker = @event.NewTicker;
     }
+
+    public void ChangeIsin(ISIN isin)
+    {
+        if (this.Isin == isin)
+            return;
+
+        Apply(new IsinChanged(Id, isin));
+    }
+
+    public void ChangeFigi(FIGI figi)
+    {
+        if (this.Figi == figi)
+            return;
+
+        Apply(new FigiChanged(Id, figi));
+    }
+
+    public void ChangeInstrumentId(InstrumentId instrumentId)
+    {
+        if (this.InstrumentId == instrumentId)
+            return;
+
+        Apply(new InstrumentIdChanged(Id, instrumentId));
+    }
+
+    private void When(IsinChanged @event)
+    {
+        Isin = @event.Isin;
+    }
+
+    private void When(FigiChanged @event)
+    {
+        Figi = @event.Figi;
+    }
+
+    private void When(InstrumentIdChanged @event)
+    {
+        InstrumentId = @event.InstrumentId;
+    }
 }

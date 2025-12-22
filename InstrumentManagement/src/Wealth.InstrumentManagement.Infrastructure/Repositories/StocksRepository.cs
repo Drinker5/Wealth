@@ -73,6 +73,28 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         return instruments.FirstOrDefault();
     }
 
+    private async Task<Stock?> GetStock(ISIN isin, FIGI figi, InstrumentId instrumentId, CancellationToken token)
+    {
+        var instruments = await GetStocks(
+            """
+            SELECT * FROM "Stocks"
+            WHERE "ISIN" = @Isin
+                OR "FIGI" = @Figi
+                OR instrument_id = @InstrumentId
+            """,
+            new
+            {
+                Isin = isin.Value,
+                Figi = figi.Value,
+                InstrumentId = instrumentId.Value
+            });
+
+        if (instruments.Count > 1)
+            throw new InvalidOperationException($"Found more than one stock Isin: ${isin.Value}, Figi: ${figi.Value}, InstrumentId: ${instrumentId.Value}");
+
+        return instruments.FirstOrDefault();
+    }
+
     public async Task<StockId> CreateStock(
         CreateStockCommand command,
         CancellationToken token = default)
@@ -85,6 +107,45 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         var stock = Stock.Create(new StockId(nextId), command.Ticker, command.Name, command.Isin, command.Figi, command.InstrumentId);
         stock.ChangeLotSize(command.LotSize);
         return await CreateStock(stock);
+    }
+
+    public async Task<StockId> UpsertStock(CreateStockCommand command, CancellationToken token = default)
+    {
+        var stock = await GetStock(command.Isin, command.Figi, command.InstrumentId, token);
+        if (stock == null)
+            return await CreateStock(command, token);
+
+        await UpdateStock(stock.Id, command, token);
+        return stock.Id;
+    }
+
+    private async Task UpdateStock(StockId id, CreateStockCommand command, CancellationToken token)
+    {
+        var instrument = await GetStock(id);
+        if (instrument == null)
+            return;
+
+        instrument.ChangeLotSize(command.LotSize);
+        instrument.ChangeTicker(command.Ticker);
+        instrument.ChangeIsin(command.Isin);
+        instrument.ChangeFigi(command.Figi);
+        instrument.ChangeInstrumentId(command.InstrumentId);
+        await connection.ExecuteAsync(
+            """
+            UPDATE "Stocks" 
+            SET "LotSize" = @LotSize, ticker = @Ticker, "ISIN" = @Isin, "FIGI" = @Figi, instrument_id = @InstrumentId
+            WHERE "Id" = @Id
+            """,
+            new
+            {
+                Id = id.Value,
+                LotSize = command.LotSize.Value,
+                Ticker = command.Ticker,
+                ISIN = command.Isin.Value,
+                Figi = command.Figi.Value,
+                InstrumentId = command.InstrumentId.Value
+            });
+        dbContext.AddEvents(instrument);
     }
 
     private async Task<StockId> CreateStock(Stock stock)

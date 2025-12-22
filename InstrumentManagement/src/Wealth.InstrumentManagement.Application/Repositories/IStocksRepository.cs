@@ -17,6 +17,7 @@ public interface IStocksRepository
     Task ChangeDividend(StockId id, Dividend dividend);
 
     Task<StockId> CreateStock(CreateStockCommand command, CancellationToken token = default);
+    Task<StockId> UpsertStock(CreateStockCommand command, CancellationToken token = default);
 
     Task ChangeLotSize(StockId id, int lotSize);
     Task ChangeTicker(StockId id, Ticker ticker);
