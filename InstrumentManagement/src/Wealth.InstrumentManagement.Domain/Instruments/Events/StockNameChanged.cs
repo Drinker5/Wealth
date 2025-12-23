@@ -3,4 +3,4 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.InstrumentManagement.Domain.Instruments.Events;
 
-public sealed record InstrumentIdChanged(StockId StockId, InstrumentId InstrumentId) : DomainEvent;
+public record StockNameChanged(StockId StockId, string Name) : DomainEvent;

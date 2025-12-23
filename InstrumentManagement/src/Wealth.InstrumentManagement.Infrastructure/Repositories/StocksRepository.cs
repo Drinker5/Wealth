@@ -115,16 +115,13 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         if (stock == null)
             return await CreateStock(command, token);
 
-        await UpdateStock(stock.Id, command, token);
+        await UpdateStock(stock, command, token);
         return stock.Id;
     }
 
-    private async Task UpdateStock(StockId id, CreateStockCommand command, CancellationToken token)
+    private async Task UpdateStock(Stock instrument, CreateStockCommand command, CancellationToken token)
     {
-        var instrument = await GetStock(id);
-        if (instrument == null)
-            return;
-
+        instrument.ChangeName(command.Name);
         instrument.ChangeLotSize(command.LotSize);
         instrument.ChangeTicker(command.Ticker);
         instrument.ChangeIsin(command.Isin);
@@ -133,14 +130,15 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         await connection.ExecuteAsync(
             """
             UPDATE "Stocks" 
-            SET "LotSize" = @LotSize, ticker = @Ticker, "ISIN" = @Isin, "FIGI" = @Figi, instrument_id = @InstrumentId
+            SET "Name" = @Name, "LotSize" = @LotSize, ticker = @Ticker, "ISIN" = @Isin, "FIGI" = @Figi, instrument_id = @InstrumentId
             WHERE "Id" = @Id
             """,
             new
             {
-                Id = id.Value,
+                Id = instrument.Id.Value,
+                Name = command.Name,
                 LotSize = command.LotSize.Value,
-                Ticker = command.Ticker,
+                Ticker = command.Ticker.Value,
                 ISIN = command.Isin.Value,
                 Figi = command.Figi.Value,
                 InstrumentId = command.InstrumentId.Value

@@ -79,10 +79,65 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
         return await CreateBond(bondInstrument);
     }
 
+    public async Task<BondId> UpsertBond(CreateBondCommand command, CancellationToken token)
+    {
+        var bond = await GetBond(command.Isin, command.Figi, command.InstrumentId, token);
+        if (bond == null)
+            return await CreateBond(command, token);
+
+        await UpdateBond(bond, command, token);
+        return bond.Id;
+    }
+
+    private async Task UpdateBond(Bond instrument, CreateBondCommand command, CancellationToken token)
+    {
+        instrument.ChangeName(command.Name);
+        instrument.ChangeIsin(command.Isin);
+        instrument.ChangeFigi(command.Figi);
+        instrument.ChangeInstrumentId(command.InstrumentId);
+        await connection.ExecuteAsync(
+            """
+            UPDATE "Bonds" 
+            SET "Name" = @Name, "ISIN" = @Isin, "FIGI" = @Figi, instrument_id = @InstrumentId
+            WHERE "Id" = @Id
+            """,
+            new
+            {
+                Id = instrument.Id.Value,
+                Name = command.Name,
+                ISIN = command.Isin.Value,
+                Figi = command.Figi.Value,
+                InstrumentId = command.InstrumentId.Value
+            });
+        dbContext.AddEvents(instrument);
+    }
+
     public Task<IReadOnlyCollection<Bond>> GetBonds()
     {
         const string sql = """SELECT * FROM "Bonds" LIMIT 10""";
         return GetBonds(sql);
+    }
+
+    private async Task<Bond?> GetBond(ISIN isin, FIGI figi, InstrumentId instrumentId, CancellationToken token)
+    {
+        var instruments = await GetBonds(
+            """
+            SELECT * FROM "Bonds"
+            WHERE "ISIN" = @Isin
+                OR "FIGI" = @Figi
+                OR instrument_id = @InstrumentId
+            """,
+            new
+            {
+                Isin = isin.Value,
+                Figi = figi.Value,
+                InstrumentId = instrumentId.Value
+            });
+
+        if (instruments.Count > 1)
+            throw new InvalidOperationException($"Found more than one bond Isin: ${isin.Value}, Figi: ${figi.Value}, InstrumentId: ${instrumentId.Value}");
+
+        return instruments.FirstOrDefault();
     }
 
     private async Task<BondId> CreateBond(Bond bond)

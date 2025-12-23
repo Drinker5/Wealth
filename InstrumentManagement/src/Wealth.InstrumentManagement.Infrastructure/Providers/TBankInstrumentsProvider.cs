@@ -8,13 +8,7 @@ using Wealth.InstrumentManagement.Application.Providers;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Providers;
 
-[StructLayout(LayoutKind.Auto)]
-public record struct InstrumentsCreateCommand(
-    IReadOnlyCollection<CreateStockCommand>? CreateStockCommands,
-    IReadOnlyCollection<CreateBondCommand>? CreateBondCommands,
-    IReadOnlyCollection<CreateCurrencyCommand>? CreateCurrencyCommands);
-
-public class InstrumentsProvider(IOptions<TBankInstrumentsProviderOptions> options) : IInstrumentsProvider
+public sealed class InstrumentsProvider(IOptions<TBankInstrumentsProviderOptions> options) : IInstrumentsProvider
 {
     private readonly InvestApiClient client = InvestApiClientFactory.Create(options.Value.Token);
     
@@ -24,7 +18,7 @@ public class InstrumentsProvider(IOptions<TBankInstrumentsProviderOptions> optio
         {
             IdType = InstrumentIdType.Uid,
             Id = instrumentId.ToString()
-        });
+        }, cancellationToken: token);
 
         return new CreateStockCommand
         {
@@ -43,7 +37,7 @@ public class InstrumentsProvider(IOptions<TBankInstrumentsProviderOptions> optio
         {
             IdType = InstrumentIdType.Uid,
             Id = instrumentId.ToString()
-        });
+        }, cancellationToken: token);
 
         return new CreateBondCommand
         {
@@ -60,7 +54,7 @@ public class InstrumentsProvider(IOptions<TBankInstrumentsProviderOptions> optio
         {
             IdType = InstrumentIdType.Uid,
             Id = instrumentId.ToString()
-        });
+        }, cancellationToken: token);
 
         return new CreateCurrencyCommand
         {

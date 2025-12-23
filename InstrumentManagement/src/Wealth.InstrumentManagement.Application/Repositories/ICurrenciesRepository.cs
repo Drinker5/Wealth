@@ -13,4 +13,5 @@ public interface ICurrenciesRepository
     Task DeleteCurrency(CurrencyId id);
     Task ChangePrice(CurrencyId id, Money price);
     Task<CurrencyId> CreateCurrency(CreateCurrencyCommand command, CancellationToken token);
+    Task<CurrencyId> UpsertCurrency(CreateCurrencyCommand command, CancellationToken token);
 }

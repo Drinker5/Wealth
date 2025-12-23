@@ -14,5 +14,6 @@ public interface IBondsRepository
     Task DeleteBond(BondId id);
     Task ChangePrice(BondId id, Money price);
     Task<BondId> CreateBond(CreateBondCommand command, CancellationToken token);
+    Task<BondId> UpsertBond(CreateBondCommand command, CancellationToken token);
     Task ChangeCoupon(BondId id, Coupon coupon);
 }

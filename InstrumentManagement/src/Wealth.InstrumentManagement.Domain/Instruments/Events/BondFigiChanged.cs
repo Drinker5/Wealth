@@ -3,4 +3,4 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.InstrumentManagement.Domain.Instruments.Events;
 
-public sealed record FigiChanged(StockId StockId, FIGI Figi) : DomainEvent;
+public record BondFigiChanged(BondId BondId, FIGI Figi) : DomainEvent;

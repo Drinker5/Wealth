@@ -12,7 +12,7 @@ public class StockTicker : Migration
             .AddColumn("ticker")
             .AsString(10)
             .NotNullable()
-            .WithDefaultValue(string.Empty);
+            .WithDefaultValue("0");
     }
 
     public override void Down()

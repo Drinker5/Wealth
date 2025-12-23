@@ -71,6 +71,57 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
         return await CreateCurrency(currencyInstrument);
     }
 
+    public async Task<CurrencyId> UpsertCurrency(CreateCurrencyCommand command, CancellationToken token)
+    {
+        var currency = await GetCurrency(command.Figi, command.InstrumentId, token);
+        if (currency == null)
+            return await CreateCurrency(command, token);
+
+        await UpdateCurrency(currency, command, token);
+        return currency.Id;
+    }
+
+    private async Task<Currency?> GetCurrency(FIGI figi, InstrumentId instrumentId, CancellationToken token)
+    {
+        var instruments = await GetCurrencies(
+            """
+            SELECT * FROM currencies
+            WHERE figi = @Figi 
+               OR instrument_id = @InstrumentId
+            """,
+            new
+            {
+                Figi = figi.Value,
+                InstrumentId = instrumentId.Value
+            });
+
+        if (instruments.Count > 1)
+            throw new InvalidOperationException($"Found more than one currency Figi: ${figi.Value}, InstrumentId: ${instrumentId.Value}");
+
+        return instruments.FirstOrDefault();
+    }
+
+    private async Task UpdateCurrency(Currency instrument, CreateCurrencyCommand command, CancellationToken token)
+    {
+        instrument.ChangeName(command.Name);
+        instrument.ChangeFigi(command.Figi);
+        instrument.ChangeInstrumentId(command.InstrumentId);
+        await connection.ExecuteAsync(
+            """
+            UPDATE currencies 
+            SET name = @Name, figi = @Figi, instrument_id = @InstrumentId
+            WHERE id = @Id
+            """,
+            new
+            {
+                Id = instrument.Id.Value,
+                Name = command.Name,
+                Figi = command.Figi.Value,
+                InstrumentId = command.InstrumentId.Value
+            });
+        dbContext.AddEvents(instrument);
+    }
+
     public Task<IReadOnlyCollection<Currency>> GetCurrencies()
     {
         const string sql = "SELECT * FROM currencies LIMIT 10";

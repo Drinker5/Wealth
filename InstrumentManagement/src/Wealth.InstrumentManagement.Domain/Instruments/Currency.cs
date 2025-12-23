@@ -13,7 +13,7 @@ public class Currency(CurrencyId id) : AggregateRoot
     public FIGI Figi { get; set; }
 
     public Money Price { get; set; } = Money.Empty;
-    
+
     public InstrumentId InstrumentId { get; set; }
 
     public static Currency Create(CurrencyId currencyId, string name, FIGI figi, InstrumentId instrumentId)
@@ -42,5 +42,44 @@ public class Currency(CurrencyId id) : AggregateRoot
     private void When(CurrencyPriceChanged @event)
     {
         Price = @event.NewPrice;
+    }
+
+    public void ChangeFigi(FIGI figi)
+    {
+        if (this.Figi == figi)
+            return;
+
+        Apply(new CurrencyFigiChanged(Id, figi));
+    }
+
+    public void ChangeInstrumentId(InstrumentId instrumentId)
+    {
+        if (this.InstrumentId == instrumentId)
+            return;
+
+        Apply(new CurrencyInstrumentIdChanged(Id, instrumentId));
+    }
+
+    public void ChangeName(string name)
+    {
+        if (this.Name == name)
+            return;
+
+        Apply(new CurrencyNameChanged(Id, name));
+    }
+
+    private void When(CurrencyFigiChanged @event)
+    {
+        Figi = @event.Figi;
+    }
+
+    private void When(CurrencyInstrumentIdChanged @event)
+    {
+        InstrumentId = @event.InstrumentId;
+    }
+    
+    private void When(CurrencyNameChanged @event)
+    {
+        Name = @event.Name;
     }
 }

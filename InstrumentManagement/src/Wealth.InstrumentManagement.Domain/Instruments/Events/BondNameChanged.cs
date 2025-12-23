@@ -3,4 +3,4 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.InstrumentManagement.Domain.Instruments.Events;
 
-public sealed record IsinChanged(StockId StockId, ISIN Isin) : DomainEvent;
+public record BondNameChanged(BondId BondId, string Name) : DomainEvent;

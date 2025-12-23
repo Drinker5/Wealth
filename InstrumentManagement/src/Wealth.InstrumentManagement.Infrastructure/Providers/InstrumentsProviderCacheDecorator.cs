@@ -1,15 +1,10 @@
-using System.Runtime.InteropServices;
-using Microsoft.Extensions.Options;
-using Tinkoff.InvestApi;
-using Tinkoff.InvestApi.V1;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Providers;
-using Instrument = Wealth.InstrumentManagement.Application.Instruments.Models.Instrument;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Providers;
 
-public class InstrumentsProviderDecorator(IInstrumentsProvider instrumentsProvider) : IInstrumentsProvider
+public sealed class InstrumentsProviderDecorator(IInstrumentsProvider instrumentsProvider) : IInstrumentsProvider
 {
     private Dictionary<InstrumentId, CreateBondCommand>? Bonds = null;
     private Dictionary<InstrumentId, CreateStockCommand>? Stocks = null;

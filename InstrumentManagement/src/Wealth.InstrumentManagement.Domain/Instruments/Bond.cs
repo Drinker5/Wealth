@@ -58,7 +58,7 @@ public class Bond(BondId id) : AggregateRoot
     {
         if (Coupon == coupon)
             return;
-        
+
         Apply(new BondCouponChanged
         {
             BondId = Id,
@@ -75,5 +75,57 @@ public class Bond(BondId id) : AggregateRoot
     private void When(BondPriceChanged @event)
     {
         Price = @event.NewPrice;
+    }
+
+    public void ChangeIsin(ISIN isin)
+    {
+        if (this.Isin == isin)
+            return;
+
+        Apply(new BondIsinChanged(Id, isin));
+    }
+
+    public void ChangeFigi(FIGI figi)
+    {
+        if (this.Figi == figi)
+            return;
+
+        Apply(new BondFigiChanged(Id, figi));
+    }
+
+    public void ChangeInstrumentId(InstrumentId instrumentId)
+    {
+        if (this.InstrumentId == instrumentId)
+            return;
+
+        Apply(new BondInstrumentIdChanged(Id, instrumentId));
+    }
+
+    public void ChangeName(string name)
+    {
+        if (this.Name == name)
+            return;
+        
+        Apply(new BondNameChanged(Id, name));
+    }
+
+    private void When(BondIsinChanged @event)
+    {
+        Isin = @event.Isin;
+    }
+
+    private void When(BondFigiChanged @event)
+    {
+        Figi = @event.Figi;
+    }
+
+    private void When(BondInstrumentIdChanged @event)
+    {
+        InstrumentId = @event.InstrumentId;
+    }
+    
+    private void When(BondNameChanged @event)
+    {
+        Name = @event.Name;
     }
 }
