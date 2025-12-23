@@ -32,6 +32,7 @@ public sealed class InstrumentManagementApiFixture : WebApplicationFactory<Progr
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
+        builder.UseEnvironment("Testing");
         builder.ConfigureHostConfiguration(config =>
         {
             var data = new Dictionary<string, string>
