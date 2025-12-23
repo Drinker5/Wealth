@@ -155,7 +155,7 @@ public sealed class Strategy : AggregateRoot
         if (newComponents.Count > 0)
         {
             var totalWeight = newComponents.Sum(c => c.Weight);
-            const decimal tolerance = 0.01m;
+            const decimal tolerance = 1m;
 
             if (Math.Abs(totalWeight - 100) > tolerance)
                 throw new ArgumentException($"Total weight must be 100.0 (currently: {totalWeight})", nameof(newComponents));

@@ -30,8 +30,8 @@ public sealed class TinkoffMoexComponentProvider(
     private async Task<List<StrategyComponent>> Build(List<Instrument> strategyInstruments, CancellationToken token)
     {
         var strategyInstrumentIds = strategyInstruments
-            .Where(i => i.InstrumentId.HasValue)
-            .ToDictionary(i => i.InstrumentId!.Value);
+            .Where(i => i.InstrumentUID is not null)
+            .ToDictionary(i => InstrumentId.From(i.InstrumentUID!));
 
         var instrumentsResponse = await instrumentsServiceClient.GetInstrumentsAsync(new GetInstrumentsRequest
         {
@@ -46,12 +46,16 @@ public sealed class TinkoffMoexComponentProvider(
 
             if (strategyInstrumentIds.Count > 0)
             {
-                var g = strategyInstrumentIds.Values.GroupBy(i => i.Type)
-                    .ToDictionary(k => k.Key, v => v.Select(i => new InstrumentIdProto(i.InstrumentId!.Value)));
+                var g = strategyInstrumentIds.Values
+                    .GroupBy(i => i.Type)
+                    .ToDictionary(k => k.Key,
+                        v => v.Select(i => new InstrumentIdProto(i.InstrumentUID!)),
+                        StringComparer.OrdinalIgnoreCase);
+
                 var request = new ImportInstrumentsRequest
                 {
-                    StockInstrumentIds = { g.TryGetValue(Stock, out var stocks) ? stocks : null },
-                    BondInstrumentIds = { g.TryGetValue(Bond, out var bonds) ? bonds : null },
+                    StockInstrumentIds = { g.TryGetValue(Stock, out var stocks) ? stocks : [] },
+                    BondInstrumentIds = { g.TryGetValue(Bond, out var bonds) ? bonds : [] },
                     CurrencyInstrumentIds = { }
                 };
 
@@ -61,7 +65,7 @@ public sealed class TinkoffMoexComponentProvider(
                 if (strategyInstrumentIds.Count != updateInstrumentsResponse.Instruments.Count)
                 {
                     foreach (var instrument in updateInstrumentsResponse.Instruments)
-                        strategyInstrumentIds.Remove(instrument.InstrumentId.Value);
+                        strategyInstrumentIds.Remove(instrument.InstrumentId);
 
                     throw new InvalidOperationException($"Did not find {string.Join(", ", strategyInstrumentIds)} instruments.");
                 }
@@ -74,10 +78,10 @@ public sealed class TinkoffMoexComponentProvider(
         {
             if (StringComparer.OrdinalIgnoreCase.Equals(instrument.Type, Stock))
             {
-                if (instrument.Isin == null)
-                    throw new InvalidOperationException($"{instrument.Name} stock isin is null.");
+                if (instrument.InstrumentUID == null)
+                    throw new InvalidOperationException($"{instrument.InstrumentUID} stock uid is null.");
 
-                var instrumentProto = instruments[instrument.Isin];
+                var instrumentProto = instruments[instrument.InstrumentUID];
                 return new StockStrategyComponent
                 {
                     StockId = instrumentProto.Id,
@@ -96,10 +100,10 @@ public sealed class TinkoffMoexComponentProvider(
 
             if (StringComparer.OrdinalIgnoreCase.Equals(instrument.Type, Bond))
             {
-                if (instrument.Isin == null)
-                    throw new InvalidOperationException($"{instrument.Name} bond isin is null.");
+                if (instrument.InstrumentUID == null)
+                    throw new InvalidOperationException($"{instrument.Name} bond uid is null.");
 
-                var instrumentProto = instruments[instrument.Isin];
+                var instrumentProto = instruments[instrument.InstrumentUID];
                 return new BondStrategyComponent
                 {
                     BondId = instrumentProto.Id,
@@ -128,6 +132,6 @@ public sealed class TinkoffMoexComponentProvider(
         public decimal RelativeValue { get; set; }
         public string? Isin { get; set; }
         public string? Ticker { get; set; }
-        public Guid? InstrumentId { get; set; }
+        public string? InstrumentUID { get; set; }
     }
 }

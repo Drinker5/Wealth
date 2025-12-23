@@ -10,6 +10,7 @@
     <PackageReference Include="FluentMigrator.Runner.Postgres" Version="7.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.1" />
     <PackageReference Include="Npgsql" Version="10.0.1" />
+    <PackageReference Include="Polly.RateLimiting" Version="8.6.5" />
     <PackageReference Include="Z.Dapper.Plus" Version="9.2.0" />
     <PackageReference Include="Tinkoff.InvestApi" Version="0.6.17" />
     <PackageReference Include="Scrutor" Version="7.0.0" />

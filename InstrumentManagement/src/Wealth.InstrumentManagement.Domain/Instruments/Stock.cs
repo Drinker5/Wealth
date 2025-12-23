@@ -105,7 +105,7 @@ public class Stock(StockId id) : AggregateRoot
         if (this.Isin == isin)
             return;
 
-        Apply(new IsinChanged(Id, isin));
+        Apply(new StockIsinChanged(Id, isin));
     }
 
     public void ChangeFigi(FIGI figi)
@@ -113,7 +113,7 @@ public class Stock(StockId id) : AggregateRoot
         if (this.Figi == figi)
             return;
 
-        Apply(new FigiChanged(Id, figi));
+        Apply(new StockFigiChanged(Id, figi));
     }
 
     public void ChangeInstrumentId(InstrumentId instrumentId)
@@ -121,21 +121,34 @@ public class Stock(StockId id) : AggregateRoot
         if (this.InstrumentId == instrumentId)
             return;
 
-        Apply(new InstrumentIdChanged(Id, instrumentId));
+        Apply(new StockInstrumentIdChanged(Id, instrumentId));
     }
 
-    private void When(IsinChanged @event)
+    public void ChangeName(string name)
+    {
+        if (this.Name == name)
+            return;
+        
+        Apply(new StockNameChanged(Id, name));
+    }
+
+    private void When(StockIsinChanged @event)
     {
         Isin = @event.Isin;
     }
 
-    private void When(FigiChanged @event)
+    private void When(StockFigiChanged @event)
     {
         Figi = @event.Figi;
     }
 
-    private void When(InstrumentIdChanged @event)
+    private void When(StockInstrumentIdChanged @event)
     {
         InstrumentId = @event.InstrumentId;
+    }
+
+    private void When(StockNameChanged @event)
+    {
+        Name = @event.Name;
     }
 }

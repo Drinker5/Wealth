@@ -243,7 +243,7 @@ public sealed class InstrumentManagementApiTests :
     }
 
     [Fact]
-    public async Task ImportInstruments_AsExpected()
+    public async Task ImportInstruments_ShouldCreateNewInstruments()
     {
         var instrumentIds = fixture.CreateMany<InstrumentId>(3).ToArray();
         var createStockCommand = fixture.Create<CreateStockCommand>();
@@ -276,5 +276,106 @@ public sealed class InstrumentManagementApiTests :
                 Assert.Equal(instrumentIds[2], (InstrumentId)i.InstrumentId);
                 Assert.Equal(InstrumentTypeProto.CurrencyAsset, i.Type);
             });
+    }
+
+    [Fact]
+    public async Task ImportInstruments_Stock_ShouldUpdateExisted()
+    {
+        var createStockRequest = new CreateStockRequest
+        {
+            InstrumentId = fixture.Create<InstrumentId>(),
+            Isin = fixture.Create<ISIN>(),
+            Figi = fixture.Create<FIGI>(),
+            LotSize = fixture.Create<int>(),
+            Name = fixture.Create<string>(),
+            Ticker = fixture.Create<Ticker>()
+        };
+        var createStockResponse = await grpcClient.CreateStockAsync(createStockRequest);
+        var instrumentId = fixture.Create<InstrumentId>();
+        var updateCommand = fixture.Create<CreateStockCommand>() with
+        {
+            Isin = createStockRequest.Isin
+        };
+        TestInstrumentsProvider.Stocks.Add(instrumentId, updateCommand);
+
+        // Act
+        var response = await grpcClient.ImportInstrumentsAsync(new ImportInstrumentsRequest
+        {
+            StockInstrumentIds = { instrumentId }
+        });
+
+        var instrument = Assert.Single(response.Instruments);
+        var stock = await grpcClient.GetStockAsync(new GetStockRequest { StockId = new StockIdProto(instrument.Id) });
+        Assert.Equal(createStockResponse.StockId, stock.StockInfo.StockId);
+        Assert.Equal(updateCommand.Figi, stock.StockInfo.Figi);
+        Assert.Equal(updateCommand.Isin, stock.StockInfo.Isin.Value);
+        Assert.Equal(updateCommand.LotSize.Value, stock.StockInfo.LotSize);
+        Assert.Equal(updateCommand.InstrumentId.Value, stock.StockInfo.InstrumentId);
+        Assert.Equal(updateCommand.Name, stock.StockInfo.Name);
+        Assert.Equal(updateCommand.Ticker, stock.StockInfo.Ticker);
+    }
+    
+    [Fact]
+    public async Task ImportInstruments_Bond_ShouldUpdateExisted()
+    {
+        var createBondRequest = new CreateBondRequest
+        {
+            InstrumentId = fixture.Create<InstrumentId>(),
+            Isin = fixture.Create<ISIN>(),
+            Figi = fixture.Create<FIGI>(),
+            Name = fixture.Create<string>(),
+        };
+        var createBondResponse = await grpcClient.CreateBondAsync(createBondRequest);
+        var instrumentId = fixture.Create<InstrumentId>();
+        var updateCommand = fixture.Create<CreateBondCommand>() with
+        {
+            Isin = createBondRequest.Isin
+        };
+        TestInstrumentsProvider.Bonds.Add(instrumentId, updateCommand);
+
+        // Act
+        var response = await grpcClient.ImportInstrumentsAsync(new ImportInstrumentsRequest
+        {
+            BondInstrumentIds = { instrumentId }
+        });
+
+        var instrument = Assert.Single(response.Instruments);
+        var bond = await grpcClient.GetBondAsync(new GetBondRequest { BondId = new BondIdProto(instrument.Id) });
+        Assert.Equal(createBondResponse.BondId, bond.BondId);
+        Assert.Equal(updateCommand.Figi, bond.Figi);
+        Assert.Equal(updateCommand.Isin, bond.Isin.Value);
+        Assert.Equal(updateCommand.InstrumentId.Value, bond.InstrumentId);
+        Assert.Equal(updateCommand.Name, bond.Name);
+    }
+    
+    [Fact]
+    public async Task ImportInstruments_Currency_ShouldUpdateExisted()
+    {
+        var createCurrencyRequest = new CreateCurrencyRequest
+        {
+            InstrumentId = fixture.Create<InstrumentId>(),
+            Figi = fixture.Create<FIGI>(),
+            Name = fixture.Create<string>(),
+        };
+        var createCurrencyResponse = await grpcClient.CreateCurrencyAsync(createCurrencyRequest);
+        var instrumentId = fixture.Create<InstrumentId>();
+        var updateCommand = fixture.Create<CreateCurrencyCommand>() with
+        {
+            Figi = createCurrencyRequest.Figi
+        };
+        TestInstrumentsProvider.Currencies.Add(instrumentId, updateCommand);
+
+        // Act
+        var response = await grpcClient.ImportInstrumentsAsync(new ImportInstrumentsRequest
+        {
+            CurrencyInstrumentIds = { instrumentId }
+        });
+
+        var instrument = Assert.Single(response.Instruments);
+        var stock = await grpcClient.GetCurrencyAsync(new GetCurrencyRequest { CurrencyId = new CurrencyIdProto(instrument.Id) });
+        Assert.Equal(createCurrencyResponse.CurrencyId, stock.CurrencyId);
+        Assert.Equal(updateCommand.Figi, stock.Figi);
+        Assert.Equal(updateCommand.InstrumentId.Value, stock.InstrumentId);
+        Assert.Equal(updateCommand.Name, stock.Name);
     }
 }

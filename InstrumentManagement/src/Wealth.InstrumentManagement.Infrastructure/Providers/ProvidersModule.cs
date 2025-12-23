@@ -15,6 +15,7 @@ public class ProvidersModule : IServiceModule
             .ValidateOnStart();
 
         services.AddSingleton<IInstrumentsProvider, InstrumentsProvider>();
+        services.Decorate<IInstrumentsProvider, InstrumentsProviderRateLimiterDecorator>();
         services.Decorate<IInstrumentsProvider, InstrumentsProviderDecorator>();
     }
 }

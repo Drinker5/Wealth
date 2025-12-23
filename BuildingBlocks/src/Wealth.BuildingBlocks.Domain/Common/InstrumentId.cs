@@ -3,6 +3,7 @@ namespace Wealth.BuildingBlocks.Domain.Common;
 public readonly record struct InstrumentId(Guid Value) : IIdentity
 {
     public static InstrumentId New() => new(Guid.NewGuid());
+    public static InstrumentId From(string value) => new(Guid.Parse(value));
 
     public override string ToString()
     {
