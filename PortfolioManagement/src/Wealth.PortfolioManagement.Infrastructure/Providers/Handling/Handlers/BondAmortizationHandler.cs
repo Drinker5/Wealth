@@ -1,4 +1,3 @@
-using Tinkoff.InvestApi.V1;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Domain.Operations;
 using Operation = Wealth.PortfolioManagement.Domain.Operations.Operation;

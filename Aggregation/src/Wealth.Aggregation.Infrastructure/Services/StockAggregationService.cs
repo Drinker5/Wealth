@@ -7,21 +7,27 @@ namespace Wealth.Aggregation.Infrastructure.Services;
 
 public sealed class StockAggregationService(
     IStockAggregationRepository repository,
-    IInstrumentService instrumentService) : IStockAggregationService
+    IInstrumentService instrumentService,
+    IStrategyService strategyService) : IStockAggregationService
 {
     public async Task<IReadOnlyCollection<StockAggregation>> GetStockAggregation(
         PortfolioId portfolioId,
+        StrategyId strategyId,
         CancellationToken token)
     {
         var raws = await repository.GetAggregation(portfolioId, token).ToListAsync(cancellationToken: token);
 
         var stockIds = raws.Select(i => new StockId(i.StockId)).ToList();
         var stockInfos = await instrumentService.GetStocksInfo(stockIds, token);
-        return BuildStockAggregations(raws, stockInfos);
+        var strategy = await strategyService.GetStrategy(strategyId, token);
+        var componentWeights = strategy?.Components.ToDictionary(i => i.Id, i => i.Weight) ?? [];
+
+        return BuildStockAggregations(raws, componentWeights, stockInfos);
     }
 
     private static List<StockAggregation> BuildStockAggregations(
         List<StockAggregationRaw> raws,
+        Dictionary<int, decimal> componentWeights,
         IReadOnlyDictionary<StockId, StockInfo> stockInfos)
     {
         var result = new List<StockAggregation>();
@@ -32,7 +38,7 @@ public sealed class StockAggregationService(
             result.Add(new StockAggregation(
                 Index: stockInfo.Ticker,
                 Name: stockInfo.Name,
-                Weight: -1, // TODO
+                Weight: componentWeights.GetValueOrDefault(raw.StockId, 0),
                 WeightSkipped: -1, // TODO
                 UnitPrice: new Money(raw.Currency, raw.Price),
                 stockInfo.DividendPerYear,

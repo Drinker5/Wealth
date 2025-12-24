@@ -7,5 +7,6 @@ public interface IStockAggregationService
 {
     Task<IReadOnlyCollection<StockAggregation>> GetStockAggregation(
         PortfolioId portfolioId,
+        StrategyId strategyId,
         CancellationToken token);
 }
