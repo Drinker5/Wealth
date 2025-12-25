@@ -1,17 +1,25 @@
+using Eventso.Subscription;
 using Wealth.Aggregation.Application.Commands;
 using Wealth.BuildingBlocks.Application;
+
 
 namespace Wealth.Aggregation.Application.Events;
 
 public sealed class StockPriceChangedIntegrationEventHandler(ICqrsInvoker cqrsInvoker)
-    : IMessageHandler<StockPriceChangedIntegrationEvent>
+    : IMessageHandler<IReadOnlyCollection<StockPriceChangedIntegrationEvent>>
 {
-    public Task Handle(StockPriceChangedIntegrationEvent @event, CancellationToken token = default)
+    public async Task Handle(IReadOnlyCollection<StockPriceChangedIntegrationEvent> messages, CancellationToken token = default)
     {
-        return cqrsInvoker.Command(new StockChangePrice
-        {
-            StockId = @event.StockId,
-            NewPrice = @event.NewPrice,
-        }, token);
+        foreach (var message in messages)
+            await Handle(token, message);
     }
+
+    private Task Handle(CancellationToken token, StockPriceChangedIntegrationEvent message)
+        => cqrsInvoker.Command(
+            new StockChangePrice
+            {
+                StockId = message.StockId,
+                NewPrice = message.NewPrice,
+            },
+            token);
 }

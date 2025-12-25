@@ -1,10 +1,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Wealth.Aggregation.Application.Events;
-using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Infrastructure;
 using Wealth.BuildingBlocks.Infrastructure.KafkaConsumer;
-using Wealth.PortfolioManagement;
+using Eventso.Subscription.Hosting;
 
 namespace Wealth.Aggregation.Infrastructure.EventBus;
 
@@ -12,9 +10,16 @@ public class EventBusModule : IServiceModule
 {
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddTopicHandler<StockPriceChangedIntegrationEvent, StockPriceChangedIntegrationEventHandler>(
-            "WealthInstrumentManagement");
-        services.AddTopicHandler<OperationProto, OperationEventHandler>(
-            "WealthOperationsConverted");
+        services.AddSubscriptions((subs, sp) =>
+            {
+                subs.AddBatch(sp,
+                    "WealthInstrumentManagement",
+                    new StockPriceChangedIntegrationEventDeserializer());
+
+                subs.AddBatch(sp,
+                    "WealthOperationsConverted",
+                    new OperationProtoDeserializer());
+            },
+            handlersLifetime: ServiceLifetime.Singleton);
     }
 }

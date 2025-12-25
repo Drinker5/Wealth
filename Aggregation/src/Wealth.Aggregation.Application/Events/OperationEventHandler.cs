@@ -1,12 +1,19 @@
+using Eventso.Subscription;
 using Wealth.Aggregation.Application.Commands;
 using Wealth.BuildingBlocks.Application;
 using Wealth.PortfolioManagement;
 
 namespace Wealth.Aggregation.Application.Events;
 
-public sealed class OperationEventHandler(ICqrsInvoker mediator) : IMessageHandler<OperationProto>
+public sealed class OperationEventHandler(ICqrsInvoker mediator) : IMessageHandler<IReadOnlyCollection<OperationProto>>
 {
-    public async Task Handle(OperationProto message, CancellationToken token)
+    public async Task Handle(IReadOnlyCollection<OperationProto> messages, CancellationToken token)
+    {
+        foreach (var message in messages)
+            await Handle(message, token);
+    }
+
+    private async Task Handle(OperationProto message, CancellationToken token)
     {
         switch (message.VariantCase)
         {

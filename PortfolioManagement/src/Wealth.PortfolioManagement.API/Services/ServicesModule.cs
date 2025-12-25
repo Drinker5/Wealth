@@ -1,7 +1,7 @@
+using Eventso.Subscription.Hosting;
 using Wealth.BuildingBlocks.Infrastructure;
 using Wealth.BuildingBlocks.Infrastructure.KafkaConsumer;
 using Wealth.PortfolioManagement.Application.Services;
-using Wealth.PortfolioManagement.Infrastructure.Providers.Handling;
 using InstrumentsService = Wealth.InstrumentManagement.InstrumentsService;
 
 namespace Wealth.PortfolioManagement.API.Services;
@@ -14,6 +14,11 @@ public class ServicesModule : IServiceModule
         services.AddGrpcClient<InstrumentsService.InstrumentsServiceClient>(o => { o.Address = new Uri("http://instrument"); })
             .AddServiceDiscovery();
 
-        services.AddTopicHandler<Tinkoff.InvestApi.V1.Operation, OperationHandler>("OperationsTopic");
+        services.AddSubscriptions((subs, sp) =>
+        {
+            subs.AddBatch(sp,
+                "OperationsTopic",
+                new OperationDeserializer());
+        });
     }
 }
