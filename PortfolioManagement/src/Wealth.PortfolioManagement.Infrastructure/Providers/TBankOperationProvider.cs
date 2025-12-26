@@ -1,41 +1,64 @@
-using System.Collections.Frozen;
+using System.Collections;
 using System.Runtime.CompilerServices;
+using System.Threading.RateLimiting;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Options;
+using Polly;
 using Tinkoff.InvestApi;
 using Tinkoff.InvestApi.V1;
-using Wealth.PortfolioManagement.Application.Providers;
-using Wealth.PortfolioManagement.Infrastructure.Providers.Handling;
-using Operation = Wealth.PortfolioManagement.Domain.Operations.Operation;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Providers;
 
-internal sealed class TBankOperationProvider(
-    IPortfolioIdProvider portfolioIdProvider,
-    OperationConverter converter,
-    IOptions<TBankOperationProviderOptions> options) : IOperationProvider
+internal sealed class TBankOperationProvider(IOptions<TBankOperationProviderOptions> options)
 {
     private readonly InvestApiClient client = InvestApiClientFactory.Create(options.Value.Token);
+    private const int dateRangeSize = 30;
+
+    private readonly ResiliencePipeline pipeline = new ResiliencePipelineBuilder()
+        .AddRateLimiter(new SlidingWindowRateLimiter(
+            new SlidingWindowRateLimiterOptions
+            {
+                PermitLimit = 30,
+                SegmentsPerWindow = 4,
+                Window = TimeSpan.FromMinutes(1)
+            })).Build();
 
     public async IAsyncEnumerable<Operation> GetOperations(
         DateTimeOffset from,
+        DateTimeOffset to,
         [EnumeratorCancellation] CancellationToken token)
     {
-        var operations = await client.Operations.GetOperationsAsync(new OperationsRequest
+        foreach (var (chunkFrom, chunkTo) in SplitDateRange(from, to, dateRangeSize))
         {
-            AccountId = options.Value.AccountId,
-            From = Timestamp.FromDateTimeOffset(from.ToUniversalTime()),
-            To = Timestamp.FromDateTime(DateTime.UtcNow)
-        }, cancellationToken: token);
+            var operations = await pipeline.ExecuteAsync(
+                async ct => await client.Operations.GetOperationsAsync(new OperationsRequest
+                {
+                    AccountId = options.Value.AccountId,
+                    From = Timestamp.FromDateTimeOffset(chunkFrom.ToUniversalTime()),
+                    To = Timestamp.FromDateTimeOffset(chunkTo.ToUniversalTime())
+                }, cancellationToken: ct),
+                token);
 
-        if (operations.Operations.Count <= 0)
-            yield break;
+            if (operations.Operations.Count <= 0)
+                yield break;
 
-        var portfolioId = await portfolioIdProvider.GetPortfolioIdByAccountId(options.Value.AccountId, token);
-        foreach (var operation in operations.Operations.Where(i => i.State == OperationState.Executed))
-        {
-            await foreach (var converted in converter.ConvertOperation(operation, portfolioId).WithCancellation(token))
-                yield return converted;
+            foreach (var operation in operations.Operations.Where(i => i.State == OperationState.Executed))
+                yield return operation;
         }
+    }
+
+    private static IEnumerable<(DateTimeOffset From, DateTimeOffset To)> SplitDateRange(
+        DateTimeOffset from,
+        DateTimeOffset to,
+        int chunkDays)
+    {
+        DateTimeOffset chunkEnd;
+        while ((chunkEnd = from.AddDays(chunkDays)) < to)
+        {
+            yield return (from, chunkEnd);
+            from = chunkEnd.AddTicks(1);
+        }
+
+        yield return (from, to);
     }
 }

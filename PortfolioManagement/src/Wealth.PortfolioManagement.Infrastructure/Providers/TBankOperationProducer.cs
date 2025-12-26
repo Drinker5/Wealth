@@ -1,37 +1,36 @@
-using Confluent.Kafka;
 using Microsoft.Extensions.Options;
-using Tinkoff.InvestApi;
 using Tinkoff.InvestApi.V1;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Infrastructure.KafkaProducer;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Application.Providers;
-using Timestamp = Google.Protobuf.WellKnownTypes.Timestamp;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Providers;
 
 internal sealed class TBankOperationProducer(
     IPortfolioIdProvider portfolioIdProvider,
+    TBankOperationProvider operationProvider,
     IKafkaProducer producer,
     IOptions<TBankOperationProviderOptions> options) : IOperationProducer
 {
-    private readonly InvestApiClient client = InvestApiClientFactory.Create(options.Value.Token);
+    private const int chunkSize = 100;
 
     public async Task ProduceOperations(DateTimeOffset from, DateTimeOffset to, CancellationToken token)
     {
-        var operations = await client.Operations.GetOperationsAsync(new OperationsRequest
-        {
-            AccountId = options.Value.AccountId,
-            From = Timestamp.FromDateTimeOffset(from.ToUniversalTime()),
-            To = Timestamp.FromDateTimeOffset(to.ToUniversalTime())
-        }, cancellationToken: token);
+        var portfolioId = await portfolioIdProvider.GetPortfolioIdByAccountId(options.Value.AccountId, token);
+        await foreach (var chunk in operationProvider
+                           .GetOperations(from, to, token)
+                           .Chunk(chunkSize)
+                           .WithCancellation(token))
+            await ProduceChunk(portfolioId, chunk, token);
+    }
 
-        if (operations.Operations.Count <= 0)
+    private async Task ProduceChunk(PortfolioId portfolioId, Operation[] operations, CancellationToken token)
+    {
+        if (operations.Length == 0)
             return;
 
-        var portfolioId = await portfolioIdProvider.GetPortfolioIdByAccountId(options.Value.AccountId, token);
-        var messages = operations.Operations
-            .Where(i => i.State == OperationState.Executed)
-            .Select(i => new BusMessage<string, Tinkoff.InvestApi.V1.Operation>
+        var messages = operations
+            .Select(i => new BusMessage<string, Operation>
             {
                 Key = portfolioId.ToString(),
                 Value = i

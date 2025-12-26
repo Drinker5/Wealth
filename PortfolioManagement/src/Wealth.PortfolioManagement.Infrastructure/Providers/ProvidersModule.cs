@@ -20,8 +20,8 @@ public class ProvidersModule : IServiceModule
         services.AddOptions<PortfolioMapOptions>()
             .BindConfiguration(PortfolioMapOptions.Section);
 
-        services.AddSingleton<IOperationProvider, TBankOperationProvider>();
         services.AddSingleton<IOperationProducer, TBankOperationProducer>();
+        services.AddSingleton<TBankOperationProvider>();
         services.AddSingleton<IPortfolioIdProvider, PortfolioIdProvider>();
         services.AddSingleton<IInstrumentIdProvider, InstrumentIdProvider>();
         services.Decorate<IInstrumentIdProvider, InstrumentIdProviderCacheDecorator>();
