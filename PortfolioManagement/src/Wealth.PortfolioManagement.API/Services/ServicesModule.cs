@@ -15,10 +15,12 @@ public class ServicesModule : IServiceModule
             .AddServiceDiscovery();
 
         services.AddSubscriptions((subs, sp) =>
-        {
-            subs.AddBatch(sp,
-                "OperationsTopic",
-                new OperationDeserializer());
-        });
+            {
+                subs.AddBatch(sp,
+                    "OperationsTopic",
+                    new OperationDeserializer());
+            },
+            types => types.FromApplicationDependencies(),
+            handlersLifetime: ServiceLifetime.Singleton);
     }
 }

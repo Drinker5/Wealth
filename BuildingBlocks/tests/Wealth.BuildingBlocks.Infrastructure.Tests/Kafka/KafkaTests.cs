@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Wealth.BuildingBlocks.Application;
-using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Infrastructure.KafkaConsumer;
 using Wealth.BuildingBlocks.Infrastructure.KafkaProducer;
 

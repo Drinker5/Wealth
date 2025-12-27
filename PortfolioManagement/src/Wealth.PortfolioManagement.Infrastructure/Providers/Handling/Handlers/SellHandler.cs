@@ -1,4 +1,4 @@
-using Tinkoff.InvestApi.V1;
+using System.Runtime.CompilerServices;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Domain.Operations;
 using Operation = Wealth.PortfolioManagement.Domain.Operations.Operation;
@@ -10,7 +10,8 @@ public class SellHandler(IInstrumentIdProvider instrumentIdProvider) : IOperatio
     public async IAsyncEnumerable<Operation> Handle(
         Tinkoff.InvestApi.V1.Operation operation,
         Tinkoff.InvestApi.V1.InstrumentType instrumentType,
-        PortfolioId portfolioId)
+        PortfolioId portfolioId,
+        [EnumeratorCancellation] CancellationToken token)
     {
         foreach (var trade in operation.Trades)
         {
@@ -21,7 +22,7 @@ public class SellHandler(IInstrumentIdProvider instrumentIdProvider) : IOperatio
                     Id = trade.TradeId,
                     Date = trade.DateTime.ToDateTimeOffset(),
                     Amount = trade.Price.ToMoney(),
-                    BondId = await instrumentIdProvider.GetBondId(operation.InstrumentUid),
+                    BondId = await instrumentIdProvider.GetBondId(operation.InstrumentUid, token),
                     PortfolioId = portfolioId,
                     Quantity = -trade.Quantity,
                     Type = TradeOperationType.Sell,
@@ -31,7 +32,7 @@ public class SellHandler(IInstrumentIdProvider instrumentIdProvider) : IOperatio
                     Id = trade.TradeId,
                     Date = trade.DateTime.ToDateTimeOffset(),
                     Amount = trade.Price.ToMoney(),
-                    StockId = await instrumentIdProvider.GetStockId(operation.InstrumentUid),
+                    StockId = await instrumentIdProvider.GetStockId(operation.InstrumentUid, token),
                     PortfolioId = portfolioId,
                     Quantity = -trade.Quantity,
                     Type = TradeOperationType.Sell,

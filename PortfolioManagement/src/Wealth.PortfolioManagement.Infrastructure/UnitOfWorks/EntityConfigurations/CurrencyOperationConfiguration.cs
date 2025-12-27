@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Wealth.PortfolioManagement.Domain.Operations;
-using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations.Converters;
 
 namespace Wealth.PortfolioManagement.Infrastructure.UnitOfWorks.EntityConfigurations;
 

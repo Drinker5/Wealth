@@ -1,4 +1,5 @@
 using System.Collections.Frozen;
+using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using Tinkoff.InvestApi.V1;
 using Wealth.BuildingBlocks.Domain.Common;
@@ -36,12 +37,13 @@ public sealed class OperationConverter(IServiceProvider sp)
 
     public async IAsyncEnumerable<Operation> ConvertOperation(
         Tinkoff.InvestApi.V1.Operation operation,
-        PortfolioId portfolioId)
+        PortfolioId portfolioId,
+        [EnumeratorCancellation] CancellationToken token)
     {
         var instrumentType = _instrumentTypeMap[operation.InstrumentType];
 
         var handler = GetOrCreateHandler(operation.OperationType);
-        await foreach (var result in handler.Handle(operation, instrumentType, portfolioId))
+        await foreach (var result in handler.Handle(operation, instrumentType, portfolioId, token))
             yield return result;
     }
     

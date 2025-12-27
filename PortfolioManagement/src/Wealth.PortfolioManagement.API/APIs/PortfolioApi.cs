@@ -4,7 +4,6 @@ using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Application.Portfolios.Commands;
 using Wealth.PortfolioManagement.Application.Portfolios.Queries;
 using Wealth.PortfolioManagement.Application.Providers;
-using Wealth.PortfolioManagement.Domain.Operations;
 
 namespace Wealth.PortfolioManagement.API.APIs;
 

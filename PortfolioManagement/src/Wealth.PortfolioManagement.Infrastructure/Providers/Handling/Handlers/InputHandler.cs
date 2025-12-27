@@ -1,4 +1,3 @@
-using Tinkoff.InvestApi.V1;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Domain.Operations;
 using Operation = Wealth.PortfolioManagement.Domain.Operations.Operation;
@@ -10,15 +9,17 @@ public class InputHandler : IOperationHandler
     public IAsyncEnumerable<Operation> Handle(
         Tinkoff.InvestApi.V1.Operation operation,
         Tinkoff.InvestApi.V1.InstrumentType instrumentType,
-        PortfolioId portfolioId) => new[]
-    {
-        new MoneyOperation
+        PortfolioId portfolioId,
+        CancellationToken token) =>
+        new[]
         {
-            Id = operation.Id,
-            Date = operation.Date.ToDateTimeOffset(),
-            Amount = operation.Payment.ToMoney(),
-            Type = MoneyOperationType.Deposit,
-            PortfolioId = portfolioId
-        }
-    }.ToAsyncEnumerable();
+            new MoneyOperation
+            {
+                Id = operation.Id,
+                Date = operation.Date.ToDateTimeOffset(),
+                Amount = operation.Payment.ToMoney(),
+                Type = MoneyOperationType.Deposit,
+                PortfolioId = portfolioId
+            }
+        }.ToAsyncEnumerable();
 }

@@ -37,7 +37,7 @@ public sealed class InstrumentsRepository(WealthDbContext dbContext) : IInstrume
             sql,
             parameters: new
             {
-                instrumentIds = instrumentIds.Select(i=>i.Value).ToArray()
+                instrumentIds = instrumentIds.Select(i => i.Value).ToArray()
             },
             cancellationToken: token);
 

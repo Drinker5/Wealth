@@ -1,10 +1,8 @@
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.PortfolioManagement.Application.Portfolios.Commands;
-using Wealth.PortfolioManagement.Application.Portfolios.Events.CurrencyDepositedHandlers;
 using Wealth.PortfolioManagement.Domain.Operations;
 using Wealth.PortfolioManagement.Domain.Portfolios.Events;
-using Wealth.PortfolioManagement.Domain.Repositories;
 
 namespace Wealth.PortfolioManagement.Application.Portfolios.EventsHandlers.StockBoughtHandlers;
 

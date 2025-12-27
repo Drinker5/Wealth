@@ -20,6 +20,7 @@ public class EventBusModule : IServiceModule
                     "WealthOperationsConverted",
                     new OperationProtoDeserializer());
             },
+            types => types.FromApplicationDependencies(),
             handlersLifetime: ServiceLifetime.Singleton);
     }
 }

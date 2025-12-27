@@ -2,7 +2,6 @@ using Wealth.BuildingBlocks.Application.CommandScheduler;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.CurrencyManagement.Application.ExchangeRates.Commands;
-using Wealth.CurrencyManagement.Application.Tests.TestHelpers;
 using Wealth.CurrencyManagement.Domain.Repositories;
 
 namespace Wealth.CurrencyManagement.Application.Tests.ExchangeRates.Commands;

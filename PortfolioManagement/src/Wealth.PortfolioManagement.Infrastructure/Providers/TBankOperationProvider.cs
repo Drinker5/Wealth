@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Threading.RateLimiting;
 using Google.Protobuf.WellKnownTypes;
@@ -43,7 +42,12 @@ internal sealed class TBankOperationProvider(IOptions<TBankOperationProviderOpti
                 yield break;
 
             foreach (var operation in operations.Operations.Where(i => i.State == OperationState.Executed))
+            {
+                if (options.Value.FixInstrumentUid.TryGetValue(operation.InstrumentUid, out var fixedUid))
+                    operation.InstrumentUid = fixedUid;
+
                 yield return operation;
+            }
         }
     }
 

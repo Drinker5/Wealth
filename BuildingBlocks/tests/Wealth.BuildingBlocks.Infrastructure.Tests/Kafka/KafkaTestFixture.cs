@@ -1,5 +1,4 @@
 using Testcontainers.Kafka;
-using Xunit;
 
 namespace Wealth.BuildingBlocks.Infrastructure.Tests.Kafka;
 

@@ -1,4 +1,3 @@
-using System.Collections;
 using Wealth.BuildingBlocks.Domain;
 using Xunit;
 

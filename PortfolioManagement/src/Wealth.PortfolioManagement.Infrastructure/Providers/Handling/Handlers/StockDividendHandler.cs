@@ -1,4 +1,4 @@
-using Tinkoff.InvestApi.V1;
+using System.Runtime.CompilerServices;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Domain.Operations;
 using Operation = Wealth.PortfolioManagement.Domain.Operations.Operation;
@@ -10,7 +10,8 @@ public sealed class StockDividendHandler(IInstrumentIdProvider instrumentIdProvi
     public async IAsyncEnumerable<Operation> Handle(
         Tinkoff.InvestApi.V1.Operation operation,
         Tinkoff.InvestApi.V1.InstrumentType instrumentType,
-        PortfolioId portfolioId)
+        PortfolioId portfolioId,
+        [EnumeratorCancellation] CancellationToken token)
     {
         if (instrumentType != Tinkoff.InvestApi.V1.InstrumentType.Share)
             throw new ArgumentOutOfRangeException(nameof(instrumentType));
@@ -21,7 +22,7 @@ public sealed class StockDividendHandler(IInstrumentIdProvider instrumentIdProvi
             Date = operation.Date.ToDateTimeOffset(),
             Amount = operation.Payment.ToMoney(),
             PortfolioId = portfolioId,
-            StockId = await instrumentIdProvider.GetStockId(operation.InstrumentUid),
+            StockId = await instrumentIdProvider.GetStockId(operation.InstrumentUid, token),
         };
     }
 }

@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.PortfolioManagement.Application.Providers;
 using Wealth.PortfolioManagement.Infrastructure.Providers;
 using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 
