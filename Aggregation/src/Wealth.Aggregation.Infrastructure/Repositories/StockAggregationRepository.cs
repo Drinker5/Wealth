@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using Octonica.ClickHouseClient;
 using SharpJuice.Clickhouse;
+using Wealth.Aggregation.Application.Commands;
 using Wealth.Aggregation.Application.Models;
 using Wealth.Aggregation.Application.Repository;
 using Wealth.BuildingBlocks.Domain.Common;
@@ -19,31 +20,40 @@ public sealed class StockAggregationRepository(IClickHouseConnectionFactory conn
         const string query =
             """
             WITH trades AS
-                     (SELECT stock_id,
+                     (SELECT instrument_id,
                              sum(quantity) as quantity,
                              sum(amount)   as trade_amount,
                              any(currency) as currency
-                      FROM stock_trade FINAL
+                      FROM operations FINAL
                       WHERE portfolio_id = @portfolioId
-                      GROUP BY stock_id),
+                         AND instrument_type = @instrument_type
+                         AND operation_type in (@buy, @sell)
+                      GROUP BY instrument_id),
                  money AS
-                     (SELECT stock_id,
+                     (SELECT instrument_id,
                              sum(amount) as money_amount
-                      FROM stock_money_operation FINAL
+                      FROM operations FINAL
                       WHERE portfolio_id = @portfolioId
-                      GROUP BY stock_id)
-            SELECT t.stock_id,
+                         AND instrument_type = @instrument_type
+                         AND operation_type in (@dividend, @dividendTax)
+                      GROUP BY instrument_id)
+            SELECT t.instrument_id,
                    t.currency,
                    t.quantity,
                    t.trade_amount,
                    m.money_amount,
-                   dictGet('instrument_price_dictionary', 'price', (t.stock_id, 1)) as price
+                   dictGet('instrument_price_dictionary', 'price', (t.instrument_id, 1)) as price
             FROM trades t
-            LEFT JOIN money m on t.stock_id = m.stock_id;
+            LEFT JOIN money m on t.instrument_id = m.instrument_id;
             """;
 
         await using var command = connection.CreateCommand(query);
         command.Parameters.AddWithValue("@portfolioId", portfolioId.Value);
+        command.Parameters.AddWithValue("@instrument_type", (byte)InstrumentType.Stock);
+        command.Parameters.AddWithValue("@buy", (byte)OperationType.Buy);
+        command.Parameters.AddWithValue("@sell", (byte)OperationType.Sell);
+        command.Parameters.AddWithValue("@dividend", (byte)OperationType.Dividend);
+        command.Parameters.AddWithValue("@dividendTax", (byte)OperationType.DividendTax);
 
         await using var reader = await command.ExecuteReaderAsync(token);
 

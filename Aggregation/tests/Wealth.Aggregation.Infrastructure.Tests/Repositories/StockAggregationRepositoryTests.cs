@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using Octonica.ClickHouseClient;
 using SharpJuice.Clickhouse;
+using Wealth.Aggregation.Application.Commands;
 using Wealth.Aggregation.Infrastructure.Repositories;
 using Wealth.BuildingBlocks.Domain.Common;
 
@@ -48,36 +49,39 @@ public class StockAggregationRepositoryTests : IClassFixture<ClickHouseFixture>
 
         const string insertTradeQuery =
             """
-            INSERT INTO stock_trade (op_id, date, portfolio_id, stock_id, quantity, amount, currency, type)
-            VALUES (@opId, @date, @portfolioId, @stockId, @quantity, @amount, @currency, @type)
+            INSERT INTO operations (op_id, date, portfolio_id, instrument_id, instrument_type, quantity, amount, currency, operation_type)
+            VALUES (@opId, @date, @portfolioId, @instrumentId, @instrumentType, @quantity, @amount, @currency, @type)
             """;
 
         await using var tradeCommand = connection.CreateCommand(insertTradeQuery);
         tradeCommand.Parameters.AddWithValue("@opId", "trade_1");
         tradeCommand.Parameters.AddWithValue("@date", DateTime.UtcNow);
         tradeCommand.Parameters.AddWithValue("@portfolioId", portfolioId.Value);
-        tradeCommand.Parameters.AddWithValue("@stockId", 1);
+        tradeCommand.Parameters.AddWithValue("@instrumentId", 1);
+        tradeCommand.Parameters.AddWithValue("@instrumentType", (byte)InstrumentType.Stock);
         tradeCommand.Parameters.AddWithValue("@quantity", 100L);
         tradeCommand.Parameters.AddWithValue("@amount", 1000m);
         tradeCommand.Parameters.AddWithValue("@currency", (byte)CurrencyCode.Rub);
-        tradeCommand.Parameters.AddWithValue("@type", 1);
+        tradeCommand.Parameters.AddWithValue("@type", (byte)OperationType.Buy);
 
         await tradeCommand.ExecuteNonQueryAsync(token);
 
         const string insertMoneyQuery =
             """
-            INSERT INTO stock_money_operation (op_id, date, portfolio_id, stock_id, amount, currency, type)
-            VALUES (@opId, @date, @portfolioId, @stockId, @amount, @currency, @type)
+            INSERT INTO operations (op_id, date, portfolio_id, instrument_id, instrument_type, quantity, amount, currency, operation_type)
+            VALUES (@opId, @date, @portfolioId, @instrumentId, @instrumentType, @quantity, @amount, @currency, @type)
             """;
 
         await using var moneyCommand = connection.CreateCommand(insertMoneyQuery);
         moneyCommand.Parameters.AddWithValue("@opId", "money_1");
         moneyCommand.Parameters.AddWithValue("@date", DateTime.UtcNow);
         moneyCommand.Parameters.AddWithValue("@portfolioId", portfolioId.Value);
-        moneyCommand.Parameters.AddWithValue("@stockId", 1);
+        moneyCommand.Parameters.AddWithValue("@instrumentId", 1);
+        moneyCommand.Parameters.AddWithValue("@instrumentType", (byte)InstrumentType.Stock);
+        moneyCommand.Parameters.AddWithValue("@quantity", -1L);
         moneyCommand.Parameters.AddWithValue("@amount", 200m);
         moneyCommand.Parameters.AddWithValue("@currency", (byte)CurrencyCode.Rub);
-        moneyCommand.Parameters.AddWithValue("@type", 1);
+        moneyCommand.Parameters.AddWithValue("@type", (byte)OperationType.Dividend);
 
         await moneyCommand.ExecuteNonQueryAsync(token);
 

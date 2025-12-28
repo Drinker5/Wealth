@@ -8,15 +8,15 @@ using Xunit.Abstractions;
 
 namespace Wealth.Aggregation.Infrastructure.Tests.Repositories;
 
-[TestSubject(typeof(StockTradeOperationRepository))]
-public class StockTradeOperationRepositoryTests : IClassFixture<ClickHouseFixture>
+[TestSubject(typeof(OperationsRepository))]
+public class OperationsRepositoryTests : IClassFixture<ClickHouseFixture>
 {
     private readonly ITestOutputHelper output;
     private readonly ClickHouseFixture clickHouseFixture;
-    private readonly StockTradeOperationRepository operationRepository;
+    private readonly OperationsRepository operationsRepository;
     private readonly Fixture fixture;
 
-    public StockTradeOperationRepositoryTests(ITestOutputHelper output, ClickHouseFixture clickHouseFixture)
+    public OperationsRepositoryTests(ITestOutputHelper output, ClickHouseFixture clickHouseFixture)
     {
         fixture = new Fixture();
         this.output = output;
@@ -25,7 +25,7 @@ public class StockTradeOperationRepositoryTests : IClassFixture<ClickHouseFixtur
         var clickHouseConnectionStringBuilder = new ClickHouseConnectionStringBuilder(clickHouseFixture.ClickHouseConnectionString);
         var clickHouseConnectionSettings = clickHouseConnectionStringBuilder.BuildSettings();
         var connectionFactory = new ClickHouseConnectionFactory(clickHouseConnectionSettings);
-        operationRepository = new StockTradeOperationRepository(new TableWriterBuilder(connectionFactory));
+        operationsRepository = new OperationsRepository(new TableWriterBuilder(connectionFactory));
     }
 
     [Fact]
@@ -34,27 +34,28 @@ public class StockTradeOperationRepositoryTests : IClassFixture<ClickHouseFixtur
         var logs = await clickHouseFixture.migratorContainer.GetLogsAsync();
         output.WriteLine(logs.Stdout);
         output.WriteLine(logs.Stderr);
-        
-        var op = fixture.Create<StockTradeOperation>();
 
-        await operationRepository.Upsert(op, CancellationToken.None);
+        var ops = fixture.CreateMany<Operation>(10).ToArray();
 
-        await CheckOp(op, CancellationToken.None);
+        await operationsRepository.Upsert(ops, CancellationToken.None);
+
+        await CheckOps(ops, CancellationToken.None);
     }
 
-    private async Task CheckOp(StockTradeOperation op, CancellationToken token)
+    private async Task CheckOps(IReadOnlyCollection<Operation> ops, CancellationToken token)
     {
         await using var connection = new ClickHouseConnection(clickHouseFixture.ClickHouseConnectionString);
         await connection.OpenAsync(token);
 
-        var command = connection.CreateCommand("select * from stock_trade");
+        var command = connection.CreateCommand("select * from operations");
         var reader = await command.ExecuteReaderAsync(token);
 
+        var ids = ops.Select(o => o.Id).ToHashSet();
         while (await reader.ReadAsync(token))
         {
             var id = reader.GetString(0);
-            
-            Assert.Equal(id, op.Id);
+
+            Assert.Contains(id, ids);
         }
-    } 
+    }
 }

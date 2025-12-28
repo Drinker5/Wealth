@@ -62,6 +62,7 @@ public sealed class OperationConverter(IServiceProvider sp)
             return operationHandler;
         }
 
+        // TODO : TaxCorrection (Currency Operation)
         throw new ArgumentOutOfRangeException($"Unknown operation type: {operationType}");
     }
 }

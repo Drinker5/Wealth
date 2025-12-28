@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS instrument_price
 (
     instrument_id   Int32,
     instrument_type UInt8,
-    price           Decimal(18, 2)
+    price           Decimal(18, 4)
 ) ENGINE = ReplacingMergeTree
       ORDER BY (instrument_id, instrument_type);
 
@@ -15,7 +15,7 @@ CREATE DICTIONARY IF NOT EXISTS instrument_price_dictionary
 (
     instrument_id   Int32,
     instrument_type UInt8,
-    price           Decimal(18, 2)
+    price           Decimal(18, 4)
 ) PRIMARY KEY instrument_id, instrument_type
     SOURCE (CLICKHOUSE(TABLE 'instrument_price_view' USER 'default' PASSWORD 'default'))
     LIFETIME (MIN 600 MAX 900)

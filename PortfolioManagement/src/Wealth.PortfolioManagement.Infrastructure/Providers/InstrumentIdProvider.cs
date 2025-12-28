@@ -16,7 +16,7 @@ public sealed class InstrumentIdProvider(
             return stock.Value;
 
         var response = await CreateInstrument(stockInstrumentIds: [instrumentId], token: token);
-        return new StockId(response.Id);
+        return new StockId(response.Single().Id);
     }
 
     public async ValueTask<BondId> GetBondId(InstrumentId instrumentId, CancellationToken token)
@@ -26,7 +26,7 @@ public sealed class InstrumentIdProvider(
             return bond.Value;
 
         var response = await CreateInstrument(bondInstrumentIds: [instrumentId], token: token);
-        return new BondId(response.Id);
+        return new BondId(response.Single().Id);
     }
 
     public async ValueTask<CurrencyId> GetCurrencyId(InstrumentId instrumentId, CancellationToken token)
@@ -36,7 +36,7 @@ public sealed class InstrumentIdProvider(
             return currency.Value;
 
         var response = await CreateInstrument(currencyInstrumentIds: [instrumentId], token: token);
-        return new CurrencyId(response.Id);
+        return new CurrencyId(response.Single().Id);
     }
 
     public async Task<IReadOnlyDictionary<InstrumentId, int>> GetInstruments(
@@ -109,7 +109,7 @@ public sealed class InstrumentIdProvider(
         }
     }
 
-    private async Task<InstrumentProto> CreateInstrument(
+    private async Task<IReadOnlyCollection<InstrumentProto>> CreateInstrument(
         IEnumerable<InstrumentId>? stockInstrumentIds = null,
         IEnumerable<InstrumentId>? bondInstrumentIds = null,
         IEnumerable<InstrumentId>? currencyInstrumentIds = null,
@@ -122,10 +122,10 @@ public sealed class InstrumentIdProvider(
             CurrencyInstrumentIds = { currencyInstrumentIds?.Select(i => new InstrumentIdProto(i.Value)) }
         }, cancellationToken: token);
 
-        return response.Instruments.Single();
+        return response.Instruments;
     }
 
-    private Task<InstrumentProto> CreateInstruments(List<InstrumentIdType> toCreate, CancellationToken token) =>
+    private Task<IReadOnlyCollection<InstrumentProto>> CreateInstruments(List<InstrumentIdType> toCreate, CancellationToken token) =>
         CreateInstrument(
             stockInstrumentIds: toCreate.Where(i => i.Type == InstrumentType.Stock).Select(i => i.Id),
             bondInstrumentIds: toCreate.Where(i => i.Type == InstrumentType.Bond).Select(i => i.Id),
