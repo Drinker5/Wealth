@@ -12,5 +12,6 @@ public sealed record MoneyOperation : Operation
 public enum MoneyOperationType : byte
 {
     Deposit,
-    Withdraw
+    Withdraw,
+    TaxCorrection
 }

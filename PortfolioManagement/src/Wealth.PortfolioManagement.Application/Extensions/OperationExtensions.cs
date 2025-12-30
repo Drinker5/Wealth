@@ -76,6 +76,7 @@ public static class OperationExtensions
         {
             MoneyOperationType.Deposit => MoneyOperationTypeProto.Deposit,
             MoneyOperationType.Withdraw => MoneyOperationTypeProto.Withdraw,
+            MoneyOperationType.TaxCorrection => MoneyOperationTypeProto.TaxCorrection,
             _ => throw new ArgumentOutOfRangeException(nameof(operation))
         }
     };

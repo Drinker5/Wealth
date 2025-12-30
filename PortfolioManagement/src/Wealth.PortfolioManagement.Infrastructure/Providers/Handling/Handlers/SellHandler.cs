@@ -1,7 +1,6 @@
 using System.Runtime.CompilerServices;
 using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.PortfolioManagement.Domain.Operations;
-using Operation = Wealth.PortfolioManagement.Domain.Operations.Operation;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Providers.Handling.Handlers;
 
@@ -9,7 +8,7 @@ public class SellHandler(IInstrumentIdProvider instrumentIdProvider) : IOperatio
 {
     public async IAsyncEnumerable<Operation> Handle(
         Tinkoff.InvestApi.V1.Operation operation,
-        Tinkoff.InvestApi.V1.InstrumentType instrumentType,
+        InstrumentType instrumentType,
         PortfolioId portfolioId,
         [EnumeratorCancellation] CancellationToken token)
     {
@@ -17,7 +16,7 @@ public class SellHandler(IInstrumentIdProvider instrumentIdProvider) : IOperatio
         {
             yield return instrumentType switch
             {
-                Tinkoff.InvestApi.V1.InstrumentType.Bond => new BondTradeOperation
+                InstrumentType.Bond => new BondTradeOperation
                 {
                     Id = trade.TradeId,
                     Date = trade.DateTime.ToDateTimeOffset(),
@@ -27,7 +26,7 @@ public class SellHandler(IInstrumentIdProvider instrumentIdProvider) : IOperatio
                     Quantity = -trade.Quantity,
                     Type = TradeOperationType.Sell,
                 },
-                Tinkoff.InvestApi.V1.InstrumentType.Share => new StockTradeOperation
+                InstrumentType.Stock => new StockTradeOperation
                 {
                     Id = trade.TradeId,
                     Date = trade.DateTime.ToDateTimeOffset(),

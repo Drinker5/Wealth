@@ -3,22 +3,27 @@ using Wealth.PortfolioManagement.Domain.Operations;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Providers.Handling.Handlers;
 
-public class InputHandler : IOperationHandler
+public sealed class TaxCorrectionHandler : IOperationHandler
 {
     public IAsyncEnumerable<Operation> Handle(
         Tinkoff.InvestApi.V1.Operation operation,
         InstrumentType instrumentType,
         PortfolioId portfolioId,
-        CancellationToken token) =>
-        new[]
+        CancellationToken token)
+    {
+        if (instrumentType != InstrumentType.Currency)
+            throw new ArgumentOutOfRangeException(nameof(instrumentType));
+
+        return new[]
         {
             new MoneyOperation
             {
                 Id = operation.Id,
                 Date = operation.Date.ToDateTimeOffset(),
                 Amount = operation.Payment.ToMoney(),
-                Type = MoneyOperationType.Deposit,
+                Type = MoneyOperationType.TaxCorrection,
                 PortfolioId = portfolioId
             }
         }.ToAsyncEnumerable();
+    }
 }

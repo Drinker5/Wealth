@@ -1,10 +1,10 @@
 using System.Collections.Frozen;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
-using Tinkoff.InvestApi.V1;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.PortfolioManagement.Domain.Operations;
 using Wealth.PortfolioManagement.Infrastructure.Providers.Handling.Handlers;
-using Operation = Wealth.PortfolioManagement.Domain.Operations.Operation;
+using OperationType = Tinkoff.InvestApi.V1.OperationType;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Providers.Handling;
 
@@ -22,17 +22,18 @@ public sealed class OperationConverter(IServiceProvider sp)
         { OperationType.Input, typeof(InputHandler) },
         { OperationType.Dividend, typeof(StockDividendHandler) },
         { OperationType.DividendTax, typeof(StockDividendTaxHandler) },
+        { OperationType.TaxCorrection, typeof(TaxCorrectionHandler) }
     }.ToFrozenDictionary();
 
     private readonly Dictionary<OperationType, IOperationHandler> _handlers = new();
 
-    private static readonly FrozenDictionary<string, Tinkoff.InvestApi.V1.InstrumentType> _instrumentTypeMap =
-        new Dictionary<string, Tinkoff.InvestApi.V1.InstrumentType>
+    private static readonly FrozenDictionary<string, InstrumentType> _instrumentTypeMap =
+        new Dictionary<string, InstrumentType>
         {
-            { "", Tinkoff.InvestApi.V1.InstrumentType.Unspecified },
-            { "bond", Tinkoff.InvestApi.V1.InstrumentType.Bond },
-            { "share", Tinkoff.InvestApi.V1.InstrumentType.Share },
-            { "currency", Tinkoff.InvestApi.V1.InstrumentType.Currency },
+            { "", InstrumentType.Currency },
+            { "bond", InstrumentType.Bond },
+            { "share", InstrumentType.Stock },
+            { "currency", InstrumentType.CurrencyAsset },
         }.ToFrozenDictionary();
 
     public async IAsyncEnumerable<Operation> ConvertOperation(
@@ -62,7 +63,6 @@ public sealed class OperationConverter(IServiceProvider sp)
             return operationHandler;
         }
 
-        // TODO : TaxCorrection (Currency Operation)
         throw new ArgumentOutOfRangeException($"Unknown operation type: {operationType}");
     }
 }

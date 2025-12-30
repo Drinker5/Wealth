@@ -7,7 +7,7 @@ public interface IOperationHandler
 {
     IAsyncEnumerable<Operation> Handle(
         Tinkoff.InvestApi.V1.Operation operation,
-        Tinkoff.InvestApi.V1.InstrumentType instrumentType,
+        InstrumentType instrumentType,
         PortfolioId portfolioId,
         CancellationToken token);
 }

@@ -143,6 +143,7 @@ public sealed class OperationProtoDeserializer : IMessageDeserializer
         {
             MoneyOperationTypeProto.Deposit => OperationType.Deposit,
             MoneyOperationTypeProto.Withdraw => OperationType.Withdraw,
+            MoneyOperationTypeProto.TaxCorrection => OperationType.TaxCorrection,
             _ => throw new ArgumentOutOfRangeException(nameof(proto), proto, null)
         };
 }

@@ -26,4 +26,5 @@ public enum OperationType : byte
     BrokerFee = 8,
     Deposit = 9,
     Withdraw = 10,
+    TaxCorrection = 11,
 }
