@@ -10,4 +10,4 @@ public record struct GetBondByFigi(FIGI Figi) : IQuery<Bond?>;
 
 public record struct GetBondByIsin(ISIN Isin) : IQuery<Bond?>;
 
-public record struct GetBondByInstrumentId(InstrumentId Id) : IQuery<Bond?>;
+public record struct GetBondByInstrumentId(InstrumentUId UId) : IQuery<Bond?>;

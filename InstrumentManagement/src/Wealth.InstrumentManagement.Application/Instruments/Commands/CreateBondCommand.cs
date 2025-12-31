@@ -9,4 +9,4 @@ public record struct CreateBondCommand(
     string Name,
     ISIN Isin,
     FIGI Figi,
-    InstrumentId InstrumentId) : ICommand<BondId>;
+    InstrumentUId InstrumentUId) : ICommand<BondId>;

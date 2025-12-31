@@ -22,7 +22,7 @@ public class GetCurrencyQueryHandler(ICurrenciesRepository repository) :
 
     public Task<Currency?> Handle(GetCurrencyByInstrumentId request, CancellationToken cancellationToken)
     {
-        return repository.GetCurrency(request.Id);
+        return repository.GetCurrency(request.UId);
     }
 
     public async Task<IReadOnlyCollection<Currency>> Handle(GetCurrenciesQuery request, CancellationToken cancellationToken)

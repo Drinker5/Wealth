@@ -33,10 +33,10 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
         return instruments.FirstOrDefault();
     }
 
-    public async Task<Bond?> GetBond(InstrumentId id)
+    public async Task<Bond?> GetBond(InstrumentUId uId)
     {
         const string sql = """SELECT * FROM "Bonds" WHERE instrument_id = @instrumentId""";
-        var instruments = await GetBonds(sql, new { instrumentId = id.Value });
+        var instruments = await GetBonds(sql, new { instrumentId = uId.Value });
         return instruments.FirstOrDefault();
     }
 
@@ -75,13 +75,13 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
             commandText: sql,
             cancellationToken: token));
 
-        var bondInstrument = Bond.Create(new BondId(nextId), command.Name, command.Isin, command.Figi, command.InstrumentId);
+        var bondInstrument = Bond.Create(new BondId(nextId), command.Name, command.Isin, command.Figi, command.InstrumentUId);
         return await CreateBond(bondInstrument);
     }
 
     public async Task<BondId> UpsertBond(CreateBondCommand command, CancellationToken token)
     {
-        var bond = await GetBond(command.Isin, command.Figi, command.InstrumentId, token);
+        var bond = await GetBond(command.Isin, command.Figi, command.InstrumentUId, token);
         if (bond == null)
             return await CreateBond(command, token);
 
@@ -94,7 +94,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
         instrument.ChangeName(command.Name);
         instrument.ChangeIsin(command.Isin);
         instrument.ChangeFigi(command.Figi);
-        instrument.ChangeInstrumentId(command.InstrumentId);
+        instrument.ChangeInstrumentId(command.InstrumentUId);
         await connection.ExecuteAsync(
             """
             UPDATE "Bonds" 
@@ -107,7 +107,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
                 Name = command.Name,
                 ISIN = command.Isin.Value,
                 Figi = command.Figi.Value,
-                InstrumentId = command.InstrumentId.Value
+                InstrumentId = command.InstrumentUId.Value
             });
         dbContext.AddEvents(instrument);
     }
@@ -118,7 +118,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
         return GetBonds(sql);
     }
 
-    private async Task<Bond?> GetBond(ISIN isin, FIGI figi, InstrumentId instrumentId, CancellationToken token)
+    private async Task<Bond?> GetBond(ISIN isin, FIGI figi, InstrumentUId instrumentUId, CancellationToken token)
     {
         var instruments = await GetBonds(
             """
@@ -131,11 +131,11 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
             {
                 Isin = isin.Value,
                 Figi = figi.Value,
-                InstrumentId = instrumentId.Value
+                InstrumentId = instrumentUId.Value
             });
 
         if (instruments.Count > 1)
-            throw new InvalidOperationException($"Found more than one bond Isin: ${isin.Value}, Figi: ${figi.Value}, InstrumentId: ${instrumentId.Value}");
+            throw new InvalidOperationException($"Found more than one bond Isin: ${isin.Value}, Figi: ${figi.Value}, InstrumentId: ${instrumentUId.Value}");
 
         return instruments.FirstOrDefault();
     }
@@ -152,7 +152,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
             Name = bond.Name,
             ISIN = bond.Isin.Value,
             FIGI = bond.Figi.Value,
-            InstrumentId = bond.InstrumentId.Value
+            InstrumentId = bond.InstrumentUId.Value
         });
         dbContext.AddEvents(bond);
 
@@ -211,7 +211,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
             bond.Name = reader.GetString((int)Columns.Name);
             bond.Isin = reader.GetString((int)Columns.ISIN);
             bond.Figi = reader.GetString((int)Columns.FIGI);
-            bond.InstrumentId = reader.GetGuid((int)Columns.InstrumentId);
+            bond.InstrumentUId = reader.GetGuid((int)Columns.InstrumentId);
             if (!reader.IsDBNull((int)Columns.Price_Currency))
             {
                 bond.Price = new Money(

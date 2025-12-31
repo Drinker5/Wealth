@@ -10,7 +10,7 @@ public interface IBondsRepository
     Task<Bond?> GetBond(BondId id);
     Task<Bond?> GetBond(ISIN isin);
     Task<Bond?> GetBond(FIGI figi);
-    Task<Bond?> GetBond(InstrumentId id);
+    Task<Bond?> GetBond(InstrumentUId uId);
     Task DeleteBond(BondId id);
     Task ChangePrice(BondId id, Money price);
     Task<BondId> CreateBond(CreateBondCommand command, CancellationToken token);

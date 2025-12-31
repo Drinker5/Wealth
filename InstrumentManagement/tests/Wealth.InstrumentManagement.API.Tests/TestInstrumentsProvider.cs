@@ -6,22 +6,22 @@ namespace Wealth.InstrumentManagement.API.Tests;
 
 public sealed class TestInstrumentsProvider : IInstrumentsProvider
 {
-    public static Dictionary<InstrumentId, CreateStockCommand> Stocks = new();
-    public static Dictionary<InstrumentId, CreateBondCommand> Bonds = new();
-    public static Dictionary<InstrumentId, CreateCurrencyCommand> Currencies = new();
+    public static Dictionary<InstrumentUId, CreateStockCommand> Stocks = new();
+    public static Dictionary<InstrumentUId, CreateBondCommand> Bonds = new();
+    public static Dictionary<InstrumentUId, CreateCurrencyCommand> Currencies = new();
 
-    public ValueTask<CreateStockCommand> StockProvide(InstrumentId instrumentId, CancellationToken token)
+    public ValueTask<CreateStockCommand> StockProvide(InstrumentUId instrumentUId, CancellationToken token)
     {
-        return ValueTask.FromResult(Stocks[instrumentId]);
+        return ValueTask.FromResult(Stocks[instrumentUId]);
     }
 
-    public ValueTask<CreateBondCommand> BondProvide(InstrumentId instrumentId, CancellationToken token)
+    public ValueTask<CreateBondCommand> BondProvide(InstrumentUId instrumentUId, CancellationToken token)
     {
-        return ValueTask.FromResult(Bonds[instrumentId]);
+        return ValueTask.FromResult(Bonds[instrumentUId]);
     }
 
-    public ValueTask<CreateCurrencyCommand> CurrencyProvide(InstrumentId instrumentId, CancellationToken token)
+    public ValueTask<CreateCurrencyCommand> CurrencyProvide(InstrumentUId instrumentUId, CancellationToken token)
     {
-        return ValueTask.FromResult(Currencies[instrumentId]);
+        return ValueTask.FromResult(Currencies[instrumentUId]);
     }
 }

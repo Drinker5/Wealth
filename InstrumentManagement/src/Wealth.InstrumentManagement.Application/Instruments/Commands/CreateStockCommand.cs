@@ -11,5 +11,5 @@ public record struct CreateStockCommand(
     string Name,
     ISIN Isin,
     FIGI Figi,
-    InstrumentId InstrumentId,
+    InstrumentUId InstrumentUId,
     LotSize LotSize) : ICommand<StockId>;

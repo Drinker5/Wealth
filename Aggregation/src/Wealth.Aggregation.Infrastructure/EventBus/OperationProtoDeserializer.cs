@@ -25,8 +25,7 @@ public sealed class OperationProtoDeserializer : IMessageDeserializer
                     message.Id,
                     message.Date.ToDateTime(),
                     message.StockTrade.PortfolioId,
-                    message.StockTrade.StockId.Id,
-                    InstrumentType.Stock,
+                    new InstrumentIdType(message.StockTrade.StockId.Id, InstrumentType.Stock),
                     message.StockTrade.Amount,
                     Map(message.StockTrade.Type),
                     message.StockTrade.Quantity);
@@ -35,8 +34,7 @@ public sealed class OperationProtoDeserializer : IMessageDeserializer
                     message.Id,
                     message.Date.ToDateTime(),
                     message.CurrencyTrade.PortfolioId,
-                    message.CurrencyTrade.CurrencyId.Id,
-                    InstrumentType.CurrencyAsset,
+                    new InstrumentIdType(message.CurrencyTrade.CurrencyId.Id, InstrumentType.CurrencyAsset),
                     message.CurrencyTrade.Amount,
                     Map(message.CurrencyTrade.Type),
                     message.CurrencyTrade.Quantity);
@@ -45,8 +43,7 @@ public sealed class OperationProtoDeserializer : IMessageDeserializer
                     message.Id,
                     message.Date.ToDateTime(),
                     message.BondCoupon.PortfolioId,
-                    message.BondCoupon.BondId.Id,
-                    InstrumentType.Bond,
+                    new InstrumentIdType(message.BondCoupon.BondId.Id, InstrumentType.Bond),
                     message.BondCoupon.Amount,
                     OperationType.Coupon);
             case OperationProto.VariantOneofCase.StockDividend:
@@ -54,8 +51,7 @@ public sealed class OperationProtoDeserializer : IMessageDeserializer
                     message.Id,
                     message.Date.ToDateTime(),
                     message.StockDividend.PortfolioId,
-                    message.StockDividend.StockId.Id,
-                    InstrumentType.Stock,
+                    new InstrumentIdType(message.StockDividend.StockId.Id, InstrumentType.Stock),
                     message.StockDividend.Amount,
                     OperationType.Dividend);
             case OperationProto.VariantOneofCase.StockDividendTax:
@@ -63,8 +59,7 @@ public sealed class OperationProtoDeserializer : IMessageDeserializer
                     message.Id,
                     message.Date.ToDateTime(),
                     message.StockDividendTax.PortfolioId,
-                    message.StockDividendTax.StockId.Id,
-                    InstrumentType.Stock,
+                    new InstrumentIdType(message.StockDividendTax.StockId.Id, InstrumentType.Stock),
                     message.StockDividendTax.Amount,
                     OperationType.DividendTax);
             case OperationProto.VariantOneofCase.StockBrokerFee:
@@ -72,8 +67,7 @@ public sealed class OperationProtoDeserializer : IMessageDeserializer
                     message.Id,
                     message.Date.ToDateTime(),
                     message.StockBrokerFee.PortfolioId,
-                    message.StockBrokerFee.StockId.Id,
-                    InstrumentType.Stock,
+                    new InstrumentIdType(message.StockBrokerFee.StockId.Id, InstrumentType.Stock),
                     message.StockBrokerFee.Amount,
                     OperationType.BrokerFee);
             case OperationProto.VariantOneofCase.MoneyOperation:
@@ -81,8 +75,7 @@ public sealed class OperationProtoDeserializer : IMessageDeserializer
                     message.Id,
                     message.Date.ToDateTime(),
                     message.MoneyOperation.PortfolioId,
-                    InstrumentId: -1,
-                    InstrumentType.Currency,
+                    new InstrumentIdType(-1, InstrumentType.Currency),
                     message.MoneyOperation.Amount,
                     Map(message.MoneyOperation.Type));
             case OperationProto.VariantOneofCase.BondBrokerFee:
@@ -90,8 +83,7 @@ public sealed class OperationProtoDeserializer : IMessageDeserializer
                     message.Id,
                     message.Date.ToDateTime(),
                     message.BondBrokerFee.PortfolioId,
-                    message.BondBrokerFee.BondId.Id,
-                    InstrumentType.Bond,
+                    new InstrumentIdType(message.BondBrokerFee.BondId.Id, InstrumentType.Bond),
                     message.BondBrokerFee.Amount,
                     OperationType.BrokerFee);
             case OperationProto.VariantOneofCase.CurrencyBrokerFee:
@@ -99,8 +91,7 @@ public sealed class OperationProtoDeserializer : IMessageDeserializer
                     message.Id,
                     message.Date.ToDateTime(),
                     message.CurrencyBrokerFee.PortfolioId,
-                    message.CurrencyBrokerFee.CurrencyId.Id,
-                    InstrumentType.CurrencyAsset,
+                    new InstrumentIdType(message.CurrencyBrokerFee.CurrencyId.Id, InstrumentType.CurrencyAsset),
                     message.CurrencyBrokerFee.Amount,
                     OperationType.BrokerFee);
             case OperationProto.VariantOneofCase.BondAmortizationOperation:
@@ -108,8 +99,7 @@ public sealed class OperationProtoDeserializer : IMessageDeserializer
                     message.Id,
                     message.Date.ToDateTime(),
                     message.BondAmortizationOperation.PortfolioId,
-                    message.BondAmortizationOperation.BondId.Id,
-                    InstrumentType.Bond,
+                    new InstrumentIdType(message.BondAmortizationOperation.BondId.Id, InstrumentType.Bond),
                     message.BondAmortizationOperation.Amount,
                     OperationType.Amortization);
             case OperationProto.VariantOneofCase.BondTrade:
@@ -117,8 +107,7 @@ public sealed class OperationProtoDeserializer : IMessageDeserializer
                     message.Id,
                     message.Date.ToDateTime(),
                     message.BondTrade.PortfolioId,
-                    message.BondTrade.BondId.Id,
-                    InstrumentType.Bond,
+                    new InstrumentIdType(message.BondTrade.BondId.Id, InstrumentType.Bond),
                     message.BondTrade.Amount,
                     Map(message.BondTrade.Type),
                     message.BondTrade.Quantity);

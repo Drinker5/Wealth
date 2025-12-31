@@ -15,30 +15,39 @@ public sealed class StockAggregationService(
         StrategyId strategyId,
         CancellationToken token)
     {
-        var raws = await repository.GetAggregation(portfolioId, token).ToListAsync(cancellationToken: token);
-
-        var stockIds = raws.Select(i => new StockId(i.StockId)).ToList();
-        var stockInfos = await instrumentService.GetStocksInfo(stockIds, token);
         var strategy = await strategyService.GetStrategy(strategyId, token);
-        var componentWeights = strategy?.Components.ToDictionary(i => i.Id, i => i.Weight) ?? [];
+        if (strategy == null)
+            return [];
+
+        var componentWeights = strategy.Components.ToDictionary(i => i.IdType.Id, i => i.Weight) ?? [];
+        var raws = await repository
+            .GetAggregation(portfolioId, componentWeights.Keys, token)
+            .ToListAsync(cancellationToken: token);
+
+        var stockIds = raws
+            .Where(i => i.InstrumentIdType.Type == InstrumentType.Stock)
+            .Select(i => new StockId(i.InstrumentIdType.Id))
+            .ToList();
+        
+        var stockInfos = await instrumentService.GetStocksInfo(stockIds, token);
 
         return BuildStockAggregations(raws, componentWeights, stockInfos);
     }
 
     private static List<StockAggregation> BuildStockAggregations(
         List<StockAggregationRaw> raws,
-        Dictionary<int, decimal> componentWeights,
+        Dictionary<InstrumentId, decimal> componentWeights,
         IReadOnlyDictionary<StockId, StockInfo> stockInfos)
     {
         var result = new List<StockAggregation>();
 
         foreach (var raw in raws)
         {
-            var stockInfo = stockInfos[raw.StockId];
+            var stockInfo = stockInfos[raw.InstrumentIdType.Id.Value];
             result.Add(new StockAggregation(
                 Index: stockInfo.Ticker,
                 Name: stockInfo.Name,
-                Weight: componentWeights.GetValueOrDefault(raw.StockId, 0),
+                Weight: componentWeights.GetValueOrDefault(raw.InstrumentIdType.Id, 0),
                 WeightSkipped: -1, // TODO
                 UnitPrice: new Money(raw.Currency, raw.Price),
                 stockInfo.DividendPerYear,

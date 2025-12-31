@@ -36,7 +36,7 @@ public sealed class OperationHandler(
             await mediator.Command(new AddOperation(converted), token);
     }
 
-    private static InstrumentIdType Parse(string Id, string Type) => new(Guid.Parse(Id), Parse(Type));
+    private static InstrumentUIdType Parse(string Id, string Type) => new(Guid.Parse(Id), Parse(Type));
 
     private static InstrumentType Parse(string type)
     {

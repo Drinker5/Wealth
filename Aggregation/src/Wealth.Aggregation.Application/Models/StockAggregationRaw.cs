@@ -3,7 +3,7 @@ using Wealth.BuildingBlocks.Domain.Common;
 namespace Wealth.Aggregation.Application.Models;
 
 public sealed record StockAggregationRaw(
-    int StockId,
+    InstrumentIdType InstrumentIdType,
     CurrencyCode Currency,
     long Quantity,
     decimal TradeAmount,

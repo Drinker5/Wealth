@@ -5,46 +5,46 @@ namespace Wealth.PortfolioManagement.Infrastructure.Providers;
 
 public sealed class InstrumentIdProviderCacheDecorator(IInstrumentIdProvider instrumentIdProvider) : IInstrumentIdProvider
 {
-    private readonly ConcurrentDictionary<InstrumentId, int> cache = new();
+    private readonly ConcurrentDictionary<InstrumentUId, int> cache = new();
 
-    public async ValueTask<StockId> GetStockId(InstrumentId instrumentId, CancellationToken token)
+    public async ValueTask<StockId> GetStockId(InstrumentUId instrumentUId, CancellationToken token)
     {
-        if (cache.TryGetValue(instrumentId, out var stockId))
+        if (cache.TryGetValue(instrumentUId, out var stockId))
             return stockId;
 
-        stockId = await instrumentIdProvider.GetStockId(instrumentId, token);
-        cache.AddOrUpdate(instrumentId, stockId, (_, _) => stockId);
+        stockId = await instrumentIdProvider.GetStockId(instrumentUId, token);
+        cache.AddOrUpdate(instrumentUId, stockId, (_, _) => stockId);
         return stockId;
     }
 
-    public async ValueTask<BondId> GetBondId(InstrumentId instrumentId, CancellationToken token)
+    public async ValueTask<BondId> GetBondId(InstrumentUId instrumentUId, CancellationToken token)
     {
-        if (cache.TryGetValue(instrumentId, out var bondId))
+        if (cache.TryGetValue(instrumentUId, out var bondId))
             return bondId;
 
-        bondId = await instrumentIdProvider.GetBondId(instrumentId, token);
-        cache.AddOrUpdate(instrumentId, bondId, (_, _) => bondId);
+        bondId = await instrumentIdProvider.GetBondId(instrumentUId, token);
+        cache.AddOrUpdate(instrumentUId, bondId, (_, _) => bondId);
         return bondId;
     }
 
-    public async ValueTask<CurrencyId> GetCurrencyId(InstrumentId instrumentId, CancellationToken token)
+    public async ValueTask<CurrencyId> GetCurrencyId(InstrumentUId instrumentUId, CancellationToken token)
     {
-        if (cache.TryGetValue(instrumentId, out var currencyId))
+        if (cache.TryGetValue(instrumentUId, out var currencyId))
             return currencyId;
 
-        currencyId = await instrumentIdProvider.GetCurrencyId(instrumentId, token);
-        cache.AddOrUpdate(instrumentId, currencyId, (_, _) => currencyId);
+        currencyId = await instrumentIdProvider.GetCurrencyId(instrumentUId, token);
+        cache.AddOrUpdate(instrumentUId, currencyId, (_, _) => currencyId);
         return currencyId;
     }
 
-    public async Task<IReadOnlyDictionary<InstrumentId, int>> GetInstruments(
-        IReadOnlySet<InstrumentIdType> instrumentIdTypes,
+    public async Task<IReadOnlyDictionary<InstrumentUId, int>> GetInstruments(
+        IReadOnlySet<InstrumentUIdType> instrumentIdTypes,
         CancellationToken token)
     {
-        var toResolve = new HashSet<InstrumentIdType>();
+        var toResolve = new HashSet<InstrumentUIdType>();
         foreach (var instrumentIdType in instrumentIdTypes)
         {
-            if (!cache.ContainsKey(instrumentIdType.Id))
+            if (!cache.ContainsKey(instrumentIdType.UId))
                 toResolve.Add(instrumentIdType);
         }
 

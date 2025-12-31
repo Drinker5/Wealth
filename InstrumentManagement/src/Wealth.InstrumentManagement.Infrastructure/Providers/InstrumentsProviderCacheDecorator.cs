@@ -6,34 +6,34 @@ namespace Wealth.InstrumentManagement.Infrastructure.Providers;
 
 public sealed class InstrumentsProviderDecorator(IInstrumentsProvider instrumentsProvider) : IInstrumentsProvider
 {
-    private Dictionary<InstrumentId, CreateBondCommand>? Bonds = null;
-    private Dictionary<InstrumentId, CreateStockCommand>? Stocks = null;
-    private Dictionary<InstrumentId, CreateCurrencyCommand>? Currencies = null;
+    private Dictionary<InstrumentUId, CreateBondCommand>? Bonds = null;
+    private Dictionary<InstrumentUId, CreateStockCommand>? Stocks = null;
+    private Dictionary<InstrumentUId, CreateCurrencyCommand>? Currencies = null;
 
-    public async ValueTask<CreateStockCommand> StockProvide(InstrumentId instrumentId, CancellationToken token)
+    public async ValueTask<CreateStockCommand> StockProvide(InstrumentUId instrumentUId, CancellationToken token)
     {
-        Stocks ??= new Dictionary<InstrumentId, CreateStockCommand>();
-        if (!Stocks.ContainsKey(instrumentId))
-            Stocks[instrumentId] = await instrumentsProvider.StockProvide(instrumentId, token);
+        Stocks ??= new Dictionary<InstrumentUId, CreateStockCommand>();
+        if (!Stocks.ContainsKey(instrumentUId))
+            Stocks[instrumentUId] = await instrumentsProvider.StockProvide(instrumentUId, token);
 
-        return Stocks[instrumentId];
+        return Stocks[instrumentUId];
     }
 
-    public async ValueTask<CreateBondCommand> BondProvide(InstrumentId instrumentId, CancellationToken token)
+    public async ValueTask<CreateBondCommand> BondProvide(InstrumentUId instrumentUId, CancellationToken token)
     {
-        Bonds ??= new Dictionary<InstrumentId, CreateBondCommand>();
-        if (!Bonds.ContainsKey(instrumentId))
-            Bonds[instrumentId] = await instrumentsProvider.BondProvide(instrumentId, token);
+        Bonds ??= new Dictionary<InstrumentUId, CreateBondCommand>();
+        if (!Bonds.ContainsKey(instrumentUId))
+            Bonds[instrumentUId] = await instrumentsProvider.BondProvide(instrumentUId, token);
 
-        return Bonds[instrumentId];
+        return Bonds[instrumentUId];
     }
 
-    public async ValueTask<CreateCurrencyCommand> CurrencyProvide(InstrumentId instrumentId, CancellationToken token)
+    public async ValueTask<CreateCurrencyCommand> CurrencyProvide(InstrumentUId instrumentUId, CancellationToken token)
     {
-        Currencies ??= new Dictionary<InstrumentId, CreateCurrencyCommand>();
-        if (!Currencies.ContainsKey(instrumentId))
-            Currencies[instrumentId] = await instrumentsProvider.CurrencyProvide(instrumentId, token);
+        Currencies ??= new Dictionary<InstrumentUId, CreateCurrencyCommand>();
+        if (!Currencies.ContainsKey(instrumentUId))
+            Currencies[instrumentUId] = await instrumentsProvider.CurrencyProvide(instrumentUId, token);
 
-        return Currencies[instrumentId];
+        return Currencies[instrumentUId];
     }
 }

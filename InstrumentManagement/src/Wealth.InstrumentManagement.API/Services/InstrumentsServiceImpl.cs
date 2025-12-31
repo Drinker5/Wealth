@@ -39,7 +39,7 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
             Name = request.Name,
             Isin = request.Isin,
             Figi = request.Figi,
-            InstrumentId = request.InstrumentId
+            InstrumentUId = request.InstrumentId
         });
 
         return new CreateBondResponse
@@ -54,7 +54,7 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
         {
             Name = request.Name,
             Figi = request.Figi,
-            InstrumentId = request.InstrumentId
+            InstrumentUId = request.InstrumentId
         });
 
         return new CreateCurrencyResponse
@@ -84,7 +84,7 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
             Price = instrument.Price,
             Isin = instrument.Isin,
             Figi = instrument.Figi,
-            InstrumentId = instrument.InstrumentId
+            InstrumentId = instrument.InstrumentUId
         };
 
         return response;
@@ -109,7 +109,7 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
             Name = instrument.Name,
             Price = instrument.Price,
             Figi = instrument.Figi,
-            InstrumentId = instrument.InstrumentId
+            InstrumentId = instrument.InstrumentUId
         };
 
         return response;
@@ -141,7 +141,7 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
                 DividendPerYear = instrument.Dividend.ValuePerYear,
                 LotSize = instrument.LotSize,
                 Ticker = instrument.Ticker,
-                InstrumentId = instrument.InstrumentId
+                InstrumentId = instrument.InstrumentUId
             }
         };
 
@@ -195,7 +195,7 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
 
     public override async Task<GetInstrumentsResponse> GetInstruments(GetInstrumentsRequest request, ServerCallContext context)
     {
-        var instrumentIds = request.InstrumentIds.Select(i => new InstrumentId(i.Value)).ToHashSet();
+        var instrumentIds = request.InstrumentIds.Select(i => new InstrumentUId(i.Value)).ToHashSet();
         var instruments = await mediator.Query(new GetInstrumentsQuery(instrumentIds));
 
         return new GetInstrumentsResponse
@@ -206,9 +206,9 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
 
     public override async Task<GetInstrumentsResponse> ImportInstruments(ImportInstrumentsRequest request, ServerCallContext context)
     {
-        var stockInstrumentIds = request.StockInstrumentIds.Select(i => new InstrumentId(i.Value)).ToArray();
-        var bondInstrumentIds = request.BondInstrumentIds.Select(i => new InstrumentId(i.Value)).ToArray();
-        var currencyInstrumentIds = request.CurrencyInstrumentIds.Select(i => new InstrumentId(i.Value)).ToArray();
+        var stockInstrumentIds = request.StockInstrumentIds.Select(i => new InstrumentUId(i.Value)).ToArray();
+        var bondInstrumentIds = request.BondInstrumentIds.Select(i => new InstrumentUId(i.Value)).ToArray();
+        var currencyInstrumentIds = request.CurrencyInstrumentIds.Select(i => new InstrumentUId(i.Value)).ToArray();
         var importedInstruments = await mediator.Command(
             new ImportInstruments(stockInstrumentIds, bondInstrumentIds, currencyInstrumentIds),
             context.CancellationToken);

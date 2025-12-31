@@ -5,7 +5,7 @@ using Wealth.InstrumentManagement.Application.Repositories;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Queries;
 
-public record struct GetInstrumentsQuery(IReadOnlyCollection<InstrumentId> InstrumentIds) : IQuery<IReadOnlyCollection<Instrument>>;
+public record struct GetInstrumentsQuery(IReadOnlyCollection<InstrumentUId> InstrumentIds) : IQuery<IReadOnlyCollection<Instrument>>;
 
 public sealed class GetInstrumentsQueryHandler(IInstrumentsRepository repository)
     : IQueryHandler<GetInstrumentsQuery, IReadOnlyCollection<Instrument>>

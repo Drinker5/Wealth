@@ -26,10 +26,10 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
         return instruments.FirstOrDefault();
     }
 
-    public async Task<Currency?> GetCurrency(InstrumentId id)
+    public async Task<Currency?> GetCurrency(InstrumentUId uId)
     {
         const string sql = "SELECT * FROM currencies WHERE instrument_id = @instrumentId";
-        var instruments = await GetCurrencies(sql, new { instrumentId = id.Value });
+        var instruments = await GetCurrencies(sql, new { instrumentId = uId.Value });
         return instruments.FirstOrDefault();
     }
 
@@ -67,13 +67,13 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
             commandText: sql,
             cancellationToken: token));
 
-        var currencyInstrument = Currency.Create(new CurrencyId(nextId), command.Name, command.Figi, command.InstrumentId);
+        var currencyInstrument = Currency.Create(new CurrencyId(nextId), command.Name, command.Figi, command.InstrumentUId);
         return await CreateCurrency(currencyInstrument);
     }
 
     public async Task<CurrencyId> UpsertCurrency(CreateCurrencyCommand command, CancellationToken token)
     {
-        var currency = await GetCurrency(command.Figi, command.InstrumentId, token);
+        var currency = await GetCurrency(command.Figi, command.InstrumentUId, token);
         if (currency == null)
             return await CreateCurrency(command, token);
 
@@ -81,7 +81,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
         return currency.Id;
     }
 
-    private async Task<Currency?> GetCurrency(FIGI figi, InstrumentId instrumentId, CancellationToken token)
+    private async Task<Currency?> GetCurrency(FIGI figi, InstrumentUId instrumentUId, CancellationToken token)
     {
         var instruments = await GetCurrencies(
             """
@@ -92,11 +92,11 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
             new
             {
                 Figi = figi.Value,
-                InstrumentId = instrumentId.Value
+                InstrumentId = instrumentUId.Value
             });
 
         if (instruments.Count > 1)
-            throw new InvalidOperationException($"Found more than one currency Figi: ${figi.Value}, InstrumentId: ${instrumentId.Value}");
+            throw new InvalidOperationException($"Found more than one currency Figi: ${figi.Value}, InstrumentId: ${instrumentUId.Value}");
 
         return instruments.FirstOrDefault();
     }
@@ -105,7 +105,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
     {
         instrument.ChangeName(command.Name);
         instrument.ChangeFigi(command.Figi);
-        instrument.ChangeInstrumentId(command.InstrumentId);
+        instrument.ChangeInstrumentId(command.InstrumentUId);
         await connection.ExecuteAsync(
             """
             UPDATE currencies 
@@ -117,7 +117,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
                 Id = instrument.Id.Value,
                 Name = command.Name,
                 Figi = command.Figi.Value,
-                InstrumentId = command.InstrumentId.Value
+                InstrumentId = command.InstrumentUId.Value
             });
         dbContext.AddEvents(instrument);
     }
@@ -139,7 +139,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
             Id = currency.Id.Value,
             Name = currency.Name,
             FIGI = currency.Figi.Value,
-            InstrumentId = currency.InstrumentId.Value
+            InstrumentId = currency.InstrumentUId.Value
         });
         dbContext.AddEvents(currency);
 
@@ -167,7 +167,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
 
             currency.Name = reader.GetString((int)Columns.Name);
             currency.Figi = reader.GetString((int)Columns.FIGI);
-            currency.InstrumentId = reader.GetGuid((int)Columns.InstrumentId);
+            currency.InstrumentUId = reader.GetGuid((int)Columns.InstrumentId);
             if (!reader.IsDBNull((int)Columns.Price_Currency))
             {
                 currency.Price = new Money(

@@ -1,4 +1,3 @@
-using Wealth.Aggregation.Application.Repository;
 using Wealth.BuildingBlocks.Application;
 
 namespace Wealth.Aggregation.Application.Commands;

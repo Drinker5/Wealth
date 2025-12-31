@@ -12,12 +12,12 @@ public class StockTests
     readonly string name = "foo";
     readonly ISIN isin = "barbarbarbar";
     readonly FIGI figi = "arbarbarbarb";
-    readonly InstrumentId instrumentId = new Guid("FCFF748D-C4E9-4388-B9B0-6164AB55E428");
+    readonly InstrumentUId instrumentUId = new Guid("FCFF748D-C4E9-4388-B9B0-6164AB55E428");
     readonly Dividend dividend = new Dividend(CurrencyCode.Rub, Decimal.One);
 
     private Stock CreateStockInstrument()
     {
-        return Stock.Create(3, index, name, isin, figi, instrumentId);
+        return Stock.Create(3, index, name, isin, figi, instrumentUId);
     }
 
     [Test]
@@ -32,11 +32,11 @@ public class StockTests
             Assert.That(@event.Index, Is.EqualTo(index));
             Assert.That(@event.Name, Is.EqualTo(name));
             Assert.That(@event.Isin, Is.EqualTo(isin));
-            Assert.That(@event.InstrumentId, Is.EqualTo(instrumentId));
+            Assert.That(@event.InstrumentUId, Is.EqualTo(instrumentUId));
             Assert.That(stock.Id, Is.Not.Zero);
             Assert.That(stock.Name, Is.EqualTo(name));
             Assert.That(stock.Isin, Is.EqualTo(isin));
-            Assert.That(stock.InstrumentId, Is.EqualTo(instrumentId));
+            Assert.That(stock.InstrumentUId, Is.EqualTo(instrumentUId));
             Assert.That(stock.Dividend, Is.EqualTo(Dividend.Empty));
             Assert.That(stock.LotSize.Value, Is.EqualTo(1));
         }

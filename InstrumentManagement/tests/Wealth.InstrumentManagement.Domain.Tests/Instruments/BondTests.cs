@@ -11,12 +11,12 @@ public class BondTests
     readonly string name = "foo";
     readonly ISIN isin = "barbarbarbar";
     readonly FIGI figi = "arbarbarbarb";
-    readonly InstrumentId instrumentId = new Guid("2E7B63F8-EE1F-4007-850A-F52194B34476");
+    readonly InstrumentUId instrumentUId = new Guid("2E7B63F8-EE1F-4007-850A-F52194B34476");
     readonly Coupon coupon = new Coupon(CurrencyCode.Rub, Decimal.One);
 
     private Bond CreateBondInstrument()
     {
-        return Bond.Create(3, name, isin, figi, instrumentId);
+        return Bond.Create(3, name, isin, figi, instrumentUId);
     }
 
     [Test]
@@ -30,11 +30,11 @@ public class BondTests
             Assert.That(@event.BondId, Is.Not.Zero);
             Assert.That(@event.Name, Is.EqualTo(name));
             Assert.That(@event.Isin, Is.EqualTo(isin));
-            Assert.That(@event.InstrumentId, Is.EqualTo(instrumentId));
+            Assert.That(@event.InstrumentUId, Is.EqualTo(instrumentUId));
             Assert.That(bond.Id, Is.Not.Zero);
             Assert.That(bond.Name, Is.EqualTo(name));
             Assert.That(bond.Isin, Is.EqualTo(isin));
-            Assert.That(bond.InstrumentId, Is.EqualTo(instrumentId));
+            Assert.That(bond.InstrumentUId, Is.EqualTo(instrumentUId));
             Assert.That(bond.Coupon, Is.EqualTo(Coupon.Empty));
         }
     }

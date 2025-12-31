@@ -7,5 +7,6 @@ public interface IStockAggregationRepository
 {
     IAsyncEnumerable<StockAggregationRaw> GetAggregation(
         PortfolioId portfolioId,
+        IReadOnlyCollection<InstrumentId> instrumentIds,
         CancellationToken token);
 }

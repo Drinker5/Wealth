@@ -9,7 +9,7 @@ public interface ICurrenciesRepository
     Task<IReadOnlyCollection<Currency>> GetCurrencies();
     Task<Currency?> GetCurrency(CurrencyId id);
     Task<Currency?> GetCurrency(FIGI figi);
-    Task<Currency?> GetCurrency(InstrumentId id);
+    Task<Currency?> GetCurrency(InstrumentUId uId);
     Task DeleteCurrency(CurrencyId id);
     Task ChangePrice(CurrencyId id, Money price);
     Task<CurrencyId> CreateCurrency(CreateCurrencyCommand command, CancellationToken token);

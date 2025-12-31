@@ -5,9 +5,9 @@ namespace Wealth.InstrumentManagement.Application.Providers;
 
 public interface IInstrumentsProvider
 {
-    ValueTask<CreateStockCommand> StockProvide(InstrumentId instrumentId, CancellationToken token);
+    ValueTask<CreateStockCommand> StockProvide(InstrumentUId instrumentUId, CancellationToken token);
 
-    ValueTask<CreateBondCommand> BondProvide(InstrumentId instrumentId, CancellationToken token);
+    ValueTask<CreateBondCommand> BondProvide(InstrumentUId instrumentUId, CancellationToken token);
 
-    ValueTask<CreateCurrencyCommand> CurrencyProvide(InstrumentId instrumentId, CancellationToken token);
+    ValueTask<CreateCurrencyCommand> CurrencyProvide(InstrumentUId instrumentUId, CancellationToken token);
 }

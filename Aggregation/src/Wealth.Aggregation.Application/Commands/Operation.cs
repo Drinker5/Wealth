@@ -7,8 +7,7 @@ public sealed record Operation(
     string Id,
     DateTime Date,
     PortfolioId PortfolioId,
-    int InstrumentId,
-    InstrumentType instrumentType,
+    InstrumentIdType InstrumentIdType,
     Money Amount,
     OperationType Type,
     long Quantity = -1) : ICommand;

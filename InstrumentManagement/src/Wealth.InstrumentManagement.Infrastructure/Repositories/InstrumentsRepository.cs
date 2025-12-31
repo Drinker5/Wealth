@@ -12,7 +12,7 @@ public sealed class InstrumentsRepository(WealthDbContext dbContext) : IInstrume
     private readonly IDbConnection connection = dbContext.CreateConnection();
 
     public async Task<IReadOnlyCollection<Instrument>> GetInstruments(
-        IReadOnlyCollection<InstrumentId> instrumentIds,
+        IReadOnlyCollection<InstrumentUId> instrumentIds,
         CancellationToken token)
     {
         if (instrumentIds.Count == 0)
@@ -47,7 +47,7 @@ public sealed class InstrumentsRepository(WealthDbContext dbContext) : IInstrume
         {
             var instrument = new Instrument(
                 Id: reader.GetInt32(0),
-                InstrumentId: reader.GetGuid(1),
+                InstrumentUId: reader.GetGuid(1),
                 Type: (InstrumentType)reader.GetByte(2));
 
             result.Add(instrument);

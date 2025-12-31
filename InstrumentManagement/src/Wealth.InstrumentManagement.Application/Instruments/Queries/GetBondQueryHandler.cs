@@ -28,7 +28,7 @@ public class GetBondQueryHandler(IBondsRepository repository) :
 
     public Task<Bond?> Handle(GetBondByInstrumentId request, CancellationToken cancellationToken)
     {
-        return repository.GetBond(request.Id);
+        return repository.GetBond(request.UId);
     }
 
     public async Task<IReadOnlyCollection<Bond>> Handle(GetBondsQuery request, CancellationToken cancellationToken)

@@ -245,7 +245,7 @@ public sealed class InstrumentManagementApiTests :
     [Fact]
     public async Task ImportInstruments_ShouldCreateNewInstruments()
     {
-        var instrumentIds = fixture.CreateMany<InstrumentId>(3).ToArray();
+        var instrumentIds = fixture.CreateMany<InstrumentUId>(3).ToArray();
         var createStockCommand = fixture.Create<CreateStockCommand>();
         var createBondCommand = fixture.Create<CreateBondCommand>();
         var createCurrencyCommand = fixture.Create<CreateCurrencyCommand>();
@@ -263,17 +263,17 @@ public sealed class InstrumentManagementApiTests :
         Assert.Collection(response.Instruments,
             i =>
             {
-                Assert.Equal(instrumentIds[0], (InstrumentId)i.InstrumentId);
+                Assert.Equal(instrumentIds[0], (InstrumentUId)i.InstrumentId);
                 Assert.Equal(InstrumentTypeProto.Stock, i.Type);
             },
             i =>
             {
-                Assert.Equal(instrumentIds[1], (InstrumentId)i.InstrumentId);
+                Assert.Equal(instrumentIds[1], (InstrumentUId)i.InstrumentId);
                 Assert.Equal(InstrumentTypeProto.Bond, i.Type);
             },
             i =>
             {
-                Assert.Equal(instrumentIds[2], (InstrumentId)i.InstrumentId);
+                Assert.Equal(instrumentIds[2], (InstrumentUId)i.InstrumentId);
                 Assert.Equal(InstrumentTypeProto.CurrencyAsset, i.Type);
             });
     }
@@ -283,7 +283,7 @@ public sealed class InstrumentManagementApiTests :
     {
         var createStockRequest = new CreateStockRequest
         {
-            InstrumentId = fixture.Create<InstrumentId>(),
+            InstrumentId = fixture.Create<InstrumentUId>(),
             Isin = fixture.Create<ISIN>(),
             Figi = fixture.Create<FIGI>(),
             LotSize = fixture.Create<int>(),
@@ -291,7 +291,7 @@ public sealed class InstrumentManagementApiTests :
             Ticker = fixture.Create<Ticker>()
         };
         var createStockResponse = await grpcClient.CreateStockAsync(createStockRequest);
-        var instrumentId = fixture.Create<InstrumentId>();
+        var instrumentId = fixture.Create<InstrumentUId>();
         var updateCommand = fixture.Create<CreateStockCommand>() with
         {
             Isin = createStockRequest.Isin
@@ -310,7 +310,7 @@ public sealed class InstrumentManagementApiTests :
         Assert.Equal(updateCommand.Figi, stock.StockInfo.Figi);
         Assert.Equal(updateCommand.Isin, stock.StockInfo.Isin.Value);
         Assert.Equal(updateCommand.LotSize.Value, stock.StockInfo.LotSize);
-        Assert.Equal(updateCommand.InstrumentId.Value, stock.StockInfo.InstrumentId);
+        Assert.Equal(updateCommand.InstrumentUId.Value, stock.StockInfo.InstrumentId);
         Assert.Equal(updateCommand.Name, stock.StockInfo.Name);
         Assert.Equal(updateCommand.Ticker, stock.StockInfo.Ticker);
     }
@@ -320,13 +320,13 @@ public sealed class InstrumentManagementApiTests :
     {
         var createBondRequest = new CreateBondRequest
         {
-            InstrumentId = fixture.Create<InstrumentId>(),
+            InstrumentId = fixture.Create<InstrumentUId>(),
             Isin = fixture.Create<ISIN>(),
             Figi = fixture.Create<FIGI>(),
             Name = fixture.Create<string>(),
         };
         var createBondResponse = await grpcClient.CreateBondAsync(createBondRequest);
-        var instrumentId = fixture.Create<InstrumentId>();
+        var instrumentId = fixture.Create<InstrumentUId>();
         var updateCommand = fixture.Create<CreateBondCommand>() with
         {
             Isin = createBondRequest.Isin
@@ -344,7 +344,7 @@ public sealed class InstrumentManagementApiTests :
         Assert.Equal(createBondResponse.BondId, bond.BondId);
         Assert.Equal(updateCommand.Figi, bond.Figi);
         Assert.Equal(updateCommand.Isin, bond.Isin.Value);
-        Assert.Equal(updateCommand.InstrumentId.Value, bond.InstrumentId);
+        Assert.Equal(updateCommand.InstrumentUId.Value, bond.InstrumentId);
         Assert.Equal(updateCommand.Name, bond.Name);
     }
     
@@ -353,12 +353,12 @@ public sealed class InstrumentManagementApiTests :
     {
         var createCurrencyRequest = new CreateCurrencyRequest
         {
-            InstrumentId = fixture.Create<InstrumentId>(),
+            InstrumentId = fixture.Create<InstrumentUId>(),
             Figi = fixture.Create<FIGI>(),
             Name = fixture.Create<string>(),
         };
         var createCurrencyResponse = await grpcClient.CreateCurrencyAsync(createCurrencyRequest);
-        var instrumentId = fixture.Create<InstrumentId>();
+        var instrumentId = fixture.Create<InstrumentUId>();
         var updateCommand = fixture.Create<CreateCurrencyCommand>() with
         {
             Figi = createCurrencyRequest.Figi
@@ -375,7 +375,7 @@ public sealed class InstrumentManagementApiTests :
         var stock = await grpcClient.GetCurrencyAsync(new GetCurrencyRequest { CurrencyId = new CurrencyIdProto(instrument.Id) });
         Assert.Equal(createCurrencyResponse.CurrencyId, stock.CurrencyId);
         Assert.Equal(updateCommand.Figi, stock.Figi);
-        Assert.Equal(updateCommand.InstrumentId.Value, stock.InstrumentId);
+        Assert.Equal(updateCommand.InstrumentUId.Value, stock.InstrumentId);
         Assert.Equal(updateCommand.Name, stock.Name);
     }
 }

@@ -8,4 +8,4 @@ namespace Wealth.InstrumentManagement.Application.Instruments.Commands;
 public record struct CreateCurrencyCommand(
     string Name,
     FIGI Figi,
-    InstrumentId InstrumentId) : ICommand<CurrencyId>;
+    InstrumentUId InstrumentUId) : ICommand<CurrencyId>;

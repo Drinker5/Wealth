@@ -10,11 +10,11 @@ public class CurrencyTests
 {
     readonly string name = "foo";
     readonly FIGI figi = "arbarbarbarb";
-    readonly InstrumentId instrumentId = new Guid("46042ADD-269E-4B54-8848-2004109FF14A");
+    readonly InstrumentUId instrumentUId = new Guid("46042ADD-269E-4B54-8848-2004109FF14A");
 
     private Currency CreateCurrencyInstrument()
     {
-        return Currency.Create(3, name, figi, instrumentId);
+        return Currency.Create(3, name, figi, instrumentUId);
     }
 
     [Test]
@@ -27,10 +27,10 @@ public class CurrencyTests
         {
             Assert.That(@event.CurrencyId, Is.Not.Zero);
             Assert.That(@event.Name, Is.EqualTo(name));
-            Assert.That(@event.InstrumentId, Is.EqualTo(instrumentId));
+            Assert.That(@event.InstrumentUId, Is.EqualTo(instrumentUId));
             Assert.That(currency.Id, Is.Not.Zero);
             Assert.That(currency.Name, Is.EqualTo(name));
-            Assert.That(currency.InstrumentId, Is.EqualTo(instrumentId));
+            Assert.That(currency.InstrumentUId, Is.EqualTo(instrumentUId));
         }
     }
 

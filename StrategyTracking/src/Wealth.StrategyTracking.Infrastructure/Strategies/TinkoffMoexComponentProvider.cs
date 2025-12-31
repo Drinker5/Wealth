@@ -31,14 +31,14 @@ public sealed class TinkoffMoexComponentProvider(
     {
         var strategyInstrumentIds = strategyInstruments
             .Where(i => i.InstrumentUID is not null)
-            .ToDictionary(i => InstrumentId.From(i.InstrumentUID!));
+            .ToDictionary(i => InstrumentUId.From(i.InstrumentUID!));
 
         var instrumentsResponse = await instrumentsServiceClient.GetInstrumentsAsync(new GetInstrumentsRequest
         {
             InstrumentIds = { strategyInstrumentIds.Select(i => new InstrumentIdProto(i.Key)) }
         }, cancellationToken: token);
 
-        var instruments = instrumentsResponse.Instruments.ToDictionary(i => (InstrumentId)i.InstrumentId);
+        var instruments = instrumentsResponse.Instruments.ToDictionary(i => (InstrumentUId)i.InstrumentId);
         if (strategyInstrumentIds.Count != instruments.Count)
         {
             foreach (var id in instruments.Keys)

@@ -20,12 +20,12 @@ public class Stock(StockId id) : AggregateRoot
 
     public LotSize LotSize { get; set; } = 1;
 
-    public InstrumentId InstrumentId { get; set; }
+    public InstrumentUId InstrumentUId { get; set; }
 
-    public static Stock Create(StockId id, string index, string name, ISIN isin, FIGI figi, InstrumentId instrumentId)
+    public static Stock Create(StockId id, string index, string name, ISIN isin, FIGI figi, InstrumentUId instrumentUId)
     {
         var stock = new Stock(id);
-        stock.Apply(new StockCreated(id, index, name, isin, figi, instrumentId));
+        stock.Apply(new StockCreated(id, index, name, isin, figi, instrumentUId));
         return stock;
     }
 
@@ -64,7 +64,7 @@ public class Stock(StockId id) : AggregateRoot
         Ticker = @event.Index;
         Isin = @event.Isin;
         Figi = @event.Figi;
-        InstrumentId = @event.InstrumentId;
+        InstrumentUId = @event.InstrumentUId;
     }
 
     private void When(StockDividendChanged @event)
@@ -116,12 +116,12 @@ public class Stock(StockId id) : AggregateRoot
         Apply(new StockFigiChanged(Id, figi));
     }
 
-    public void ChangeInstrumentId(InstrumentId instrumentId)
+    public void ChangeInstrumentId(InstrumentUId instrumentUId)
     {
-        if (this.InstrumentId == instrumentId)
+        if (this.InstrumentUId == instrumentUId)
             return;
 
-        Apply(new StockInstrumentIdChanged(Id, instrumentId));
+        Apply(new StockInstrumentIdChanged(Id, instrumentUId));
     }
 
     public void ChangeName(string name)
@@ -144,7 +144,7 @@ public class Stock(StockId id) : AggregateRoot
 
     private void When(StockInstrumentIdChanged @event)
     {
-        InstrumentId = @event.InstrumentId;
+        InstrumentUId = @event.InstrumentUId;
     }
 
     private void When(StockNameChanged @event)

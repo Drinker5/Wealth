@@ -1,32 +1,24 @@
 namespace Wealth.BuildingBlocks.Domain.Common;
 
-public readonly record struct InstrumentId(Guid Value) : IIdentity
+public readonly record struct InstrumentId(int Value) : IIdentity
 {
-    public static InstrumentId New() => new(Guid.NewGuid());
-    public static InstrumentId From(string value) => new(Guid.Parse(value));
-
     public override string ToString()
     {
-        return Value.ToString("D");
+        return Value.ToString();
     }
 
     public override int GetHashCode()
     {
         return Value.GetHashCode();
     }
-    
-    public static implicit operator Guid(InstrumentId id)
+
+    public static implicit operator int(InstrumentId uId)
     {
-        return id.Value;
+        return uId.Value;
     }
-    
-    public static implicit operator InstrumentId(Guid value)
+
+    public static implicit operator InstrumentId(int value)
     {
         return new InstrumentId(value);
-    }
-    
-    public static implicit operator InstrumentId(string value)
-    {
-        return new InstrumentId(Guid.Parse(value));
     }
 }

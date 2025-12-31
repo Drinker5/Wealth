@@ -27,13 +27,14 @@ public class StockAggregationRepositoryTests : IClassFixture<ClickHouseFixture>
     {
         await InitData();
 
-        var result = await repository.GetAggregation(portfolioId, CancellationToken.None).ToListAsync();
+        var result = await repository.GetAggregation(portfolioId, [1], CancellationToken.None).ToListAsync();
 
         // Assert that we have exactly one result
         var item = Assert.Single(result);
         Assert.Multiple(() =>
         {
-            Assert.Equal(1, item.StockId);
+            Assert.Equal(1, item.InstrumentIdType.Id.Value);
+            Assert.Equal(InstrumentType.Stock, item.InstrumentIdType.Type);
             Assert.Equal(CurrencyCode.Rub, item.Currency);
             Assert.Equal(100L, item.Quantity);
             Assert.Equal(1000m, item.TradeAmount);

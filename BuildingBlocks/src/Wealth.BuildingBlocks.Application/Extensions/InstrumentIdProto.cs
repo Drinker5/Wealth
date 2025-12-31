@@ -4,12 +4,12 @@ namespace Wealth.BuildingBlocks;
 
 public partial class InstrumentIdProto
 {
-    public static implicit operator InstrumentId(InstrumentIdProto grpcValue)
+    public static implicit operator InstrumentUId(InstrumentIdProto grpcValue)
     {
-        return new InstrumentId(grpcValue.Value);
+        return new InstrumentUId(grpcValue.Value);
     }
 
-    public static implicit operator InstrumentIdProto(InstrumentId value)
+    public static implicit operator InstrumentIdProto(InstrumentUId value)
     {
         return new InstrumentIdProto
         {

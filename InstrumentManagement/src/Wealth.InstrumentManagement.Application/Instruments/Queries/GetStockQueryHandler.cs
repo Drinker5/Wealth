@@ -28,7 +28,7 @@ public class GetStockQueryHandler(IStocksRepository repository) :
 
     public Task<Stock?> Handle(GetStockByInstrumentId request, CancellationToken cancellationToken)
     {
-        return repository.GetStock(request.Id);
+        return repository.GetStock(request.UId);
     }
 
     public async Task<IReadOnlyCollection<Stock>> Handle(GetStocksQuery request, CancellationToken cancellationToken)

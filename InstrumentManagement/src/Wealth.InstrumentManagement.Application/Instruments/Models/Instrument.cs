@@ -6,5 +6,5 @@ namespace Wealth.InstrumentManagement.Application.Instruments.Models;
 [StructLayout(LayoutKind.Auto)]
 public record struct Instrument(
     int Id,
-    InstrumentId InstrumentId,
+    InstrumentUId InstrumentUId,
     InstrumentType Type);

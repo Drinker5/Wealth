@@ -4,13 +4,13 @@ namespace Wealth.PortfolioManagement.Infrastructure.Providers;
 
 public interface IInstrumentIdProvider
 {
-    ValueTask<StockId> GetStockId(InstrumentId instrumentId, CancellationToken token);
+    ValueTask<StockId> GetStockId(InstrumentUId instrumentUId, CancellationToken token);
 
-    ValueTask<BondId> GetBondId(InstrumentId instrumentId, CancellationToken token);
+    ValueTask<BondId> GetBondId(InstrumentUId instrumentUId, CancellationToken token);
 
-    ValueTask<CurrencyId> GetCurrencyId(InstrumentId instrumentId, CancellationToken token);
+    ValueTask<CurrencyId> GetCurrencyId(InstrumentUId instrumentUId, CancellationToken token);
 
-    Task<IReadOnlyDictionary<InstrumentId, int>> GetInstruments(
-        IReadOnlySet<InstrumentIdType> instrumentIdTypes,
+    Task<IReadOnlyDictionary<InstrumentUId, int>> GetInstruments(
+        IReadOnlySet<InstrumentUIdType> instrumentIdTypes,
         CancellationToken token);
 }

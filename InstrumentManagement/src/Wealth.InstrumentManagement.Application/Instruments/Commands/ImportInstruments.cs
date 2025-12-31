@@ -7,9 +7,9 @@ using Wealth.InstrumentManagement.Application.Repositories;
 namespace Wealth.InstrumentManagement.Application.Instruments.Commands;
 
 public readonly record struct ImportInstruments(
-    IReadOnlyCollection<InstrumentId> StockInstrumentIds,
-    IReadOnlyCollection<InstrumentId> BondInstrumentIds,
-    IReadOnlyCollection<InstrumentId> CurrencyInstrumentIds) : ICommand<IReadOnlyCollection<Instrument>>;
+    IReadOnlyCollection<InstrumentUId> StockInstrumentIds,
+    IReadOnlyCollection<InstrumentUId> BondInstrumentIds,
+    IReadOnlyCollection<InstrumentUId> CurrencyInstrumentIds) : ICommand<IReadOnlyCollection<Instrument>>;
 
 public sealed class UpdateInstrumentsHandler(
     IInstrumentsProvider instrumentsProvider,
@@ -32,9 +32,9 @@ public sealed class UpdateInstrumentsHandler(
         var instruments = (await repository.GetInstruments(instrumentIds, token)).ToList();
         foreach (var instrument in instruments)
         {
-            stockInstrumentIds.Remove(instrument.InstrumentId);
-            bondInstrumentIds.Remove(instrument.InstrumentId);
-            currencyInstrumentIds.Remove(instrument.InstrumentId);
+            stockInstrumentIds.Remove(instrument.InstrumentUId);
+            bondInstrumentIds.Remove(instrument.InstrumentUId);
+            currencyInstrumentIds.Remove(instrument.InstrumentUId);
         }
 
         var result = new List<Instrument>(stockInstrumentIds.Count + bondInstrumentIds.Count + currencyInstrumentIds.Count);
@@ -49,7 +49,7 @@ public sealed class UpdateInstrumentsHandler(
         return result;
     }
 
-    private async Task<IEnumerable<Instrument>> ImportStocks(IReadOnlyCollection<InstrumentId> stockInstrumentIds, CancellationToken token)
+    private async Task<IEnumerable<Instrument>> ImportStocks(IReadOnlyCollection<InstrumentUId> stockInstrumentIds, CancellationToken token)
     {
         var result = new List<Instrument>();
         foreach (var stockInstrumentId in stockInstrumentIds)
@@ -58,7 +58,7 @@ public sealed class UpdateInstrumentsHandler(
             var stockId = await stocksRepository.UpsertStock(stockProvideCommand, token);
             result.Add(new Instrument
             {
-                InstrumentId = stockInstrumentId,
+                InstrumentUId = stockInstrumentId,
                 Id = stockId,
                 Type = InstrumentType.Stock
             });
@@ -67,7 +67,7 @@ public sealed class UpdateInstrumentsHandler(
         return result;
     }
 
-    private async Task<IEnumerable<Instrument>> ImportBonds(IReadOnlyCollection<InstrumentId> bondInstrumentIds, CancellationToken token)
+    private async Task<IEnumerable<Instrument>> ImportBonds(IReadOnlyCollection<InstrumentUId> bondInstrumentIds, CancellationToken token)
     {
         var result = new List<Instrument>();
         foreach (var bondInstrumentId in bondInstrumentIds)
@@ -76,7 +76,7 @@ public sealed class UpdateInstrumentsHandler(
             var bondId = await bondsRepository.UpsertBond(bondProvideCommand, token);
             result.Add(new Instrument
             {
-                InstrumentId = bondInstrumentId,
+                InstrumentUId = bondInstrumentId,
                 Id = bondId,
                 Type = InstrumentType.Bond
             });
@@ -85,7 +85,7 @@ public sealed class UpdateInstrumentsHandler(
         return result;
     }
     
-    private async Task<IEnumerable<Instrument>> ImportCurrencies(IReadOnlyCollection<InstrumentId> currencyInstrumentIds, CancellationToken token)
+    private async Task<IEnumerable<Instrument>> ImportCurrencies(IReadOnlyCollection<InstrumentUId> currencyInstrumentIds, CancellationToken token)
     {
         var result = new List<Instrument>();
         foreach (var currencyInstrumentId in currencyInstrumentIds)
@@ -94,7 +94,7 @@ public sealed class UpdateInstrumentsHandler(
             var currencyId = await currenciesRepository.UpsertCurrency(currencyProvideCommand, token);
             result.Add(new Instrument
             {
-                InstrumentId = currencyInstrumentId,
+                InstrumentUId = currencyInstrumentId,
                 Id = currencyId,
                 Type = InstrumentType.CurrencyAsset
             });

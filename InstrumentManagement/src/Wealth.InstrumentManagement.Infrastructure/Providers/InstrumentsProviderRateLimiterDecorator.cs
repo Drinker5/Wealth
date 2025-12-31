@@ -17,24 +17,24 @@ public sealed class InstrumentsProviderRateLimiterDecorator(IInstrumentsProvider
                 Window = TimeSpan.FromMinutes(1)
             })).Build();
 
-    public ValueTask<CreateStockCommand> StockProvide(InstrumentId instrumentId, CancellationToken token)
+    public ValueTask<CreateStockCommand> StockProvide(InstrumentUId instrumentUId, CancellationToken token)
     {
         return pipeline.ExecuteAsync(
-            ct => instrumentsProvider.StockProvide(instrumentId, ct),
+            ct => instrumentsProvider.StockProvide(instrumentUId, ct),
             token);
     }
 
-    public ValueTask<CreateBondCommand> BondProvide(InstrumentId instrumentId, CancellationToken token)
+    public ValueTask<CreateBondCommand> BondProvide(InstrumentUId instrumentUId, CancellationToken token)
     {
         return pipeline.ExecuteAsync(
-            ct => instrumentsProvider.BondProvide(instrumentId, ct),
+            ct => instrumentsProvider.BondProvide(instrumentUId, ct),
             token);
     }
 
-    public ValueTask<CreateCurrencyCommand> CurrencyProvide(InstrumentId instrumentId, CancellationToken token)
+    public ValueTask<CreateCurrencyCommand> CurrencyProvide(InstrumentUId instrumentUId, CancellationToken token)
     {
         return pipeline.ExecuteAsync(
-            ct => instrumentsProvider.CurrencyProvide(instrumentId, ct),
+            ct => instrumentsProvider.CurrencyProvide(instrumentUId, ct),
             token);
     }
 }

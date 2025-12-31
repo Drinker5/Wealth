@@ -32,10 +32,10 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         return instruments.FirstOrDefault();
     }
 
-    public async Task<Stock?> GetStock(InstrumentId id)
+    public async Task<Stock?> GetStock(InstrumentUId uId)
     {
         const string sql = """SELECT * FROM "Stocks" WHERE instrument_id = @instrumentId""";
-        var instruments = await GetStocks(sql, new { instrumentId = id.Value });
+        var instruments = await GetStocks(sql, new { instrumentId = uId.Value });
         return instruments.FirstOrDefault();
     }
 
@@ -73,7 +73,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         return instruments.FirstOrDefault();
     }
 
-    private async Task<Stock?> GetStock(ISIN isin, FIGI figi, InstrumentId instrumentId, CancellationToken token)
+    private async Task<Stock?> GetStock(ISIN isin, FIGI figi, InstrumentUId instrumentUId, CancellationToken token)
     {
         var instruments = await GetStocks(
             """
@@ -86,11 +86,11 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             {
                 Isin = isin.Value,
                 Figi = figi.Value,
-                InstrumentId = instrumentId.Value
+                InstrumentId = instrumentUId.Value
             });
 
         if (instruments.Count > 1)
-            throw new InvalidOperationException($"Found more than one stock Isin: ${isin.Value}, Figi: ${figi.Value}, InstrumentId: ${instrumentId.Value}");
+            throw new InvalidOperationException($"Found more than one stock Isin: ${isin.Value}, Figi: ${figi.Value}, InstrumentId: ${instrumentUId.Value}");
 
         return instruments.FirstOrDefault();
     }
@@ -104,14 +104,14 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             commandText: sql,
             cancellationToken: token));
 
-        var stock = Stock.Create(new StockId(nextId), command.Ticker, command.Name, command.Isin, command.Figi, command.InstrumentId);
+        var stock = Stock.Create(new StockId(nextId), command.Ticker, command.Name, command.Isin, command.Figi, command.InstrumentUId);
         stock.ChangeLotSize(command.LotSize);
         return await CreateStock(stock);
     }
 
     public async Task<StockId> UpsertStock(CreateStockCommand command, CancellationToken token = default)
     {
-        var stock = await GetStock(command.Isin, command.Figi, command.InstrumentId, token);
+        var stock = await GetStock(command.Isin, command.Figi, command.InstrumentUId, token);
         if (stock == null)
             return await CreateStock(command, token);
 
@@ -126,7 +126,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         instrument.ChangeTicker(command.Ticker);
         instrument.ChangeIsin(command.Isin);
         instrument.ChangeFigi(command.Figi);
-        instrument.ChangeInstrumentId(command.InstrumentId);
+        instrument.ChangeInstrumentId(command.InstrumentUId);
         await connection.ExecuteAsync(
             """
             UPDATE "Stocks" 
@@ -141,7 +141,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
                 Ticker = command.Ticker.Value,
                 ISIN = command.Isin.Value,
                 Figi = command.Figi.Value,
-                InstrumentId = command.InstrumentId.Value
+                InstrumentId = command.InstrumentUId.Value
             });
         dbContext.AddEvents(instrument);
     }
@@ -160,7 +160,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             ISIN = stock.Isin.Value,
             FIGI = stock.Figi.Value,
             LotSize = stock.LotSize.Value,
-            InstrumentId = stock.InstrumentId.Value
+            InstrumentId = stock.InstrumentUId.Value
         });
         dbContext.AddEvents(stock);
 
@@ -262,7 +262,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             stock.Name = reader.GetString((int)Columns.Name);
             stock.Isin = reader.GetString((int)Columns.ISIN);
             stock.Figi = reader.GetString((int)Columns.FIGI);
-            stock.InstrumentId = reader.GetGuid((int)Columns.InstrumentId);
+            stock.InstrumentUId = reader.GetGuid((int)Columns.InstrumentId);
             stock.Ticker = reader.GetString((int)Columns.Ticker);
             if (!reader.IsDBNull((int)Columns.Price_Currency))
             {

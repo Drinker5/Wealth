@@ -9,5 +9,5 @@ public record BondCreated : DomainEvent
     public required string Name { get; init; }
     public required ISIN Isin { get; init; }
     public required FIGI Figi { get; init; }
-    public required InstrumentId InstrumentId { get; init; }
+    public required InstrumentUId InstrumentUId { get; init; }
 }

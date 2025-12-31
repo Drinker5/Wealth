@@ -12,13 +12,13 @@ public class Bond(BondId id) : AggregateRoot
 
     public ISIN Isin { get; set; }
     public FIGI Figi { get; set; }
-    public InstrumentId InstrumentId { get; set; }
+    public InstrumentUId InstrumentUId { get; set; }
 
     public Money Price { get; set; } = Money.Empty;
 
     public Coupon Coupon { get; set; }
 
-    public static Bond Create(BondId bondId, string name, ISIN isin, FIGI figi, InstrumentId instrumentId)
+    public static Bond Create(BondId bondId, string name, ISIN isin, FIGI figi, InstrumentUId instrumentUId)
     {
         var bond = new Bond(bondId);
         bond.Apply(new BondCreated
@@ -27,7 +27,7 @@ public class Bond(BondId id) : AggregateRoot
             Name = name,
             Isin = isin,
             Figi = figi,
-            InstrumentId = instrumentId
+            InstrumentUId = instrumentUId
         });
         return bond;
     }
@@ -51,7 +51,7 @@ public class Bond(BondId id) : AggregateRoot
         Name = @event.Name;
         Isin = @event.Isin;
         Figi = @event.Figi;
-        InstrumentId = @event.InstrumentId;
+        InstrumentUId = @event.InstrumentUId;
     }
 
     public void ChangeCoupon(Coupon coupon)
@@ -93,12 +93,12 @@ public class Bond(BondId id) : AggregateRoot
         Apply(new BondFigiChanged(Id, figi));
     }
 
-    public void ChangeInstrumentId(InstrumentId instrumentId)
+    public void ChangeInstrumentId(InstrumentUId instrumentUId)
     {
-        if (this.InstrumentId == instrumentId)
+        if (this.InstrumentUId == instrumentUId)
             return;
 
-        Apply(new BondInstrumentIdChanged(Id, instrumentId));
+        Apply(new BondInstrumentIdChanged(Id, instrumentUId));
     }
 
     public void ChangeName(string name)
@@ -121,7 +121,7 @@ public class Bond(BondId id) : AggregateRoot
 
     private void When(BondInstrumentIdChanged @event)
     {
-        InstrumentId = @event.InstrumentId;
+        InstrumentUId = @event.InstrumentUId;
     }
     
     private void When(BondNameChanged @event)

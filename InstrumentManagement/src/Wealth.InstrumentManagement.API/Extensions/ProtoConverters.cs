@@ -9,7 +9,7 @@ public static class ProtoConverters
         new()
         {
             Id = instrument.Id,
-            InstrumentId = instrument.InstrumentId,
+            InstrumentId = instrument.InstrumentUId,
             Type = instrument.Type.ToProto(),
         };
 }

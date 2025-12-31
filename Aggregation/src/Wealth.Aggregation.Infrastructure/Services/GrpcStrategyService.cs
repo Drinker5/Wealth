@@ -18,8 +18,7 @@ public sealed class GrpcStrategyService(StrategiesService.StrategiesServiceClien
 
             var components = response.Components
                 .Select(i => new StrategyComponent(
-                    i.InstrumentId,
-                    i.InstrumentType.FromProto(),
+                    new InstrumentIdType(i.InstrumentId, i.InstrumentType.FromProto()),
                     i.Weight))
                 .ToArray();
 
