@@ -17,8 +17,7 @@ public sealed class ClickHouseFixture : IAsyncLifetime
         var network = new NetworkBuilder()
             .Build();
 
-        clickHouseContainer = new ClickHouseBuilder()
-            .WithImage("clickhouse/clickhouse-server:25.9-alpine")
+        clickHouseContainer = new ClickHouseBuilder(image: "clickhouse/clickhouse-server:25.9-alpine")
             .WithNetworkAliases("clickhouse")
             .WithNetwork(network)
             .WithDatabase("default")
@@ -26,9 +25,8 @@ public sealed class ClickHouseFixture : IAsyncLifetime
             .WithPassword("default")
             .Build();
 
-        migratorContainer = new ContainerBuilder()
+        migratorContainer = new ContainerBuilder(image: "gomicro/goose:3.26.0")
             .WithNetwork(network)
-            .WithImage("gomicro/goose:3.26.0")
             .WithBindMount(Path.Combine(Directory.GetCurrentDirectory(), "Migrations"), "/migrations", AccessMode.ReadOnly)
             .DependsOn(clickHouseContainer)
             .WithEnvironment(new Dictionary<string, string>

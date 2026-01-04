@@ -12,14 +12,13 @@ public sealed class PortfolioManagementApiFixture : WebApplicationFactory<Progra
 {
     public Mock<IInstrumentService> InstrumentServiceMock { get; } = new();
 
-    private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder()
-        .WithImage("postgres")
+    private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder(image: "postgres")
         .WithDatabase("PortfolioManagement")
         .WithUsername("postgres")
         .WithPassword("postgres")
         .Build();
 
-    private readonly KafkaContainer kafkaContainer = new KafkaBuilder()
+    private readonly KafkaContainer kafkaContainer = new KafkaBuilder(image: "confluentinc/cp-kafka:7.5.12")
         .Build();
 
     private string postgresConnectionString;

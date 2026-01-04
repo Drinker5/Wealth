@@ -11,8 +11,7 @@ public sealed class StrategyTrackingApiFixture : WebApplicationFactory<Program>,
 {
     private readonly IHost app;
 
-    private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder()
-        .WithImage("postgres")
+    private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder(image: "postgres")
         .WithDatabase("StrategyTracking")
         .WithUsername("postgres")
         .WithPassword("postgres")

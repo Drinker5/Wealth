@@ -9,8 +9,7 @@ public sealed class WalletManagementApiFixture : WebApplicationFactory<Program>,
 {
     private readonly IHost app;
 
-    private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder()
-        .WithImage("postgres")
+    private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder(image: "postgres")
         .WithDatabase("WalletManagement")
         .WithUsername("postgres")
         .WithPassword("postgres")

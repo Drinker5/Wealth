@@ -9,7 +9,7 @@ public sealed class AggregationApiFixture : WebApplicationFactory<Program>, IAsy
 {
     private readonly IHost app;
 
-    private readonly ClickHouseContainer clickHouseContainer = new ClickHouseBuilder()
+    private readonly ClickHouseContainer clickHouseContainer = new ClickHouseBuilder(image: "clickhouse/clickhouse-server:25.9-alpine")
         .Build();
 
     private string clickHouseConnectionString;
@@ -17,7 +17,7 @@ public sealed class AggregationApiFixture : WebApplicationFactory<Program>, IAsy
     public AggregationApiFixture()
     {
         var appBuilder = new HostApplicationBuilder();
-        
+
         app = appBuilder.Build();
     }
 
@@ -32,10 +32,8 @@ public sealed class AggregationApiFixture : WebApplicationFactory<Program>, IAsy
             config.AddInMemoryCollection(data!);
         });
 
-        builder.ConfigureServices(services =>
-        {
-        });
-        
+        builder.ConfigureServices(services => { });
+
         return base.CreateHost(builder);
     }
 

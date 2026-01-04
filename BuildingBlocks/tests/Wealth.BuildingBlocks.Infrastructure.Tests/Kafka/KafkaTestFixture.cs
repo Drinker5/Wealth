@@ -4,7 +4,7 @@ namespace Wealth.BuildingBlocks.Infrastructure.Tests.Kafka;
 
 public sealed class KafkaTestFixture : IAsyncLifetime
 {
-    private readonly KafkaContainer kafkaContainer = new KafkaBuilder()
+    private readonly KafkaContainer kafkaContainer = new KafkaBuilder(image: "confluentinc/cp-kafka:7.5.12")
         .Build();
 
     public string BootstrapServers { get; private set; } = string.Empty;
@@ -20,6 +20,3 @@ public sealed class KafkaTestFixture : IAsyncLifetime
         await kafkaContainer.StopAsync();
     }
 }
-
-
-

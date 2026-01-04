@@ -9,8 +9,7 @@ public sealed class DepositManagementApiFixture : WebApplicationFactory<Program>
 {
     private readonly IHost app;
 
-    private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder()
-        .WithImage("postgres")
+    private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder(image: "postgres")
         .WithDatabase("DepositManagement")
         .WithUsername("postgres")
         .WithPassword("postgres")

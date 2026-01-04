@@ -12,8 +12,7 @@ public sealed class CurrencyManagementApiFixture : WebApplicationFactory<Program
     private readonly IHost app;
     public ICommandsScheduler CommandsScheduler = Substitute.For<ICommandsScheduler>();
 
-    private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder()
-        .WithImage("postgres")
+    private readonly PostgreSqlContainer postgresContainer = new PostgreSqlBuilder(image: "postgres")
         .WithDatabase("CurrencyManagement")
         .WithUsername("postgres")
         .WithPassword("postgres")
