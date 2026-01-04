@@ -6,7 +6,7 @@ using Wealth.BuildingBlocks.Domain.Common;
 namespace Wealth.Aggregation.Infrastructure.Services;
 
 public sealed class StockAggregationService(
-    IStockAggregationRepository repository,
+    IAggregationRepository repository,
     IInstrumentService instrumentService,
     IStrategyService strategyService) : IStockAggregationService
 {

@@ -7,19 +7,19 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.Aggregation.Infrastructure.Tests.Repositories;
 
-[TestSubject(typeof(StockAggregationRepository))]
-public class StockAggregationRepositoryTests : IClassFixture<ClickHouseFixture>
+[TestSubject(typeof(AggregationRepository))]
+public class AggregationRepositoryTests : IClassFixture<ClickHouseFixture>
 {
-    private readonly StockAggregationRepository repository;
+    private readonly AggregationRepository repository;
     private readonly PortfolioId portfolioId = 1;
     private readonly ClickHouseConnectionFactory connectionFactory;
 
-    public StockAggregationRepositoryTests(ClickHouseFixture clickHouseFixture)
+    public AggregationRepositoryTests(ClickHouseFixture clickHouseFixture)
     {
         var clickHouseConnectionStringBuilder = new ClickHouseConnectionStringBuilder(clickHouseFixture.ClickHouseConnectionString);
         var clickHouseConnectionSettings = clickHouseConnectionStringBuilder.BuildSettings();
         connectionFactory = new ClickHouseConnectionFactory(clickHouseConnectionSettings);
-        repository = new StockAggregationRepository(connectionFactory);
+        repository = new AggregationRepository(connectionFactory);
     }
 
     [Fact]

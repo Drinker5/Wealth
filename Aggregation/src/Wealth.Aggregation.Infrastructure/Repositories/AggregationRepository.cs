@@ -8,7 +8,7 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.Aggregation.Infrastructure.Repositories;
 
-public sealed class StockAggregationRepository(IClickHouseConnectionFactory connectionFactory) : IStockAggregationRepository
+public sealed class AggregationRepository(IClickHouseConnectionFactory connectionFactory) : IAggregationRepository
 {
     public async IAsyncEnumerable<StockAggregationRaw> GetAggregation(
         PortfolioId portfolioId,
@@ -19,6 +19,7 @@ public sealed class StockAggregationRepository(IClickHouseConnectionFactory conn
         await connection.OpenAsync(token);
 
         const string query =
+            // language=clickhouse
             """
             WITH trades AS
                      (SELECT instrument_id,

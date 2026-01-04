@@ -1,5 +1,8 @@
+using System.Runtime.InteropServices;
+
 namespace Wealth.BuildingBlocks.Domain.Common;
 
+[StructLayout(LayoutKind.Auto)]
 public readonly record struct InstrumentId(int Value) : IIdentity
 {
     public override string ToString()

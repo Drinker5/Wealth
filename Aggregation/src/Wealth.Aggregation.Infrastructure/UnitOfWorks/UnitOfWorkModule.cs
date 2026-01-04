@@ -24,6 +24,7 @@ public class UnitOfWorkModule : IServiceModule
         services.AddSingleton<ITableWriterBuilder, TableWriterBuilder>();
         services.AddSingleton<IOperationsRepository, OperationsRepository>();
 
-        services.AddSingleton<IStockAggregationRepository, StockAggregationRepository>();
+        services.AddSingleton<IAggregationRepository, AggregationRepository>();
+        services.AddSingleton<IPriceRepository, PriceRepository>();
     }
 }

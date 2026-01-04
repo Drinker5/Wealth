@@ -3,7 +3,7 @@ using Wealth.BuildingBlocks.Domain.Common;
 
 namespace Wealth.Aggregation.Application.Repository;
 
-public interface IStockAggregationRepository
+public interface IAggregationRepository
 {
     IAsyncEnumerable<StockAggregationRaw> GetAggregation(
         PortfolioId portfolioId,
