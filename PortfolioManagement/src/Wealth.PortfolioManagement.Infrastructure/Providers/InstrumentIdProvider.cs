@@ -45,10 +45,10 @@ public sealed class InstrumentIdProvider(
     {
         var response = await instrumentsServiceClient.GetInstrumentsAsync(new GetInstrumentsRequest
         {
-            InstrumentIds = { instrumentIdTypes.Select(i => new InstrumentIdProto(i.UId)) }
+            InstrumentUids = { instrumentIdTypes.Select(i => new InstrumentUIdProto(i.UId)) }
         }, cancellationToken: token);
 
-        var responseDict = response.Instruments.ToDictionary(i => new InstrumentUIdType(i.InstrumentId, i.Type.FromProto()));
+        var responseDict = response.Instruments.ToDictionary(i => new InstrumentUIdType(i.InstrumentUid, i.Type.FromProto()));
 
         var toCreate = new List<InstrumentUIdType>();
         foreach (var instrumentIdType in instrumentIdTypes.Except(responseDict.Keys))
@@ -57,7 +57,7 @@ public sealed class InstrumentIdProvider(
         if (toCreate.Count > 0)
             await CreateInstruments(toCreate, token);
 
-        return response.Instruments.ToDictionary(i => new InstrumentUId(i.InstrumentId.Value), i => i.Id);
+        return response.Instruments.ToDictionary(i => new InstrumentUId(i.InstrumentUid.Value), i => i.Id);
     }
 
     private async Task<StockId?> GetStock(InstrumentUId instrumentUId, CancellationToken token)
@@ -66,7 +66,7 @@ public sealed class InstrumentIdProvider(
         {
             var response = await instrumentsServiceClient.GetStockAsync(new GetStockRequest
             {
-                InstrumentId = instrumentUId
+                InstrumentUid = instrumentUId
             }, cancellationToken: token);
 
             return response.StockInfo.StockId;
@@ -83,7 +83,7 @@ public sealed class InstrumentIdProvider(
         {
             var getBondResponse = await instrumentsServiceClient.GetBondAsync(new GetBondRequest
             {
-                InstrumentId = instrumentUId
+                InstrumentUid = instrumentUId
             }, cancellationToken: token);
             return getBondResponse.BondId;
         }
@@ -99,7 +99,7 @@ public sealed class InstrumentIdProvider(
         {
             var getCurrencyResponse = await instrumentsServiceClient.GetCurrencyAsync(new GetCurrencyRequest
             {
-                InstrumentId = instrumentUId
+                InstrumentUid = instrumentUId
             }, cancellationToken: token);
             return getCurrencyResponse.CurrencyId;
         }
@@ -117,9 +117,9 @@ public sealed class InstrumentIdProvider(
     {
         var response = await instrumentsServiceClient.ImportInstrumentsAsync(new ImportInstrumentsRequest
         {
-            StockInstrumentIds = { stockInstrumentIds?.Select(i => new InstrumentIdProto(i.Value)) },
-            BondInstrumentIds = { bondInstrumentIds?.Select(i => new InstrumentIdProto(i.Value)) },
-            CurrencyInstrumentIds = { currencyInstrumentIds?.Select(i => new InstrumentIdProto(i.Value)) }
+            StockInstrumentIds = { stockInstrumentIds?.Select(i => new InstrumentUIdProto(i.Value)) },
+            BondInstrumentIds = { bondInstrumentIds?.Select(i => new InstrumentUIdProto(i.Value)) },
+            CurrencyInstrumentIds = { currencyInstrumentIds?.Select(i => new InstrumentUIdProto(i.Value)) }
         }, cancellationToken: token);
 
         return response.Instruments;

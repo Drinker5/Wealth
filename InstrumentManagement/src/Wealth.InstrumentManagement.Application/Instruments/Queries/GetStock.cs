@@ -10,4 +10,4 @@ public record struct GetStockByFigi(FIGI Figi) : IQuery<Stock?>;
 
 public record struct GetStockByIsin(ISIN Isin) : IQuery<Stock?>;
 
-public record struct GetStockByInstrumentId(InstrumentUId UId) : IQuery<Stock?>;
+public record struct GetStockByInstrumentUId(InstrumentUId UId) : IQuery<Stock?>;

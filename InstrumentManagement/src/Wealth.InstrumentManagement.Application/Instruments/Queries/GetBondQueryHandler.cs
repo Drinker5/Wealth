@@ -8,7 +8,7 @@ public class GetBondQueryHandler(IBondsRepository repository) :
     IQueryHandler<GetBond, Bond?>,
     IQueryHandler<GetBondByIsin, Bond?>,
     IQueryHandler<GetBondByFigi, Bond?>,
-    IQueryHandler<GetBondByInstrumentId, Bond?>,
+    IQueryHandler<GetBondByInstrumentUId, Bond?>,
     IQueryHandler<GetBondsQuery, IReadOnlyCollection<Bond>>
 {
     public Task<Bond?> Handle(GetBond request, CancellationToken cancellationToken)
@@ -26,7 +26,7 @@ public class GetBondQueryHandler(IBondsRepository repository) :
         return repository.GetBond(request.Figi);
     }
 
-    public Task<Bond?> Handle(GetBondByInstrumentId request, CancellationToken cancellationToken)
+    public Task<Bond?> Handle(GetBondByInstrumentUId request, CancellationToken cancellationToken)
     {
         return repository.GetBond(request.UId);
     }

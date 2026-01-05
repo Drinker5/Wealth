@@ -6,8 +6,9 @@ package wealth;
 
 option csharp_namespace = "Wealth.BuildingBlocks.Application";
 
-message StockPriceChangedIntegrationEvent {
-  StockIdProto stock_id = 1;
-  ISINProto ISIN = 2;
+message InstrumentPriceChangedIntegrationEvent {
+  InstrumentIdProto instrument_id = 1;
+  InstrumentTypeProto instrument_type = 2;
   MoneyProto new_price = 3;
 }
+

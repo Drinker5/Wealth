@@ -1,3 +1,4 @@
+using Wealth.BuildingBlocks;
 using Wealth.BuildingBlocks.Application;
 using Wealth.InstrumentManagement.Domain.Instruments.Events;
 
@@ -9,10 +10,10 @@ internal class InstrumentPriceChangedEventHandler(IOutboxRepository outboxReposi
     {
         await outboxRepository.Add(
             notification,
-            new StockPriceChangedIntegrationEvent
+            new InstrumentPriceChangedIntegrationEvent()
             {
-                StockId = notification.StockId,
-                ISIN = notification.ISIN,
+                InstrumentId =  notification.StockId.Value,
+                InstrumentType = InstrumentTypeProto.Stock,
                 NewPrice = notification.NewPrice,
             },
             notification.StockId.ToString(),

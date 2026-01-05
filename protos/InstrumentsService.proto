@@ -27,7 +27,7 @@ message GetBondRequest {
     BondIdProto bond_id = 1;
     ISINProto isin = 2;
     string figi = 3;
-    InstrumentIdProto instrument_id = 4;
+    InstrumentUIdProto instrument_uid = 4;
   }
 }
 
@@ -37,7 +37,7 @@ message GetStockRequest {
     StockIdProto stock_id = 1;
     ISINProto isin = 2;
     string figi = 3;
-    InstrumentIdProto instrument_id = 4;
+    InstrumentUIdProto instrument_uid = 4;
   }
 }
 
@@ -49,7 +49,7 @@ message GetCurrencyRequest {
   oneof variant {
     CurrencyIdProto currency_id = 1;
     string figi = 2;
-    InstrumentIdProto instrument_id = 3;
+    InstrumentUIdProto instrument_uid = 3;
   }
 }
 
@@ -59,7 +59,7 @@ message GetBondResponse {
   MoneyProto price = 3;
   ISINProto isin = 4;
   string figi = 5;
-  InstrumentIdProto instrument_id = 6;
+  InstrumentUIdProto instrument_uid = 6;
 }
 
 message GetStockResponse {
@@ -79,7 +79,7 @@ message StockInfoProto {
   int32 lot_size = 6;
   MoneyProto dividend_per_year = 7;
   string ticker = 8;
-  InstrumentIdProto instrument_id = 9;
+  InstrumentUIdProto instrument_uid = 9;
 }
 
 message GetCurrencyResponse {
@@ -87,7 +87,7 @@ message GetCurrencyResponse {
   string name = 2;
   MoneyProto price = 3;
   string figi = 4;
-  InstrumentIdProto instrument_id = 5;
+  InstrumentUIdProto instrument_uid = 5;
 }
 
 message CreateStockRequest {
@@ -96,7 +96,7 @@ message CreateStockRequest {
   string figi = 3;
   int32 lot_size = 4;
   string ticker = 5;
-  InstrumentIdProto instrument_id = 6;
+  InstrumentUIdProto instrument_uid = 6;
 }
 
 message CreateStockResponse {
@@ -107,13 +107,13 @@ message CreateBondRequest {
   string name = 1;
   ISINProto isin = 2;
   string figi = 3;
-  InstrumentIdProto instrument_id = 4;
+  InstrumentUIdProto instrument_uid = 4;
 }
 
 message CreateCurrencyRequest {
   string name = 1;
   string figi = 2;
-  InstrumentIdProto instrument_id = 3;
+  InstrumentUIdProto instrument_uid = 3;
 }
 
 message CreateBondResponse {
@@ -143,7 +143,7 @@ message ChangePriceResponse {
 }
 
 message GetInstrumentsRequest {
-  repeated InstrumentIdProto instrument_ids = 1;
+  repeated InstrumentUIdProto instrument_uids = 1;
 }
 
 message GetInstrumentsResponse {
@@ -151,13 +151,13 @@ message GetInstrumentsResponse {
 }
 
 message InstrumentProto {
-  InstrumentIdProto instrument_id = 1;
+  InstrumentUIdProto instrument_uid = 1;
   int32 id = 2;
   InstrumentTypeProto type = 3;
 }
 
 message ImportInstrumentsRequest {
-  repeated InstrumentIdProto stock_instrument_ids = 1;
-  repeated InstrumentIdProto bond_instrument_ids = 2;
-  repeated InstrumentIdProto currency_instrument_ids = 3;
+  repeated InstrumentUIdProto stock_instrument_ids = 1;
+  repeated InstrumentUIdProto bond_instrument_ids = 2;
+  repeated InstrumentUIdProto currency_instrument_ids = 3;
 }

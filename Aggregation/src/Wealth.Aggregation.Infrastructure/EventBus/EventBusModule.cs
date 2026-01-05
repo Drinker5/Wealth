@@ -14,7 +14,7 @@ public class EventBusModule : IServiceModule
             {
                 subs.AddBatch(sp,
                     "WealthInstrumentManagement",
-                    new StockPriceChangedIntegrationEventDeserializer());
+                    new InstrumentPriceChangedIntegrationEventDeserializer());
 
                 subs.AddBatch(sp,
                     "WealthOperationsConverted",

@@ -18,14 +18,8 @@ message StockDividendChangedIntegrationEvent {
   MoneyProto new_dividend = 3;
 }
 
-message StockPriceChangedIntegrationEvent {
-  StockIdProto stock_id = 1;
-  ISINProto ISIN = 2;
-  MoneyProto new_price = 3;
-}
-
-message BondPriceChangedIntegrationEvent {
-  BondIdProto bond_id = 1;
-  ISINProto ISIN = 2;
+message InstrumentPriceChangedIntegrationEvent {
+  InstrumentIdProto instrument_id = 1;
+  InstrumentTypeProto instrument_type = 2;
   MoneyProto new_price = 3;
 }

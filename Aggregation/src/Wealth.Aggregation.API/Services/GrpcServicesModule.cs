@@ -17,5 +17,8 @@ public class GrpcServicesModule : IServiceModule
         {
             o.Address = new Uri("http://strategy");
         }).AddServiceDiscovery();
+        
+        services.AddServiceDiscovery();
+        
     }
 }

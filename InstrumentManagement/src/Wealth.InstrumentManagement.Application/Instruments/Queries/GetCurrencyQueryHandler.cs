@@ -7,7 +7,7 @@ namespace Wealth.InstrumentManagement.Application.Instruments.Queries;
 public class GetCurrencyQueryHandler(ICurrenciesRepository repository) : 
     IQueryHandler<GetCurrency, Currency?>,
     IQueryHandler<GetCurrencyByFigi, Currency?>,
-    IQueryHandler<GetCurrencyByInstrumentId, Currency?>,
+    IQueryHandler<GetCurrencyByInstrumentUId, Currency?>,
     IQueryHandler<GetCurrenciesQuery, IReadOnlyCollection<Currency>>
 {
     public  Task<Currency?> Handle(GetCurrency request, CancellationToken cancellationToken)
@@ -20,7 +20,7 @@ public class GetCurrencyQueryHandler(ICurrenciesRepository repository) :
         return repository.GetCurrency(request.Figi);
     }
 
-    public Task<Currency?> Handle(GetCurrencyByInstrumentId request, CancellationToken cancellationToken)
+    public Task<Currency?> Handle(GetCurrencyByInstrumentUId request, CancellationToken cancellationToken)
     {
         return repository.GetCurrency(request.UId);
     }

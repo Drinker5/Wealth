@@ -8,4 +8,4 @@ public record struct GetCurrency(CurrencyId Id) : IQuery<Currency?>;
 
 public record struct GetCurrencyByFigi(FIGI Figi) : IQuery<Currency?>;
 
-public record struct GetCurrencyByInstrumentId(InstrumentUId UId) : IQuery<Currency?>;
+public record struct GetCurrencyByInstrumentUId(InstrumentUId UId) : IQuery<Currency?>;

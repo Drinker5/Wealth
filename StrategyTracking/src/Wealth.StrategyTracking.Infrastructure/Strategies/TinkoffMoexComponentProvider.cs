@@ -35,10 +35,10 @@ public sealed class TinkoffMoexComponentProvider(
 
         var instrumentsResponse = await instrumentsServiceClient.GetInstrumentsAsync(new GetInstrumentsRequest
         {
-            InstrumentIds = { strategyInstrumentIds.Select(i => new InstrumentIdProto(i.Key)) }
+            InstrumentUids = { strategyInstrumentIds.Select(i => new InstrumentUIdProto(i.Key)) }
         }, cancellationToken: token);
 
-        var instruments = instrumentsResponse.Instruments.ToDictionary(i => (InstrumentUId)i.InstrumentId);
+        var instruments = instrumentsResponse.Instruments.ToDictionary(i => (InstrumentUId)i.InstrumentUid);
         if (strategyInstrumentIds.Count != instruments.Count)
         {
             foreach (var id in instruments.Keys)
@@ -49,7 +49,7 @@ public sealed class TinkoffMoexComponentProvider(
                 var g = strategyInstrumentIds.Values
                     .GroupBy(i => i.Type)
                     .ToDictionary(k => k.Key,
-                        v => v.Select(i => new InstrumentIdProto(i.InstrumentUID!)),
+                        v => v.Select(i => new InstrumentUIdProto(i.InstrumentUID!)),
                         StringComparer.OrdinalIgnoreCase);
 
                 var request = new ImportInstrumentsRequest
@@ -65,7 +65,7 @@ public sealed class TinkoffMoexComponentProvider(
                 if (strategyInstrumentIds.Count != updateInstrumentsResponse.Instruments.Count)
                 {
                     foreach (var instrument in updateInstrumentsResponse.Instruments)
-                        strategyInstrumentIds.Remove(instrument.InstrumentId);
+                        strategyInstrumentIds.Remove(instrument.InstrumentUid);
 
                     throw new InvalidOperationException($"Did not find {string.Join(", ", strategyInstrumentIds)} instruments.");
                 }

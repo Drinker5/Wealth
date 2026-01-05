@@ -31,6 +31,10 @@ message ISINProto {
 }
 
 message InstrumentIdProto {
+  int32 value = 1;
+}
+
+message InstrumentUIdProto {
   GuidProto value = 1;
 }
 
