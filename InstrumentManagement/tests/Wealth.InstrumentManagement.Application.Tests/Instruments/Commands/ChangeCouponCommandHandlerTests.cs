@@ -15,13 +15,13 @@ public class ChangeCouponCommandHandlerTests
         var bondsRepository = A.Fake<IBondsRepository>();
         var command = new ChangeCouponCommand
         {
-            Id = new BondId(3),
+            BondId = new BondId(3),
             Coupon = new Coupon(CurrencyCode.Rub, 3.42m),
         };
         var handler = new ChangeCouponCommandHandler(bondsRepository);
         
         await handler.Handle(command, CancellationToken.None);
         
-        A.CallTo(() => bondsRepository.ChangeCoupon(command.Id, command.Coupon)).MustHaveHappened();
+        A.CallTo(() => bondsRepository.ChangeCoupon(command.BondId, command.Coupon)).MustHaveHappened();
     }
 }

@@ -19,6 +19,7 @@ public sealed class InstrumentsRepository(WealthDbContext dbContext) : IInstrume
             return [];
 
         const string sql =
+            // language=postgresql
             """
             SELECT "Id", instrument_id, 0
             FROM "Stocks" 

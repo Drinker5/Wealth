@@ -14,6 +14,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
 
     public async Task<Bond?> GetBond(BondId id)
     {
+        // language=postgresql
         const string sql = """SELECT * FROM "Bonds" WHERE "Id" = @Id""";
         var instruments = await GetBonds(sql, new { Id = id.Value });
         return instruments.FirstOrDefault();
@@ -21,6 +22,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
 
     public async Task<Bond?> GetBond(ISIN isin)
     {
+        // language=postgresql
         const string sql = """SELECT * FROM "Bonds" WHERE "ISIN" = @isin""";
         var instruments = await GetBonds(sql, new { isin = isin.Value });
         return instruments.FirstOrDefault();
@@ -28,6 +30,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
 
     public async Task<Bond?> GetBond(FIGI figi)
     {
+        // language=postgresql
         const string sql = """SELECT * FROM "Bonds" WHERE "FIGI" = @figi""";
         var instruments = await GetBonds(sql, new { figi = figi.Value });
         return instruments.FirstOrDefault();
@@ -35,6 +38,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
 
     public async Task<Bond?> GetBond(InstrumentUId uId)
     {
+        // language=postgresql
         const string sql = """SELECT * FROM "Bonds" WHERE instrument_id = @instrumentId""";
         var instruments = await GetBonds(sql, new { instrumentId = uId.Value });
         return instruments.FirstOrDefault();
@@ -42,6 +46,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
 
     public async Task DeleteBond(BondId instrumentId)
     {
+        // language=postgresql
         const string sql = """DELETE FROM "Bonds" WHERE "Id" = @Id""";
         await connection.ExecuteAsync(sql, new { Id = instrumentId.Value });
     }
@@ -53,6 +58,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
             return;
 
         bond.ChangePrice(price);
+        // language=postgresql
         const string sql = """
                            UPDATE "Bonds" 
                            SET "Price_Currency" = @Currency, "Price_Amount" = @Amount
@@ -69,6 +75,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
 
     public async Task<BondId> CreateBond(CreateBondCommand command, CancellationToken token = default)
     {
+        // language=postgresql
         const string sql = """SELECT nextval('"BondsHiLo"')""";
 
         var nextId = await connection.ExecuteScalarAsync<int>(new CommandDefinition(
@@ -96,6 +103,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
         instrument.ChangeFigi(command.Figi);
         instrument.ChangeInstrumentId(command.InstrumentUId);
         await connection.ExecuteAsync(
+            // language=postgresql
             """
             UPDATE "Bonds" 
             SET "Name" = @Name, "ISIN" = @Isin, "FIGI" = @Figi, instrument_id = @InstrumentId
@@ -114,6 +122,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
 
     public Task<IReadOnlyCollection<Bond>> GetBonds()
     {
+        // language=postgresql
         const string sql = """SELECT * FROM "Bonds" LIMIT 10""";
         return GetBonds(sql);
     }
@@ -121,6 +130,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
     private async Task<Bond?> GetBond(ISIN isin, FIGI figi, InstrumentUId instrumentUId, CancellationToken token)
     {
         var instruments = await GetBonds(
+            // language=postgresql
             """
             SELECT * FROM "Bonds"
             WHERE "ISIN" = @Isin
@@ -142,6 +152,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
 
     private async Task<BondId> CreateBond(Bond bond)
     {
+        // language=postgresql
         const string sql = """
                            INSERT INTO "Bonds" ("Id", "Name", "ISIN", "FIGI", instrument_id) 
                            VALUES (@Id, @Name, @ISIN, @FIGI, @InstrumentId)
@@ -166,6 +177,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
             return;
 
         instrument.ChangeCoupon(coupon);
+        // language=postgresql
         const string sql = """
                            UPDATE "Bonds" 
                            SET "Coupon_Currency" = @Currency, "Coupon_Amount" = @Amount

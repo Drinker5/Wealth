@@ -11,7 +11,6 @@ namespace Wealth.Aggregation.Infrastructure.Tests.Repositories;
 public class PriceRepositoryTests : IClassFixture<ClickHouseFixture>
 {
     private readonly PriceRepository _repository;
-    private readonly PortfolioId portfolioId = 1;
     private readonly ClickHouseConnectionFactory _connectionFactory;
 
     public PriceRepositoryTests(ClickHouseFixture clickHouseFixture)

@@ -14,6 +14,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
 
     public async Task<Currency?> GetCurrency(CurrencyId id)
     {
+        // language=postgresql
         const string sql = "SELECT * FROM currencies WHERE id = @Id";
         var instruments = await GetCurrencies(sql, new { Id = id.Value });
         return instruments.FirstOrDefault();
@@ -21,6 +22,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
 
     public async Task<Currency?> GetCurrency(FIGI figi)
     {
+        // language=postgresql
         const string sql = "SELECT * FROM currencies WHERE figi = @figi";
         var instruments = await GetCurrencies(sql, new { figi = figi.Value });
         return instruments.FirstOrDefault();
@@ -28,6 +30,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
 
     public async Task<Currency?> GetCurrency(InstrumentUId uId)
     {
+        // language=postgresql
         const string sql = "SELECT * FROM currencies WHERE instrument_id = @instrumentId";
         var instruments = await GetCurrencies(sql, new { instrumentId = uId.Value });
         return instruments.FirstOrDefault();
@@ -35,6 +38,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
 
     public async Task DeleteCurrency(CurrencyId instrumentId)
     {
+        // language=postgresql
         const string sql = "DELETE FROM currencies WHERE id = @Id";
         await connection.ExecuteAsync(sql, new { Id = instrumentId.Value });
     }
@@ -46,6 +50,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
             return;
 
         currency.ChangePrice(price);
+        // language=postgresql
         const string sql = """
                            UPDATE currencies 
                            SET price_currency = @Currency, price_amount = @Amount
@@ -62,6 +67,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
 
     public async Task<CurrencyId> CreateCurrency(CreateCurrencyCommand command, CancellationToken token = default)
     {
+        // language=postgresql
         const string sql = "SELECT nextval('currencies_hilo')";
         var nextId = await connection.ExecuteScalarAsync<int>(new CommandDefinition(
             commandText: sql,
@@ -84,6 +90,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
     private async Task<Currency?> GetCurrency(FIGI figi, InstrumentUId instrumentUId, CancellationToken token)
     {
         var instruments = await GetCurrencies(
+            // language=postgresql
             """
             SELECT * FROM currencies
             WHERE figi = @Figi 
@@ -107,6 +114,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
         instrument.ChangeFigi(command.Figi);
         instrument.ChangeInstrumentId(command.InstrumentUId);
         await connection.ExecuteAsync(
+            // language=postgresql
             """
             UPDATE currencies 
             SET name = @Name, figi = @Figi, instrument_id = @InstrumentId
@@ -124,12 +132,14 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
 
     public Task<IReadOnlyCollection<Currency>> GetCurrencies()
     {
+        // language=postgresql
         const string sql = "SELECT * FROM currencies LIMIT 10";
         return GetCurrencies(sql);
     }
 
     private async Task<CurrencyId> CreateCurrency(Currency currency)
     {
+        // language=postgresql
         const string sql = """
                            INSERT INTO currencies (id, name, figi, instrument_id) 
                            VALUES (@Id, @Name, @FIGI, @InstrumentId)

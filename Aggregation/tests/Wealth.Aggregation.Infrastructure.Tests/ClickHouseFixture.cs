@@ -79,14 +79,17 @@ public sealed class ClickHouseFixture : IAsyncLifetime
             await connection.OpenAsync(cancellationTokenSource.Token);
 
             await using var command = connection.CreateCommand();
-            command.CommandText = """
-                                  select count(*) 
-                                  from system.tables
-                                  where database = 'default'
-                                  """;
-            var result = await command.ExecuteScalarAsync(cancellationTokenSource.Token);
+            command.CommandText =
+                // language=clickhouse
+                """
+                SELECT count(*) 
+                FROM system.tables
+                WHERE database = 'default'
+                AND name = 'instrument_price'
+                """;
 
-            if (result != null && Convert.ToInt64(result) > 0)
+            var result = await command.ExecuteScalarAsync<ulong>(cancellationTokenSource.Token);
+            if (result > 0)
                 return;
 
             await Task.Delay(1000, cancellationTokenSource.Token);

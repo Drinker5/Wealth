@@ -15,13 +15,13 @@ public class ChangeDividendCommandHandlerTests
         var stocksRepository = A.Fake<IStocksRepository>();
         var command = new ChangeDividendCommand
         {
-            Id = new StockId(3),
+            StockId = new StockId(3),
             Dividend = new Dividend(CurrencyCode.Rub, 3.42m),
         };
         var handler = new ChangeDividendCommandHandler(stocksRepository);
         
         await handler.Handle(command, CancellationToken.None);
         
-        A.CallTo(() => stocksRepository.ChangeDividend(command.Id, command.Dividend)).MustHaveHappened();
+        A.CallTo(() => stocksRepository.ChangeDividend(command.StockId, command.Dividend)).MustHaveHappened();
     }
 }

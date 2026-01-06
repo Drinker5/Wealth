@@ -8,7 +8,8 @@ public static class Extensions
 {
     public static void AddApplicationServices(this IHostApplicationBuilder builder)
     {
-        builder.Services.AddLogging(l => l.AddFluentMigratorConsole())
+        builder.Services
+            .AddLogging(l => l.AddFluentMigratorConsole())
             .AddFluentMigratorCore()
             .ConfigureRunner(c => c.AddPostgres()
                 .WithGlobalConnectionString(builder.Configuration.GetConnectionString("InstrumentManagement"))

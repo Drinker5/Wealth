@@ -14,12 +14,14 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
 
     public async Task<IReadOnlyCollection<Stock>> GetStocks()
     {
+        // language=postgresql
         const string sql = """SELECT * FROM "GetStocks" LIMIT 10""";
         return await GetStocks(sql);
     }
 
     public async Task<Stock?> GetStock(ISIN isin)
     {
+        // language=postgresql
         const string sql = """SELECT * FROM "Stocks" WHERE "ISIN" = @isin""";
         var instruments = await GetStocks(sql, new { isin = isin.Value });
         return instruments.FirstOrDefault();
@@ -27,6 +29,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
 
     public async Task<Stock?> GetStock(FIGI figi)
     {
+        // language=postgresql
         const string sql = """SELECT * FROM "Stocks" WHERE "FIGI" = @figi""";
         var instruments = await GetStocks(sql, new { figi = figi.Value });
         return instruments.FirstOrDefault();
@@ -34,6 +37,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
 
     public async Task<Stock?> GetStock(InstrumentUId uId)
     {
+        // language=postgresql
         const string sql = """SELECT * FROM "Stocks" WHERE instrument_id = @instrumentId""";
         var instruments = await GetStocks(sql, new { instrumentId = uId.Value });
         return instruments.FirstOrDefault();
@@ -41,6 +45,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
 
     public async Task DeleteStock(StockId id)
     {
+        // language=postgresql
         const string sql = """DELETE FROM "Stocks" WHERE "Id" = @Id""";
         await connection.ExecuteAsync(sql, new { Id = id.Value });
     }
@@ -52,11 +57,13 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             return;
 
         instrument.ChangePrice(price);
-        const string sql = """
-                           UPDATE "Stocks" 
-                           SET "Price_Currency" = @Currency, "Price_Amount" = @Amount
-                           WHERE "Id" = @Id
-                           """;
+        const string sql =
+            // language=postgresql
+            """
+            UPDATE "Stocks" 
+            SET "Price_Currency" = @Currency, "Price_Amount" = @Amount
+            WHERE "Id" = @Id
+            """;
         await connection.ExecuteAsync(sql, new
         {
             Id = id.Value,
@@ -68,6 +75,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
 
     public async Task<Stock?> GetStock(StockId id)
     {
+        // language=postgresql
         const string sql = """SELECT * FROM "Stocks" WHERE "Id" = @Id""";
         var instruments = await GetStocks(sql, new { Id = id.Value });
         return instruments.FirstOrDefault();
@@ -76,6 +84,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
     private async Task<Stock?> GetStock(ISIN isin, FIGI figi, InstrumentUId instrumentUId, CancellationToken token)
     {
         var instruments = await GetStocks(
+            // language=postgresql
             """
             SELECT * FROM "Stocks"
             WHERE "ISIN" = @Isin
@@ -99,6 +108,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         CreateStockCommand command,
         CancellationToken token = default)
     {
+        // language=postgresql
         const string sql = """SELECT nextval('"StocksHiLo"')""";
         var nextId = await connection.ExecuteScalarAsync<int>(new CommandDefinition(
             commandText: sql,
@@ -128,6 +138,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
         instrument.ChangeFigi(command.Figi);
         instrument.ChangeInstrumentId(command.InstrumentUId);
         await connection.ExecuteAsync(
+            // language=postgresql
             """
             UPDATE "Stocks" 
             SET "Name" = @Name, "LotSize" = @LotSize, ticker = @Ticker, "ISIN" = @Isin, "FIGI" = @Figi, instrument_id = @InstrumentId
@@ -148,10 +159,13 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
 
     private async Task<StockId> CreateStock(Stock stock)
     {
-        const string sql = """
-                           INSERT INTO "Stocks" ("Id", ticker, "Name", "ISIN", "FIGI", "LotSize", instrument_id) 
-                           VALUES (@Id, @Ticker, @Name, @ISIN, @FIGI, @LotSize, @InstrumentId)
-                           """;
+        const string sql =
+            // language=postgresql
+            """
+            INSERT INTO "Stocks" ("Id", ticker, "Name", "ISIN", "FIGI", "LotSize", instrument_id) 
+            VALUES (@Id, @Ticker, @Name, @ISIN, @FIGI, @LotSize, @InstrumentId)
+            """;
+
         await connection.ExecuteAsync(sql, new
         {
             Id = stock.Id.Value,
@@ -174,11 +188,14 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             return;
 
         instrument.ChangeDividend(dividend);
-        const string sql = """
-                           UPDATE "Stocks" 
-                           SET "Dividend_Currency" = @Currency, "Dividend_Amount" = @Amount
-                           WHERE "Id" = @Id
-                           """;
+        const string sql =
+            // language=postgresql
+            """
+            UPDATE "Stocks" 
+            SET "Dividend_Currency" = @Currency, "Dividend_Amount" = @Amount
+            WHERE "Id" = @Id
+            """;
+
         await connection.ExecuteAsync(sql, new
         {
             Id = id.Value,
@@ -195,11 +212,14 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             return;
 
         instrument.ChangeLotSize(lotSize);
-        const string sql = """
-                           UPDATE "Stocks" 
-                           SET "LotSize" = @LotSize
-                           WHERE "Id" = @Id
-                           """;
+        const string sql =
+            // language=postgresql
+            """
+            UPDATE "Stocks" 
+            SET "LotSize" = @LotSize
+            WHERE "Id" = @Id
+            """;
+
         await connection.ExecuteAsync(sql, new
         {
             Id = id.Value,
@@ -215,11 +235,14 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             return;
 
         instrument.ChangeTicker(ticker);
-        const string sql = """
-                           UPDATE "Stocks" 
-                           SET ticker = @Ticker
-                           WHERE "Id" = @Id
-                           """;
+        const string sql =
+            // language=postgresql
+            """
+            UPDATE "Stocks" 
+            SET ticker = @Ticker
+            WHERE "Id" = @Id
+            """;
+
         await connection.ExecuteAsync(sql, new
         {
             Id = id.Value,

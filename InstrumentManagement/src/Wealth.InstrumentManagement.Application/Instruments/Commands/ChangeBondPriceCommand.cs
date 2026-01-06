@@ -1,10 +1,17 @@
+using System.Runtime.InteropServices;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.InstrumentManagement.Application.Repositories;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Commands;
 
-public class ChangeBondPriceCommand : ICommand
+[StructLayout(LayoutKind.Auto)]
+public record struct ChangeBondPriceCommand(BondId BondId, Money Price) : ICommand;
+
+public class ChangeBondPriceCommandHandler(IBondsRepository repository) : ICommandHandler<ChangeBondPriceCommand>
 {
-    public BondId BondId { get; set; }
-    public Money Price { get; set; }
+    public async Task Handle(ChangeBondPriceCommand request, CancellationToken cancellationToken)
+    {
+        await repository.ChangePrice(request.BondId, request.Price);
+    }
 }

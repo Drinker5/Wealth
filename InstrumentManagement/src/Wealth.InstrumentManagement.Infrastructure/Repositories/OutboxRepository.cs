@@ -11,13 +11,14 @@ public class OutboxRepository(WealthDbContext dbContext) : IOutboxRepository
 
     public async Task Add(OutboxMessage outboxMessage, CancellationToken cancellationToken)
     {
-        var sql = """
-                  INSERT INTO "OutboxMessages" 
-                  ("Id", "Type", "Data", "OccurredOn", "ProcessedOn", "Key")
-                  VALUES (@Id, @Type, @Data, @OccurredOn, NULL, @Key)
-                  """;
+        // language=postgresql
+        const string sql = """
+                           INSERT INTO "OutboxMessages" 
+                           ("Id", "Type", "Data", "OccurredOn", "ProcessedOn", "Key")
+                           VALUES (@Id, @Type, @Data, @OccurredOn, NULL, @Key)
+                           """;
 
-        await connection.ExecuteAsync(sql, new 
+        await connection.ExecuteAsync(sql, new
         {
             Id = outboxMessage.Id,
             Type = outboxMessage.Type,
