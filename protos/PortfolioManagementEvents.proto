@@ -1,10 +1,21 @@
 syntax = "proto3";
 
 import "Common.proto";
+import "google/protobuf/timestamp.proto";
 
 package wealth;
 
 option csharp_namespace = "Wealth.PortfolioManagement";
+
+message PortfolioManagementEvent {
+  string id = 1;
+  google.protobuf.Timestamp date = 2;
+  oneof variant {
+    StockBoughtIntegrationEvent stock_bought = 3;
+    BondBoughtIntegrationEvent bond_bought = 4;
+    CurrencyDepositedIntegrationEvent currency_deposited = 5;
+  }
+}
 
 message StockBoughtIntegrationEvent {
   PortfolioIdProto portfolio_id = 1;
@@ -24,7 +35,6 @@ message CurrencyDepositedIntegrationEvent {
   PortfolioIdProto portfolio_id = 1;
   MoneyProto amount = 2;
 }
-
 
 
 

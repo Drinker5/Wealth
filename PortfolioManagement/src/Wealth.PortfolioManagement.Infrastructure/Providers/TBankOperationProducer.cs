@@ -2,6 +2,7 @@ using Microsoft.Extensions.Options;
 using Tinkoff.InvestApi.V1;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.PortfolioManagement.Application.Options;
 using Wealth.PortfolioManagement.Application.Providers;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Providers;
@@ -36,6 +37,6 @@ internal sealed class TBankOperationProducer(
                 Value = i
             });
 
-        await producer.ProduceAsync("wealth-operations", messages, token);
+        await producer.Produce("wealth-operations", messages, token);
     }
 }

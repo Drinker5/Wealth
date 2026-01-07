@@ -2,7 +2,10 @@ namespace Wealth.BuildingBlocks.Application;
 
 public interface IKafkaProducer
 {
-    Task ProduceAsync<T>(string topic, IEnumerable<BusMessage<string, T>> message, CancellationToken token)
+    Task Produce<T>(string topic, IEnumerable<BusMessage<string, T>> messages, CancellationToken token)
+        where T : Google.Protobuf.IMessage;
+
+    Task Produce<T>(string topic, BusMessage<string, T> message, CancellationToken token)
         where T : Google.Protobuf.IMessage;
 }
 

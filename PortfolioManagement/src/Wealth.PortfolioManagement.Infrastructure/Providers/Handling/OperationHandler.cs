@@ -2,6 +2,7 @@ using Eventso.Subscription;
 using Microsoft.Extensions.Options;
 using Wealth.BuildingBlocks.Application;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.PortfolioManagement.Application.Options;
 using Wealth.PortfolioManagement.Application.Portfolios.Commands;
 using Wealth.PortfolioManagement.Application.Providers;
 

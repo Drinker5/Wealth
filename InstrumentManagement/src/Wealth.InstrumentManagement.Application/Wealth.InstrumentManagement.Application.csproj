@@ -12,11 +12,7 @@
     <ProjectReference Include="..\Wealth.InstrumentManagement.Domain\Wealth.InstrumentManagement.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Protobuf Include="Events.proto"
-              GrpcServices="Client"
-              AdditionalImportDirs="..\..\..\protos\" />
-    <Protobuf Include="..\..\..\protos\InstrumentsService.proto"
-              Link="InstrumentsService.proto"
-              GrpcServices="Client,Server" />
+    <Protobuf Include="..\..\..\protos\InstrumentManagementEvents.proto" Link="InstrumentManagementEvents.proto" GrpcServices="Client" />
+    <Protobuf Include="..\..\..\protos\InstrumentsService.proto" Link="InstrumentsService.proto" GrpcServices="Client,Server" />
   </ItemGroup>
 </Project>

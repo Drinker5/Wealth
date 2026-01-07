@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Polly;
 using Tinkoff.InvestApi;
 using Tinkoff.InvestApi.V1;
+using Wealth.PortfolioManagement.Application.Options;
 
 namespace Wealth.PortfolioManagement.Infrastructure.Providers;
 

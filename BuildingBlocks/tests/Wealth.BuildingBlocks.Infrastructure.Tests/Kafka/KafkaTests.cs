@@ -42,7 +42,7 @@ public class KafkaTests : IClassFixture<KafkaTestFixture>
                 CancellationToken.None),
             cts.Token);
 
-        await producer.ProduceAsync(topic, [
+        await producer.Produce(topic, [
             new BusMessage<string, MoneyProto>
             {
                 Key = Guid.NewGuid().ToString(),

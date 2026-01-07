@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Wealth.PortfolioManagement.Application.Options;
 using Wealth.PortfolioManagement.Infrastructure.Providers;
 using Wealth.PortfolioManagement.Infrastructure.UnitOfWorks;
 

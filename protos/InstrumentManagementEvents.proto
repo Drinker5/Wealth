@@ -1,10 +1,21 @@
 syntax = "proto3";
 
 import "Common.proto";
+import "google/protobuf/timestamp.proto";
 
 package wealth;
 
 option csharp_namespace = "Wealth.InstrumentManagement";
+
+message InstrumentManagementEvent {
+  string id = 1;
+  google.protobuf.Timestamp date = 2;
+  oneof variant {
+    BondCouponChangedIntegrationEvent bond_coupon_changed = 3;
+    StockDividendChangedIntegrationEvent stock_dividend_changed = 4;
+    InstrumentPriceChangedIntegrationEvent instrument_price_changed = 5;
+  }
+}
 
 message BondCouponChangedIntegrationEvent {
   BondIdProto bond_id = 1;

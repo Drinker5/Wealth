@@ -1,4 +1,4 @@
-namespace Wealth.PortfolioManagement.Infrastructure.Providers;
+namespace Wealth.PortfolioManagement.Application.Options;
 
 public class PortfolioMapOptions
 {

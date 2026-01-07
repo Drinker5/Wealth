@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wealth.BuildingBlocks.Infrastructure;
+using Wealth.PortfolioManagement.Application.Options;
 using Wealth.PortfolioManagement.Application.Providers;
 using Wealth.PortfolioManagement.Infrastructure.Providers.Handling;
 using Wealth.PortfolioManagement.Infrastructure.Providers.Handling.Handlers;
@@ -20,6 +21,11 @@ public class ProvidersModule : IServiceModule
         services.AddOptions<PortfolioMapOptions>()
             .BindConfiguration(PortfolioMapOptions.Section);
 
+        services.AddOptions<OperationsProducerOptions>()
+            .BindConfiguration(OperationsProducerOptions.Section)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+        
         services.AddSingleton<IOperationProducer, TBankOperationProducer>();
         services.AddSingleton<TBankOperationProvider>();
         services.AddSingleton<IPortfolioIdProvider, PortfolioIdProvider>();
