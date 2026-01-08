@@ -1,3 +1,4 @@
+using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Wealth.BuildingBlocks.Application;
@@ -21,9 +22,14 @@ public class KafkaTests : IClassFixture<KafkaTestFixture>
     {
         var topic = $"test-consumer-{Guid.NewGuid():N}";
         var groupId = $"test-group-{Guid.NewGuid():N}";
+        var producerConfig = new ProducerConfig
+        {
+            BootstrapServers = fixture.BootstrapServers,
+        };
+        var producerBinary = new ProducerBuilder<byte[], byte[]>(producerConfig).BuildBinary();
 
-        var producerOptions = Options.Create(new KafkaProducerOptions { BootstrapServers = fixture.BootstrapServers });
-        var producer = new KafkaProducer.KafkaProducer(producerOptions);
+        var producer = new KafkaProducer<MoneyProto>(producerBinary, topic, i => (int)i.Currency);
+
         var consumerOptions = Options.Create(new KafkaConsumerOptions { BootstrapServers = fixture.BootstrapServers, GroupId = groupId });
         var consumer = new Infrastructure.KafkaConsumer.KafkaConsumer(consumerOptions, Mock.Of<ILogger<Infrastructure.KafkaConsumer.KafkaConsumer>>());
         var expected = new MoneyProto { Amount = 99.50m, Currency = CurrencyCodeProto.Usd };
@@ -42,13 +48,7 @@ public class KafkaTests : IClassFixture<KafkaTestFixture>
                 CancellationToken.None),
             cts.Token);
 
-        await producer.Produce(topic, [
-            new BusMessage<string, MoneyProto>
-            {
-                Key = Guid.NewGuid().ToString(),
-                Value = expected,
-            }
-        ], cts.Token);
+        await producer.Produce(expected, cts.Token);
 
         var received = await receivedTcs.Task.WaitAsync(TimeSpan.FromSeconds(5), cts.Token);
 

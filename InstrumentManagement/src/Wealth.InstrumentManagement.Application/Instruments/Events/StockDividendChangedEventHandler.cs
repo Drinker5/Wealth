@@ -1,33 +1,21 @@
 using Google.Protobuf.WellKnownTypes;
-using Microsoft.Extensions.Options;
 using Wealth.BuildingBlocks.Application;
-using Wealth.InstrumentManagement.Application.Options;
 using Wealth.InstrumentManagement.Domain.Instruments.Events;
 
 namespace Wealth.InstrumentManagement.Application.Instruments.Events;
 
 internal class StockDividendChangedEventHandler(
-    IKafkaProducer producer,
-    IOptions<InstrumentsProducerOptions> producerOptions) : IDomainEventHandler<StockDividendChanged>
+    IKafkaProducer<StockDividendChangedIntegrationEvent> producer) : IDomainEventHandler<StockDividendChanged>
 {
-    public async Task Handle(StockDividendChanged notification, CancellationToken cancellationToken)
+    public Task Handle(StockDividendChanged notification, CancellationToken cancellationToken)
     {
-        await producer.Produce(
-            producerOptions.Value.Topic,
-            new BusMessage<string, InstrumentManagementEvent>
+        return producer.Produce(
+            new StockDividendChangedIntegrationEvent
             {
-                Key = notification.ToString(),
-                Value = new InstrumentManagementEvent
-                {
-                    Id = notification.ToString(),
-                    Date = notification.OccurredOn.ToTimestamp(),
-                    StockDividendChanged = new StockDividendChangedIntegrationEvent
-                    {
-                        StockId = notification.StockId,
-                        ISIN = notification.ISIN,
-                        NewDividend = notification.NewDividend.ValuePerYear,
-                    },
-                },
+                StockId = notification.StockId,
+                ISIN = notification.ISIN,
+                NewDividend = notification.NewDividend.ValuePerYear,
+                OccuredOn = notification.OccurredOn.ToTimestamp(),
             },
             cancellationToken);
     }

@@ -1,48 +1,27 @@
 using Confluent.Kafka;
-using Google.Protobuf;
-using Microsoft.Extensions.Options;
+using Eventso.KafkaProducer;
+
 using Wealth.BuildingBlocks.Application;
 
 namespace Wealth.BuildingBlocks.Infrastructure.KafkaProducer;
 
-public sealed class KafkaProducer(IOptions<KafkaProducerOptions> options) : IKafkaProducer
+public sealed class KafkaProducer<T>(
+    IProducer producer,
+    string topic,
+    Func<T, long> key) : IKafkaProducer<T>
+    where T : Google.Protobuf.IMessage
 {
-    private readonly ProducerConfig config = new()
+    public Task Produce(IEnumerable<T> messages, CancellationToken token)
     {
-        BootstrapServers = options.Value.BootstrapServers,
-    };
+        var batch = producer.CreateBatch(topic);
+        foreach (var message in messages)
+            batch.Produce(key(message), message);
 
-    public async Task Produce<T>(string topic, IEnumerable<BusMessage<string, T>> messages, CancellationToken token)
-        where T : Google.Protobuf.IMessage
-    {
-        var builder = new ProducerBuilder<string, T>(config)
-            .SetKeySerializer(Serializers.Utf8);
-
-        var serializer = new ProtobufMessageSerializer<T>();
-        builder = builder.SetValueSerializer(serializer);
-
-        using var producer = builder.Build();
-
-        foreach (var message in messages.Select(i => new Message<string, T> { Key = i.Key, Value = i.Value }))
-            await producer.ProduceAsync(topic, message, token);
+        return batch.Complete(token);
     }
 
-    public async Task Produce<T>(string topic, BusMessage<string, T> message, CancellationToken token) where T : IMessage
+    public Task Produce(T message, CancellationToken token)
     {
-        var builder = new ProducerBuilder<string, T>(config)
-            .SetKeySerializer(Serializers.Utf8);
-
-        var serializer = new ProtobufMessageSerializer<T>();
-        builder = builder.SetValueSerializer(serializer);
-
-        using var producer = builder.Build();
-
-        await producer.ProduceAsync(topic, new Message<string, T> { Key = message.Key, Value = message.Value }, token);
-    }
-
-    private sealed class ProtobufMessageSerializer<T> : ISerializer<T>
-        where T : Google.Protobuf.IMessage
-    {
-        public byte[] Serialize(T data, SerializationContext context) => data.ToByteArray();
+        return producer.ProduceAsync(topic, key(message), message, token);
     }
 }

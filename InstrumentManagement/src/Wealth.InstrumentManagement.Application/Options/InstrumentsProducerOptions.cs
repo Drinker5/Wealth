@@ -6,6 +6,12 @@ public sealed class InstrumentsProducerOptions
 {
     public const string Section = "InstrumentsProducer";
 
-    [Required(ErrorMessage = "InstrumentsProducer's topic is undefined")]
-    public string Topic { get; set; }
+    [Required(ErrorMessage = "InstrumentPriceChangedTopic is undefined")]
+    public string InstrumentPriceChangedTopic { get; set; }
+
+    [Required(ErrorMessage = "BondCouponChangedTopic is undefined")]
+    public string BondCouponChangedTopic { get; set; }
+
+    [Required(ErrorMessage = "StockDividendChangedTopic is undefined")]
+    public string StockDividendChangedTopic { get; set; }
 }

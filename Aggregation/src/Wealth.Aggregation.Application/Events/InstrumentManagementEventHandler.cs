@@ -9,13 +9,11 @@ using Wealth.InstrumentManagement;
 namespace Wealth.Aggregation.Application.Events;
 
 public sealed class InstrumentManagementEventHandler(ICqrsInvoker cqrsInvoker)
-    : IMessageHandler<IReadOnlyCollection<InstrumentManagementEvent>>
+    : IMessageHandler<IReadOnlyCollection<InstrumentPriceChangedIntegrationEvent>>
 {
-    public Task Handle(IReadOnlyCollection<InstrumentManagementEvent> messages, CancellationToken token = default)
+    public Task Handle(IReadOnlyCollection<InstrumentPriceChangedIntegrationEvent> messages, CancellationToken token = default)
     {
         var prices = messages
-            .Where(i => i.VariantCase == InstrumentManagementEvent.VariantOneofCase.InstrumentPriceChanged)
-            .Select(i => i.InstrumentPriceChanged)
             .Select(i => new InstrumentPrice(new InstrumentIdType(i.InstrumentId, i.InstrumentType.FromProto()), i.NewPrice))
             .ToList();
 

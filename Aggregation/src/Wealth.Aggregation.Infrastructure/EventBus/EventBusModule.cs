@@ -13,8 +13,8 @@ public class EventBusModule : IServiceModule
         services.AddSubscriptions((subs, sp) =>
             {
                 subs.AddBatch(sp,
-                    "InstrumentsConsumer",
-                    new InstrumentManagementEventDeserializer());
+                    "InstrumentPricesConsumer",
+                    new InstrumentPriceChangedIntegrationEventDeserializer());
                 subs.AddBatch(sp,
                     "WealthOperationsConverted",
                     new OperationProtoDeserializer());

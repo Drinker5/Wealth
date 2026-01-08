@@ -8,21 +8,11 @@ namespace Wealth.PortfolioManagement.Application.Portfolios.Commands;
 
 public class AddOperationHandler(
     IOperationRepository repository,
-    IOptions<OperationsProducerOptions> producerOptions,
-    IKafkaProducer producer) : ICommandHandler<AddOperation>
+    IKafkaProducer<OperationProto> producer) : ICommandHandler<AddOperation>
 {
     public async Task Handle(AddOperation request, CancellationToken cancellationToken)
     {
         await repository.UpsertOperation(request.Operation, cancellationToken);
-        await producer.Produce(
-            producerOptions.Value.Topic,
-            [
-                new BusMessage<string, OperationProto>
-                {
-                    Key = request.Operation.Id.Value,
-                    Value = request.Operation.ToProto(),
-                }
-            ],
-            cancellationToken);
+        await producer.Produce(request.Operation.ToProto(), cancellationToken);
     }
 }

@@ -186,8 +186,10 @@ services:
         condition: service_healthy
     command:
       - -c 
-      - ./kafka-topics.sh --create --if-not-exists --topic "wealth-currency-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&  
-        ./kafka-topics.sh --create --if-not-exists --topic "wealth-instruments" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
+      - ./kafka-topics.sh --create --if-not-exists --topic "wealth-currency-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
+        ./kafka-topics.sh --create --if-not-exists --topic "wealth-instrument-prices" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
+        ./kafka-topics.sh --create --if-not-exists --topic "wealth-bond-coupons" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
+        ./kafka-topics.sh --create --if-not-exists --topic "wealth-stock-dividends" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
         ./kafka-topics.sh --create --if-not-exists --topic "wealth-portfolio-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
         ./kafka-topics.sh --create --if-not-exists --topic "wealth-operations" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
         ./kafka-topics.sh --create --if-not-exists --topic "wealth-operations-converted" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1

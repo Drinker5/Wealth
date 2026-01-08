@@ -7,30 +7,24 @@ package wealth;
 
 option csharp_namespace = "Wealth.InstrumentManagement";
 
-message InstrumentManagementEvent {
-  string id = 1;
-  google.protobuf.Timestamp date = 2;
-  oneof variant {
-    BondCouponChangedIntegrationEvent bond_coupon_changed = 3;
-    StockDividendChangedIntegrationEvent stock_dividend_changed = 4;
-    InstrumentPriceChangedIntegrationEvent instrument_price_changed = 5;
-  }
-}
 
 message BondCouponChangedIntegrationEvent {
   BondIdProto bond_id = 1;
   ISINProto ISIN = 2;
   MoneyProto new_coupon = 3;
+  google.protobuf.Timestamp occured_on = 4;
 }
 
 message StockDividendChangedIntegrationEvent {
   StockIdProto stock_id = 1;
   ISINProto ISIN = 2;
   MoneyProto new_dividend = 3;
+  google.protobuf.Timestamp occured_on = 4;
 }
 
 message InstrumentPriceChangedIntegrationEvent {
   InstrumentIdProto instrument_id = 1;
   InstrumentTypeProto instrument_type = 2;
   MoneyProto new_price = 3;
+  google.protobuf.Timestamp occured_on = 4;
 }

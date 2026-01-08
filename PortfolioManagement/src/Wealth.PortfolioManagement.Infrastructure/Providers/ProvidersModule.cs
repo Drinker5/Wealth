@@ -21,11 +21,6 @@ public class ProvidersModule : IServiceModule
         services.AddOptions<PortfolioMapOptions>()
             .BindConfiguration(PortfolioMapOptions.Section);
 
-        services.AddOptions<OperationsProducerOptions>()
-            .BindConfiguration(OperationsProducerOptions.Section)
-            .ValidateDataAnnotations()
-            .ValidateOnStart();
-        
         services.AddSingleton<IOperationProducer, TBankOperationProducer>();
         services.AddSingleton<TBankOperationProvider>();
         services.AddSingleton<IPortfolioIdProvider, PortfolioIdProvider>();
