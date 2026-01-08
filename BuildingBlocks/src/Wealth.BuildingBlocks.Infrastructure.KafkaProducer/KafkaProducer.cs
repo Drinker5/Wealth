@@ -43,7 +43,6 @@ public sealed class KafkaProducer(IOptions<KafkaProducerOptions> options) : IKaf
     private sealed class ProtobufMessageSerializer<T> : ISerializer<T>
         where T : Google.Protobuf.IMessage
     {
-        public byte[] Serialize(T data, SerializationContext context)
-            => Google.Protobuf.MessageExtensions.ToByteArray(data);
+        public byte[] Serialize(T data, SerializationContext context) => data.ToByteArray();
     }
 }

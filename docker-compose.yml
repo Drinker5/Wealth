@@ -32,21 +32,6 @@ services:
       postgres:
         condition: service_healthy
 
-  instrument-management-poller:
-    build:
-      context: ./OutboxPoller
-      target: app
-      dockerfile: ./Dockerfile
-    command:
-      - "outbox"
-      - "-connectionString=postgres://postgres:postgres@postgres/InstrumentManagement?sslmode=disable"
-      - "-kafka-brokers=kafka"
-      - "-kafka-topic=wealth-instrument-management"
-      - "-period=2000"
-    restart: on-failure
-    labels:
-      com.jetbrains.rider.debug: false
-
   portfolio-management:
     build:
       context: ./PortfolioManagement
@@ -202,7 +187,7 @@ services:
     command:
       - -c 
       - ./kafka-topics.sh --create --if-not-exists --topic "wealth-currency-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&  
-        ./kafka-topics.sh --create --if-not-exists --topic "wealth-instrument-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
+        ./kafka-topics.sh --create --if-not-exists --topic "wealth-instruments" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
         ./kafka-topics.sh --create --if-not-exists --topic "wealth-portfolio-management" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
         ./kafka-topics.sh --create --if-not-exists --topic "wealth-operations" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1 &&
         ./kafka-topics.sh --create --if-not-exists --topic "wealth-operations-converted" --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1

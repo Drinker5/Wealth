@@ -11,17 +11,9 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Wealth.BuildingBlocks.Application\Wealth.BuildingBlocks.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Protobuf Include="Events.proto" 
-              GrpcServices="Client"
-              AdditionalImportDirs="..\..\..\protos\" />
-    <Protobuf Include="..\..\..\protos\Operations.proto"
-              GrpcServices="Client"
-              Link="Operations.proto" />
-    <Protobuf Include="..\..\..\protos\InstrumentsService.proto"
-              GrpcServices="Client"
-              Link="InstrumentsService.proto" />
-    <Protobuf Include="..\..\..\protos\StrategiesService.proto"
-              GrpcServices="Client"
-              Link="StrategiesService.proto" />
+    <Protobuf Include="..\..\..\protos\InstrumentManagementEvents.proto" GrpcServices="Client" Link="InstrumentManagementEvents.proto" />
+    <Protobuf Include="..\..\..\protos\Operations.proto" GrpcServices="Client" Link="Operations.proto" />
+    <Protobuf Include="..\..\..\protos\InstrumentsService.proto" GrpcServices="Client" Link="InstrumentsService.proto" />
+    <Protobuf Include="..\..\..\protos\StrategiesService.proto" GrpcServices="Client" Link="StrategiesService.proto" />
   </ItemGroup>
 </Project>
