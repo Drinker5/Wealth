@@ -44,7 +44,7 @@ public sealed class InstrumentManagementApiFixture : WebApplicationFactory<Progr
 
         builder.ConfigureServices(services =>
         {
-            services.AddSingleton<IInstrumentsProvider, TestInstrumentsProvider>();
+            services.AddSingleton<IInstrumentsProvider, TestTBankInstrumentsProvider>();
         });
 
         return base.CreateHost(builder);

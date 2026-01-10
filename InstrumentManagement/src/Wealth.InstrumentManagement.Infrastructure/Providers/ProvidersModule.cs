@@ -14,8 +14,12 @@ public class ProvidersModule : IServiceModule
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        services.AddSingleton<IInstrumentsProvider, InstrumentsProvider>();
+        services.AddSingleton<IInstrumentsProvider, TBankInstrumentsProvider>();
         services.Decorate<IInstrumentsProvider, InstrumentsProviderRateLimiterDecorator>();
         services.Decorate<IInstrumentsProvider, InstrumentsProviderDecorator>();
+
+
+        services.AddSingleton<IInstrumentPricesProvider, TBankInstrumentPricesProvider>();
+        services.Decorate<IInstrumentPricesProvider, InstrumentPricesProviderDecorator>();
     }
 }

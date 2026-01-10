@@ -9,9 +9,9 @@ using Wealth.InstrumentManagement.Application.Providers;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Providers;
 
-public sealed class InstrumentsProvider(
+public sealed class TBankInstrumentsProvider(
     IOptions<TBankInstrumentsProviderOptions> options,
-    ILogger<InstrumentsProvider> logger) : IInstrumentsProvider
+    ILogger<TBankInstrumentsProvider> logger) : IInstrumentsProvider
 {
     private readonly InvestApiClient client = InvestApiClientFactory.Create(options.Value.Token);
 

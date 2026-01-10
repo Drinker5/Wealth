@@ -249,9 +249,9 @@ public sealed class InstrumentManagementApiTests :
         var createStockCommand = fixture.Create<CreateStockCommand>();
         var createBondCommand = fixture.Create<CreateBondCommand>();
         var createCurrencyCommand = fixture.Create<CreateCurrencyCommand>();
-        TestInstrumentsProvider.Stocks.Add(instrumentIds[0], createStockCommand);
-        TestInstrumentsProvider.Bonds.Add(instrumentIds[1], createBondCommand);
-        TestInstrumentsProvider.Currencies.Add(instrumentIds[2], createCurrencyCommand);
+        TestTBankInstrumentsProvider.Stocks.Add(instrumentIds[0], createStockCommand);
+        TestTBankInstrumentsProvider.Bonds.Add(instrumentIds[1], createBondCommand);
+        TestTBankInstrumentsProvider.Currencies.Add(instrumentIds[2], createCurrencyCommand);
 
         var response = await grpcClient.ImportInstrumentsAsync(new ImportInstrumentsRequest
         {
@@ -296,7 +296,7 @@ public sealed class InstrumentManagementApiTests :
         {
             Isin = createStockRequest.Isin
         };
-        TestInstrumentsProvider.Stocks.Add(instrumentId, updateCommand);
+        TestTBankInstrumentsProvider.Stocks.Add(instrumentId, updateCommand);
 
         // Act
         var response = await grpcClient.ImportInstrumentsAsync(new ImportInstrumentsRequest
@@ -331,7 +331,7 @@ public sealed class InstrumentManagementApiTests :
         {
             Isin = createBondRequest.Isin
         };
-        TestInstrumentsProvider.Bonds.Add(instrumentId, updateCommand);
+        TestTBankInstrumentsProvider.Bonds.Add(instrumentId, updateCommand);
 
         // Act
         var response = await grpcClient.ImportInstrumentsAsync(new ImportInstrumentsRequest
@@ -363,7 +363,7 @@ public sealed class InstrumentManagementApiTests :
         {
             Figi = createCurrencyRequest.Figi
         };
-        TestInstrumentsProvider.Currencies.Add(instrumentUId, updateCommand);
+        TestTBankInstrumentsProvider.Currencies.Add(instrumentUId, updateCommand);
 
         // Act
         var response = await grpcClient.ImportInstrumentsAsync(new ImportInstrumentsRequest

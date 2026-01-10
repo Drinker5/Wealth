@@ -4,7 +4,7 @@ using Wealth.InstrumentManagement.Application.Providers;
 
 namespace Wealth.InstrumentManagement.API.Tests;
 
-public sealed class TestInstrumentsProvider : IInstrumentsProvider
+public sealed class TestTBankInstrumentsProvider : IInstrumentsProvider
 {
     public static Dictionary<InstrumentUId, CreateStockCommand> Stocks = new();
     public static Dictionary<InstrumentUId, CreateBondCommand> Bonds = new();
