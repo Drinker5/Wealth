@@ -19,6 +19,7 @@ public class UnitOfWorksModule : IServiceModule
         services.AddScoped<IStocksRepository, StocksRepository>();
         services.AddScoped<ICurrenciesRepository, CurrenciesRepository>();
         services.AddScoped<IInstrumentsRepository, InstrumentsRepository>();
+        services.AddScoped<IPricesRepository, PricesRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IDomainEventsResolver, WealthDbContext>();

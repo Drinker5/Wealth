@@ -12,17 +12,47 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
 {
     private readonly IDbConnection connection = dbContext.CreateConnection();
 
+    private const string COLUMNS =
+        """
+        "Id",
+        "Name",
+        "ISIN",
+        "Price_Amount",
+        "Dividend_Amount",
+        "LotSize",
+        "FIGI",
+        "Price_Currency",
+        "Dividend_Currency",
+        ticker,
+        instrument_id
+        """;
+
+    private enum Columns : byte
+    {
+        Id = 0,
+        Name,
+        ISIN,
+        Price_Amount,
+        Dividend_Amount,
+        LotSize,
+        FIGI,
+        Price_Currency,
+        Dividend_Currency,
+        Ticker,
+        InstrumentId
+    }
+
     public async Task<IReadOnlyCollection<Stock>> GetStocks()
     {
         // language=postgresql
-        const string sql = """SELECT * FROM "GetStocks" LIMIT 10""";
+        const string sql = $"""SELECT {COLUMNS} FROM "GetStocks";""";
         return await GetStocks(sql);
     }
 
     public async Task<Stock?> GetStock(ISIN isin)
     {
         // language=postgresql
-        const string sql = """SELECT * FROM "Stocks" WHERE "ISIN" = @isin""";
+        const string sql = $"""SELECT {COLUMNS} FROM "Stocks" WHERE "ISIN" = @isin""";
         var instruments = await GetStocks(sql, new { isin = isin.Value });
         return instruments.FirstOrDefault();
     }
@@ -30,7 +60,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
     public async Task<Stock?> GetStock(FIGI figi)
     {
         // language=postgresql
-        const string sql = """SELECT * FROM "Stocks" WHERE "FIGI" = @figi""";
+        const string sql = $"""SELECT {COLUMNS} FROM "Stocks" WHERE "FIGI" = @figi""";
         var instruments = await GetStocks(sql, new { figi = figi.Value });
         return instruments.FirstOrDefault();
     }
@@ -38,7 +68,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
     public async Task<Stock?> GetStock(InstrumentUId uId)
     {
         // language=postgresql
-        const string sql = """SELECT * FROM "Stocks" WHERE instrument_id = @instrumentId""";
+        const string sql = $"""SELECT {COLUMNS} FROM "Stocks" WHERE instrument_id = @instrumentId""";
         var instruments = await GetStocks(sql, new { instrumentId = uId.Value });
         return instruments.FirstOrDefault();
     }
@@ -76,7 +106,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
     public async Task<Stock?> GetStock(StockId id)
     {
         // language=postgresql
-        const string sql = """SELECT * FROM "Stocks" WHERE "Id" = @Id""";
+        const string sql = $"""SELECT {COLUMNS} FROM "Stocks" WHERE "Id" = @Id""";
         var instruments = await GetStocks(sql, new { Id = id.Value });
         return instruments.FirstOrDefault();
     }
@@ -85,12 +115,12 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
     {
         var instruments = await GetStocks(
             // language=postgresql
-            """
-            SELECT * FROM "Stocks"
-            WHERE "ISIN" = @Isin
-                OR "FIGI" = @Figi
-                OR instrument_id = @InstrumentId
-            """,
+            $"""
+             SELECT {COLUMNS} FROM "Stocks"
+             WHERE "ISIN" = @Isin
+                 OR "FIGI" = @Figi
+                 OR instrument_id = @InstrumentId
+             """,
             new
             {
                 Isin = isin.Value,
@@ -249,21 +279,6 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             Ticker = ticker,
         });
         dbContext.AddEvents(instrument);
-    }
-
-    private enum Columns : byte
-    {
-        Id = 0,
-        Name,
-        ISIN,
-        Price_Amount,
-        Dividend_Amount,
-        LotSize,
-        FIGI,
-        Price_Currency,
-        Dividend_Currency,
-        Ticker,
-        InstrumentId
     }
 
     private async Task<IReadOnlyCollection<Stock>> GetStocks(string sql, object? param = null)

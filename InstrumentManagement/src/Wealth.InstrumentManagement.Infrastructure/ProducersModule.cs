@@ -16,6 +16,9 @@ public sealed class ProducersModule : IServiceModule
         services.AddOptionsWithValidateOnStart<InstrumentsProducerOptions>()
             .BindConfiguration(InstrumentsProducerOptions.Section);
 
+        services.AddOptionsWithValidateOnStart<PriceUpdaterOptions>()
+            .BindConfiguration(PriceUpdaterOptions.Section);
+        
         services
             .AddSingleton<IKafkaProducer<InstrumentPriceChangedIntegrationEvent>>(sp =>
                 new KafkaProducer<InstrumentPriceChangedIntegrationEvent>(

@@ -8,7 +8,7 @@ namespace Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
 public class WealthDbContext(IConfiguration configuration) : IDisposable, IDomainEventsResolver
 {
-    private IDbConnection? connection;
+    private NpgsqlConnection? connection;
     private readonly List<DomainEvent> trackedEvents = [];
 
     public IDbConnection CreateConnection()
