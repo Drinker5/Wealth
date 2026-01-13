@@ -31,5 +31,6 @@ public class UID : Migration
     {
         Delete.Column("instrument_id").FromTable("Stocks");
         Delete.Column("instrument_id").FromTable("Bonds");
+        Delete.Column("instrument_id").FromTable("currencies");
     }
 }
