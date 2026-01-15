@@ -9,10 +9,10 @@
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="Google.Protobuf" Version="3.33.4" />
     <PackageReference Include="MediatR" Version="14.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions"  Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions"  Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.2" />
     <PackageReference Include="Eventso.Subscription.Abstractions" Version="0.8.10" />
     <PackageReference Include="SharpJuice.Essentials" Version="2.6.0" />
   </ItemGroup>
