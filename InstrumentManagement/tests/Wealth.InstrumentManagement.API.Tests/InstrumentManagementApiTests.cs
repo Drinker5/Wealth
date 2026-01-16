@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using AutoFixture;
+﻿using AutoFixture;
 using Grpc.Net.Client;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Wealth.BuildingBlocks;
@@ -15,7 +14,6 @@ public sealed class InstrumentManagementApiTests :
     IClassFixture<AutoFixtureInitializer>
 {
     private readonly IFixture fixture;
-    private readonly JsonSerializerOptions jsonSerializerOptions = new(JsonSerializerDefaults.Web);
     private readonly InstrumentsService.InstrumentsServiceClient grpcClient;
 
     public InstrumentManagementApiTests(InstrumentManagementApiFixture apiFixture, AutoFixtureInitializer fixtureInitializer)

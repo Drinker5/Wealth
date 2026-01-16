@@ -1,23 +1,28 @@
 using Dapper;
-using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
+using FluentMigrator.Runner;
+using Wealth.BuildingBlocks.Infrastructure.Repositories;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Migrations;
 
-public class Database
+public class Database(IConnectionFactory connectionFactory, IMigrationRunner migrationRunner)
 {
-    private readonly WealthDbContext context;
-    public Database(WealthDbContext context)
+    public async Task Migrate(CancellationToken token)
     {
-        this.context = context;
+        await CreateDatabase("InstrumentManagement", token);
+        migrationRunner.MigrateUp();
     }
 
-    public async Task CreateDatabase(string dbName)
+    private async Task CreateDatabase(string dbName, CancellationToken token)
     {
-        var query = "SELECT datname FROM pg_database WHERE datname = @name";
-        var parameters = new DynamicParameters();
-        parameters.Add("name", dbName);
-        using var connection = context.CreateMasterConnection();
-        var records = connection.Query(query, parameters);
+        var parameters = new CommandDefinition(
+            "SELECT datname FROM pg_database WHERE datname = @name",
+            new
+            {
+                name = dbName
+            },
+            cancellationToken: token);
+        using var connection = connectionFactory.CreateMasterConnection();
+        var records = await connection.QueryAsync(parameters);
         if (!records.Any())
             await connection.ExecuteAsync($"CREATE DATABASE \"{dbName}\"");
     }

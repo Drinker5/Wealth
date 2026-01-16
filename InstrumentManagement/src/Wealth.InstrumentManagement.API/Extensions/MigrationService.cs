@@ -10,9 +10,7 @@ public class MigrationService(IServiceProvider serviceProvider) : IHostedService
     {
         using var scope = serviceProvider.CreateScope();
         var databaseService = scope.ServiceProvider.GetRequiredService<Database>();
-        var migrationService = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
-        await databaseService.CreateDatabase("InstrumentManagement");
-        migrationService.MigrateUp();
+        await databaseService.Migrate(cancellationToken);
         
         var seeders = scope.ServiceProvider.GetRequiredService<IEnumerable<IDbSeeder>>();
         foreach (var seeder in seeders)

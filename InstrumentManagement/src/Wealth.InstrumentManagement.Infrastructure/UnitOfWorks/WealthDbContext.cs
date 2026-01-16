@@ -3,10 +3,11 @@ using Microsoft.Extensions.Configuration;
 using Npgsql;
 using Wealth.BuildingBlocks.Domain;
 using Wealth.BuildingBlocks.Infrastructure.Mediation;
+using Wealth.BuildingBlocks.Infrastructure.Repositories;
 
 namespace Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
-public class WealthDbContext(IConfiguration configuration) : IDisposable, IDomainEventsResolver
+public class WealthDbContext(IConfiguration configuration) : IDisposable, IDomainEventsResolver, IConnectionFactory
 {
     private NpgsqlConnection? connection;
     private readonly List<DomainEvent> trackedEvents = [];

@@ -2,20 +2,21 @@ using System.Data;
 using Dapper;
 using SharpJuice.Essentials;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.BuildingBlocks.Infrastructure.Repositories;
 using Wealth.InstrumentManagement.Application.Instruments.Models;
 using Wealth.InstrumentManagement.Application.Repositories;
-using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Repositories;
 
-public class PricesRepository(IClock clock, WealthDbContext dbContext) : IPricesRepository
+public class PricesRepository(IClock clock, IConnectionFactory connectionFactory) : IPricesRepository
 {
-    private readonly IDbConnection connection = dbContext.CreateConnection();
+    private readonly IDbConnection connection = connectionFactory.CreateConnection();
 
     public async Task<IReadOnlyCollection<InstrumentUId>> GetOld(TimeSpan thatOld, CancellationToken token)
     {
         var olderThan = clock.Now.Subtract(thatOld);
-        using var reader = await connection.ExecuteReaderAsync(
+
+        var command = new CommandDefinition(
             // language=postgresql
             """
             SELECT instrument_id FROM "Stocks"
@@ -27,10 +28,13 @@ public class PricesRepository(IClock clock, WealthDbContext dbContext) : IPrices
             SELECT instrument_id FROM currencies
             WHERE price_updated_at < @olderThan
             """,
-            new
+            parameters: new
             {
                 olderThan
-            });
+            },
+            cancellationToken: token);
+
+        using var reader = await connection.ExecuteReaderAsync(command);
 
         var result = new List<InstrumentUId>();
 
@@ -40,8 +44,48 @@ public class PricesRepository(IClock clock, WealthDbContext dbContext) : IPrices
         return result;
     }
 
-    public Task UpdatePrices(IReadOnlyCollection<InstrumentUIdPrice> prices, CancellationToken token)
+    public async Task UpdatePrices(IReadOnlyCollection<InstrumentUIdPrice> prices, CancellationToken token)
     {
-        throw new NotImplementedException();
+        var command = new CommandDefinition(
+            // language=postgresql
+            """
+            WITH price_data AS (
+                SELECT unnest(@ids) AS instrument_id,
+                       unnest(@prices) AS price
+            )
+            UPDATE "Stocks"
+            SET "Price_Amount" = data.price,
+                price_updated_at = now()
+            FROM price_data AS data
+            WHERE "Stocks".instrument_id = data.instrument_id;
+
+            WITH price_data AS (
+                SELECT unnest(@ids) AS instrument_id,
+                       unnest(@prices) AS price
+            )
+            UPDATE "Bonds"
+            SET "Price_Amount" = data.price,
+                price_updated_at = now()
+            FROM price_data AS data
+            WHERE "Bonds".instrument_id = data.instrument_id;
+
+            WITH price_data AS (
+                SELECT unnest(@ids) AS instrument_id,
+                       unnest(@prices) AS price
+            )
+            UPDATE currencies
+            SET price_amount = data.price,
+                price_updated_at = now()
+            FROM price_data AS data
+            WHERE currencies.instrument_id = data.instrument_id;
+            """,
+            parameters: new
+            {
+                ids = prices.Select(i => i.InstrumentUId.Value).ToArray(),
+                prices = prices.Select(i => i.Price).ToArray(),
+            },
+            cancellationToken: token);
+
+        await connection.ExecuteAsync(command);
     }
 }
