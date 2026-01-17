@@ -44,6 +44,38 @@ public class PricesRepository(IClock clock, IConnectionFactory connectionFactory
         return result;
     }
 
+    public async Task<IReadOnlyCollection<InstrumentUIdPrice>> GetPrices(IReadOnlyCollection<InstrumentUId> instrumentUIds, CancellationToken token)
+    {
+        var command = new CommandDefinition(
+            // language=postgresql
+            """
+            SELECT instrument_id, "Price_Amount" FROM "Stocks"
+            WHERE instrument_id = ANY(@instrumentIds)
+            UNION ALL
+            SELECT instrument_id, "Price_Amount" FROM "Bonds"
+            WHERE instrument_id = ANY(@instrumentIds)
+            UNION ALL
+            SELECT instrument_id, price_amount FROM currencies
+            WHERE instrument_id = ANY(@instrumentIds)
+            """,
+            parameters: new
+            {
+                instrumentIds = instrumentUIds.Select(i => i.Value).ToArray()
+            },
+            cancellationToken: token);
+
+        using var reader = await connection.ExecuteReaderAsync(command);
+
+        var result = new List<InstrumentUIdPrice>();
+
+        while (reader.Read())
+            result.Add(new InstrumentUIdPrice(
+                reader.GetGuid(0),
+                reader.GetDecimal(1)));
+
+        return result;
+    }
+
     public async Task UpdatePrices(IReadOnlyCollection<InstrumentUIdPrice> prices, CancellationToken token)
     {
         var command = new CommandDefinition(
@@ -55,7 +87,7 @@ public class PricesRepository(IClock clock, IConnectionFactory connectionFactory
             )
             UPDATE "Stocks"
             SET "Price_Amount" = data.price,
-                price_updated_at = now()
+                price_updated_at = @now
             FROM price_data AS data
             WHERE "Stocks".instrument_id = data.instrument_id;
 
@@ -65,7 +97,7 @@ public class PricesRepository(IClock clock, IConnectionFactory connectionFactory
             )
             UPDATE "Bonds"
             SET "Price_Amount" = data.price,
-                price_updated_at = now()
+                price_updated_at = @now
             FROM price_data AS data
             WHERE "Bonds".instrument_id = data.instrument_id;
 
@@ -75,7 +107,7 @@ public class PricesRepository(IClock clock, IConnectionFactory connectionFactory
             )
             UPDATE currencies
             SET price_amount = data.price,
-                price_updated_at = now()
+                price_updated_at = @now
             FROM price_data AS data
             WHERE currencies.instrument_id = data.instrument_id;
             """,
@@ -83,6 +115,7 @@ public class PricesRepository(IClock clock, IConnectionFactory connectionFactory
             {
                 ids = prices.Select(i => i.InstrumentUId.Value).ToArray(),
                 prices = prices.Select(i => i.Price).ToArray(),
+                now = clock.Now
             },
             cancellationToken: token);
 

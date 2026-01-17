@@ -1,16 +1,16 @@
 using System.Data;
 using Dapper;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.BuildingBlocks.Infrastructure.Repositories;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Repositories;
 using Wealth.InstrumentManagement.Domain.Instruments;
-using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Repositories;
 
-public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
+public class BondsRepository(IConnectionFactory connectionFactory, IEventTracker eventTracker) : IBondsRepository
 {
-    private readonly IDbConnection connection = dbContext.CreateConnection();
+    private readonly IDbConnection connection = connectionFactory.CreateConnection();
 
     public async Task<Bond?> GetBond(BondId id)
     {
@@ -70,7 +70,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
             Currency = bond.Price.Currency,
             Amount = bond.Price.Amount,
         });
-        dbContext.AddEvents(bond);
+        eventTracker.AddEvents(bond);
     }
 
     public async Task<BondId> CreateBond(CreateBondCommand command, CancellationToken token = default)
@@ -117,7 +117,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
                 Figi = command.Figi.Value,
                 InstrumentId = command.InstrumentUId.Value
             });
-        dbContext.AddEvents(instrument);
+        eventTracker.AddEvents(instrument);
     }
 
     public Task<IReadOnlyCollection<Bond>> GetBonds()
@@ -165,7 +165,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
             FIGI = bond.Figi.Value,
             InstrumentId = bond.InstrumentUId.Value
         });
-        dbContext.AddEvents(bond);
+        eventTracker.AddEvents(bond);
 
         return bond.Id;
     }
@@ -189,7 +189,7 @@ public class BondsRepository(WealthDbContext dbContext) : IBondsRepository
             Currency = coupon.ValuePerYear.Currency,
             Amount = coupon.ValuePerYear.Amount,
         });
-        dbContext.AddEvents(instrument);
+        eventTracker.AddEvents(instrument);
     }
 
     private enum Columns

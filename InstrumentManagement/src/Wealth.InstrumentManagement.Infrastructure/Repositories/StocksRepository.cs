@@ -1,16 +1,16 @@
 using System.Data;
 using Dapper;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.BuildingBlocks.Infrastructure.Repositories;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Repositories;
 using Wealth.InstrumentManagement.Domain.Instruments;
-using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Repositories;
 
-public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
+public class StocksRepository(IConnectionFactory connectionFactory, IEventTracker eventTracker) : IStocksRepository
 {
-    private readonly IDbConnection connection = dbContext.CreateConnection();
+    private readonly IDbConnection connection = connectionFactory.CreateConnection();
 
     private const string COLUMNS =
         """
@@ -100,7 +100,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             Currency = instrument.Price.Currency,
             Amount = instrument.Price.Amount,
         });
-        dbContext.AddEvents(instrument);
+        eventTracker.AddEvents(instrument);
     }
 
     public async Task<Stock?> GetStock(StockId id)
@@ -184,7 +184,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
                 Figi = command.Figi.Value,
                 InstrumentId = command.InstrumentUId.Value
             });
-        dbContext.AddEvents(instrument);
+        eventTracker.AddEvents(instrument);
     }
 
     private async Task<StockId> CreateStock(Stock stock)
@@ -206,7 +206,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             LotSize = stock.LotSize.Value,
             InstrumentId = stock.InstrumentUId.Value
         });
-        dbContext.AddEvents(stock);
+        eventTracker.AddEvents(stock);
 
         return stock.Id;
     }
@@ -232,7 +232,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             Currency = dividend.ValuePerYear.Currency,
             Amount = dividend.ValuePerYear.Amount,
         });
-        dbContext.AddEvents(instrument);
+        eventTracker.AddEvents(instrument);
     }
 
     public async Task ChangeLotSize(StockId id, int lotSize)
@@ -255,7 +255,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             Id = id.Value,
             LotSize = lotSize,
         });
-        dbContext.AddEvents(instrument);
+        eventTracker.AddEvents(instrument);
     }
 
     public async Task ChangeTicker(StockId id, Ticker ticker)
@@ -278,7 +278,7 @@ public class StocksRepository(WealthDbContext dbContext) : IStocksRepository
             Id = id.Value,
             Ticker = ticker,
         });
-        dbContext.AddEvents(instrument);
+        eventTracker.AddEvents(instrument);
     }
 
     private async Task<IReadOnlyCollection<Stock>> GetStocks(string sql, object? param = null)

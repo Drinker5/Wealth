@@ -1,6 +1,7 @@
 using System.Data;
 using Dapper;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.BuildingBlocks.Infrastructure.Repositories;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Repositories;
 using Wealth.InstrumentManagement.Domain.Instruments;
@@ -8,9 +9,9 @@ using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Repositories;
 
-public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesRepository
+public class CurrenciesRepository(IConnectionFactory connectionFactory, IEventTracker eventTracker) : ICurrenciesRepository
 {
-    private readonly IDbConnection connection = dbContext.CreateConnection();
+    private readonly IDbConnection connection = connectionFactory.CreateConnection();
 
     public async Task<Currency?> GetCurrency(CurrencyId id)
     {
@@ -62,7 +63,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
             Currency = currency.Price.Currency,
             Amount = currency.Price.Amount,
         });
-        dbContext.AddEvents(currency);
+        eventTracker.AddEvents(currency);
     }
 
     public async Task<CurrencyId> CreateCurrency(CreateCurrencyCommand command, CancellationToken token = default)
@@ -127,7 +128,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
                 Figi = command.Figi.Value,
                 InstrumentId = command.InstrumentUId.Value
             });
-        dbContext.AddEvents(instrument);
+        eventTracker.AddEvents(instrument);
     }
 
     public Task<IReadOnlyCollection<Currency>> GetCurrencies()
@@ -151,7 +152,7 @@ public class CurrenciesRepository(WealthDbContext dbContext) : ICurrenciesReposi
             FIGI = currency.Figi.Value,
             InstrumentId = currency.InstrumentUId.Value
         });
-        dbContext.AddEvents(currency);
+        eventTracker.AddEvents(currency);
 
         return currency.Id;
     }

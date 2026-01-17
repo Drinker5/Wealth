@@ -1,15 +1,16 @@
 using System.Data;
 using Dapper;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.BuildingBlocks.Infrastructure.Repositories;
 using Wealth.InstrumentManagement.Application.Instruments.Models;
 using Wealth.InstrumentManagement.Application.Repositories;
 using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Repositories;
 
-public sealed class InstrumentsRepository(WealthDbContext dbContext) : IInstrumentsRepository
+public sealed class InstrumentsRepository(IConnectionFactory connectionFactory) : IInstrumentsRepository
 {
-    private readonly IDbConnection connection = dbContext.CreateConnection();
+    private readonly IDbConnection connection = connectionFactory.CreateConnection();
 
     public async Task<IReadOnlyCollection<Instrument>> GetInstruments(
         IReadOnlyCollection<InstrumentUId> instrumentIds,

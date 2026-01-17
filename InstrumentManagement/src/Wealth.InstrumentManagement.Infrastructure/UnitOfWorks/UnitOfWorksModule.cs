@@ -25,6 +25,7 @@ public class UnitOfWorksModule : IServiceModule
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IDomainEventsResolver, WealthDbContext>();
         services.AddScoped<IConnectionFactory, WealthDbContext>();
+        services.AddScoped<IEventTracker, WealthDbContext>();
 
         services.AddScoped<WealthDbContext>();
         services.AddScoped<Database>();
