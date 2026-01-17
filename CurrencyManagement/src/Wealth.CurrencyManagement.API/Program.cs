@@ -1,12 +1,10 @@
 using Serilog;
 using Wealth.BuildingBlocks.API;
-using Wealth.CurrencyManagement.API.Blazor;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+builder.Services.AddSwaggerGen();
 
 var logConfig = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration);
 
@@ -23,14 +21,9 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-app.UseAntiforgery();
-app.MapStaticAssets();
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
 app.MapControllers();
 
 app.Run();
