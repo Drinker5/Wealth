@@ -20,13 +20,13 @@ public class PricesRepository(IClock clock, IConnectionFactory connectionFactory
             // language=postgresql
             """
             SELECT instrument_id FROM "Stocks"
-            WHERE price_updated_at < @olderThan
+            WHERE price_updated_at < @olderThan or price_updated_at is null
             UNION ALL
             SELECT instrument_id FROM "Bonds"
-            WHERE price_updated_at < @olderThan
+            WHERE price_updated_at < @olderThan or price_updated_at is null
             UNION ALL
             SELECT instrument_id FROM currencies
-            WHERE price_updated_at < @olderThan
+            WHERE price_updated_at < @olderThan or price_updated_at is null
             """,
             parameters: new
             {

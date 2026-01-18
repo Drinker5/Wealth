@@ -48,6 +48,25 @@ public sealed class PricesRepositoryTests :
     }
 
     [Fact]
+    public async Task GetOld_AsExpected()
+    {
+        var stocks = fixture.CreateMany<CreateStockCommand>(3).ToArray();
+        var bonds = fixture.CreateMany<CreateBondCommand>(3).ToArray();
+        var currencies = fixture.CreateMany<CreateCurrencyCommand>(3).ToArray();
+        await instrumentInitializer.CreateStocks(stocks);
+        await instrumentInitializer.CreateBonds(bonds);
+        await instrumentInitializer.CreateCurrencies(currencies);
+        var instrumentPrices = stocks.Select(i => i.InstrumentUId)
+            .Union(bonds.Select(i => i.InstrumentUId))
+            .Union(currencies.Select(i => i.InstrumentUId))
+            .ToArray();
+
+        var oldPrices = await repository.GetOld(TimeSpan.Zero, CancellationToken.None);
+
+        Assert.Equivalent(instrumentPrices, oldPrices);
+    }
+
+    [Fact]
     public async Task UpdatePrices_AsExpected()
     {
         var stocks = fixture.CreateMany<CreateStockCommand>(3).ToArray();

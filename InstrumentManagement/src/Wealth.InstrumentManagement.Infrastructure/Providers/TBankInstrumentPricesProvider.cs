@@ -24,5 +24,6 @@ public sealed class TBankInstrumentPricesProvider(
         return response.LastPrices.ToDictionary(i => InstrumentUId.From(i.InstrumentUid), i => Convert(i.Price));
     }
 
-    private static decimal Convert(Quotation quotation) => new DecimalProto(quotation.Units, quotation.Nano);
+    private static decimal Convert(Quotation? quotation)
+        => quotation == null ? 0 : new DecimalProto(quotation.Units, quotation.Nano);
 }

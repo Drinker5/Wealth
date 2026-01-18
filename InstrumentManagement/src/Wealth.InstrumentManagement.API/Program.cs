@@ -18,5 +18,6 @@ builder.Services.ConfigureHttpClientDefaults(http =>
 });
 
 var app = builder.Build();
+
 app.MapEndpoints();
 app.Run();

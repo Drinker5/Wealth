@@ -16,7 +16,7 @@ public static class Extensions
                 .ScanIn(AppDomain.CurrentDomain.GetAssemblies()).For.Migrations());
 
         builder.Services.AddHostedService<MigrationService>();
-
+        builder.Services.AddHostedService<PriceUpdaterService>();
         DapperMapping.Map();
     }
 

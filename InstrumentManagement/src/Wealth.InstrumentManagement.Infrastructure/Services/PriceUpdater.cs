@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Wealth.InstrumentManagement.Application.Instruments.Models;
 using Wealth.InstrumentManagement.Application.Options;
@@ -10,10 +11,14 @@ namespace Wealth.InstrumentManagement.Infrastructure.Services;
 public sealed class PriceUpdater(
     IOptions<PriceUpdaterOptions> priceUpdaterOptions,
     IPricesRepository pricesRepository,
-    IInstrumentPricesProvider pricesProvider) : IPriceUpdater
+    IInstrumentPricesProvider pricesProvider,
+    ILogger<PriceUpdater> logger) : IPriceUpdater
 {
     public async Task UpdatePrices(CancellationToken token)
     {
+        if (logger.IsEnabled(LogLevel.Debug))
+            logger.LogDebug("Updating prices");
+
         var instrumentUIds = await pricesRepository.GetOld(priceUpdaterOptions.Value.OlderThan, token);
         var prices = await pricesProvider.ProvidePrices(instrumentUIds, token);
 

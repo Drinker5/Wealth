@@ -1,6 +1,8 @@
 using System.Data;
 using Dapper;
+using SharpJuice.Essentials;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.BuildingBlocks.Infrastructure.Repositories;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Repositories;
@@ -8,7 +10,10 @@ using Wealth.InstrumentManagement.Domain.Instruments;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Repositories;
 
-public class StocksRepository(IConnectionFactory connectionFactory, IEventTracker eventTracker) : IStocksRepository
+public class StocksRepository(
+    IConnectionFactory connectionFactory,
+    IEventTracker eventTracker,
+    IClock clock) : IStocksRepository
 {
     private readonly IDbConnection connection = connectionFactory.CreateConnection();
 
@@ -91,7 +96,9 @@ public class StocksRepository(IConnectionFactory connectionFactory, IEventTracke
             // language=postgresql
             """
             UPDATE "Stocks" 
-            SET "Price_Currency" = @Currency, "Price_Amount" = @Amount
+            SET "Price_Currency" = @Currency, 
+                "Price_Amount" = @Amount,
+                price_updated_at = @Now
             WHERE "Id" = @Id
             """;
         await connection.ExecuteAsync(sql, new
@@ -99,6 +106,7 @@ public class StocksRepository(IConnectionFactory connectionFactory, IEventTracke
             Id = id.Value,
             Currency = instrument.Price.Currency,
             Amount = instrument.Price.Amount,
+            Now = clock.Now 
         });
         eventTracker.AddEvents(instrument);
     }
