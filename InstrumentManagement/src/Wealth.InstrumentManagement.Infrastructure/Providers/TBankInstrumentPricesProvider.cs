@@ -21,6 +21,10 @@ public sealed class TBankInstrumentPricesProvider(
             InstrumentId = { instrumentUIds.Select(i => i.ToString()) }
         }, cancellationToken: token);
 
+        // TODO:
+        // Stocks: price * lot
+        // Bonds: price / 100 * nominal
+        // Currencies: price * log / nominal
         return response.LastPrices.ToDictionary(i => InstrumentUId.From(i.InstrumentUid), i => Convert(i.Price));
     }
 

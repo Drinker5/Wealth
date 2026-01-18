@@ -22,6 +22,7 @@ public class Stock(StockId id) : AggregateRoot
 
     public InstrumentUId InstrumentUId { get; set; }
 
+    // TODO price currency
     public static Stock Create(StockId id, string index, string name, ISIN isin, FIGI figi, InstrumentUId instrumentUId)
     {
         var stock = new Stock(id);

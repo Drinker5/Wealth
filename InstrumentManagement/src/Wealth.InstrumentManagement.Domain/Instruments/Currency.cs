@@ -16,6 +16,7 @@ public class Currency(CurrencyId id) : AggregateRoot
 
     public InstrumentUId InstrumentUId { get; set; }
 
+    // TODO price currency
     public static Currency Create(CurrencyId currencyId, string name, FIGI figi, InstrumentUId instrumentUId)
     {
         var currency = new Currency(currencyId);

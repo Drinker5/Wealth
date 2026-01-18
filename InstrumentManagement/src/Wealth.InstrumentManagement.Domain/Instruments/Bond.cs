@@ -18,6 +18,7 @@ public class Bond(BondId id) : AggregateRoot
 
     public Coupon Coupon { get; set; }
 
+    // TODO price currency
     public static Bond Create(BondId bondId, string name, ISIN isin, FIGI figi, InstrumentUId instrumentUId)
     {
         var bond = new Bond(bondId);
