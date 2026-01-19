@@ -14,7 +14,7 @@ public class CurrencyTests
 
     private Currency CreateCurrencyInstrument()
     {
-        return Currency.Create(3, name, figi, instrumentUId);
+        return Currency.Create(3, name, figi, instrumentUId, CurrencyCode.Rub);
     }
 
     [Test]

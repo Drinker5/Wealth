@@ -82,7 +82,7 @@ public class CurrenciesRepository(
             commandText: sql,
             cancellationToken: token));
 
-        var currencyInstrument = Currency.Create(new CurrencyId(nextId), command.Name, command.Figi, command.InstrumentUId);
+        var currencyInstrument = Currency.Create(new CurrencyId(nextId), command.Name, command.Figi, command.InstrumentUId, command.Currency);
         return await CreateCurrency(currencyInstrument);
     }
 
@@ -150,15 +150,16 @@ public class CurrenciesRepository(
     {
         // language=postgresql
         const string sql = """
-                           INSERT INTO currencies (id, name, figi, instrument_id) 
-                           VALUES (@Id, @Name, @FIGI, @InstrumentId)
+                           INSERT INTO currencies (id, name, figi, instrument_id, price_currency) 
+                           VALUES (@Id, @Name, @FIGI, @InstrumentId, @PriceCurrency)
                            """;
         await connection.ExecuteAsync(sql, new
         {
             Id = currency.Id.Value,
             Name = currency.Name,
             FIGI = currency.Figi.Value,
-            InstrumentId = currency.InstrumentUId.Value
+            InstrumentId = currency.InstrumentUId.Value,
+            PriceCurrency = currency.Price.Currency
         });
         eventTracker.AddEvents(currency);
 
@@ -191,7 +192,7 @@ public class CurrenciesRepository(
             {
                 currency.Price = new Money(
                     (CurrencyCode)reader.GetByte((int)Columns.Price_Currency),
-                    reader.GetDecimal((int)Columns.Price_Amount));
+                    reader.IsDBNull((int)Columns.Price_Amount) ? 0 : reader.GetDecimal((int)Columns.Price_Amount));
             }
 
             instruments.Add(currency);

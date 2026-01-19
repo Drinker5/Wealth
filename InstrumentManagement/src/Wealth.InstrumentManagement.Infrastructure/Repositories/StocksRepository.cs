@@ -106,7 +106,7 @@ public class StocksRepository(
             Id = id.Value,
             Currency = instrument.Price.Currency,
             Amount = instrument.Price.Amount,
-            Now = clock.Now 
+            Now = clock.Now
         });
         eventTracker.AddEvents(instrument);
     }
@@ -152,7 +152,7 @@ public class StocksRepository(
             commandText: sql,
             cancellationToken: token));
 
-        var stock = Stock.Create(new StockId(nextId), command.Ticker, command.Name, command.Isin, command.Figi, command.InstrumentUId);
+        var stock = Stock.Create(new StockId(nextId), command.Ticker, command.Name, command.Isin, command.Figi, command.InstrumentUId, command.Currency);
         stock.ChangeLotSize(command.LotSize);
         return await CreateStock(stock);
     }
@@ -200,8 +200,8 @@ public class StocksRepository(
         const string sql =
             // language=postgresql
             """
-            INSERT INTO "Stocks" ("Id", ticker, "Name", "ISIN", "FIGI", "LotSize", instrument_id) 
-            VALUES (@Id, @Ticker, @Name, @ISIN, @FIGI, @LotSize, @InstrumentId)
+            INSERT INTO "Stocks" ("Id", ticker, "Name", "ISIN", "FIGI", "LotSize", instrument_id, "Price_Currency") 
+            VALUES (@Id, @Ticker, @Name, @ISIN, @FIGI, @LotSize, @InstrumentId, @PriceCurrency);
             """;
 
         await connection.ExecuteAsync(sql, new
@@ -212,7 +212,8 @@ public class StocksRepository(
             ISIN = stock.Isin.Value,
             FIGI = stock.Figi.Value,
             LotSize = stock.LotSize.Value,
-            InstrumentId = stock.InstrumentUId.Value
+            InstrumentId = stock.InstrumentUId.Value,
+            PriceCurrency = stock.Price.Currency
         });
         eventTracker.AddEvents(stock);
 
@@ -314,7 +315,7 @@ public class StocksRepository(
             {
                 stock.Price = new Money(
                     (CurrencyCode)reader.GetByte((int)Columns.Price_Currency),
-                    reader.GetDecimal((int)Columns.Price_Amount));
+                    reader.IsDBNull((int)Columns.Price_Amount) ? 0 : reader.GetDecimal((int)Columns.Price_Amount));
             }
 
             instruments.Add(stock);

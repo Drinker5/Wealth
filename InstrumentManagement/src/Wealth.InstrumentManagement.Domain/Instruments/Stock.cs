@@ -22,11 +22,10 @@ public class Stock(StockId id) : AggregateRoot
 
     public InstrumentUId InstrumentUId { get; set; }
 
-    // TODO price currency
-    public static Stock Create(StockId id, string index, string name, ISIN isin, FIGI figi, InstrumentUId instrumentUId)
+    public static Stock Create(StockId id, string index, string name, ISIN isin, FIGI figi, InstrumentUId instrumentUId, CurrencyCode currency)
     {
         var stock = new Stock(id);
-        stock.Apply(new StockCreated(id, index, name, isin, figi, instrumentUId));
+        stock.Apply(new StockCreated(id, index, name, isin, figi, instrumentUId, currency));
         return stock;
     }
 
@@ -66,6 +65,7 @@ public class Stock(StockId id) : AggregateRoot
         Isin = @event.Isin;
         Figi = @event.Figi;
         InstrumentUId = @event.InstrumentUId;
+        Price = new Money(@event.Currency, 0);
     }
 
     private void When(StockDividendChanged @event)

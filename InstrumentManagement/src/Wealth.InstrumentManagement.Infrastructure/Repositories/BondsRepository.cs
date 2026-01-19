@@ -89,7 +89,7 @@ public class BondsRepository(
             commandText: sql,
             cancellationToken: token));
 
-        var bondInstrument = Bond.Create(new BondId(nextId), command.Name, command.Isin, command.Figi, command.InstrumentUId);
+        var bondInstrument = Bond.Create(new BondId(nextId), command.Name, command.Isin, command.Figi, command.InstrumentUId, command.Currency);
         return await CreateBond(bondInstrument);
     }
 
@@ -161,8 +161,8 @@ public class BondsRepository(
     {
         // language=postgresql
         const string sql = """
-                           INSERT INTO "Bonds" ("Id", "Name", "ISIN", "FIGI", instrument_id) 
-                           VALUES (@Id, @Name, @ISIN, @FIGI, @InstrumentId)
+                           INSERT INTO "Bonds" ("Id", "Name", "ISIN", "FIGI", instrument_id, "Price_Currency") 
+                           VALUES (@Id, @Name, @ISIN, @FIGI, @InstrumentId, @PriceCurrency)
                            """;
         await connection.ExecuteAsync(sql, new
         {
@@ -170,7 +170,8 @@ public class BondsRepository(
             Name = bond.Name,
             ISIN = bond.Isin.Value,
             FIGI = bond.Figi.Value,
-            InstrumentId = bond.InstrumentUId.Value
+            InstrumentId = bond.InstrumentUId.Value,
+            PriceCurrency = bond.Price.Currency
         });
         eventTracker.AddEvents(bond);
 
@@ -235,7 +236,7 @@ public class BondsRepository(
             {
                 bond.Price = new Money(
                     (CurrencyCode)reader.GetByte((int)Columns.Price_Currency),
-                    reader.GetDecimal((int)Columns.Price_Amount));
+                    reader.IsDBNull((int)Columns.Price_Amount) ? 0 : reader.GetDecimal((int)Columns.Price_Amount));
             }
 
             instruments.Add(bond);

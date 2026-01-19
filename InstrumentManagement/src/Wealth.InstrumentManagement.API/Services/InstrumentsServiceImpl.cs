@@ -19,7 +19,8 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
                 request.Isin,
                 request.Figi,
                 request.InstrumentUid,
-                request.LotSize));
+                request.LotSize,
+                CurrencyCode.None));
 
             return new CreateStockResponse
             {
@@ -39,7 +40,8 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
             Name = request.Name,
             Isin = request.Isin,
             Figi = request.Figi,
-            InstrumentUId = request.InstrumentUid
+            InstrumentUId = request.InstrumentUid,
+            Currency = CurrencyCode.None
         });
 
         return new CreateBondResponse
@@ -54,7 +56,8 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
         {
             Name = request.Name,
             Figi = request.Figi,
-            InstrumentUId = request.InstrumentUid
+            InstrumentUId = request.InstrumentUid,
+            Currency = CurrencyCode.None
         });
 
         return new CreateCurrencyResponse

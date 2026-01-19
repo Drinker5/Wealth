@@ -10,7 +10,8 @@ public record struct CreateBondCommand(
     string Name,
     ISIN Isin,
     FIGI Figi,
-    InstrumentUId InstrumentUId) : ICommand<BondId>;
+    InstrumentUId InstrumentUId,
+    CurrencyCode Currency) : ICommand<BondId>;
 
 public class CreateBondCommandHandler(IBondsRepository repository) : ICommandHandler<CreateBondCommand, BondId>
 {

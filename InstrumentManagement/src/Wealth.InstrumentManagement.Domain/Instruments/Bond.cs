@@ -18,8 +18,7 @@ public class Bond(BondId id) : AggregateRoot
 
     public Coupon Coupon { get; set; }
 
-    // TODO price currency
-    public static Bond Create(BondId bondId, string name, ISIN isin, FIGI figi, InstrumentUId instrumentUId)
+    public static Bond Create(BondId bondId, string name, ISIN isin, FIGI figi, InstrumentUId instrumentUId, CurrencyCode currency)
     {
         var bond = new Bond(bondId);
         bond.Apply(new BondCreated
@@ -28,7 +27,8 @@ public class Bond(BondId id) : AggregateRoot
             Name = name,
             Isin = isin,
             Figi = figi,
-            InstrumentUId = instrumentUId
+            InstrumentUId = instrumentUId,
+            Currency = currency
         });
         return bond;
     }
@@ -53,6 +53,7 @@ public class Bond(BondId id) : AggregateRoot
         Isin = @event.Isin;
         Figi = @event.Figi;
         InstrumentUId = @event.InstrumentUId;
+        Price = new Money(@event.Currency, 0);
     }
 
     public void ChangeCoupon(Coupon coupon)
@@ -106,7 +107,7 @@ public class Bond(BondId id) : AggregateRoot
     {
         if (this.Name == name)
             return;
-        
+
         Apply(new BondNameChanged(Id, name));
     }
 
@@ -124,7 +125,7 @@ public class Bond(BondId id) : AggregateRoot
     {
         InstrumentUId = @event.InstrumentUId;
     }
-    
+
     private void When(BondNameChanged @event)
     {
         Name = @event.Name;

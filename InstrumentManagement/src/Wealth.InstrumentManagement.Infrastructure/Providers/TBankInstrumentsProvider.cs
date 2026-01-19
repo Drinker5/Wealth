@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Tinkoff.InvestApi;
 using Tinkoff.InvestApi.V1;
 using Wealth.BuildingBlocks.Domain.Common;
+using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Providers;
 
@@ -25,6 +26,7 @@ public sealed class TBankInstrumentsProvider(
                 Id = instrumentUId.ToString()
             }, cancellationToken: token);
 
+            
             return new CreateStockCommand
             {
                 Name = stock.Instrument.Name,
@@ -32,7 +34,8 @@ public sealed class TBankInstrumentsProvider(
                 Isin = stock.Instrument.Isin,
                 Figi = stock.Instrument.Figi,
                 LotSize = stock.Instrument.Lot,
-                Ticker = stock.Instrument.Ticker
+                Ticker = stock.Instrument.Ticker,
+                Currency = CurrencyCodeParser.Parse(stock.Instrument.Currency)
             };
         }
         catch (RpcException e) when (e.StatusCode == StatusCode.NotFound)
@@ -58,6 +61,7 @@ public sealed class TBankInstrumentsProvider(
                 InstrumentUId = bond.Instrument.Uid,
                 Isin = bond.Instrument.Isin,
                 Figi = bond.Instrument.Figi,
+                Currency = CurrencyCodeParser.Parse(bond.Instrument.Currency)
             };
         }
         catch (RpcException e) when (e.StatusCode == StatusCode.NotFound)
@@ -81,7 +85,8 @@ public sealed class TBankInstrumentsProvider(
             {
                 Name = currency.Instrument.Name,
                 InstrumentUId = currency.Instrument.Uid,
-                Figi = currency.Instrument.Figi
+                Figi = currency.Instrument.Figi,
+                Currency = CurrencyCodeParser.Parse(currency.Instrument.Currency_)
             };
         }
         catch (RpcException e) when (e.StatusCode == StatusCode.NotFound)

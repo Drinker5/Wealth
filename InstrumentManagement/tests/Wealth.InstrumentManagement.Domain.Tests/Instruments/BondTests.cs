@@ -16,7 +16,7 @@ public class BondTests
 
     private Bond CreateBondInstrument()
     {
-        return Bond.Create(3, name, isin, figi, instrumentUId);
+        return Bond.Create(3, name, isin, figi, instrumentUId, CurrencyCode.Rub);
     }
 
     [Test]

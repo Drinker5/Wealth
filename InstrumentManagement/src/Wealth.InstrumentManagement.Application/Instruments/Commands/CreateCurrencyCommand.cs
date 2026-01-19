@@ -9,7 +9,8 @@ namespace Wealth.InstrumentManagement.Application.Instruments.Commands;
 public record struct CreateCurrencyCommand(
     string Name,
     FIGI Figi,
-    InstrumentUId InstrumentUId) : ICommand<CurrencyId>;
+    InstrumentUId InstrumentUId,
+    CurrencyCode Currency) : ICommand<CurrencyId>;
 
 public class CreateCurrencyCommandHandler(ICurrenciesRepository repository) : ICommandHandler<CreateCurrencyCommand, CurrencyId>
 {

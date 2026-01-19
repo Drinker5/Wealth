@@ -9,4 +9,5 @@ public record StockCreated(
     string Name,
     ISIN Isin,
     FIGI Figi,
-    InstrumentUId InstrumentUId) : DomainEvent;
+    InstrumentUId InstrumentUId,
+    CurrencyCode Currency) : DomainEvent;

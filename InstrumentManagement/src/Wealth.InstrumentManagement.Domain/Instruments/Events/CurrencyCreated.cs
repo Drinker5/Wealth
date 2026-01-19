@@ -7,4 +7,5 @@ public record CurrencyCreated(
     CurrencyId CurrencyId,
     string Name,
     FIGI Figi,
-    InstrumentUId InstrumentUId) : DomainEvent;
+    InstrumentUId InstrumentUId,
+    CurrencyCode Currency) : DomainEvent;

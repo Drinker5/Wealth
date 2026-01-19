@@ -13,7 +13,8 @@ public record struct CreateStockCommand(
     ISIN Isin,
     FIGI Figi,
     InstrumentUId InstrumentUId,
-    LotSize LotSize) : ICommand<StockId>;
+    LotSize LotSize,
+    CurrencyCode Currency) : ICommand<StockId>;
 
 public class CreateStockCommandHandler(IStocksRepository repository) : ICommandHandler<CreateStockCommand, StockId>
 {

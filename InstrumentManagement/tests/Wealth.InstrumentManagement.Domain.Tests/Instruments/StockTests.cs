@@ -17,7 +17,7 @@ public class StockTests
 
     private Stock CreateStockInstrument()
     {
-        return Stock.Create(3, index, name, isin, figi, instrumentUId);
+        return Stock.Create(3, index, name, isin, figi, instrumentUId, CurrencyCode.Rub);
     }
 
     [Test]

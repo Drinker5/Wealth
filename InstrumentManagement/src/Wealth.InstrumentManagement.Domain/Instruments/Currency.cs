@@ -16,11 +16,10 @@ public class Currency(CurrencyId id) : AggregateRoot
 
     public InstrumentUId InstrumentUId { get; set; }
 
-    // TODO price currency
-    public static Currency Create(CurrencyId currencyId, string name, FIGI figi, InstrumentUId instrumentUId)
+    public static Currency Create(CurrencyId currencyId, string name, FIGI figi, InstrumentUId instrumentUId, CurrencyCode currencyCode)
     {
         var currency = new Currency(currencyId);
-        currency.Apply(new CurrencyCreated(currencyId, name, figi, instrumentUId));
+        currency.Apply(new CurrencyCreated(currencyId, name, figi, instrumentUId, currencyCode));
         return currency;
     }
 
@@ -38,6 +37,7 @@ public class Currency(CurrencyId id) : AggregateRoot
         Name = @event.Name;
         Figi = @event.Figi;
         InstrumentUId = @event.InstrumentUId;
+        Price = new Money(@event.Currency, 0);
     }
 
     private void When(CurrencyPriceChanged @event)
@@ -78,7 +78,7 @@ public class Currency(CurrencyId id) : AggregateRoot
     {
         InstrumentUId = @event.InstrumentUId;
     }
-    
+
     private void When(CurrencyNameChanged @event)
     {
         Name = @event.Name;
