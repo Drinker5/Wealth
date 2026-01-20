@@ -11,6 +11,7 @@ public interface IBondsRepository
     Task<Bond?> GetBond(ISIN isin);
     Task<Bond?> GetBond(FIGI figi);
     Task<Bond?> GetBond(InstrumentUId uId);
+    Task<IReadOnlyDictionary<InstrumentUId, Bond>> GetBonds(IReadOnlyCollection<InstrumentUId> ids, CancellationToken token);
     Task DeleteBond(BondId id);
     Task ChangePrice(BondId id, Money price);
     Task<BondId> CreateBond(CreateBondCommand command, CancellationToken token);

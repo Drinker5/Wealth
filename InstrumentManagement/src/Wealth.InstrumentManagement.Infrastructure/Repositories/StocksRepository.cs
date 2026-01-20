@@ -2,7 +2,6 @@ using System.Data;
 using Dapper;
 using SharpJuice.Essentials;
 using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.BuildingBlocks.Infrastructure.Repositories;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Repositories;
@@ -78,6 +77,14 @@ public class StocksRepository(
         return instruments.FirstOrDefault();
     }
 
+    public async Task<IReadOnlyDictionary<InstrumentUId, Stock>> GetStocks(IReadOnlyCollection<InstrumentUId> ids, CancellationToken token)
+    {
+        // language=postgresql
+        const string sql = """SELECT * FROM "Stocks" WHERE instrument_id = ANY(@instrumentIds)""";
+        var instruments = await GetStocks(sql, new { instrumentIds = ids.Select(i => i.Value).ToArray() }, token);
+        return instruments.ToDictionary(i => i.InstrumentUId);
+    }
+
     public async Task DeleteStock(StockId id)
     {
         // language=postgresql
@@ -134,7 +141,7 @@ public class StocksRepository(
                 Isin = isin.Value,
                 Figi = figi.Value,
                 InstrumentId = instrumentUId.Value
-            });
+            }, token);
 
         if (instruments.Count > 1)
             throw new InvalidOperationException($"Found more than one stock Isin: ${isin.Value}, Figi: ${figi.Value}, InstrumentId: ${instrumentUId.Value}");
@@ -290,8 +297,9 @@ public class StocksRepository(
         eventTracker.AddEvents(instrument);
     }
 
-    private async Task<IReadOnlyCollection<Stock>> GetStocks(string sql, object? param = null)
+    private async Task<IReadOnlyCollection<Stock>> GetStocks(string sql, object? param = null, CancellationToken token = default)
     {
+        var command = new CommandDefinition(sql, param, cancellationToken: token);
         using var reader = await connection.ExecuteReaderAsync(sql, param);
 
         var instruments = new List<Stock>();

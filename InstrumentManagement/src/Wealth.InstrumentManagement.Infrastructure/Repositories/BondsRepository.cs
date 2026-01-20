@@ -48,6 +48,14 @@ public class BondsRepository(
         return instruments.FirstOrDefault();
     }
 
+    public async Task<IReadOnlyDictionary<InstrumentUId, Bond>> GetBonds(IReadOnlyCollection<InstrumentUId> ids, CancellationToken token)
+    {
+        // language=postgresql
+        const string sql = """SELECT * FROM "Bonds" WHERE instrument_id = ANY(@instrumentIds)""";
+        var instruments = await GetBonds(sql, new { instrumentIds = ids.Select(i => i.Value).ToArray() }, token);
+        return instruments.ToDictionary(i => i.InstrumentUId);
+    }
+
     public async Task DeleteBond(BondId instrumentId)
     {
         // language=postgresql
@@ -149,7 +157,7 @@ public class BondsRepository(
                 Isin = isin.Value,
                 Figi = figi.Value,
                 InstrumentId = instrumentUId.Value
-            });
+            }, token);
 
         if (instruments.Count > 1)
             throw new InvalidOperationException($"Found more than one bond Isin: ${isin.Value}, Figi: ${figi.Value}, InstrumentId: ${instrumentUId.Value}");
@@ -213,9 +221,10 @@ public class BondsRepository(
         InstrumentId
     }
 
-    private async Task<IReadOnlyCollection<Bond>> GetBonds(string sql, object? param = null)
+    private async Task<IReadOnlyCollection<Bond>> GetBonds(string sql, object? param = null, CancellationToken token = default)
     {
-        using var reader = await connection.ExecuteReaderAsync(sql, param);
+        var command = new CommandDefinition(sql, param, cancellationToken: token);
+        using var reader = await connection.ExecuteReaderAsync(command);
 
         var instruments = new List<Bond>();
         while (reader.Read())

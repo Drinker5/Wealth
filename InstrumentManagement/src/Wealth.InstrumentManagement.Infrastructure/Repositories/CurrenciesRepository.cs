@@ -2,12 +2,10 @@ using System.Data;
 using Dapper;
 using SharpJuice.Essentials;
 using Wealth.BuildingBlocks.Domain.Common;
-using Wealth.BuildingBlocks.Domain.Utilities;
 using Wealth.BuildingBlocks.Infrastructure.Repositories;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Repositories;
 using Wealth.InstrumentManagement.Domain.Instruments;
-using Wealth.InstrumentManagement.Infrastructure.UnitOfWorks;
 
 namespace Wealth.InstrumentManagement.Infrastructure.Repositories;
 
@@ -40,6 +38,14 @@ public class CurrenciesRepository(
         const string sql = "SELECT * FROM currencies WHERE instrument_id = @instrumentId";
         var instruments = await GetCurrencies(sql, new { instrumentId = uId.Value });
         return instruments.FirstOrDefault();
+    }
+
+    public async Task<IReadOnlyDictionary<InstrumentUId, Currency>> GetCurrencies(IReadOnlyCollection<InstrumentUId> ids, CancellationToken token)
+    {
+        // language=postgresql
+        const string sql = "SELECT * FROM currencies WHERE instrument_id = ANY(@instrumentIds)";
+        var instruments = await GetCurrencies(sql, new { instrumentIds = ids.Select(i => i.Value).ToArray() }, token);
+        return instruments.ToDictionary(i => i.InstrumentUId);
     }
 
     public async Task DeleteCurrency(CurrencyId instrumentId)
@@ -109,7 +115,7 @@ public class CurrenciesRepository(
             {
                 Figi = figi.Value,
                 InstrumentId = instrumentUId.Value
-            });
+            }, token);
 
         if (instruments.Count > 1)
             throw new InvalidOperationException($"Found more than one currency Figi: ${figi.Value}, InstrumentId: ${instrumentUId.Value}");
@@ -176,9 +182,10 @@ public class CurrenciesRepository(
         InstrumentId
     }
 
-    private async Task<IReadOnlyCollection<Currency>> GetCurrencies(string sql, object? param = null)
+    private async Task<IReadOnlyCollection<Currency>> GetCurrencies(string sql, object? param = null, CancellationToken token = default)
     {
-        using var reader = await connection.ExecuteReaderAsync(sql, param);
+        var command = new CommandDefinition(sql, param, cancellationToken: token);
+        using var reader = await connection.ExecuteReaderAsync(command);
 
         var instruments = new List<Currency>();
         while (reader.Read())
