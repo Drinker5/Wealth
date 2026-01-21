@@ -16,6 +16,7 @@ public sealed class PriceUpdaterService(
         await Task.Delay(options.Value.CheckInterval, stoppingToken);
         while (!stoppingToken.IsCancellationRequested)
         {
+            // TODO mediator
             await priceUpdater.UpdatePrices(stoppingToken);
             await Task.Delay(options.Value.CheckInterval, stoppingToken);
         }

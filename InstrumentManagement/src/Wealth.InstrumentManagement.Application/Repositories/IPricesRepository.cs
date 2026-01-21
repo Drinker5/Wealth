@@ -5,6 +5,6 @@ namespace Wealth.InstrumentManagement.Application.Repositories;
 
 public interface IPricesRepository
 {
-    Task<IReadOnlyCollection<InstrumentUId>> GetOld(TimeSpan thatOld, CancellationToken token);
+    Task<IReadOnlyCollection<InstrumentUIdType>> GetOld(TimeSpan thatOld, CancellationToken token);
     Task UpdatePrices(IReadOnlyCollection<InstrumentUIdPrice> prices, CancellationToken token);
 }

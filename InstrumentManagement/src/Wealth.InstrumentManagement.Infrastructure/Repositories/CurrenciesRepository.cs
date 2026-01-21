@@ -40,7 +40,7 @@ public class CurrenciesRepository(
         return instruments.FirstOrDefault();
     }
 
-    public async Task<IReadOnlyDictionary<InstrumentUId, Currency>> GetCurrencies(IReadOnlyCollection<InstrumentUId> ids, CancellationToken token)
+    public async Task<IReadOnlyDictionary<InstrumentUId, Currency>> GetCurrencies(IEnumerable<InstrumentUId> ids, CancellationToken token)
     {
         // language=postgresql
         const string sql = "SELECT * FROM currencies WHERE instrument_id = ANY(@instrumentIds)";

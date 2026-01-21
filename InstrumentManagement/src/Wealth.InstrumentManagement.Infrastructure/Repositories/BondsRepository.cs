@@ -48,7 +48,7 @@ public class BondsRepository(
         return instruments.FirstOrDefault();
     }
 
-    public async Task<IReadOnlyDictionary<InstrumentUId, Bond>> GetBonds(IReadOnlyCollection<InstrumentUId> ids, CancellationToken token)
+    public async Task<IReadOnlyDictionary<InstrumentUId, Bond>> GetBonds(IEnumerable<InstrumentUId> ids, CancellationToken token)
     {
         // language=postgresql
         const string sql = """SELECT * FROM "Bonds" WHERE instrument_id = ANY(@instrumentIds)""";

@@ -77,7 +77,7 @@ public class StocksRepository(
         return instruments.FirstOrDefault();
     }
 
-    public async Task<IReadOnlyDictionary<InstrumentUId, Stock>> GetStocks(IReadOnlyCollection<InstrumentUId> ids, CancellationToken token)
+    public async Task<IReadOnlyDictionary<InstrumentUId, Stock>> GetStocks(IEnumerable<InstrumentUId> ids, CancellationToken token)
     {
         // language=postgresql
         const string sql = """SELECT * FROM "Stocks" WHERE instrument_id = ANY(@instrumentIds)""";

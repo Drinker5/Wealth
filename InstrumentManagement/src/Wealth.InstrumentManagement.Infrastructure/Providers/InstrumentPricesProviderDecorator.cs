@@ -17,7 +17,7 @@ public sealed class InstrumentPricesProviderDecorator(IInstrumentPricesProvider 
             })).Build();
 
     public Task<IReadOnlyDictionary<InstrumentUId, decimal>> ProvidePrices(
-        IReadOnlyCollection<InstrumentUId> instrumentUIds,
+        IReadOnlyCollection<InstrumentUIdType> instrumentUIds,
         CancellationToken token)
     {
         return pipeline.ExecuteAsync(

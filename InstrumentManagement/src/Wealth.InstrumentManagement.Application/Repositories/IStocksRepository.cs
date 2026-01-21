@@ -11,7 +11,7 @@ public interface IStocksRepository
     Task<Stock?> GetStock(ISIN isin);
     Task<Stock?> GetStock(FIGI figi);
     Task<Stock?> GetStock(InstrumentUId uId);
-    Task<IReadOnlyDictionary<InstrumentUId, Stock>> GetStocks(IReadOnlyCollection<InstrumentUId> ids, CancellationToken token);
+    Task<IReadOnlyDictionary<InstrumentUId, Stock>> GetStocks(IEnumerable<InstrumentUId> ids, CancellationToken token);
     
     Task DeleteStock(StockId id);
     Task ChangePrice(StockId id, Money price);

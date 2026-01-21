@@ -12,34 +12,37 @@ public class PricesRepository(IClock clock, IConnectionFactory connectionFactory
 {
     private readonly IDbConnection connection = connectionFactory.CreateConnection();
 
-    public async Task<IReadOnlyCollection<InstrumentUId>> GetOld(TimeSpan thatOld, CancellationToken token)
+    public async Task<IReadOnlyCollection<InstrumentUIdType>> GetOld(TimeSpan thatOld, CancellationToken token)
     {
         var olderThan = clock.Now.Subtract(thatOld);
 
         var command = new CommandDefinition(
             // language=postgresql
             """
-            SELECT instrument_id FROM "Stocks"
+            SELECT instrument_id, @stock FROM "Stocks"
             WHERE price_updated_at < @olderThan or price_updated_at is null
             UNION ALL
-            SELECT instrument_id FROM "Bonds"
+            SELECT instrument_id, @bond FROM "Bonds"
             WHERE price_updated_at < @olderThan or price_updated_at is null
             UNION ALL
-            SELECT instrument_id FROM currencies
+            SELECT instrument_id, @currency FROM currencies
             WHERE price_updated_at < @olderThan or price_updated_at is null
             """,
             parameters: new
             {
-                olderThan
+                olderThan,
+                stock = (byte)InstrumentType.Stock,
+                bond = (byte)InstrumentType.Bond,
+                currency = (byte)InstrumentType.Currency
             },
             cancellationToken: token);
 
         using var reader = await connection.ExecuteReaderAsync(command);
 
-        var result = new List<InstrumentUId>();
+        var result = new List<InstrumentUIdType>();
 
         while (reader.Read())
-            result.Add(reader.GetGuid(0));
+            result.Add(new InstrumentUIdType(reader.GetGuid(0), (InstrumentType)reader.GetByte(1)));
 
         return result;
     }

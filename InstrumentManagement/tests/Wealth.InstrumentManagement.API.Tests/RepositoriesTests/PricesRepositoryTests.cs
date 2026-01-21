@@ -3,6 +3,7 @@ using Dapper;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using SharpJuice.Essentials;
+using Wealth.BuildingBlocks.Domain.Common;
 using Wealth.BuildingBlocks.Infrastructure.Repositories;
 using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Instruments.Models;
@@ -56,9 +57,9 @@ public sealed class PricesRepositoryTests :
         await instrumentInitializer.CreateStocks(stocks);
         await instrumentInitializer.CreateBonds(bonds);
         await instrumentInitializer.CreateCurrencies(currencies);
-        var instrumentPrices = stocks.Select(i => i.InstrumentUId)
-            .Union(bonds.Select(i => i.InstrumentUId))
-            .Union(currencies.Select(i => i.InstrumentUId))
+        var instrumentPrices = stocks.Select(i => new InstrumentUIdType(i.InstrumentUId, InstrumentType.Stock))
+            .Union(bonds.Select(i => new InstrumentUIdType(i.InstrumentUId, InstrumentType.Bond)))
+            .Union(currencies.Select(i => new InstrumentUIdType(i.InstrumentUId, InstrumentType.Currency)))
             .ToArray();
 
         var oldPrices = await repository.GetOld(TimeSpan.Zero, CancellationToken.None);
@@ -102,7 +103,7 @@ public sealed class PricesRepositoryTests :
         clockMock.Setup(i => i.Now).Returns(nowTime.AddMinutes(2));
         var result2 = await repository.GetOld(TimeSpan.FromMinutes(1), CancellationToken.None);
 
-        Assert.Equivalent(instrumentPrices.Select(i => i.InstrumentUId), result2);
+        Assert.Equivalent(instrumentPrices.Select(i => new InstrumentUIdType(i.InstrumentUId, InstrumentType.Stock)), result2);
     }
 
     public Task InitializeAsync() => Task.CompletedTask;
