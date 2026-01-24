@@ -25,6 +25,7 @@ services:
       - Services__currency__http=currency-management
       - ConnectionStrings__InstrumentManagement=Host=postgres;Username=postgres;Password=postgres;Persist Security Info=True;Database=InstrumentManagement;
       - ConnectionStrings__Master=Host=postgres;Username=postgres;Password=postgres;Persist Security Info=True;Database=postgres;
+      - KafkaProducer__BootstrapServers=kafka:9092
     ports:
       - 5001:80
     restart: on-failure

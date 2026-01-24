@@ -39,7 +39,7 @@ public class PricesRepository(IClock clock, IConnectionFactory connectionFactory
 
         using var reader = await connection.ExecuteReaderAsync(command);
 
-        var result = new List<InstrumentUIdType>();
+        var result = new HashSet<InstrumentUIdType>();
 
         while (reader.Read())
             result.Add(new InstrumentUIdType(reader.GetGuid(0), (InstrumentType)reader.GetByte(1)));

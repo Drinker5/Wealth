@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
+using Testcontainers.Kafka;
 using Testcontainers.PostgreSql;
 using Wealth.InstrumentManagement.Application.Providers;
 using Xunit;
@@ -19,13 +20,17 @@ public sealed class InstrumentManagementApiFixture : WebApplicationFactory<Progr
         .WithPassword("postgres")
         .Build();
 
+    private readonly KafkaContainer kafkaContainer = new KafkaBuilder(image: "confluentinc/cp-kafka:7.5.12")
+        .Build();
+
     private string postgresConnectionString;
     private string masterConnectionString;
+    private string kafkaBootstrapServers;
 
     public InstrumentManagementApiFixture()
     {
         var appBuilder = new HostApplicationBuilder();
-        
+
         app = appBuilder.Build();
     }
 
@@ -38,14 +43,12 @@ public sealed class InstrumentManagementApiFixture : WebApplicationFactory<Progr
             {
                 { "ConnectionStrings:InstrumentManagement", postgresConnectionString },
                 { "ConnectionStrings:Master", masterConnectionString },
+                { "KafkaProducer:BootstrapServers", kafkaBootstrapServers },
             };
             config.AddInMemoryCollection(data!);
         });
 
-        builder.ConfigureServices(services =>
-        {
-            services.AddSingleton<IInstrumentsProvider, TestTBankInstrumentsProvider>();
-        });
+        builder.ConfigureServices(services => { services.AddSingleton<IInstrumentsProvider, TestTBankInstrumentsProvider>(); });
 
         return base.CreateHost(builder);
     }
@@ -62,8 +65,9 @@ public sealed class InstrumentManagementApiFixture : WebApplicationFactory<Progr
         {
             app.Dispose();
         }
-        
+
         await postgresContainer.StopAsync();
+        await kafkaContainer.StopAsync();
     }
 
     public async Task InitializeAsync()
@@ -75,5 +79,7 @@ public sealed class InstrumentManagementApiFixture : WebApplicationFactory<Progr
         {
             Database = "postgres"
         }.ToString();
+        await kafkaContainer.StartAsync();
+        kafkaBootstrapServers = kafkaContainer.GetBootstrapAddress();
     }
 }

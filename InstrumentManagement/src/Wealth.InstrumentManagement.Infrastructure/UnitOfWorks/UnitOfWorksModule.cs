@@ -23,11 +23,11 @@ public class UnitOfWorksModule : IServiceModule
         services.AddScoped<IPricesRepository, PricesRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<IDomainEventsResolver, WealthDbContext>();
-        services.AddScoped<IConnectionFactory, WealthDbContext>();
-        services.AddScoped<IEventTracker, WealthDbContext>();
-
         services.AddScoped<WealthDbContext>();
+        services.AddScoped<IDomainEventsResolver, WealthDbContext>(sp => sp.GetRequiredService<WealthDbContext>());
+        services.AddScoped<IConnectionFactory, WealthDbContext>(sp => sp.GetRequiredService<WealthDbContext>());
+        services.AddScoped<IEventTracker, WealthDbContext>(sp => sp.GetRequiredService<WealthDbContext>());
+
         services.AddScoped<Database>();
         services.AddScoped<IDbSeeder, FirstSeed>();
 

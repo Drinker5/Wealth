@@ -18,8 +18,7 @@ public class ProvidersModule : IServiceModule
         services.Decorate<IInstrumentsProvider, InstrumentsProviderRateLimiterDecorator>();
         services.Decorate<IInstrumentsProvider, InstrumentsProviderDecorator>();
 
-
-        services.AddSingleton<IInstrumentPricesProvider, TBankInstrumentPricesProvider>();
+        services.AddScoped<IInstrumentPricesProvider, TBankInstrumentPricesProvider>();
         services.Decorate<IInstrumentPricesProvider, InstrumentPricesProviderDecorator>();
     }
 }

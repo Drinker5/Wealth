@@ -23,7 +23,7 @@ public sealed class TBankInstrumentPricesProvider(
     {
         var response = await client.MarketData.GetLastPricesAsync(new GetLastPricesRequest
         {
-            InstrumentId = { instrumentUIds.Select(i => i.ToString()) }
+            InstrumentId = { instrumentUIds.Select(i => i.UId.Value.ToString()) }
         }, cancellationToken: token);
         var rawPrices = response.LastPrices.ToDictionary(i => InstrumentUId.From(i.InstrumentUid), i => Convert(i.Price));
 

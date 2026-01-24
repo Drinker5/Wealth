@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Options;
+using Wealth.BuildingBlocks.Application;
+using Wealth.InstrumentManagement.Application.Instruments.Commands;
 using Wealth.InstrumentManagement.Application.Options;
-using Wealth.InstrumentManagement.Application.Services;
 
 namespace Wealth.InstrumentManagement.API.Extensions;
 
@@ -11,13 +12,12 @@ public sealed class PriceUpdaterService(
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         using var scope = serviceProvider.CreateScope();
-        var priceUpdater = scope.ServiceProvider.GetRequiredService<IPriceUpdater>();
+        var cqrsInvoker = scope.ServiceProvider.GetRequiredService<ICqrsInvoker>();
 
         await Task.Delay(options.Value.CheckInterval, stoppingToken);
         while (!stoppingToken.IsCancellationRequested)
         {
-            // TODO mediator
-            await priceUpdater.UpdatePrices(stoppingToken);
+            await cqrsInvoker.Command(new UpdatePrices(), stoppingToken);
             await Task.Delay(options.Value.CheckInterval, stoppingToken);
         }
     }
