@@ -16,9 +16,18 @@ public class Bond(BondId id) : AggregateRoot
 
     public Money Price { get; set; } = Money.Empty;
 
+    public Money Nominal { get; set; } = Money.Empty;
+
     public Coupon Coupon { get; set; }
 
-    public static Bond Create(BondId bondId, string name, ISIN isin, FIGI figi, InstrumentUId instrumentUId, CurrencyCode currency)
+    public static Bond Create(
+        BondId bondId,
+        string name,
+        ISIN isin,
+        FIGI figi,
+        InstrumentUId instrumentUId,
+        CurrencyCode currency,
+        Money nominal)
     {
         var bond = new Bond(bondId);
         bond.Apply(new BondCreated
@@ -28,7 +37,8 @@ public class Bond(BondId id) : AggregateRoot
             Isin = isin,
             Figi = figi,
             InstrumentUId = instrumentUId,
-            Currency = currency
+            Currency = currency,
+            Nominal = nominal
         });
         return bond;
     }
@@ -46,6 +56,18 @@ public class Bond(BondId id) : AggregateRoot
         });
     }
 
+    public void ChangeNominal(Money newNominal)
+    {
+        if (Nominal == newNominal)
+            return;
+
+        Apply(new BondNominalChanged
+        {
+            BondId = Id,
+            NewNominal = newNominal,
+        });
+    }
+
     private void When(BondCreated @event)
     {
         Id = @event.BondId;
@@ -54,6 +76,7 @@ public class Bond(BondId id) : AggregateRoot
         Figi = @event.Figi;
         InstrumentUId = @event.InstrumentUId;
         Price = new Money(@event.Currency, 0);
+        Nominal = @event.Nominal;
     }
 
     public void ChangeCoupon(Coupon coupon)
@@ -77,6 +100,11 @@ public class Bond(BondId id) : AggregateRoot
     private void When(BondPriceChanged @event)
     {
         Price = @event.NewPrice;
+    }
+
+    private void When(BondNominalChanged @event)
+    {
+        Nominal = @event.NewNominal;
     }
 
     public void ChangeIsin(ISIN isin)

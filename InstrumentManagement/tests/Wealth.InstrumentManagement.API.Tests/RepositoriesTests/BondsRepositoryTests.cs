@@ -62,6 +62,7 @@ public sealed class BondsRepositoryTests :
             Assert.Equal(expected.Figi, actual.Figi);
             Assert.Equal(expected.Isin, actual.Isin);
             Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.Nominal, actual.Nominal);
         }
     }
 

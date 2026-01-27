@@ -11,4 +11,5 @@ public record BondCreated : DomainEvent
     public required FIGI Figi { get; init; }
     public required InstrumentUId InstrumentUId { get; init; }
     public required CurrencyCode Currency { get; init; }
+    public required Money Nominal { get; init; }
 }

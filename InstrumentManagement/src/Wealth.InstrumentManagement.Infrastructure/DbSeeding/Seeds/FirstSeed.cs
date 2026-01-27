@@ -39,6 +39,7 @@ public class FirstSeed(
             Isin = new ISIN("000000000001"),
             Figi = new FIGI("000000000001"),
             InstrumentUId = new Guid("00000000-0000-0000-0000-000000000001"),
+            Nominal = new Money(CurrencyCode.Rub, 100m)
         }, token);
         await bondsRepository.ChangePrice(bond1, new Money(CurrencyCode.Rub, 12.34m));
         await bondsRepository.ChangeCoupon(bond1, new Coupon(CurrencyCode.Rub, 33m));
@@ -49,6 +50,7 @@ public class FirstSeed(
             Isin = new ISIN("000000000002"),
             Figi = new FIGI("000000000002"),
             InstrumentUId = new Guid("00000000-0000-0000-0000-000000000002"),
+            Nominal = new Money(CurrencyCode.Rub, 1000m)
         }, token);
         await bondsRepository.ChangePrice(bond2, new Money(CurrencyCode.Usd, 2.12m));
         await bondsRepository.ChangeCoupon(bond2, new Coupon(CurrencyCode.Rub, 44m));

@@ -26,7 +26,7 @@ public sealed class TBankInstrumentsProvider(
                 Id = instrumentUId.ToString()
             }, cancellationToken: token);
 
-            
+
             return new CreateStockCommand
             {
                 Name = stock.Instrument.Name,
@@ -61,7 +61,8 @@ public sealed class TBankInstrumentsProvider(
                 InstrumentUId = bond.Instrument.Uid,
                 Isin = bond.Instrument.Isin,
                 Figi = bond.Instrument.Figi,
-                Currency = CurrencyCodeParser.Parse(bond.Instrument.Currency)
+                Currency = CurrencyCodeParser.Parse(bond.Instrument.Currency),
+                Nominal = new Money(CurrencyCodeParser.Parse(bond.Instrument.Nominal.Currency), bond.Instrument.Nominal)
             };
         }
         catch (RpcException e) when (e.StatusCode == StatusCode.NotFound)

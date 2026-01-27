@@ -14,6 +14,7 @@ public interface IBondsRepository
     Task<IReadOnlyDictionary<InstrumentUId, Bond>> GetBonds(IEnumerable<InstrumentUId> ids, CancellationToken token);
     Task DeleteBond(BondId id);
     Task ChangePrice(BondId id, Money price);
+    Task ChangeNominal(BondId id, Money nominal);
     Task<BondId> CreateBond(CreateBondCommand command, CancellationToken token);
     Task<BondId> UpsertBond(CreateBondCommand command, CancellationToken token);
     Task ChangeCoupon(BondId id, Coupon coupon);

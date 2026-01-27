@@ -41,7 +41,8 @@ public class InstrumentsServiceImpl(ICqrsInvoker mediator) : InstrumentsService.
             Isin = request.Isin,
             Figi = request.Figi,
             InstrumentUId = request.InstrumentUid,
-            Currency = CurrencyCode.None
+            Currency = CurrencyCode.None,
+            Nominal = Money.Empty
         });
 
         return new CreateBondResponse

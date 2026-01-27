@@ -72,6 +72,7 @@ public sealed class UpdateInstrumentsHandler(
         var result = new List<Instrument>();
         foreach (var bondInstrumentId in bondInstrumentIds)
         {
+            //TODO надо обновить nominal
             var bondProvideCommand = await instrumentsProvider.BondProvide(bondInstrumentId, token);
             var bondId = await bondsRepository.UpsertBond(bondProvideCommand, token);
             result.Add(new Instrument

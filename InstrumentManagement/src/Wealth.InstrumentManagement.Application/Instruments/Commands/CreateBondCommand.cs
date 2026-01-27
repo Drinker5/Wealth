@@ -11,7 +11,8 @@ public record struct CreateBondCommand(
     ISIN Isin,
     FIGI Figi,
     InstrumentUId InstrumentUId,
-    CurrencyCode Currency) : ICommand<BondId>;
+    CurrencyCode Currency,
+    Money Nominal) : ICommand<BondId>;
 
 public class CreateBondCommandHandler(IBondsRepository repository) : ICommandHandler<CreateBondCommand, BondId>
 {

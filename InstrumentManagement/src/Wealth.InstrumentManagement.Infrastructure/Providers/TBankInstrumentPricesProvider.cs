@@ -40,8 +40,8 @@ public sealed class TBankInstrumentPricesProvider(
 
         foreach (var bond in bonds)
         {
-            // TODO: Bonds: price / 100 * nominal
-            prices[bond.Key] = rawPrices[bond.Key];
+            // Bonds: price / 100 * nominal
+            prices[bond.Key] = rawPrices[bond.Key] / 100 * bond.Value.Nominal.Amount;
         }
 
         foreach (var currency in currencies)

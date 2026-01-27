@@ -87,6 +87,30 @@ public class BondsRepository(
         });
         eventTracker.AddEvents(bond);
     }
+    
+    public async Task ChangeNominal(BondId id, Money nominal)
+    {
+        var bond = await GetBond(id);
+        if (bond == null)
+            return;
+
+        bond.ChangeNominal(nominal);
+        // language=postgresql
+        const string sql = """
+                           UPDATE "Bonds" 
+                           SET nominal_currency = @Currency,
+                               nominal_amount = @Amount
+                           WHERE "Id" = @Id
+                           """;
+        await connection.ExecuteAsync(sql, new
+        {
+            Id = id.Value,
+            Currency = bond.Nominal.Currency,
+            Amount = bond.Nominal.Amount,
+            Now = clock.Now
+        });
+        eventTracker.AddEvents(bond);
+    }
 
     public async Task<BondId> CreateBond(CreateBondCommand command, CancellationToken token = default)
     {
@@ -97,7 +121,7 @@ public class BondsRepository(
             commandText: sql,
             cancellationToken: token));
 
-        var bondInstrument = Bond.Create(new BondId(nextId), command.Name, command.Isin, command.Figi, command.InstrumentUId, command.Currency);
+        var bondInstrument = Bond.Create(new BondId(nextId), command.Name, command.Isin, command.Figi, command.InstrumentUId, command.Currency, command.Nominal);
         return await CreateBond(bondInstrument);
     }
 
@@ -117,11 +141,17 @@ public class BondsRepository(
         instrument.ChangeIsin(command.Isin);
         instrument.ChangeFigi(command.Figi);
         instrument.ChangeInstrumentId(command.InstrumentUId);
+        instrument.ChangeNominal(command.Nominal);
         await connection.ExecuteAsync(
             // language=postgresql
             """
             UPDATE "Bonds" 
-            SET "Name" = @Name, "ISIN" = @Isin, "FIGI" = @Figi, instrument_id = @InstrumentId
+            SET "Name" = @Name, 
+                "ISIN" = @Isin,
+                "FIGI" = @Figi,
+                instrument_id = @InstrumentId,
+                nominal_currency = @NominalCurrency,
+                nominal_amount = @NominalAmount
             WHERE "Id" = @Id
             """,
             new
@@ -130,7 +160,9 @@ public class BondsRepository(
                 Name = command.Name,
                 ISIN = command.Isin.Value,
                 Figi = command.Figi.Value,
-                InstrumentId = command.InstrumentUId.Value
+                InstrumentId = command.InstrumentUId.Value,
+                NominalCurrency = (byte)command.Nominal.Currency,
+                NominalAmount = command.Nominal.Amount
             });
         eventTracker.AddEvents(instrument);
     }
@@ -169,8 +201,24 @@ public class BondsRepository(
     {
         // language=postgresql
         const string sql = """
-                           INSERT INTO "Bonds" ("Id", "Name", "ISIN", "FIGI", instrument_id, "Price_Currency") 
-                           VALUES (@Id, @Name, @ISIN, @FIGI, @InstrumentId, @PriceCurrency)
+                           INSERT INTO "Bonds" 
+                               ("Id",
+                                "Name",
+                                "ISIN", 
+                                "FIGI", 
+                                instrument_id,
+                                "Price_Currency",
+                                nominal_currency,
+                                nominal_amount) 
+                           VALUES 
+                               (@Id, 
+                                @Name,
+                                @ISIN,
+                                @FIGI,
+                                @InstrumentId,
+                                @PriceCurrency,
+                                @NominalCurrency,
+                                @NominalAmount)
                            """;
         await connection.ExecuteAsync(sql, new
         {
@@ -179,7 +227,9 @@ public class BondsRepository(
             ISIN = bond.Isin.Value,
             FIGI = bond.Figi.Value,
             InstrumentId = bond.InstrumentUId.Value,
-            PriceCurrency = bond.Price.Currency
+            PriceCurrency = bond.Price.Currency,
+            NominalCurrency = (byte)bond.Nominal.Currency,
+            NominalAmount = bond.Nominal.Amount
         });
         eventTracker.AddEvents(bond);
 
@@ -218,7 +268,10 @@ public class BondsRepository(
         FIGI,
         Price_Currency,
         Coupon_Currency,
-        InstrumentId
+        InstrumentId,
+        PriceUpdatedAt,
+        Nominal_Currency,
+        Nominal_Amount
     }
 
     private async Task<IReadOnlyCollection<Bond>> GetBonds(string sql, object? param = null, CancellationToken token = default)
@@ -246,6 +299,13 @@ public class BondsRepository(
                 bond.Price = new Money(
                     (CurrencyCode)reader.GetByte((int)Columns.Price_Currency),
                     reader.IsDBNull((int)Columns.Price_Amount) ? 0 : reader.GetDecimal((int)Columns.Price_Amount));
+            }
+            
+            if (!reader.IsDBNull((int)Columns.Nominal_Currency))
+            {
+                bond.Nominal = new Money(
+                    (CurrencyCode)reader.GetByte((int)Columns.Nominal_Currency),
+                    reader.IsDBNull((int)Columns.Nominal_Amount) ? 0 : reader.GetDecimal((int)Columns.Nominal_Amount));
             }
 
             instruments.Add(bond);
