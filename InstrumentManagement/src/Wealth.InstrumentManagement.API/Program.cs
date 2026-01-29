@@ -3,19 +3,13 @@ using Wealth.InstrumentManagement.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddGrpc();
-builder.AddApplicationServices();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddServiceDiscovery();
 builder.AddServiceModules();
+builder.AddApplicationServices();
+builder.Services.AddGrpc();
 builder.Configuration.AddJsonFile("appsettings.Secrets.json", optional: true);
-builder.Services.ConfigureHttpClientDefaults(http =>
-{
-    // Turn on resilience by default
-    http.AddStandardResilienceHandler();
-
-    // Turn on service discovery by default
-    http.AddServiceDiscovery();
-});
 
 var app = builder.Build();
 

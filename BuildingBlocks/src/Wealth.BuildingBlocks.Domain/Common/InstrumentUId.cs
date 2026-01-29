@@ -1,5 +1,9 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 namespace Wealth.BuildingBlocks.Domain.Common;
 
+[JsonConverter(typeof(InstrumentUIdConverter))]
 public readonly record struct InstrumentUId(Guid Value) : IIdentity
 {
     public static InstrumentUId New() => new(Guid.NewGuid());
@@ -28,5 +32,18 @@ public readonly record struct InstrumentUId(Guid Value) : IIdentity
     public static implicit operator InstrumentUId(string value)
     {
         return new InstrumentUId(Guid.Parse(value));
+    }
+    
+    private class InstrumentUIdConverter : JsonConverter<InstrumentUId>
+    {
+        public override InstrumentUId Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            return new InstrumentUId(reader.GetGuid());
+        }
+
+        public override void Write(Utf8JsonWriter writer, InstrumentUId value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToString());
+        }
     }
 }
