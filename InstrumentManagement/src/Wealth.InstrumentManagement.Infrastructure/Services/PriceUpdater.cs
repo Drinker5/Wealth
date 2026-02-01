@@ -41,6 +41,7 @@ public sealed class PriceUpdater(
         var bonds = await bondsRepository.GetBonds(instrumentUIds.Where(i => i.Type == InstrumentType.Bond).Select(i => i.UId), token);
         foreach (var bond in bonds)
         {
+            // TODO price can be usd while bond currency is rub
             bond.Value.ChangePrice(bond.Value.Price with { Amount = prices[bond.Key] });
             eventTracker.AddEvents(bond.Value);
         }

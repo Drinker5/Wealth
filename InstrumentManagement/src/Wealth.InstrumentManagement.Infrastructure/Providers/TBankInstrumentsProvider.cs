@@ -16,7 +16,7 @@ public sealed class TBankInstrumentsProvider(
 {
     private readonly InvestApiClient client = InvestApiClientFactory.Create(options.Value.Token);
 
-    public async ValueTask<CreateStockCommand> StockProvide(InstrumentUId instrumentUId, CancellationToken token)
+    public async ValueTask<CreateStockCommand?> StockProvide(InstrumentUId instrumentUId, CancellationToken token)
     {
         try
         {
@@ -45,7 +45,7 @@ public sealed class TBankInstrumentsProvider(
         }
     }
 
-    public async ValueTask<CreateBondCommand> BondProvide(InstrumentUId instrumentUId, CancellationToken token)
+    public async ValueTask<CreateBondCommand?> BondProvide(InstrumentUId instrumentUId, CancellationToken token)
     {
         try
         {
@@ -72,7 +72,7 @@ public sealed class TBankInstrumentsProvider(
         }
     }
 
-    public async ValueTask<CreateCurrencyCommand> CurrencyProvide(InstrumentUId instrumentUId, CancellationToken token)
+    public async ValueTask<CreateCurrencyCommand?> CurrencyProvide(InstrumentUId instrumentUId, CancellationToken token)
     {
         try
         {

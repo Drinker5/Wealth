@@ -10,29 +10,47 @@ public sealed class InstrumentsProviderDecorator(IInstrumentsProvider instrument
     private Dictionary<InstrumentUId, CreateStockCommand>? Stocks = null;
     private Dictionary<InstrumentUId, CreateCurrencyCommand>? Currencies = null;
 
-    public async ValueTask<CreateStockCommand> StockProvide(InstrumentUId instrumentUId, CancellationToken token)
+    public async ValueTask<CreateStockCommand?> StockProvide(InstrumentUId instrumentUId, CancellationToken token)
     {
         Stocks ??= new Dictionary<InstrumentUId, CreateStockCommand>();
         if (!Stocks.ContainsKey(instrumentUId))
-            Stocks[instrumentUId] = await instrumentsProvider.StockProvide(instrumentUId, token);
+        {
+            var command = await instrumentsProvider.StockProvide(instrumentUId, token);
+            if (command == null)
+                return null;
+
+            Stocks[instrumentUId] = command.Value;
+        }
 
         return Stocks[instrumentUId];
     }
 
-    public async ValueTask<CreateBondCommand> BondProvide(InstrumentUId instrumentUId, CancellationToken token)
+    public async ValueTask<CreateBondCommand?> BondProvide(InstrumentUId instrumentUId, CancellationToken token)
     {
         Bonds ??= new Dictionary<InstrumentUId, CreateBondCommand>();
         if (!Bonds.ContainsKey(instrumentUId))
-            Bonds[instrumentUId] = await instrumentsProvider.BondProvide(instrumentUId, token);
+        {
+            var command = await instrumentsProvider.BondProvide(instrumentUId, token);
+            if (command == null)
+                return null;
+
+            Bonds[instrumentUId] = command.Value;
+        }
 
         return Bonds[instrumentUId];
     }
 
-    public async ValueTask<CreateCurrencyCommand> CurrencyProvide(InstrumentUId instrumentUId, CancellationToken token)
+    public async ValueTask<CreateCurrencyCommand?> CurrencyProvide(InstrumentUId instrumentUId, CancellationToken token)
     {
         Currencies ??= new Dictionary<InstrumentUId, CreateCurrencyCommand>();
         if (!Currencies.ContainsKey(instrumentUId))
-            Currencies[instrumentUId] = await instrumentsProvider.CurrencyProvide(instrumentUId, token);
+        {
+            var command = await instrumentsProvider.CurrencyProvide(instrumentUId, token);
+            if (command == null)
+                return null;
+
+            Currencies[instrumentUId] = command.Value;
+        }
 
         return Currencies[instrumentUId];
     }
