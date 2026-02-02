@@ -17,7 +17,7 @@ public sealed class TBankInstrumentPricesProvider(
 {
     private readonly InvestApiClient client = InvestApiClientFactory.Create(options.Value.Token);
 
-    public async Task<IReadOnlyDictionary<InstrumentUId, decimal>> ProvidePrices(
+    public async Task<IReadOnlyDictionary<InstrumentUId, Money>> ProvidePrices(
         IReadOnlyCollection<InstrumentUIdType> instrumentUIds,
         CancellationToken token)
     {
@@ -31,23 +31,23 @@ public sealed class TBankInstrumentPricesProvider(
         var bonds = await bondsRepository.GetBonds(instrumentUIds.Where(i => i.Type == InstrumentType.Bond).Select(i => i.UId), token);
         var currencies = await currenciesRepository.GetCurrencies(instrumentUIds.Where(i => i.Type == InstrumentType.Currency).Select(i => i.UId), token);
 
-        var prices = new Dictionary<InstrumentUId, decimal>();
+        var prices = new Dictionary<InstrumentUId, Money>();
         foreach (var stock in stocks)
         {
             // Stocks: price * lot
-            prices[stock.Key] = rawPrices[stock.Key] * stock.Value.LotSize;
+            prices[stock.Key] = stock.Value.Price with { Amount = rawPrices[stock.Key] * stock.Value.LotSize };
         }
 
         foreach (var bond in bonds)
         {
             // Bonds: price / 100 * nominal
-            prices[bond.Key] = rawPrices[bond.Key] / 100 * bond.Value.Nominal.Amount;
+            prices[bond.Key] = rawPrices[bond.Key] / 100 * bond.Value.Nominal;
         }
 
         foreach (var currency in currencies)
         {
             // TODO: Currencies: price * lot / nominal
-            prices[currency.Key] = rawPrices[currency.Key];
+            prices[currency.Key] = currency.Value.Price with { Amount = rawPrices[currency.Key] };
         }
 
         return prices;

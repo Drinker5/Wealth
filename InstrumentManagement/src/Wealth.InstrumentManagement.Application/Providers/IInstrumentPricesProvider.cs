@@ -4,7 +4,7 @@ namespace Wealth.InstrumentManagement.Application.Providers;
 
 public interface IInstrumentPricesProvider
 {
-    Task<IReadOnlyDictionary<InstrumentUId, decimal>> ProvidePrices(
+    Task<IReadOnlyDictionary<InstrumentUId, Money>> ProvidePrices(
         IReadOnlyCollection<InstrumentUIdType> instrumentUIds,
         CancellationToken token);
 }

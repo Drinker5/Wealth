@@ -34,7 +34,7 @@ public sealed class PriceUpdater(
         var stocks = await stocksRepository.GetStocks(instrumentUIds.Where(i => i.Type == InstrumentType.Stock).Select(i => i.UId), token);
         foreach (var stock in stocks)
         {
-            stock.Value.ChangePrice(stock.Value.Price with { Amount = prices[stock.Key] });
+            stock.Value.ChangePrice(prices[stock.Key]);
             eventTracker.AddEvents(stock.Value);
         }
         
@@ -42,18 +42,18 @@ public sealed class PriceUpdater(
         foreach (var bond in bonds)
         {
             // TODO price can be usd while bond currency is rub
-            bond.Value.ChangePrice(bond.Value.Price with { Amount = prices[bond.Key] });
+            bond.Value.ChangePrice(prices[bond.Key]);
             eventTracker.AddEvents(bond.Value);
         }
             
         var currencies = await currenciesRepository.GetCurrencies(instrumentUIds.Where(i => i.Type == InstrumentType.Currency).Select(i => i.UId), token);
         foreach (var currency in currencies)
         {
-            currency.Value.ChangePrice(currency.Value.Price with { Amount = prices[currency.Key] });
+            currency.Value.ChangePrice(prices[currency.Key]);
             eventTracker.AddEvents(currency.Value);
         }
 
-        var instrumentUIdPrices = prices.Select(i => new InstrumentUIdPrice(i.Key, i.Value)).ToArray();
+        var instrumentUIdPrices = prices.Select(i => new InstrumentUIdPrice(i.Key, i.Value.Amount)).ToArray();
         await pricesRepository.UpdatePrices(instrumentUIdPrices, token);
     }
 }

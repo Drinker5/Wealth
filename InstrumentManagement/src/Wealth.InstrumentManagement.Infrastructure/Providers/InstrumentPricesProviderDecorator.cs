@@ -16,7 +16,7 @@ public sealed class InstrumentPricesProviderDecorator(IInstrumentPricesProvider 
                 Window = TimeSpan.FromMinutes(1)
             })).Build();
 
-    public Task<IReadOnlyDictionary<InstrumentUId, decimal>> ProvidePrices(
+    public Task<IReadOnlyDictionary<InstrumentUId, Money>> ProvidePrices(
         IReadOnlyCollection<InstrumentUIdType> instrumentUIds,
         CancellationToken token)
     {
