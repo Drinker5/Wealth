@@ -3,7 +3,7 @@
     <PackageReference Include="Confluent.Kafka" Version="2.13.0" />
     <PackageReference Include="Eventso.Subscription.Kafka" Version="0.8.10" />
     <PackageReference Include="Eventso.Subscription.Hosting" Version="0.8.10" />
-    <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="10.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="10.3.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Polly.RateLimiting" Version="8.6.5" />
