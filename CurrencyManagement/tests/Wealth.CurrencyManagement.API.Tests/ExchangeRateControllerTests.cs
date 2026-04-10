@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Wealth.BuildingBlocks.Application.CommandScheduler;
 using Wealth.BuildingBlocks.Domain.Common;
@@ -38,22 +39,21 @@ public sealed class ExchangeRateControllerTests : IClassFixture<CurrencyManageme
 
         createResponse.EnsureSuccessStatusCode();
         const decimal value = 2.3m;
-        var queryParams = new Dictionary<string, string>
+        var queryParams = new Dictionary<string, string?>
         {
             ["from"] = obj.from.ToString(),
             ["to"] = obj.to.ToString(),
             ["date"] = obj.date,
             ["value"] = value.ToString(CultureInfo.InvariantCulture),
         };
-        var encodedParams = new FormUrlEncodedContent(queryParams);
-        var queryString = await encodedParams.ReadAsStringAsync();
-
-        var exchangeResponse = await httpClient.GetAsync($"/api/exchangeRate?{queryString}");
+        var queryString = QueryString.Create(queryParams);
+        var exchangeResponse = await httpClient.GetAsync($"/api/exchangeRate{queryString}");
 
         exchangeResponse.EnsureSuccessStatusCode();
         var body = await exchangeResponse.Content.ReadAsStringAsync();
-        var money = JsonSerializer.Deserialize<Money>(body, jsonSerializerOptions);
+        Assert.NotEmpty(body);
 
+        var money = JsonSerializer.Deserialize<Money>(body, jsonSerializerOptions);
         Assert.Equal(obj.to, money.Currency);
         Assert.Equal(obj.rate * value, money.Amount);
     }
