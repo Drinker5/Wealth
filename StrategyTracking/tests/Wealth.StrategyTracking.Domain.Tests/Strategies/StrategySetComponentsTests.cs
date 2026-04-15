@@ -15,7 +15,6 @@ public class StrategySetComponentsTests
     private readonly CurrencyId _currencyId1 = new CurrencyId(1);
     private readonly CurrencyId _currencyId2 = new CurrencyId(2);
     private readonly CurrencyCode _currencyCode1 = CurrencyCode.Usd;
-    private readonly CurrencyCode _currencyCode2 = CurrencyCode.Eur;
 
     public StrategySetComponentsTests()
     {
